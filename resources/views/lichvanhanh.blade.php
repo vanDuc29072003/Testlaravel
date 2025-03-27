@@ -1,6 +1,6 @@
 @extends('layouts.main')
 
-@section('title', 'Lịch Sửa Chữa')
+@section('title', 'Lịch Vận Hành')
 
 @section('content')
 <div class="container">
