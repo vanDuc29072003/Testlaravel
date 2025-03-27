@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\LichSuaChuaController;
+use App\Http\Controllers\LichVanHanhController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,9 +18,5 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
-Route::get('/lichvanhanh', function () {
-    return view('lichvanhanh');
-});
-Route::get('/lichsuachua', function () {
-    return view('lichsuachua');
-});
+Route::get('/lichvanhanh', [LichVanHanhController::class, 'lichVanHanh'])->name('lichvanhanh');
+Route::get('/lichsuachua', [LichSuaChuaController::class, 'lichSuaChua'])->name('lichsuachua');
