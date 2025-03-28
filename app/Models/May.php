@@ -17,7 +17,11 @@ class May extends Model
         'TenMay', 
         'SeriMay', 
         'ChuKyBaoTri', 
+        'ThoiGianBaoHanh',
+        'ThoiGianDuaVaoSuDung',
         'NamSanXuat', 
-        'HangSanXuat'
+        'HangSanXuat',
+        'ChiTietLinhKien',
+        'MaNhaCungCap',
     ];
 }

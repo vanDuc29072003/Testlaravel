@@ -14,7 +14,7 @@
                     </a>
 
             </div>
-            <table class="table table-bordered">
+            <table class="table table-bordered table-hover">
                 <thead style="background-color: pink; color: black;">
                     <tr>
                         <th>Mã Máy</th>
@@ -28,7 +28,7 @@
                 </thead>
                 <tbody>
                     @foreach ($dsMay as $may)
-                        <tr>
+                        <tr onclick="window.location='{{ route('may.detail', $may->MaMay) }}'" style="cursor: pointer;">
                             <td>{{ $may->MaMay }}</td>
                             <td>{{ $may->TenMay }}</td>
                             <td>{{ $may->SeriMay }}</td>
