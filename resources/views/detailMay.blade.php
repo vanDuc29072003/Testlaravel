@@ -58,7 +58,11 @@
                             <hr class="my-3">
                             <div class="mb-3">
                                 <label class="form-label fw-bold">Chi Tiết Linh Kiện:</label>
-                                <p class="form-control-plaintext">{{ $may->ChiTietLinhKien }}</p>
+                                <a href="{{ $may->ChiTietLinhKien }}" target="_blank"
+                                    class="form-control-plaintext">
+                                    <i class="fa fa-file-pdf"></i>
+                                    Mở file chi tiết
+                                </a>
                             </div>
                             <hr class="my-3">
                             <div class="mb-3">
