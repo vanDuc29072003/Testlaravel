@@ -74,5 +74,7 @@
     <script src="{{ asset('js/plugin/gmaps/gmaps.js') }}"></script>
     <script src="{{ asset('js/plugin/sweetalert/sweetalert.min.js') }}"></script>
     <script src="{{ asset('js/kaiadmin.min.js') }}"></script>
+
+    @yield('scripts')
   </body>
 </html>

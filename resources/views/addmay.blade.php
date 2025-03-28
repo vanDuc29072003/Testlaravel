@@ -72,7 +72,7 @@
         }, {
             type: 'danger',
             animate: {
-                enter: 'animated shake',
+                enter: 'animated fadeInDown',
                 exit: 'animated fadeOutUp'
             },
         });

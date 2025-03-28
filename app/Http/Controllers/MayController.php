@@ -49,10 +49,8 @@ class MayController extends Controller
             return redirect()->route('may')->with('success', 'Thêm máy thành công!');
         } catch (\Exception $e) {
             if ($e->getCode() == 23000) { // Mã lỗi 23000 là lỗi trùng khóa UNIQUE
-                // Lưu lỗi vào session Laravel
                 return redirect()->back()->with('error', 'Seri Máy đã tồn tại. Vui lòng nhập Seri Máy khác.');
             }
-    
             // Xử lý các lỗi khác (nếu có)
             return redirect()->back()->with('error', 'Đã xảy ra lỗi. Vui lòng thử lại.');
         }
