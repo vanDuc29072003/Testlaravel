@@ -25,13 +25,13 @@
                             <div class="form-group">
                                 <label for="TenMay">Tên Máy</label>
                                 <input type="text" class="form-control" id="TenMay" name="TenMay"
-                                    value="{{ $may->TenMay }}">
+                                    value="{{ $may->TenMay }}" readonly>
                             </div>
 
                             <div class="form-group">
                                 <label for="SeriMay">Seri Máy</label>
                                 <input type="text" class="form-control" id="SeriMay" name="SeriMay"
-                                    value="{{ $may->SeriMay }}">
+                                    value="{{ $may->SeriMay }}" readonly>
                             </div>
 
                             <div class="form-group">
@@ -49,13 +49,13 @@
                             <div class="form-group">
                                 <label for="NamSanXuat">Năm Sản Xuất</label>
                                 <input type="number" class="form-control" id="NamSanXuat" name="NamSanXuat"
-                                    value="{{ $may->NamSanXuat }}">
+                                    value="{{ $may->NamSanXuat }}" readonly>
                             </div>
 
                             <div class="form-group">
                                 <label for="HangSanXuat">Hãng Sản Xuất</label>
                                 <input type="text" class="form-control" id="HangSanXuat" name="HangSanXuat"
-                                    value="{{ $may->HangSanXuat }}">
+                                    value="{{ $may->HangSanXuat }}" readonly>
                             </div>
                         </div>
 
