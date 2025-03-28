@@ -26,3 +26,4 @@ Route::get('/may/edit/{MaMay}', [MayController::class, 'form_editmay'])->name('m
 Route::post('/may/edit/{MaMay}', [MayController::class, 'editmay'])->name('may.update');
 Route::get('/may/add', [MayController::class, 'addMay'])->name('add.may');
 Route::post('/may/store', [MayController::class, 'storeMay'])->name('may.store');
+Route::get('/may/detail/{MaMay}', [MayController::class, 'detailMay'])->name('may.detail');

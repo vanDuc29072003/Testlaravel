@@ -11,6 +11,11 @@ class MayController extends Controller
         return view('may', compact('dsMay'));
     }
 
+    public function detailMay($MaMay) {
+        $may = May::findOrFail($MaMay); // Tìm máy theo ID
+        return view('detailmay', compact('may'));
+    }
+
     public function form_editmay($MaMay) {
         $may = May::findOrFail($MaMay); // Tìm máy theo ID
         return view('editmay', compact('may'));
