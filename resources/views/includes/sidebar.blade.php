@@ -61,7 +61,7 @@
           </a>
         </li>
         <li class="nav-item ">
-          <a href="may.php" class="collapsed" aria-expanded="false">
+          <a href="{{ route('may') }}">
             <i class="fa-solid fa-sliders"></i>
             <p>Danh sách máy</p>
           </a>
