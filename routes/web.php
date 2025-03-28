@@ -22,3 +22,5 @@ Route::get('/', function () {
 Route::get('/lichvanhanh', [LichVanHanhController::class, 'lichVanHanh'])->name('lichvanhanh');
 Route::get('/lichsuachua', [LichSuaChuaController::class, 'lichSuaChua'])->name('lichsuachua');
 Route::get('/may', [MayController::class, 'may'])->name('may');
+Route::get('/may/edit/{MaMay}', [MayController::class, 'form_editmay'])->name('may.edit');
+Route::post('/may/edit/{MaMay}', [MayController::class, 'editmay'])->name('may.update');

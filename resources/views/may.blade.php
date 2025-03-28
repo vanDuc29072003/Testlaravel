@@ -35,9 +35,9 @@
                             <td>{{ $may->HangSanXuat }}</td>
                             <td>
                                 <div class="d-flex gap-2">
-                                    <button class="btn btn-warning btn-sm">
+                                      <a href="{{ route('may.edit', $may->MaMay) }}" class="btn btn-warning btn-sm text-black">  
                                         <i class="fa fa-edit"></i> Sửa
-                                    </button>
+                                      </a>
                                     <button class="btn btn-danger btn-sm">
                                         <i class="fa fa-trash"></i> Xóa
                                     </button>
