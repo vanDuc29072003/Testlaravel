@@ -8,9 +8,11 @@
         <div class="table-responsive">
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h1 class="mb-0">Danh sách máy</h1>
-                <button class="btn btn-primary">
-                    <i class="fa fa-plus"></i> Thêm mới
-                </button>
+               
+                    <a href="{{ route('add.may') }}" class="btn btn-primary btn-sm">
+                        <i class="fa fa-plus"></i> Thêm mới
+                    </a>
+
             </div>
             <table class="table table-bordered">
                 <thead style="background-color: pink; color: black;">

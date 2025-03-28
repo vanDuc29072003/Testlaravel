@@ -24,3 +24,5 @@ Route::get('/lichsuachua', [LichSuaChuaController::class, 'lichSuaChua'])->name(
 Route::get('/may', [MayController::class, 'may'])->name('may');
 Route::get('/may/edit/{MaMay}', [MayController::class, 'form_editmay'])->name('may.edit');
 Route::post('/may/edit/{MaMay}', [MayController::class, 'editmay'])->name('may.update');
+Route::get('/may/add', [MayController::class, 'addMay'])->name('add.may');
+Route::post('/may/store', [MayController::class, 'storeMay'])->name('may.store');
