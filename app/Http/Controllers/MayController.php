@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\May;
+use App\Models\NhaCungCap;
+
 class MayController extends Controller
 {
     public function may() {
@@ -13,7 +15,8 @@ class MayController extends Controller
 
     public function detailMay($MaMay) {
         $may = May::findOrFail($MaMay); // Tìm máy theo ID
-        return view('detailmay', compact('may'));
+        $nhaCungCap = NhaCungCap::find($may->MaNhaCungCap); // Tìm nhà cung cấp theo ID
+        return view('detailmay', compact('may', 'nhaCungCap'));
     }
 
     public function form_editmay($MaMay) {
@@ -26,7 +29,8 @@ class MayController extends Controller
         return redirect()->route('may')->with('success', 'Cập nhật thành công!');
     }
     public function addMay() {
-        return view('addmay');
+        $nhaCungCaps = NhaCungCap::all(); // Lấy danh sách nhà cung cấp
+        return view('addmay', compact('nhaCungCaps'));
     }
     public function storeMay(Request $request) {
         try {

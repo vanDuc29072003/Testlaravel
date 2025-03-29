@@ -66,8 +66,8 @@
                             </div>
                             <hr class="my-3">
                             <div class="mb-3">
-                                <label class="form-label fw-bold">Mã Nhà Cung Cấp:</label>
-                                <p class="form-control-plaintext">{{ $may->MaNhaCungCap }}</p>
+                                <label class="form-label fw-bold">Nhà Cung Cấp:</label>
+                                <p class="form-control-plaintext">{{ $nhaCungCap->TenNhaCungCap }}</p>
                             </div>
                         </div>
                     </div>

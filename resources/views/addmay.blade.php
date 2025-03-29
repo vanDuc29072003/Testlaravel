@@ -38,9 +38,15 @@
                             <!-- Cột 2 -->
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label for="MaNhaCungCap">Mã Nhà Cung Cấp</label>
-                                    <input type="number" class="form-control" id="MaNhaCungCap" name="MaNhaCungCap"
-                                        placeholder="Nhập mã nhà cung cấp" value="{{ old('MaNhaCungCap') }}">
+                                    <label for="MaNhaCungCap">Nhà Cung Cấp</label>
+                                    <select class="form-control" id="MaNhaCungCap" name="MaNhaCungCap" required>
+                                        <option value="">Chọn nhà cung cấp</option>
+                                        @foreach ($nhaCungCaps as $nhaCungCap)
+                                            <option value="{{ $nhaCungCap->MaNhaCungCap }}"
+                                                {{ old('MaNhaCungCap') == $nhaCungCap->MaNhaCungCap ? 'selected' : '' }}>
+                                                {{ $nhaCungCap->TenNhaCungCap }}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
 
                                 <div class="form-group">
