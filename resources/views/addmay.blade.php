@@ -8,7 +8,7 @@
         <div class="page-inner">
             <div class="card">
                 <div class="card-header">
-                    <h1>Thêm Máy Mới</h1>
+                    <h1 class="m-3">Thêm Máy Mới</h1>
                 </div>
                 <div class="card-body">
                     <form action="{{ route('may.store') }}" method="POST">
@@ -96,7 +96,7 @@
                             <button type="submit" class="btn btn-primary">
                                 <i class="fa fa-save"></i> Tạo Mới
                             </button>
-                            <a href="{{ route('may') }}" class="btn btn-secondary">Trở lại</a>
+                            <a href="{{ route('may') }}" class="btn btn-secondary mx-3">Trở lại</a>
                         </div>
                     </form>
                 </div>
