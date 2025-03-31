@@ -37,11 +37,11 @@ class MayController extends Controller
             $request->validate([
                 'TenMay' => 'required|string|max:255',
                 'SeriMay' => 'required|string|max:255|unique:may,SeriMay',
-                'ChuKyBaoTri' => 'required|integer',
-                'NamSanXuat' => 'required|integer',
+                'ChuKyBaoTri' => 'required|integer|min:1',
+                'NamSanXuat' => 'required|integer|min:1900|max:'.date('Y'),
                 'HangSanXuat' => 'required|string|max:255',
                 'ThoiGianDuaVaoSuDung' => 'required|date',
-                'ThoiGianBaoHanh' => 'required|integer',
+                'ThoiGianBaoHanh' => 'required|integer|min:1',
             ]);
     
             // Tạo mới máy
