@@ -100,11 +100,14 @@
                     </div>
 
                         <div class="form-group mt-4">
-                            <button type="submit" class="btn btn-primary">
+                            <a href="{{ route('may') }}" class="btn btn-secondary">
+                                <i class="fa fa-arrow-left"></i> Quay lại
+                            </a>
+                            <button type="submit" class="btn btn-primary mx-3">
                                     <i class="fa fa-save"></i> Cập nhật
                                 </a>
                             </button>
-                            <a href="{{ route('may') }}" class="btn btn-secondary text-white">Trở lại</a>
+                            
                         </div>
                     </div>
                 </form>
