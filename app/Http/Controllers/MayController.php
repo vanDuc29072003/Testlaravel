@@ -20,10 +20,12 @@ class MayController extends Controller
     }
 
     public function form_editmay($MaMay) {
+        $nhaCungCaps = NhaCungCap::all();
         $may = May::findOrFail($MaMay); // Tìm máy theo ID
-        return view('editmay', compact('may'));
+        return view('editmay', compact('may', 'nhaCungCaps'));
     }
     public function editmay(Request $request, $MaMay) {
+        $nhaCungCaps = NhaCungCap::all();
         $may = May::findOrFail($MaMay); // Tìm máy theo ID
         $may->update($request->all()); // Cập nhật thông tin máy
         return redirect()->route('may')->with('success', 'Cập nhật thành công!');

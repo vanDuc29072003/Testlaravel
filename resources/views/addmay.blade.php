@@ -52,7 +52,7 @@
                                 <div class="form-group">
                                     <label for="NamSanXuat">Năm Sản Xuất</label>
                                     <input type="number" class="form-control" id="NamSanXuat" name="NamSanXuat"
-                                        placeholder="Nhập năm sản xuất" value="{{ old('NamSanXuat') }}" min="1980" required>
+                                        placeholder="Nhập năm sản xuất" value="{{ old('NamSanXuat') }}" required>
                                 </div>
 
                                 <div class="form-group">
@@ -71,14 +71,7 @@
                                         placeholder="Nhập chi tiết linh kiện" value="{{ old('ChiTietLinhKien') }}">
                                 </div>
 
-                                <div class="form-group">
-                                    <label for="ChuKyBaoTri">Chu Kỳ Bảo Trì</label>
-                                    <div class="input-group mb-3">
-                                        <input type="number" class="form-control" id="ChuKyBaoTri" name="ChuKyBaoTri"
-                                            placeholder="Nhập chu kỳ bảo trì" value="{{ old('ChuKyBaoTri') }}" min="1" required>
-                                        <span class="input-group-text">Tháng</span>
-                                    </div>
-                                </div>
+                                
 
                                 <div class="form-group">
                                     <label for="ThoiGianBaoHanh">Thời Gian Bảo Hành</label>
@@ -86,6 +79,14 @@
                                         <input type="number" class="form-control" id="ThoiGianBaoHanh"
                                             name="ThoiGianBaoHanh" placeholder="Nhập thời gian bảo hành"
                                             value="{{ old('ThoiGianBaoHanh') }}" min="1" required>
+                                        <span class="input-group-text">Tháng</span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="ChuKyBaoTri">Chu Kỳ Bảo Trì</label>
+                                    <div class="input-group mb-3">
+                                        <input type="number" class="form-control" id="ChuKyBaoTri" name="ChuKyBaoTri"
+                                            placeholder="Nhập chu kỳ bảo trì" value="{{ old('ChuKyBaoTri') }}" min="1" required>
                                         <span class="input-group-text">Tháng</span>
                                     </div>
                                 </div>
