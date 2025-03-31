@@ -7,71 +7,53 @@
         <div class="page-inner">
             <div class="card">
                 <div class="card-header">
-                    <h1>Thông Tin Máy</h1>
+                    <h1 class="m-3">Thông Tin Máy</h1>
                 </div>
-                <div class="card-body p-lg-5">
-                    <div class="row">
-                        <!-- Cột 1 -->
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label class="form-label fw-bold">Mã Máy:</label>
-                                <p class="form-control-plaintext">{{ $may->MaMay }}</p>
-                            </div>
-                            <hr class="my-3">
-                            <div class="mb-3">
-                                <label class="form-label fw-bold">Tên Máy:</label>
-                                <p class="form-control-plaintext">{{ $may->TenMay }}</p>
-                            </div>
-                            <hr class="my-3">
-                            <div class="mb-3">
-                                <label class="form-label fw-bold">Seri Máy:</label>
-                                <p class="form-control-plaintext">{{ $may->SeriMay }}</p>
-                            </div>
-                            <hr class="my-3">
-                            <div class="mb-3">
-                                <label class="form-label fw-bold">Chu Kỳ Bảo Trì:</label>
-                                <p class="form-control-plaintext">{{ $may->ChuKyBaoTri }} tháng</p>
-                            </div>
-                            <hr class="my-3">
-                            <div class="mb-3">
-                                <label class="form-label fw-bold">Thời Gian Bảo Hành:</label>
-                                <p class="form-control-plaintext">{{ $may->ThoiGianBaoHanh }} tháng</p>
-                            </div>
-                        </div>
+                <div class="card-body p-5">
+                    <table class="table table-bordered table-striped">
+                        <tbody>
+                            <tr>
+                                <th scope="row">Mã Máy</th>
+                                <td>{{ $may->MaMay }}</td>
+                                <th scope="row">Thời Gian Đưa Vào Sử Dụng</th>
+                                <td>{{ $may->ThoiGianDuaVaoSuDung }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Tên Máy</th>
+                                <td>{{ $may->TenMay }}</td>
+                                <th scope="row">Năm Sản Xuất</th>
+                                <td>{{ $may->NamSanXuat }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Seri Máy</th>
+                                <td>{{ $may->SeriMay }}</td>
+                                <th scope="row">Hãng Sản Xuất</th>
+                                <td>{{ $may->HangSanXuat }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Chu Kỳ Bảo Trì</th>
+                                <td>{{ $may->ChuKyBaoTri }} tháng</td>
+                                <th scope="row">Chi Tiết Linh Kiện</th>
+                                <td><a href="{{ $may->ChiTietLinhKien }}" target="_blank"><i class="fas fa-link"></i> Mở file chi tiết</a></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Thời Gian Bảo Hành</th>
+                                <td>{{ $may->ThoiGianBaoHanh }} tháng</td>
+                                <th scope="row">Nhà Cung Cấp</th>
+                                <td>{{ $nhaCungCap->TenNhaCungCap }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
 
-                        <!-- Cột 2 -->
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label class="form-label fw-bold">Thời Gian Đưa Vào Sử Dụng:</label>
-                                <p class="form-control-plaintext">{{ $may->ThoiGianDuaVaoSuDung }}</p>
-                            </div>
-                            <hr class="my-3">
-                            <div class="mb-3">
-                                <label class="form-label fw-bold">Năm Sản Xuất:</label>
-                                <p class="form-control-plaintext">{{ $may->NamSanXuat }}</p>
-                            </div>
-                            <hr class="my-3">
-                            <div class="mb-3">
-                                <label class="form-label fw-bold">Hãng Sản Xuất:</label>
-                                <p class="form-control-plaintext">{{ $may->HangSanXuat }}</p>
-                            </div>
-                            <hr class="my-3">
-                            <div class="mb-3">
-                                <label class="form-label fw-bold">Chi Tiết Linh Kiện:</label>
-                                <p class="form-control-plaintext">{{ $may->ChiTietLinhKien }}</p>
-                            </div>
-                            <hr class="my-3">
-                            <div class="mb-3">
-                                <label class="form-label fw-bold">Mã Nhà Cung Cấp:</label>
-                                <p class="form-control-plaintext">{{ $may->MaNhaCungCap }}</p>
-                            </div>
-                        </div>
-                    </div>
-                    <hr class="my-4"> <!-- Đường kẻ ngang tách nội dung với nút -->
+                </div>
+                <div class="card-footer">
                     <!-- Nút quay lại -->
-                    <div class="text-center">
+                    <div class="m-3">
                         <a href="{{ route('may') }}" class="btn btn-secondary">
                             <i class="fa fa-arrow-left"></i> Quay lại
+                        </a>
+                        <a href="{{ route('may.edit', $may->MaMay) }}" class="btn btn-warning mx-3">
+                            <i class="fa fa-edit"></i> Sửa
                         </a>
                     </div>
                 </div>

@@ -5,24 +5,20 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class May extends Model
+class NhaCungCap extends Model
 {
     use HasFactory;
 
-    protected $table = 'may'; // Tên bảng trong database
-    protected $primaryKey = 'MaMay'; // Khóa chính
+    protected $table = 'nhacungcap'; // Tên bảng trong database
+    protected $primaryKey = 'MaNhaCungCap'; // Khóa chính
     public $timestamps = false; // Không sử dụng created_at và updated_at
 
     protected $fillable = [
-        'TenMay', 
-        'SeriMay', 
-        'ChuKyBaoTri', 
-        'ThoiGianBaoHanh',
-        'ThoiGianDuaVaoSuDung',
-        'NamSanXuat', 
-        'HangSanXuat',
-        'ChiTietLinhKien',
-        'MaNhaCungCap',
+        'TenNhaCungCap',
+        'SDT',
+        'DiaChi',
+        'Email',
+        'MaSoThue'
     ];
     public function nhaCungCap()
     {
