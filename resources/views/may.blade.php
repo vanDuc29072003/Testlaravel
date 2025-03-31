@@ -28,7 +28,8 @@
                     </thead>
                     <tbody>
                         @foreach ($dsMay as $may)
-                            <tr class="text-center" onclick="window.location='{{ route('may.detail', $may->MaMay) }}'" style="cursor: pointer;">
+                            <tr class="text-center" onclick="window.location='{{ route('may.detail', $may->MaMay) }}'"
+                                style="cursor: pointer;">
                                 <td>{{ $may->MaMay }}</td>
                                 <td>{{ $may->TenMay }}</td>
                                 <td>{{ $may->SeriMay }}</td>
@@ -41,9 +42,15 @@
                                             class="btn btn-warning btn-sm text-black">
                                             <i class="fa fa-edit"></i> Sửa
                                         </a>
-                                        <button class="btn btn-danger btn-sm">
-                                            <i class="fa fa-trash"></i> Xóa
-                                        </button>
+                                        <form action="{{ route('may.delete', $may->MaMay) }}" method="POST"
+                                            class="d-inline-block">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="button" class="btn btn-danger btn-sm"
+                                                onclick="event.stopPropagation(); confirmDelete(this)">
+                                                <i class="fa fa-trash"></i> Xóa
+                                            </button>
+                                        </form>
                                     </div>
                                 </td>
                             </tr>
@@ -53,4 +60,33 @@
             </div>
         </div>
     </div>
+@endsection
+
+@section('scripts')
+    <script>
+        function confirmDelete(button) {
+            swal({
+                title: 'Bạn có chắc chắn?',
+                text: "Hành động này không thể hoàn tác!",
+                icon: 'warning',
+                buttons: {
+                    confirm: {
+                        text: 'Xóa',
+                        className: 'btn btn-danger'
+                    },
+                    cancel: {
+                        text: 'Hủy',
+                        visible: true,
+                        className: 'btn btn-success'
+                    }
+                }
+            }).then((willDelete) => {
+                if (willDelete) {
+                    button.closest('form').submit(); // Gửi form
+                } else {
+                    swal.close(); // Đóng hộp thoại
+                }
+            });
+        }
+    </script>
 @endsection

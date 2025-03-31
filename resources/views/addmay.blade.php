@@ -70,9 +70,6 @@
                                     <input type="text" class="form-control" id="ChiTietLinhKien" name="ChiTietLinhKien"
                                         placeholder="Nhập chi tiết linh kiện" value="{{ old('ChiTietLinhKien') }}">
                                 </div>
-
-                                
-
                                 <div class="form-group">
                                     <label for="ThoiGianBaoHanh">Thời Gian Bảo Hành</label>
                                     <div class="input-group mb-3">

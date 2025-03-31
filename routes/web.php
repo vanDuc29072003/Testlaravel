@@ -27,3 +27,4 @@ Route::post('/may/edit/{MaMay}', [MayController::class, 'editmay'])->name('may.u
 Route::get('/may/add', [MayController::class, 'addMay'])->name('may.add');
 Route::post('/may/store', [MayController::class, 'storeMay'])->name('may.store');
 Route::get('/may/detail/{MaMay}', [MayController::class, 'detailMay'])->name('may.detail');
+Route::delete('/may/{MaMay}', [MayController::class, 'deleteMay'])->name('may.delete');

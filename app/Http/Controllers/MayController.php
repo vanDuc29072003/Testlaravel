@@ -67,4 +67,9 @@ class MayController extends Controller
                 ->withInput();
         }
     }
+    public function deleteMay($MaMay) {
+        $may = May::findOrFail($MaMay); // Tìm máy theo ID
+        $may->delete(); // Xóa máy
+        return redirect()->route('may')->with('success', 'Xóa máy thành công!');
+    }
 }
