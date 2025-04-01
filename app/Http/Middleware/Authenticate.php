@@ -1,20 +1,21 @@
 <?php
 
-use App\Http\Controllers\AuthController;
-use Illuminate\Support\Facades\Route;
+namespace App\Http\Middleware;
 
-// Hiển thị trang đăng nhập
-Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login')->middleware('guest');
+use Illuminate\Auth\Middleware\Authenticate as Middleware;
 
-// Xử lý đăng nhập
-Route::post('/login', [AuthController::class, 'login']);
-
-// Đăng xuất
-Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth');
-
-// Trang cần đăng nhập mới truy cập được
-Route::get('/may', function () {
-    return view('may');
-})->middleware('auth');
-
-     
+class Authenticate extends Middleware
+{
+    /**
+     * Get the path the user should be redirected to when they are not authenticated.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return string|null
+     */
+    protected function redirectTo($request)
+    {
+        if (!$request->expectsJson()) {
+            return route('login'); // Chuyển hướng đến route 'login' nếu chưa đăng nhập
+        }
+    }
+}
