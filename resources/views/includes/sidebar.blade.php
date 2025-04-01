@@ -72,6 +72,12 @@
             <p>Danh sách linh kiện</p>
           </a>
         </li>
+        <li class="nav-item ">
+          <a href="{{ route('nhacungcap') }}">
+            <i class="fas fa-shipping-fast"></i>
+            <p>Danh sách nhà cung cấp</p>
+          </a>
+        </li>
         <li class="nav-item">
           <a data-bs-toggle="collapse" href="#submenu">
             <i class="fa-solid fa-clipboard-list"></i>

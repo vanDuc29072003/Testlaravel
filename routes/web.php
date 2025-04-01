@@ -3,6 +3,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\LichSuaChuaController;
 use App\Http\Controllers\LichVanHanhController;
 use App\Http\Controllers\MayController;
+use App\Http\Controllers\NhaCungCapController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -30,4 +31,11 @@ Route::middleware('auth')->group(function () {
     Route::post('/may/store', [MayController::class, 'storeMay'])->name('may.store');
     Route::get('/may/detail/{MaMay}', [MayController::class, 'detailMay'])->name('may.detail');
     Route::delete('/may/{MaMay}', [MayController::class, 'deleteMay'])->name('may.delete');
+    Route::get('/nhacungcap', [NhaCungCapController::class, 'nhacungcap'])->name('nhacungcap');
+    Route::get('/nhacungcap/detail/{MaNhaCungCap}', [NhaCungCapController::class, 'detailNhaCungCap'])->name('nhacungcap.detail');
+    Route::get('/nhacungcap/edit/{MaNhaCungCap}', [NhaCungCapController::class, 'form_editNhaCungCap'])->name('nhacungcap.edit');
+    Route::post('/nhacungcap/edit/{MaNhaCungCap}', [NhaCungCapController::class, 'editNhaCungCap'])->name('nhacungcap.update');
+    Route::get('/nhacungcap/add', [NhaCungCapController::class, 'addNhaCungCap'])->name('nhacungcap.add');
+    Route::post('/nhacungcap/store', [NhaCungCapController::class, 'storeNhaCungCap'])->name('nhacungcap.store');
+    Route::delete('/nhacungcap/{MaNhaCungCap}', [NhaCungCapController::class, 'deleteNhaCungCap'])->name('nhacungcap.delete');
 });
