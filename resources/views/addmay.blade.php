@@ -72,7 +72,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="ThoiGianBaoHanh">Thời Gian Bảo Hành</label>
-                                    <div class="input-group mb-3">
+                                    <div class="input-group">
                                         <input type="number" class="form-control" id="ThoiGianBaoHanh"
                                             name="ThoiGianBaoHanh" placeholder="Nhập thời gian bảo hành"
                                             value="{{ old('ThoiGianBaoHanh') }}" min="1" required>
@@ -81,7 +81,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="ChuKyBaoTri">Chu Kỳ Bảo Trì</label>
-                                    <div class="input-group mb-3">
+                                    <div class="input-group">
                                         <input type="number" class="form-control" id="ChuKyBaoTri" name="ChuKyBaoTri"
                                             placeholder="Nhập chu kỳ bảo trì" value="{{ old('ChuKyBaoTri') }}" min="1" required>
                                         <span class="input-group-text">Tháng</span>
