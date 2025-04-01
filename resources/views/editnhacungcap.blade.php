@@ -5,7 +5,7 @@
 @section('content')
     <div class="container">
         <div class="page-inner">
-            <div class="card">
+            <div class="card w-50 mx-auto">
                 <div class="card-header">
                     <h1 class="m-3">Chỉnh Sửa Nhà Cung Cấp</h1>
                 </div>

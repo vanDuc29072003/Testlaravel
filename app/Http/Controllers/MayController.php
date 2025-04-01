@@ -10,29 +10,29 @@ class MayController extends Controller
 {
     public function may() {
         $dsMay = May::all(); // Lấy toàn bộ danh sách máy
-        return view('may', compact('dsMay'));
+        return view('vMay.may', compact('dsMay'));
     }
 
     public function detailMay($MaMay) {
         $may = May::with('nhaCungCap')->findOrFail($MaMay); // Eager load nhà cung cấp
-        return view('detailmay', compact('may'));
+        return view('vMay.detailmay', compact('may'));
     }
 
     public function form_editmay($MaMay) {
         $may = May::with('nhaCungCap:MaNhaCungCap,TenNhaCungCap')->findOrFail($MaMay); // Eager load nhà cung cấp
         $nhaCungCaps = NhaCungCap::select('MaNhaCungCap', 'TenNhaCungCap')->get(); // Chỉ lấy các cột cần thiết
-        return view('editmay', compact('may', 'nhaCungCaps'));
+        return view('vMay.editmay', compact('may', 'nhaCungCaps'));
     }
 
     public function editmay(Request $request, $MaMay) {
         $may = May::findOrFail($MaMay); // Tìm máy theo ID
         $may->update($request->only('ChuKyBaoTri'));
-        return redirect()->route('may')->with('success', 'Cập nhật thành công!');
+        return redirect()->route('may.detail', ['MaMay' => $MaMay])->with('success', 'Cập nhật thành công!');
     }
 
     public function addMay() {
         $nhaCungCaps = NhaCungCap::all(); // Lấy danh sách nhà cung cấp
-        return view('addmay', compact('nhaCungCaps'));
+        return view('vMay.addmay', compact('nhaCungCaps'));
     }
     public function storeMay(Request $request) {
         try {
