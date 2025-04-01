@@ -14,23 +14,22 @@ class MayController extends Controller
     }
 
     public function detailMay($MaMay) {
-        $may = May::findOrFail($MaMay); // Tìm máy theo ID
-        $nhaCungCap = NhaCungCap::find($may->MaNhaCungCap); // Tìm nhà cung cấp theo ID
-        return view('detailmay', compact('may', 'nhaCungCap'));
- 
+        $may = May::with('nhaCungCap')->findOrFail($MaMay); // Eager load nhà cung cấp
+        return view('detailmay', compact('may'));
     }
 
     public function form_editmay($MaMay) {
-        $nhaCungCaps = NhaCungCap::all();
-        $may = May::findOrFail($MaMay); // Tìm máy theo ID
+        $may = May::with('nhaCungCap:MaNhaCungCap,TenNhaCungCap')->findOrFail($MaMay); // Eager load nhà cung cấp
+        $nhaCungCaps = NhaCungCap::select('MaNhaCungCap', 'TenNhaCungCap')->get(); // Chỉ lấy các cột cần thiết
         return view('editmay', compact('may', 'nhaCungCaps'));
     }
+
     public function editmay(Request $request, $MaMay) {
-        $nhaCungCaps = NhaCungCap::all();
         $may = May::findOrFail($MaMay); // Tìm máy theo ID
-        $may->update($request->all()); // Cập nhật thông tin máy
+        $may->update($request->only('ChuKyBaoTri'));
         return redirect()->route('may')->with('success', 'Cập nhật thành công!');
     }
+
     public function addMay() {
         $nhaCungCaps = NhaCungCap::all(); // Lấy danh sách nhà cung cấp
         return view('addmay', compact('nhaCungCaps'));

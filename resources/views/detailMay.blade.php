@@ -40,7 +40,7 @@
                                 <th scope="row">Thời Gian Bảo Hành</th>
                                 <td>{{ $may->ThoiGianBaoHanh }} tháng</td>
                                 <th scope="row">Nhà Cung Cấp</th>
-                                <td>{{ $nhaCungCap->TenNhaCungCap }}</td>
+                                <td>{{ $may->nhaCungCap->TenNhaCungCap}}</td>
                             </tr>
                         </tbody>
                     </table>
