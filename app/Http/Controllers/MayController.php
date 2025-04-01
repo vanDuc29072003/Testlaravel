@@ -17,6 +17,7 @@ class MayController extends Controller
         $may = May::findOrFail($MaMay); // Tìm máy theo ID
         $nhaCungCap = NhaCungCap::find($may->MaNhaCungCap); // Tìm nhà cung cấp theo ID
         return view('detailmay', compact('may', 'nhaCungCap'));
+ 
     }
 
     public function form_editmay($MaMay) {
