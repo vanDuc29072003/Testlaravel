@@ -117,7 +117,7 @@
           </div>
         </li>
 
-        <li class="nav-item">
+        <li class="nav-item" style="cursor: pointer;">
           <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
             @csrf
           </form>
@@ -127,7 +127,6 @@
             <p>Đăng xuất</p>
           </a>
         </li>
-        
       </ul>
     </div>
   </div>

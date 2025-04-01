@@ -23,9 +23,9 @@ class AuthController extends Controller
             return redirect()->route('may');
         }
 
-        return back()->withErrors([
-            'MaNhanVien' => 'Mã nhân viên hoặc mật khẩu không đúng!'
-        ])->withInput();
+        return back()
+            ->with('error', 'Tài khoản hoặc mật khẩu không đúng.')
+            ->withInput();
     }
 
     public function logout(Request $request)

@@ -2,45 +2,43 @@
 <html lang="en">
 
 <head>
+    <!-- Các tệp CSS/JS khác -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-notify/0.2.0/js/bootstrap-notify.min.js"></script>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no" />
+    <title>CTY TNHH IN T.KHOA</title>
+    <link rel="icon" href="{{ asset('img/logo.png') }}" type="image/x-icon" />
 
-    <head>
-        <!-- Các tệp CSS/JS khác -->
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-notify/0.2.0/js/bootstrap-notify.min.js"></script>
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no" />
-        <title>CTY TNHH IN T.KHOA</title>
-        <link rel="icon" href="{{ asset('img/logo.png') }}" type="image/x-icon" />
+    <!-- Fonts and icons -->
+    <script src="{{ asset('js/plugin/webfont/webfont.min.js') }}"></script>
+    <script>
+        WebFont.load({
+            google: { families: ["Public Sans:300,400,500,600,700"] },
+            custom: {
+                families: [
+                    "Font Awesome 5 Solid",
+                    "Font Awesome 5 Regular",
+                    "Font Awesome 5 Brands",
+                    "simple-line-icons",
+                ],
+                urls: ["{{ asset('css/fonts.min.css') }}"],
+            },
+            active: function () {
+                sessionStorage.fonts = true;
+            },
+        });
+    </script>
 
-        <!-- Fonts and icons -->
-        <script src="{{ asset('js/plugin/webfont/webfont.min.js') }}"></script>
-        <script>
-            WebFont.load({
-                google: { families: ["Public Sans:300,400,500,600,700"] },
-                custom: {
-                    families: [
-                        "Font Awesome 5 Solid",
-                        "Font Awesome 5 Regular",
-                        "Font Awesome 5 Brands",
-                        "simple-line-icons",
-                    ],
-                    urls: ["{{ asset('css/fonts.min.css') }}"],
-                },
-                active: function () {
-                    sessionStorage.fonts = true;
-                },
-            });
-        </script>
-
-        <!-- CSS Files -->
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-        <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
-        <link rel="stylesheet" href="{{ asset('css/plugins.min.css') }}">
-        <link rel="stylesheet" href="{{ asset('css/kaiadmin.min.css') }}">
-        <link rel="stylesheet" href="{{ asset('css/demo.css') }}">
-    </head>
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/plugins.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/kaiadmin.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/demo.css') }}">
+</head>
 
 <body>
     <div class="wrapper">
@@ -51,7 +49,7 @@
                         <img src="{{ asset('img/login-img.jpg') }}" alt="anh" class="img-fluid"
                             style="border-radius: 1rem;height: 65vh;" />
                     </div>
-                    <div class="col-6 d-flex justify-content-center align-items-center text-center">
+                    <div class="col-6 d-flex justify-content-center align-items-center">
                         <div>
                             <div class="card-header d-flex justify-content-center align-items-center">
                                 <img src="{{ asset('img/logo.png') }}" alt="navbar brand" class="navbar-brand m-3"
@@ -64,14 +62,16 @@
                                     <div class="form-group">
                                         <label for="MaNhanVien">Mã nhân viên</label>
                                         <input type="text" name="MaNhanVien" id="MaNhanVien" class="form-control"
-                                            required>
+                                            placeholder="Nhập mã nhân viên" required>
                                     </div>
                                     <div class="form-group">
                                         <label for="MatKhau">Mật khẩu</label>
                                         <input type="password" name="MatKhau" id="MatKhau" class="form-control"
-                                            required>
+                                            placeholder="Nhập mật khẩu" required>
                                     </div>
-                                    <button type="submit" class="btn btn-primary mt-3">Đăng nhập</button>
+                                    <div class="d-flex justify-content-center">
+                                        <button type="submit" class="btn btn-primary mt-3">Đăng nhập</button>
+                                    </div>
                                 </form>
                             </div>
                         </div>
