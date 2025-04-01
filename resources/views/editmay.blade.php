@@ -45,7 +45,7 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="MaNhaCungCap">Nhà Cung Cấp</label>
-                                <select class="form-control" id="MaNhaCungCap" name="MaNhaCungCap" required readonly>
+                                <select class="form-control" id="MaNhaCungCap" name="MaNhaCungCap" required disabled>
                                     <option value="">Chọn nhà cung cấp</option>
                                     @foreach ($nhaCungCaps as $nhaCungCap)
                                         <option value="{{ $nhaCungCap->MaNhaCungCap }}"
@@ -76,9 +76,6 @@
                                 <input type="text" class="form-control" id="ChiTietLinhKien" name="ChiTietLinhKien"
                                     placeholder="Nhập chi tiết linh kiện" value="{{ $may->ChiTietLinhKien }}" readonly>
                             </div>
-
-
-
                             <div class="form-group">
                                 <label for="ThoiGianBaoHanh">Thời Gian Bảo Hành</label>
                                 <div class="input-group mb-3">
