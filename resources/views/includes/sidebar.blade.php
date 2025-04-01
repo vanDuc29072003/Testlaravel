@@ -116,15 +116,18 @@
             </ul>
           </div>
         </li>
-        <li class="nav-item ">
+
+        <li class="nav-item">
           <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
             @csrf
-        </form>
-        
-        <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-            Đăng xuất
-        </a>  
+          </form>
+          <a class="collapsed" aria-expanded="false"
+            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+            <i class="fa fa-sign-out-alt"></i>
+            <p>Đăng xuất</p>
+          </a>
         </li>
+        
       </ul>
     </div>
   </div>
