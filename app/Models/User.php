@@ -22,4 +22,8 @@ class User extends Authenticatable
     {
         return $this->MatKhau;
     }
+    public function nhanvien()
+    {
+        return $this->belongsTo(NhanVien::class, 'MaNhanVien', 'MaNhanVien');
+    }
 }

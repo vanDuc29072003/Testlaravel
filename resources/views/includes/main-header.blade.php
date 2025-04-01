@@ -17,7 +17,8 @@
             </a>
           </li>
           <li class="nav-item topbar-icon">
-            <b class="ms-2">Xin chào, ABC</b>
+            {{-- Hiển thị tên người dùng đã đăng nhập --}}
+            <b class="ms-2">Xin chào, {{ Auth::user()->nhanvien->TenNhanVien }}</b>
           </li>
         </ul>
       </div>
