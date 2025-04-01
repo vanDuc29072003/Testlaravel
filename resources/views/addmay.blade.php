@@ -52,7 +52,7 @@
                                 <div class="form-group">
                                     <label for="NamSanXuat">Năm Sản Xuất</label>
                                     <input type="number" class="form-control" id="NamSanXuat" name="NamSanXuat"
-                                        placeholder="Nhập năm sản xuất" value="{{ old('NamSanXuat') }}" required>
+                                        placeholder="Nhập năm sản xuất" value="{{ old('NamSanXuat') }}" min="1980" required>
                                 </div>
 
                                 <div class="form-group">

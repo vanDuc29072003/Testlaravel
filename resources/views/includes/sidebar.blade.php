@@ -117,10 +117,13 @@
           </div>
         </li>
         <li class="nav-item ">
-          <a href="logout.php" class="collapsed" aria-expanded="false">
-            <i class="fa-solid fa-right-from-bracket"></i>
-            <p>Đăng xuất</p>
-          </a>
+          <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+            @csrf
+        </form>
+        
+        <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+            Đăng xuất
+        </a>  
         </li>
       </ul>
     </div>
