@@ -65,7 +65,7 @@
                         </table>
                     </div>
                 </div>
-                <div class="col-2">
+                <div class="col-2 p-0">
                     <form method="GET" action="{{ route('may') }}" class="p-3 border rounded fixed-search-form">
                         <div class="mb-3">
                             <label for="MaMay" class="form-label">Mã máy</label>

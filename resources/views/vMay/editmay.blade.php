@@ -17,8 +17,9 @@
                 </div>
             </div>
             <div class="card-body">
-                <form action="{{ route('may.edit', $may->MaMay) }}" method="POST">
+                <form action="{{ route('may.update', $may->MaMay) }}" method="POST">
                     @csrf
+                    @method('PATCH')
                     <div class="row">
                         <!-- Cột 1 -->
                         <div class="col-md-4">
@@ -78,7 +79,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="ThoiGianBaoHanh">Thời Gian Bảo Hành</label>
-                                <div class="input-group mb-3">
+                                <div class="input-group">
                                     <input type="number" class="form-control" id="ThoiGianBaoHanh"
                                         name="ThoiGianBaoHanh" placeholder="Nhập thời gian bảo hành"
                                         value="{{ $may->ThoiGianBaoHanh }}" required readonly>
@@ -87,7 +88,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="ChuKyBaoTri">Chu Kỳ Bảo Trì</label>
-                                <div class="input-group mb-3">
+                                <div class="input-group">
                                     <input type="number" class="form-control" id="ChuKyBaoTri" name="ChuKyBaoTri"
                                         placeholder="Nhập chu kỳ bảo trì" value="{{ $may->ChuKyBaoTri }}" min="1" required>
                                     <span class="input-group-text">Tháng</span>
