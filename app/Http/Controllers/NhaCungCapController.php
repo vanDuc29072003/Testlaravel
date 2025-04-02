@@ -46,7 +46,7 @@ class NhaCungCapController extends Controller
          try {
                 $request->validate([
                     'TenNhaCungCap' => 'required|string|max:255|unique:nhacungcap,TenNhaCungCap',
-                    'DiaChi' => 'required|string|max:255',
+                    'DiaChi' => 'required|string|max:255|unique:nhacungcap,DiaChi',
                     'SDT' => 'required|numeric|digits_between:10,12|unique:nhacungcap,SDT',
                     'Email' => 'required|email|max:255|unique:nhacungcap,Email',
                     'MaSoThue' => 'required|numeric|digits_between:10,15|unique:nhacungcap,MaSoThue',
@@ -54,7 +54,7 @@ class NhaCungCapController extends Controller
                     
                     'TenNhaCungCap.unique' => 'Nhà cung cấp đã tồn tại.',
                     'SDT.digits_between' => 'Số Điện Thoại phải có độ dài từ 10 đến 12 chữ số.',
-                    
+                    'DiaChi.unique' => 'Địa chỉ này đã tồn tại ở công ty khác.',
                     'Email.email' => 'Email phải là một địa chỉ email hợp lệ.',
                     'Email.unique' => 'Email đã tồn tại.',
                 
