@@ -41,7 +41,7 @@
   <link rel="stylesheet" href="{{ asset('css/demo.css') }}">
 </head>
 
-<body>
+<body style="zoom: 0.85;">
   <div class="wrapper">
     <!-- Sidebar -->
     @include('includes.sidebar')

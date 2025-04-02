@@ -8,8 +8,13 @@ use App\Models\NhaCungCap;
 
 class MayController extends Controller
 {
+    // public function may() {
+    //     $dsMay = May::all(); // Lấy toàn bộ danh sách máy
+    //     return view('vMay.may', compact('dsMay'));
+    // }
+
     public function may() {
-        $dsMay = May::all(); // Lấy toàn bộ danh sách máy
+        $dsMay = May::paginate(10); // Lấy 10 bản ghi mỗi trang
         return view('vMay.may', compact('dsMay'));
     }
 

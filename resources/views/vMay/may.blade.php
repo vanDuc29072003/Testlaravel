@@ -9,7 +9,7 @@
                 <div class="d-flex justify-content-between align-items-center mb-3">
                     <h1 class="mb-0">Danh sách Máy</h1>
 
-                    <a href="{{ route('may.add') }}" class="btn btn-primary btn-sm">
+                    <a href="{{ route('may.add') }}" class="btn btn-primary">
                         <i class="fa fa-plus"></i> Thêm mới
                     </a>
 
@@ -56,6 +56,11 @@
                             </tr>
                         @endforeach
                     </tbody>
+                    <tfoot>
+                        <nav aria-label="Page navigation example">
+                            {{ $dsMay->links('pagination::bootstrap-5') }}
+                        </nav>
+                    </tfoot>
                 </table>
             </div>
         </div>
@@ -105,7 +110,7 @@
             });
         @endif
     </script>
-    
+
     <script>
         @if (session('error'))
             $.notify({
