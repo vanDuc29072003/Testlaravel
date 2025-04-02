@@ -13,8 +13,37 @@ class MayController extends Controller
     //     return view('vMay.may', compact('dsMay'));
     // }
 
-    public function may() {
-        $dsMay = May::paginate(10); // Lấy 10 bản ghi mỗi trang
+    // public function may() {
+    //     $dsMay = May::paginate(10); // Lấy 10 bản ghi mỗi trang
+    //     return view('vMay.may', compact('dsMay'));
+    // }
+
+    public function may(Request $request) {
+        $query = May::query();
+    
+        // Danh sách các trường cần lọc
+        $filters = [
+            'MaMay' => 'like',
+            'TenMay' => 'like',
+            'SeriMay' => 'like',
+            'ChuKyBaoTri' => '=',
+            'ThoiGianBaoHanh' => '=',
+            'ThoiGianDuaVaoSuDung' => '=',
+            'NamSanXuat' => '=',
+            'HangSanXuat' => 'like',
+        ];
+    
+        // Áp dụng các điều kiện lọc
+        foreach ($filters as $field => $operator) {
+            if ($request->filled($field)) {
+                $value = $operator === 'like' ? '%' . $request->$field . '%' : $request->$field;
+                $query->where($field, $operator, $value);
+            }
+        }
+    
+        // Lấy danh sách máy với phân trang (mặc định 10 bản ghi mỗi trang)
+        $dsMay = $query->paginate(10);
+    
         return view('vMay.may', compact('dsMay'));
     }
 
