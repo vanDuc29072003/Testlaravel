@@ -65,6 +65,7 @@
                     </div>
                 </div>
                     <div class="col-2 p-0">
+                        <div style="margin-top: 105px;"></div>
                         <form method="GET" action="{{ route('nhacungcap') }}" class="p-3 border rounded fixed-search-form">
                             <div class="mb-3">
                                 <label for="MaNhaCungCap" class="form-label">Mã nhà cung cấp</label>

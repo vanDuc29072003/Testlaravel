@@ -1,5 +1,6 @@
 <?php
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\DetailuserController;
 use App\Http\Controllers\LichSuaChuaController;
 use App\Http\Controllers\LichVanHanhController;
 use App\Http\Controllers\MayController;
@@ -40,4 +41,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/nhacungcap/add', [NhaCungCapController::class, 'addNhaCungCap'])->name('nhacungcap.add');
     Route::post('/nhacungcap/store', [NhaCungCapController::class, 'storeNhaCungCap'])->name('nhacungcap.store');
     Route::delete('/nhacungcap/{MaNhaCungCap}', [NhaCungCapController::class, 'deleteNhaCungCap'])->name('nhacungcap.delete');
+
+    Route::get('/detailuser', [DetailuserController::class, 'detailuser'])->name('detailuser');
 });

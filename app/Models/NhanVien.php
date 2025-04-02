@@ -26,4 +26,8 @@ class NhanVien extends Model
     {
         return $this->belongsTo(BoPhan::class, 'MaBoPhan', 'MaBoPhan');
     }
+    public function taikhoan()
+    {
+        return $this->hasOne(User::class, 'MaNhanVien', 'MaNhanVien');
+    }
 }

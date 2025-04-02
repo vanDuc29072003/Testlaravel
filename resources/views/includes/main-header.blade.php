@@ -12,7 +12,8 @@
             </a>
           </li>
           <li class="nav-item topbar-icon">
-            <a class="nav-link nav-link-icon" href="#">
+            <a class="nav-link nav-link-icon" 
+              href="{{ route('detailuser') }}">
               <i class="fa-solid fa-user-gear"></i>
             </a>
           </li>
