@@ -7,12 +7,35 @@ use App\Models\NhaCungCap;
 
 class NhaCungCapController extends Controller
 {
+    
     // Hiển thị danh sách nhà cung cấp
-    public function nhacungcap()
-    {
-        $dsNhaCungCap = NhaCungCap::all(); // Lấy toàn bộ danh sách nhà cung cấp
+   
+    public function NhaCungCap(Request $request) {
+        $query = NhaCungCap::query();
+    
+        // Danh sách các trường cần lọc
+        $filters = [
+            'MaNhaCungCap' => 'like',
+            'TenNhaCungCap' => 'like',
+            'SDT' => 'like',
+            'MaSoThue' => 'like',
+            
+        ];
+    
+        // Áp dụng các điều kiện lọc
+        foreach ($filters as $field => $operator) {
+            if ($request->filled($field)) {
+                $value = $operator === 'like' ? '%' . $request->$field . '%' : $request->$field;
+                $query->where($field, $operator, $value);
+            }
+        }
+    
+        // Lấy danh sách máy với phân trang (mặc định 10 bản ghi mỗi trang)
+        $dsNhaCungCap = $query->paginate(10);
+    
         return view('vNCC.nhacungcap', compact('dsNhaCungCap'));
     }
+
 
     public function detailNhaCungCap($MaNhaCungCap)
     {
@@ -46,7 +69,7 @@ class NhaCungCapController extends Controller
          try {
                 $request->validate([
                     'TenNhaCungCap' => 'required|string|max:255|unique:nhacungcap,TenNhaCungCap',
-                    'DiaChi' => 'required|string|max:255',
+                    'DiaChi' => 'required|string|max:255|unique:nhacungcap,DiaChi',
                     'SDT' => 'required|numeric|digits_between:10,12|unique:nhacungcap,SDT',
                     'Email' => 'required|email|max:255|unique:nhacungcap,Email',
                     'MaSoThue' => 'required|numeric|digits_between:10,15|unique:nhacungcap,MaSoThue',
@@ -54,7 +77,7 @@ class NhaCungCapController extends Controller
                     
                     'TenNhaCungCap.unique' => 'Nhà cung cấp đã tồn tại.',
                     'SDT.digits_between' => 'Số Điện Thoại phải có độ dài từ 10 đến 12 chữ số.',
-                    
+                    'DiaChi.unique' => 'Địa chỉ này đã tồn tại ở công ty khác.',
                     'Email.email' => 'Email phải là một địa chỉ email hợp lệ.',
                     'Email.unique' => 'Email đã tồn tại.',
                 
