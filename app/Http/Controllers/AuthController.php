@@ -20,7 +20,7 @@ class AuthController extends Controller
 
         if (Auth::attempt(['MaNhanVien' => $credentials['MaNhanVien'], 'password' => $credentials['MatKhau']])) {
             $request->session()->regenerate();
-            return redirect()->route('may');
+            return redirect()->route('may')->with('success', 'Chào mừng quay trở lại!');
         }
 
         return back()
@@ -36,4 +36,4 @@ class AuthController extends Controller
         return redirect('/login');
     }
 }
- 
+

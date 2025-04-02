@@ -66,52 +66,53 @@
                     </div>
                 </div>
                 <div class="col-2 p-0">
-                    <div style="margin-top: 105px;"></div>
-                    <form method="GET" action="{{ route('may') }}" class="p-3 border rounded fixed-search-form">
-                        <div class="mb-3">
-                            <label for="MaMay" class="form-label">Mã máy</label>
-                            <input type="text" name="MaMay" id="MaMay" class="form-control" placeholder="Vui lòng nhập"
-                                value="{{ request('MaMay') }}">
-                        </div>
-                        <div class="mb-3">
-                            <label for="TenMay" class="form-label">Tên máy</label>
-                            <input type="text" name="TenMay" id="TenMay" class="form-control" placeholder="Vui lòng nhập"
-                                value="{{ request('TenMay') }}">
-                        </div>
-                        <div class="mb-3">
-                            <label for="SeriMay" class="form-label">Seri máy</label>
-                            <input type="text" name="SeriMay" id="SeriMay" class="form-control" placeholder="Vui lòng nhập"
-                                value="{{ request('SeriMay') }}">
-                        </div>
-                        <div class="mb-3">
-                            <label for="ChuKyBaoTri" class="form-label">Chu kỳ bảo trì</label>
-                            <input type="number" name="ChuKyBaoTri" id="ChuKyBaoTri" class="form-control"
-                                placeholder="Vui lòng nhập" value="{{ request('ChuKyBaoTri') }}">
-                        </div>
-                        <div class="mb-3">
-                            <label for="ThoiGianBaoHanh" class="form-label">Thời gian bảo hành</label>
-                            <input type="number" name="ThoiGianBaoHanh" id="ThoiGianBaoHanh" class="form-control"
-                                placeholder="Vui lòng nhập" value="{{ request('ThoiGianBaoHanh') }}">
-                        </div>
-                        <div class="mb-3">
-                            <label for="ThoiGianDuaVaoSuDung" class="form-label">Thời gian đưa vào sử dụng</label>
-                            <input type="date" name="ThoiGianDuaVaoSuDung" id="ThoiGianDuaVaoSuDung" class="form-control"
-                                value="{{ request('ThoiGianDuaVaoSuDung') }}">
-                        </div>
-                        <div class="mb-3">
-                            <label for="NamSanXuat" class="form-label">Năm sản xuất</label>
-                            <input type="number" name="NamSanXuat" id="NamSanXuat" class="form-control"
-                                placeholder="Vui lòng nhập" value="{{ request('NamSanXuat') }}">
-                        </div>
-                        <div class="mb-3">
-                            <label for="HangSanXuat" class="form-label">Hãng sản xuất</label>
-                            <input type="text" name="HangSanXuat" id="HangSanXuat" class="form-control"
-                                placeholder="Vui lòng nhập" value="{{ request('HangSanXuat') }}">
-                        </div>
-                        <button type="submit" class="btn btn-primary w-100">
-                            <i class="fa fa-search"></i> Tìm kiếm
-                        </button>
-                    </form>
+                    <div style="margin-top: 105px;">
+                        <form method="GET" action="{{ route('may') }}" class="p-3 border rounded fixed-search-form">
+                            <div class="mb-3">
+                                <label for="MaMay" class="form-label">Mã máy</label>
+                                <input type="text" name="MaMay" id="MaMay" class="form-control" placeholder="Vui lòng nhập"
+                                    value="{{ request('MaMay') }}">
+                            </div>
+                            <div class="mb-3">
+                                <label for="TenMay" class="form-label">Tên máy</label>
+                                <input type="text" name="TenMay" id="TenMay" class="form-control"
+                                    placeholder="Vui lòng nhập" value="{{ request('TenMay') }}">
+                            </div>
+                            <div class="mb-3">
+                                <label for="SeriMay" class="form-label">Seri máy</label>
+                                <input type="text" name="SeriMay" id="SeriMay" class="form-control"
+                                    placeholder="Vui lòng nhập" value="{{ request('SeriMay') }}">
+                            </div>
+                            <div class="mb-3">
+                                <label for="ChuKyBaoTri" class="form-label">Chu kỳ bảo trì</label>
+                                <input type="number" name="ChuKyBaoTri" id="ChuKyBaoTri" class="form-control"
+                                    placeholder="Vui lòng nhập" value="{{ request('ChuKyBaoTri') }}">
+                            </div>
+                            <div class="mb-3">
+                                <label for="ThoiGianBaoHanh" class="form-label">Thời gian bảo hành</label>
+                                <input type="number" name="ThoiGianBaoHanh" id="ThoiGianBaoHanh" class="form-control"
+                                    placeholder="Vui lòng nhập" value="{{ request('ThoiGianBaoHanh') }}">
+                            </div>
+                            <div class="mb-3">
+                                <label for="ThoiGianDuaVaoSuDung" class="form-label">Thời gian đưa vào sử dụng</label>
+                                <input type="date" name="ThoiGianDuaVaoSuDung" id="ThoiGianDuaVaoSuDung"
+                                    class="form-control" value="{{ request('ThoiGianDuaVaoSuDung') }}">
+                            </div>
+                            <div class="mb-3">
+                                <label for="NamSanXuat" class="form-label">Năm sản xuất</label>
+                                <input type="number" name="NamSanXuat" id="NamSanXuat" class="form-control"
+                                    placeholder="Vui lòng nhập" value="{{ request('NamSanXuat') }}">
+                            </div>
+                            <div class="mb-3">
+                                <label for="HangSanXuat" class="form-label">Hãng sản xuất</label>
+                                <input type="text" name="HangSanXuat" id="HangSanXuat" class="form-control"
+                                    placeholder="Vui lòng nhập" value="{{ request('HangSanXuat') }}">
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">
+                                <i class="fa fa-search"></i> Tìm kiếm
+                            </button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
