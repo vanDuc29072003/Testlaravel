@@ -24,13 +24,15 @@ Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::get('/lichvanhanh', [LichVanHanhController::class, 'lichVanHanh'])->name('lichvanhanh');
     Route::get('/lichsuachua', [LichSuaChuaController::class, 'lichSuaChua'])->name('lichsuachua');
+
     Route::get('/may', [MayController::class, 'may'])->name('may');
-    Route::get('/may/edit/{MaMay}', [MayController::class, 'form_editmay'])->name('may.edit');
-    Route::post('/may/edit/{MaMay}', [MayController::class, 'editmay'])->name('may.update');
     Route::get('/may/add', [MayController::class, 'addMay'])->name('may.add');
-    Route::post('/may/store', [MayController::class, 'storeMay'])->name('may.store');
-    Route::get('/may/detail/{MaMay}', [MayController::class, 'detailMay'])->name('may.detail');
+    Route::post('/may', [MayController::class, 'storeMay'])->name('may.store');
+    Route::get('/may/{MaMay}', [MayController::class, 'detailMay'])->name('may.detail');
+    Route::get('/may/{MaMay}/edit', [MayController::class, 'form_editmay'])->name('may.edit');
+    Route::patch('/may/{MaMay}', [MayController::class, 'editmay'])->name('may.update');
     Route::delete('/may/{MaMay}', [MayController::class, 'deleteMay'])->name('may.delete');
+
     Route::get('/nhacungcap', [NhaCungCapController::class, 'nhacungcap'])->name('nhacungcap');
     Route::get('/nhacungcap/detail/{MaNhaCungCap}', [NhaCungCapController::class, 'detailNhaCungCap'])->name('nhacungcap.detail');
     Route::get('/nhacungcap/edit/{MaNhaCungCap}', [NhaCungCapController::class, 'form_editNhaCungCap'])->name('nhacungcap.edit');
