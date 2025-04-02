@@ -58,3 +58,46 @@
         </div>
     </div>
 @endsection
+@section('scripts')
+    <script>
+        function confirmDelete(button) {
+            swal({
+                title: 'Bạn có chắc chắn?',
+                text: "Hành động này không thể hoàn tác!",
+                icon: 'warning',
+                buttons: {
+                    confirm: {
+                        text: 'Xóa',
+                        className: 'btn btn-danger'
+                    },
+                    cancel: {
+                        text: 'Hủy',
+                        visible: true,
+                        className: 'btn btn-success'
+                    }
+                }
+            }).then((willDelete) => {
+                if (willDelete) {
+                    button.closest('form').submit(); // Gửi form
+                } else {
+                    swal.close(); // Đóng hộp thoại
+                }
+            });
+        }
+    </script>
+    <script>
+    @if (session('success'))
+        $.notify({
+            title: 'Thành công',
+            message: '{{ session('success') }}',
+            icon: 'icon-bell'
+        }, {
+            type: 'success',
+            animate: {
+                enter: 'animated fadeInDown',
+                exit: 'animated fadeOutUp'
+            },
+        });
+    @endif
+</script>
+@endsection

@@ -10,6 +10,15 @@
                     <h1 class="m-3">Thêm Nhà Cung Cấp</h1>
                 </div>
                 <div class="card-body">
+                    @if ($errors->any())
+                                    <div class="alert alert-danger">
+                                        <ul>
+                                            @foreach ($errors->all() as $error)
+                                                <li>{{ $error }}</li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
+                                @endif
                     <form action="{{ route('nhacungcap.store') }}" method="POST">
                         @csrf
                         <!-- Tên Nhà Cung Cấp -->
@@ -56,4 +65,21 @@
             </div>
         </div>
     </div>
+@endsection
+@section('scripts')
+<script>
+    @if (session('error'))
+        $.notify({
+            title: 'Lỗi',
+            message: '{{ session('error') }}',
+            icon: 'icon-bell'
+        }, {
+            type: 'danger',
+            animate: {
+                enter: 'animated fadeInDown',
+                exit: 'animated fadeOutUp'
+            },
+        });
+    @endif
+</script>
 @endsection

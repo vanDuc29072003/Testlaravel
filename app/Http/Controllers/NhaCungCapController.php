@@ -11,19 +11,19 @@ class NhaCungCapController extends Controller
     public function nhacungcap()
     {
         $dsNhaCungCap = NhaCungCap::all(); // Lấy toàn bộ danh sách nhà cung cấp
-        return view('nhacungcap', compact('dsNhaCungCap'));
+        return view('vNCC.nhacungcap', compact('dsNhaCungCap'));
     }
 
     public function detailNhaCungCap($MaNhaCungCap)
     {
         $nhaCungCap = NhaCungCap::findOrFail($MaNhaCungCap); // Tìm nhà cung cấp theo ID
-        return view('detailnhacungcap', compact('nhaCungCap'));
+        return view('vNCC.detailnhacungcap', compact('nhaCungCap'));
     }
     // Hiển thị form chỉnh sửa nhà cung cấp
     public function form_editNhaCungCap($MaNhaCungCap)
     {
         $nhaCungCap = NhaCungCap::findOrFail($MaNhaCungCap); // Tìm nhà cung cấp theo ID
-        return view('editnhacungcap', compact('nhaCungCap'));
+        return view('vNCC.editnhacungcap', compact('nhaCungCap'));
     }
 
     // Xử lý chỉnh sửa nhà cung cấp
@@ -37,21 +37,31 @@ class NhaCungCapController extends Controller
     // Hiển thị form thêm nhà cung cấp
     public function addNhaCungCap()
     {
-        return view('addnhacungcap');
+        return view('vNCC.addnhacungcap');
     }
 
     // Xử lý thêm nhà cung cấp
     public function storeNhaCungCap(Request $request)
     {
-        try {
-            $request->validate([
-                'TenNhaCungCap' => 'required|string|max:255',
-                'DiaChi' => 'required|string|max:255',
-                'SDT' => 'required|numeric|digits_between:10,12',
-                'Email' => 'required|email|max:255|unique:nhacungcap,Email',
-                'MaSoThue' => 'required|numeric|max:15',
-            ]);
-
+         try {
+                $request->validate([
+                    'TenNhaCungCap' => 'required|string|max:255|unique:nhacungcap,TenNhaCungCap',
+                    'DiaChi' => 'required|string|max:255',
+                    'SDT' => 'required|numeric|digits_between:10,12|unique:nhacungcap,SDT',
+                    'Email' => 'required|email|max:255|unique:nhacungcap,Email',
+                    'MaSoThue' => 'required|numeric|digits_between:10,15|unique:nhacungcap,MaSoThue',
+                ], [
+                    
+                    'TenNhaCungCap.unique' => 'Nhà cung cấp đã tồn tại.',
+                    'SDT.digits_between' => 'Số Điện Thoại phải có độ dài từ 10 đến 12 chữ số.',
+                    
+                    'Email.email' => 'Email phải là một địa chỉ email hợp lệ.',
+                    'Email.unique' => 'Email đã tồn tại.',
+                
+                    'MaSoThue.numeric' => 'Mã Số Thuế phải là số.',
+                    'MaSoThue.digits_between' => 'Mã Số Thuế phải có độ dài từ 10 đến 15 chữ số.',
+                    'MaSoThue.unique' => 'Mã Số Thuế đã tồn tại.',
+                ]);
             // Tạo mới nhà cung cấp
             NhaCungCap::create([
                 'TenNhaCungCap' => $request->TenNhaCungCap,
@@ -64,11 +74,11 @@ class NhaCungCapController extends Controller
             return redirect()->route('nhacungcap')->with('success', 'Thêm nhà cung cấp thành công!');
         } catch (\Illuminate\Validation\ValidationException $e) {
             return redirect()->back()
-                ->with('error', 'Email đã tồn tại hoặc thông tin không hợp lệ!')
-                ->withInput();
+            ->with('error', $e->validator->errors()->first()) // Lấy lỗi đầu tiên     
+            ->withInput();
         }
     }
-
+    
     // Xóa nhà cung cấp
     public function deleteNhaCungCap($MaNhaCungCap)
     {
