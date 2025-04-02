@@ -7,12 +7,35 @@ use App\Models\NhaCungCap;
 
 class NhaCungCapController extends Controller
 {
+    
     // Hiển thị danh sách nhà cung cấp
-    public function nhacungcap()
-    {
-        $dsNhaCungCap = NhaCungCap::all(); // Lấy toàn bộ danh sách nhà cung cấp
+   
+    public function NhaCungCap(Request $request) {
+        $query = NhaCungCap::query();
+    
+        // Danh sách các trường cần lọc
+        $filters = [
+            'MaNhaCungCap' => 'like',
+            'TenNhaCungCap' => 'like',
+            'SDT' => 'like',
+            'MaSoThue' => 'like',
+            
+        ];
+    
+        // Áp dụng các điều kiện lọc
+        foreach ($filters as $field => $operator) {
+            if ($request->filled($field)) {
+                $value = $operator === 'like' ? '%' . $request->$field . '%' : $request->$field;
+                $query->where($field, $operator, $value);
+            }
+        }
+    
+        // Lấy danh sách máy với phân trang (mặc định 10 bản ghi mỗi trang)
+        $dsNhaCungCap = $query->paginate(10);
+    
         return view('vNCC.nhacungcap', compact('dsNhaCungCap'));
     }
+
 
     public function detailNhaCungCap($MaNhaCungCap)
     {
