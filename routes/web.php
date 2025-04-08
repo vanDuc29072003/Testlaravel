@@ -5,6 +5,7 @@ use App\Http\Controllers\LichSuaChuaController;
 use App\Http\Controllers\LichVanHanhController;
 use App\Http\Controllers\MayController;
 use App\Http\Controllers\NhaCungCapController;
+use App\Http\Controllers\YeuCauSuaChuaController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -43,4 +44,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/nhacungcap/{MaNhaCungCap}', [NhaCungCapController::class, 'deleteNhaCungCap'])->name('nhacungcap.delete');
 
     Route::get('/detailuser', [DetailuserController::class, 'detailuser'])->name('detailuser');
+
+    Route::get('/yeucausuachua',[YeuCauSuaChuaController::class, 'yeuCauSuaChua'])->name('yeucausuachua');
+
 });
