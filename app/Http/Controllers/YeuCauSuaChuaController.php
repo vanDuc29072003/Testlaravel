@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\YeuCauSuaChua;
 use App\Models\May;
 use App\Models\NhanVien;
+use App\Models\LichSuaChua;
 use Illuminate\Support\Facades\Auth;
 
 class YeuCauSuaChuaController extends Controller
@@ -29,8 +30,15 @@ class YeuCauSuaChuaController extends Controller
                 $query->where($field, $operator, $value);
             }
         }
-        $dsYeuCauSuaChuaChoDuyet = $queryChoDuyet->where('TrangThai', '0')->with(['may', 'nhanVien'])->orderBy('ThoiGianYeuCau', 'desc')->paginate(10);
-        $dsYeuCauSuaChuaDaXuLy = $queryDaXuLy->whereIn('TrangThai', ['1', '2'])->with(['may', 'nhanVien'])->orderBy('ThoiGianYeuCau', 'desc')->paginate(10);
+        $dsYeuCauSuaChuaChoDuyet = $queryChoDuyet->where('TrangThai', '0')
+                                                ->with(['may', 'nhanVien'])
+                                                ->orderBy('ThoiGianYeuCau', 'desc')
+                                                ->paginate(10, ['*'], 'cho_duyet');
+
+        $dsYeuCauSuaChuaDaXuLy = $queryDaXuLy->whereIn('TrangThai', ['1', '2'])
+                                                ->with(['may', 'nhanVien'])
+                                                ->orderBy('ThoiGianYeuCau', 'desc')
+                                                ->paginate(10, ['*'], 'da_xu_ly');
         $dsYeuCauSuaChua = $dsYeuCauSuaChuaChoDuyet->merge($dsYeuCauSuaChuaDaXuLy);
 
         return view('vYCSC.yeucausuachua', compact('dsYeuCauSuaChua', 'dsYeuCauSuaChuaChoDuyet', 'dsYeuCauSuaChuaDaXuLy', 'dsMay', 'dsNhanVien'));
@@ -58,5 +66,37 @@ class YeuCauSuaChuaController extends Controller
         ]);
 
         return redirect()->route('yeucausuachua.index')->with('success', 'Yêu cầu sửa chữa đã được gửi thành công!');
+    }
+
+    public function tuchoi($MaYeuCauSuaChua)
+    {
+        $yeuCauSuaChua = YeuCauSuaChua::findOrFail($MaYeuCauSuaChua);
+        $yeuCauSuaChua->TrangThai = '2';
+        $yeuCauSuaChua->save();
+
+        return redirect()->route('yeucausuachua.index')->with('success', 'Yêu cầu sửa chữa đã bị từ chối!');
+    }
+
+    public function formduyet($MaYeuCauSuaChua)
+    {
+        $yeuCauSuaChua = YeuCauSuaChua::findOrFail($MaYeuCauSuaChua);
+        $dsNhanVienKyThuat = NhanVien::where('MaBoPhan', '3')->get();
+        return view('vYCSC.duyetyeucausuachua', compact('yeuCauSuaChua', 'dsNhanVienKyThuat'));
+    }
+    public function duyet(Request $request, $MaYeuCauSuaChua)
+    {
+        $request->validate([
+            'MaNhanVienKyThuat' => 'required',
+        ]);
+        
+        $yeuCauSuaChua = YeuCauSuaChua::findOrFail($MaYeuCauSuaChua);
+        $yeuCauSuaChua->TrangThai = '1';
+        $yeuCauSuaChua->save();
+
+        LichSuaChua::create([
+            'MaYeuCauSuaChua' => $MaYeuCauSuaChua,
+            'MaNhanVienKyThuat' => $request->input('MaNhanVienKyThuat'),
+        ]);
+        return redirect()->route('yeucausuachua.index')->with('success', 'Yêu cầu sửa chữa đã được duyệt!');
     }
 }

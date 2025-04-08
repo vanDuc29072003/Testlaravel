@@ -47,7 +47,7 @@
                 </a>
               </li>
               <li>
-                <a href="{{ route('lichsuachua') }}">
+                <a href="{{ route('lichsuachua.index') }}">
                   <span class="sub-item">Lịch sửa chữa</span>
                 </a>
               </li>
