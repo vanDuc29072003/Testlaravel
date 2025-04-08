@@ -10,7 +10,6 @@
                     <div class="table-responsive">
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <h1 class="mb-0">Danh sách Nhà Cung Cấp</h1>
-
                             <a href="{{ route('nhacungcap.add') }}" class="btn btn-primary">
                                 <i class="fa fa-plus"></i> Thêm mới
                             </a>

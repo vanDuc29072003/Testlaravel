@@ -45,6 +45,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/detailuser', [DetailuserController::class, 'detailuser'])->name('detailuser');
 
-    Route::get('/yeucausuachua',[YeuCauSuaChuaController::class, 'yeuCauSuaChua'])->name('yeucausuachua');
-
+    Route::get('/yeucausuachua',[YeuCauSuaChuaController::class, 'index'])->name('yeucausuachua.index');
+    Route::get('/yeucausuachua/create', [YeuCauSuaChuaController::class, 'create'])->name('yeucausuachua.create');
+    Route::post('/yeucausuachua', [YeuCauSuaChuaController::class, 'store'])->name('yeucausuachua.store');
 });

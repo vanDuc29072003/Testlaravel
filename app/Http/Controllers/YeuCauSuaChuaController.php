@@ -6,10 +6,11 @@ use Illuminate\Http\Request;
 use App\Models\YeuCauSuaChua;
 use App\Models\May;
 use App\Models\NhanVien;
+use Illuminate\Support\Facades\Auth;
 
 class YeuCauSuaChuaController extends Controller
 {
-    public function yeuCauSuaChua(Request $request) {
+    public function index(Request $request) {
         $queryChoDuyet = YeuCauSuaChua::query();
         $queryDaXuLy = YeuCauSuaChua::query();
         $query = YeuCauSuaChua::query();
@@ -20,8 +21,7 @@ class YeuCauSuaChuaController extends Controller
             'ThoiGianYeuCau' => 'like',
             'MaMay' => '=',
             'MaNhanVienYeuCau' => '=',
-            'MoTa' => 'like',
-            
+            'MoTa' => 'like',  
         ];
         foreach ($filters as $field => $operator) {
             if ($request->filled($field)) {
@@ -29,12 +29,17 @@ class YeuCauSuaChuaController extends Controller
                 $query->where($field, $operator, $value);
             }
         }
-    
-        $dsYeuCauSuaChuaChoDuyet = $queryChoDuyet->where('TrangThai', '0')->with(['may', 'nhanVien'])->paginate(10);
-        $dsYeuCauSuaChuaDaXuLy = $queryDaXuLy->whereIn('TrangThai', ['1', '2'])->with(['may', 'nhanVien'])->paginate(10);
+        $dsYeuCauSuaChuaChoDuyet = $queryChoDuyet->where('TrangThai', '0')->with(['may', 'nhanVien'])->orderBy('ThoiGianYeuCau', 'desc')->paginate(10);
+        $dsYeuCauSuaChuaDaXuLy = $queryDaXuLy->whereIn('TrangThai', ['1', '2'])->with(['may', 'nhanVien'])->orderBy('ThoiGianYeuCau', 'desc')->paginate(10);
         $dsYeuCauSuaChua = $dsYeuCauSuaChuaChoDuyet->merge($dsYeuCauSuaChuaDaXuLy);
 
         return view('vYCSC.yeucausuachua', compact('dsYeuCauSuaChua', 'dsYeuCauSuaChuaChoDuyet', 'dsYeuCauSuaChuaDaXuLy', 'dsMay', 'dsNhanVien'));
+    }
+
+    public function create(){
+        $dsMay = May::all();
+        $nhanVien = Auth::user()->nhanvien;
+        return view('vYCSC.createyeucausuachua', compact('dsMay', 'nhanVien'));
     }
 
     public function store(Request $request)
@@ -52,6 +57,6 @@ class YeuCauSuaChuaController extends Controller
             'TrangThai' => '0',
         ]);
 
-        return redirect()->back()->with('success', 'Yêu cầu sửa chữa đã được gửi thành công.');
+        return redirect()->route('yeucausuachua.index')->with('success', 'Yêu cầu sửa chữa đã được gửi thành công!');
     }
 }

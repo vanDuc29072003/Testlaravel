@@ -9,7 +9,12 @@
                 <div class="col-12">
                     <!-- Bảng yêu cầu đang chờ duyệt -->
                     <div class="table-responsive mb-5">
-                        <h3 class="mb-3">Danh sách Yêu cầu sửa chữa</h3>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h3 class="mb-3">Danh sách Yêu cầu sửa chữa</h3>
+                            <a href="{{ route('yeucausuachua.create') }}" class="btn btn-primary">
+                                <i class="fa fa-plus"></i> Thêm mới
+                            </a>
+                        </div>
                         <table class="table table-responsive table-bordered table-hover">
                             <thead>
                                 <tr class="text-center">
@@ -93,7 +98,6 @@
                                             <li class="page-item disabled"><span class="page-link">1</span></li>
                                         </ul>
                                     @endif
-                                    <!-- {{ $dsYeuCauSuaChuaDaXuLy->links('pagination::bootstrap-5') }} -->
                                 </nav>
                             </tfoot>
                         </table>
@@ -103,7 +107,7 @@
                 <!-- Form tìm kiếm -->
                 <div class="col-2 p-0">
                     <div style="margin-top: 50px;">
-                        <form method="GET" action="{{ route('yeucausuachua') }}"
+                        <form method="GET" action="{{ route('yeucausuachua.index') }}"
                             class="p-3 border rounded fixed-search-form">
                             <div class="mb-3">
                                 <label for="MaYeuCauSuaChua" class="form-label">Mã yêu cầu sửa chữa</label>
@@ -151,4 +155,38 @@
             </div>
         </div>
     </div>
+@endsection
+
+@section('scripts')
+    <script>
+        @if (session('success'))
+            $.notify({
+                title: 'Thành công',
+                message: '{{ session('success') }}',
+                icon: 'icon-bell'
+            }, {
+                type: 'success',
+                animate: {
+                    enter: 'animated fadeInDown',
+                    exit: 'animated fadeOutUp'
+                },
+            });
+        @endif
+    </script>
+
+    <script>
+        @if (session('error'))
+            $.notify({
+                title: 'Lỗi',
+                message: '{{ session('error') }}',
+                icon: 'icon-bell'
+            }, {
+                type: 'danger',
+                animate: {
+                    enter: 'animated fadeInDown',
+                    exit: 'animated fadeOutUp'
+                },
+            });
+        @endif
+    </script>
 @endsection

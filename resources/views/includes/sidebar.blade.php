@@ -55,7 +55,7 @@
           </div>
         </li>
         <li class="nav-item ">
-          <a href="{{ route('yeucausuachua') }}" class="collapsed" aria-expanded="false">
+          <a href="{{ route('yeucausuachua.index') }}" class="collapsed" aria-expanded="false">
             <i class="fa-solid fa-hammer"></i>
             <p>Yêu cầu sửa chữa</p>
           </a>
