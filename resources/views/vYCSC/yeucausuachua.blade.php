@@ -118,7 +118,7 @@
 
                 <!-- Form tìm kiếm -->
                 <div class="col-2 p-0">
-                    <div style="margin-top: 50px;">
+                    <div style="margin-top: 70px;">
                         <form method="GET" action="{{ route('yeucausuachua.index') }}"
                             class="p-3 border rounded fixed-search-form">
                             <div class="mb-3">
