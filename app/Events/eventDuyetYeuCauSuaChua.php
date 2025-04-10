@@ -17,10 +17,9 @@ class eventDuyetYeuCauSuaChua implements ShouldBroadcast
     /**
      * Create a new event instance.
      */
-    public $message;
     public function __construct()
     {
-        $this->message = 'Bạn có 1 công việc mới';
+
     }
 
     /**
@@ -36,7 +35,7 @@ class eventDuyetYeuCauSuaChua implements ShouldBroadcast
     }
     public function broadcastWith() {
         return [
-            'message' => $this->message
+            'message' => 'Bạn có 1 công việc mới'
         ];
     }
     public function broadcastAs(){

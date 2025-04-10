@@ -13,10 +13,10 @@ use Illuminate\Queue\SerializesModels;
 class eventYeuCauSuaChua implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
-    public $message;
+    public $noidung;
     public function __construct($TenNhanVien)
     {
-        $this->message = "{$TenNhanVien} đã tạo 1 yêu cầu sửa chữa";
+        $this->noidung = "{$TenNhanVien} đã tạo 1 yêu cầu sửa chữa";
     }
 
     /**
@@ -32,7 +32,7 @@ class eventYeuCauSuaChua implements ShouldBroadcast
     }
     public function broadcastWith() {
         return [
-            'message' => $this->message
+            'message' => $this->noidung
         ];
     }
     public function broadcastAs(){
