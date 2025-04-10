@@ -82,8 +82,8 @@
   @yield('scripts')
 
   <script>
-    var pusher = new Pusher('a3b97e75f062cd754730', {
-      cluster: 'ap1',
+    var pusher = new Pusher('{{ env('PUSHER_APP_KEY') }}', {
+      cluster: '{{ env('PUSHER_APP_CLUSTER') }}',
       authEndpoint: '/broadcasting/auth', // Đường dẫn xác thực của Laravel (mặc định)
       auth: {
         headers: {
