@@ -104,6 +104,17 @@
       });
     });
 
+    pusher.subscribe('private-channel-kythuat').bind('eventDuyetYeuCauSuaChua', function (data) {
+      $.notify({
+        icon: 'icon-bell',
+        title: 'Thông báo',
+        message: data.message,
+        url: "{{ route('lichsuachua.index') }}"
+      }, {
+        type: 'danger',
+        delay: 0
+      });
+    });
   </script>
 </body>
 

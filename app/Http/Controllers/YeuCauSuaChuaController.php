@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\eventDuyetYeuCauSuaChua;
 use App\Events\eventYeuCauSuaChua;
 use Illuminate\Http\Request;
 use App\Models\YeuCauSuaChua;
@@ -101,6 +102,8 @@ class YeuCauSuaChuaController extends Controller
             'MaYeuCauSuaChua' => $MaYeuCauSuaChua,
             'MaNhanVienKyThuat' => $request->input('MaNhanVienKyThuat'),
         ]);
+        
+        event(new eventDuyetYeuCauSuaChua());
         return redirect()->route('yeucausuachua.index')->with('success', 'Yêu cầu sửa chữa đã được duyệt!');
     }
 }
