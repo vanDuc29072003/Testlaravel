@@ -47,7 +47,7 @@
                 </a>
               </li>
               <li>
-                <a href="{{ route('lichsuachua') }}">
+                <a href="{{ route('lichsuachua.index') }}">
                   <span class="sub-item">Lịch sửa chữa</span>
                 </a>
               </li>
@@ -56,7 +56,7 @@
         </li>
         <li class="nav-item ">
           <a data-bs-toggle="collapse" href="#lichsu">
-            <i class="fa-solid fa-calendar-days"></i>
+            <i class="fa-solid fa-clock-rotate-left"></i>
             <p>Lịch sử</p>
             <span class="caret"></span>
           </a>
@@ -76,7 +76,7 @@
           </div>
         </li>
         <li class="nav-item ">
-          <a href="yeucau.html" class="collapsed" aria-expanded="false">
+          <a href="{{ route('yeucausuachua.index') }}" class="collapsed" aria-expanded="false">
             <i class="fa-solid fa-hammer"></i>
             <p>Yêu cầu sửa chữa</p>
           </a>

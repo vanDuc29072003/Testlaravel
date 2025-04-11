@@ -8,17 +8,19 @@ use Illuminate\Database\Eloquent\Model;
 class LichSuaChua extends Model
 {
     use HasFactory;
-    protected $table = 'lichsuachua';
-    protected $fillable = [
-        
 
+    protected $table = 'lichsuachua';
+    protected $primaryKey = 'MaLichSuaChua';
+    public $timestamps = false;
+    protected $fillable = [
+        'MaYeuCauSuaChua',
+        'MaNhanVienKyThuat',
     ];
-    function yeucau()
+    public function yeuCauSuaChua()
     {
         return $this->belongsTo(YeuCauSuaChua::class, 'MaYeuCauSuaChua', 'MaYeuCauSuaChua');
-
     }
-    function nhanvienkithuat()
+    public function nhanVienKyThuat()
     {
         return $this->belongsTo(NhanVien::class, 'MaNhanVienKyThuat', 'MaNhanVien');
     }

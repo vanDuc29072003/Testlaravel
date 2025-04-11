@@ -38,8 +38,10 @@
           </a>
         </li>
         <li class="nav-item topbar-icon">
-          {{-- Hiển thị tên người dùng đã đăng nhập --}}
-          <b class="ms-2">Xin chào, {{ Auth::user()->nhanvien->TenNhanVien }}</b>
+          <div class="d-flex flex-column align-items-center">
+            <b class="ms-2 mt-2">Xin chào, {{ Auth::user()->nhanvien->TenNhanVien }}</b>
+            <p class="m-0 fst-italic fs-6">{{ Auth::user()->nhanvien->bophan->TenBoPhan }}</p>
+          </div>
         </li>
       </ul>
     </div>
