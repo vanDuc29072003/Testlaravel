@@ -7,6 +7,7 @@ use App\Http\Controllers\MayController;
 use App\Http\Controllers\NhaCungCapController;
 use App\Http\Controllers\YeuCauSuaChuaController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\LichBaoTriController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,7 +26,6 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::get('/lichvanhanh', [LichVanHanhController::class, 'lichVanHanh'])->name('lichvanhanh');
-    Route::get('/lichsuachua', [LichSuaChuaController::class, 'lichSuaChua'])->name('lichsuachua');
 
     Route::get('/may', [MayController::class, 'may'])->name('may');
     Route::get('/may/add', [MayController::class, 'addMay'])->name('may.add');
@@ -53,4 +53,5 @@ Route::middleware('auth')->group(function () {
     Route::post('/yeucausuachua/{MaYeuCauSuaChua}/tuchoi', [YeuCauSuaChuaController::class, 'tuchoi'])->name('yeucausuachua.tuchoi');
 
     Route::get('/lichsuachua', [LichSuaChuaController::class, 'index'])->name('lichsuachua.index');
+    Route::get('/lichbaotri', [LichBaoTriController::class, 'index'])->name('lichbaotri');
 });
