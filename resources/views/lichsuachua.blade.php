@@ -16,25 +16,35 @@
       <table class="table table-bordered">
         <thead style="background-color: #ffc0cb; color: black;">
           <tr>
-            <th>#</th>
+            <th>STT</th>
             <th>TG sự cố</th>
             <th>Mã Máy</th>
             <th>Tên Máy</th>
             <th>Người Tạo</th>
             <th>Người Đảm Nhận</th>
             <th>Mô Tả</th>
+            <th>Trạng thái</th>
             <th>Cập Nhật</th>
           </tr>
         </thead>
         <tbody>
+          @foreach ($lichsuachua as $lich )
           <tr>
-            <th scope="row">1</th>
-            <td>27/3/2025</td>
-            <td>17</td>
-            <td>Máy cắt giấy</td>
-            <td>Nguyễn Văn Hoang</td>
-            <td>Nguyễn Văn Hoan</td>
-            <td>Sửa bộ phận cấp giấy, kiểm tra lại cảm biến.</td>
+            <th scope="row">{{ $loop->iteration }}</th>
+            <td>{{$lich->yeucau->ThoiGianYeuCau}}</td>
+            <td>{{$lich->yeucau->MaMay}}</td>
+            <td>{{$lich->yeucau->may->TenMay}}</td>
+            <td>{{$lich->yeucau->nhanvienyeucau->TenNhanVien}}</td>
+            <td>{{$lich->nhanvienkithuat->TenNhanVien}}</td>
+            <td>{{$lich->yeucau->MoTa}}</td>
+            <td>
+              @if ($lich->TrangThai == 0)
+                <span class="badge bg-warning">Chưa hoàn thành</span>
+              @elseif ($lich->TrangThai == 1)
+                <span class="badge bg-success">Đã hoàn thành</span>
+              @else
+                <span class="badge bg-danger">Đã hủy</span>
+              @endif
             <td>
               <div class="d-flex gap-2">
                 <button class="btn btn-success btn-sm">
@@ -49,6 +59,8 @@
               </div>
             </td>
           </tr>
+          @endforeach
+          
         </tbody>
       </table>
     </div>
