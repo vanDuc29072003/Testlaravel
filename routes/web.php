@@ -6,6 +6,7 @@ use App\Http\Controllers\LichVanHanhController;
 use App\Http\Controllers\MayController;
 use App\Http\Controllers\NhaCungCapController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\LichBaoTriController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,7 +25,7 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::get('/lichvanhanh', [LichVanHanhController::class, 'lichVanHanh'])->name('lichvanhanh');
-    Route::get('/lichsuachua', [LichSuaChuaController::class, 'lichSuaChua'])->name('lichsuachua');
+    Route::get('/lichsuachua', [LichSuaChuaController::class, 'index'])->name('lichsuachua');
 
     Route::get('/may', [MayController::class, 'may'])->name('may');
     Route::get('/may/add', [MayController::class, 'addMay'])->name('may.add');
@@ -43,4 +44,5 @@ Route::middleware('auth')->group(function () {
     Route::delete('/nhacungcap/{MaNhaCungCap}', [NhaCungCapController::class, 'deleteNhaCungCap'])->name('nhacungcap.delete');
 
     Route::get('/detailuser', [DetailuserController::class, 'detailuser'])->name('detailuser');
+    Route::get('/lichbaotri', [LichBaoTriController::class, 'index'])->name('lichbaotri');
 });
