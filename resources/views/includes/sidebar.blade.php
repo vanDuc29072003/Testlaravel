@@ -56,7 +56,7 @@
         </li>
         <li class="nav-item ">
           <a data-bs-toggle="collapse" href="#lichsu">
-            <i class="fa-solid fa-calendar-days"></i>
+            <i class="fa-solid fa-clock-rotate-left"></i>
             <p>Lịch sử</p>
             <span class="caret"></span>
           </a>
