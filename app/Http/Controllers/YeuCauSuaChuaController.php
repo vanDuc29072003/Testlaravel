@@ -107,8 +107,8 @@ class YeuCauSuaChuaController extends Controller
             'MaNhanVienKyThuat' => $request->input('MaNhanVienKyThuat'),
         ]);
         
-        event(new eventDuyetYeuCauSuaChua());
         event(new eventUpdateTable());
+        event(new eventDuyetYeuCauSuaChua());
 
         return redirect()->route('yeucausuachua.index')->with('success', 'Yêu cầu sửa chữa đã được duyệt!');
     }

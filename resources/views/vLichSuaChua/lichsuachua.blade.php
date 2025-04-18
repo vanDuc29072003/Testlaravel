@@ -23,6 +23,13 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                <tr id="spinner-row" style="display: none;">
+                                    <td colspan="6" style="text-align: center;">
+                                        <div class="spinner-border text-primary" role="status">
+                                            <span class="visually-hidden">Loading...</span>
+                                        </div>
+                                    </td>
+                                </tr>
                                 @foreach ($dsLichSuaChua as $lsc)
                                     <tr class="text-center">
                                         <td>{{ $lsc->MaLichSuaChua }}</td>
@@ -43,7 +50,7 @@
                     </div>
                 </div>
                 <!-- Form tìm kiếm -->
-                 <div class="col-2 p-0">
+                <div class="col-2 p-0">
                     <div style="margin-top: 50px;">
                         <form method="GET" action="{{ route('lichsuachua.index') }}"
                             class="p-3 border rounded fixed-search-form">
@@ -77,4 +84,35 @@
             </div>
         </div>
     </div>
+@endsection
+
+@section('scripts')
+    <script>
+        pusher.subscribe('channel-all').bind('eventUpdateTable', function (data) {
+            if (data.reload) {
+                console.log('Có cập nhật mới');
+
+                $.ajax({
+                    url: window.location.href,
+                    type: 'GET',
+
+                    beforeSend: function () {
+                        // Hiển thị spinner khi bắt đầu gửi request
+                        $('#spinner-row').show();
+                    },
+
+                    success: function (response) {
+                        $('#spinner-row').hide();
+
+                        const newTable = $(response).find('table tbody').html();
+                        $('table tbody').html(newTable);
+                    },
+                    error: function () {
+                        console.error('Lỗi khi load lại bảng!');
+                    }
+                });
+            }
+        })
+    </script>
+
 @endsection

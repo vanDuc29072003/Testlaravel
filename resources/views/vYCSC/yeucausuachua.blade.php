@@ -236,7 +236,7 @@
                     url: window.location.href,
                     type: 'GET',
                     success: function (response) {
-                        // Tìm đúng tbody từng bảng trong response
+                        // Tìm đúng bảng trong response
                         const newChoDuyet = $(response).find('#bang-cho-duyet').html();
                         const newDaXuLy = $(response).find('#bang-da-xu-ly').html();
 
