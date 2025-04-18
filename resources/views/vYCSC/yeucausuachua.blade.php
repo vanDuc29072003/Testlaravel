@@ -15,7 +15,7 @@
                             </a>
                         </div>
                         @if($dsYeuCauSuaChuaChoDuyet->count() > 0)
-                            <table class="table table-responsive table-bordered table-hover">
+                            <table id="bang-cho-duyet" class="table table-responsive table-bordered table-hover">
                                 <thead>
                                     <tr class="text-center">
                                         <th scope="col">Mã</th>
@@ -72,7 +72,7 @@
                 <div class="col-10">
                     <!-- Bảng yêu cầu đã xử lý -->
                     <div class="table-responsive">
-                        <table class="table table-responsive table-bordered table-hover">
+                        <table id="bang-da-xu-ly" class="table table-responsive table-bordered table-hover">
                             <thead>
                                 <tr class="text-center">
                                     <th scope="col">Mã</th>
@@ -224,5 +224,29 @@
                 }
             });
         }
+    </script>
+    <script>
+        pusher.subscribe('channel-all').bind('eventUpdateTable', function (data) {
+            if (data.reload) {
+                console.log('Có cập nhật mới');
+
+                $.ajax({
+                    url: window.location.href,
+                    type: 'GET',
+                    success: function (response) {
+                        // Tìm đúng tbody từng bảng trong response
+                        const newChoDuyet = $(response).find('#bang-cho-duyet').html();
+                        const newDaXuLy = $(response).find('#bang-da-xu-ly').html();
+
+                        // Gán lại đúng chỗ
+                        $('#bang-cho-duyet').html(newChoDuyet);
+                        $('#bang-da-xu-ly').html(newDaXuLy);
+                    },
+                    error: function () {
+                        console.error('Lỗi khi load lại bảng!');
+                    }
+                });
+            }
+        });
     </script>
 @endsection
