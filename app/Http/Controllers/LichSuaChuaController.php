@@ -10,7 +10,10 @@ use App\Models\NhanVien;
 class LichSuaChuaController extends Controller
 {
     public function index(Request $request) {
+        $queryChuaHoanThanh = LichSuaChua::query();
+        $queryDaHoanThanh = LichSuaChua::query();
         $query = LichSuaChua::query();
+        $dsNhanVien = NhanVien::all();
     
         // Danh sách các trường cần lọc
         $filters = [
@@ -26,9 +29,13 @@ class LichSuaChuaController extends Controller
             }
         }
 
-        $dsLichSuaChua = $query->orderByDesc('MaLichSuaChua')->paginate(10);
-        $dsNhanVien = NhanVien::all();
-    
-        return view('vLichSuaChua.lichsuachua', compact('dsLichSuaChua', 'dsNhanVien'));
+        $dsLSCChuaHoanThanh = $queryChuaHoanThanh->where('TrangThai', '0')
+                                                ->with(['yeuCauSuaChua', 'nhanVienKyThuat'])
+                                                ->paginate(10);
+
+        $dsLSCDaHoanThanh = $queryDaHoanThanh->where('TrangThai', '1')
+                                            ->with(['yeuCauSuaChua', 'nhanVienKyThuat'])
+                                            ->paginate(10);
+        return view('vLichSuaChua.lichsuachua', compact('dsLSCChuaHoanThanh', 'dsLSCDaHoanThanh', 'dsNhanVien'));
     }
 }

@@ -16,7 +16,7 @@ class eventYeuCauSuaChua implements ShouldBroadcast
     public $noidung;
     public function __construct($TenNhanVien)
     {
-        $this->noidung = "{$TenNhanVien} đã tạo 1 yêu cầu sửa chữa";
+        $this->noidung = "{$TenNhanVien} đã tạo một yêu cầu sửa chữa";
     }
 
     /**

@@ -25,7 +25,7 @@
                                             <th scope="col">Mô Tả</th>
                                             <th scope="col">NVYC</th>
                                             <th scope="col">Trạng Thái</th>
-                                            <th scope="col">Cập Nhật</th>
+                                            <th scope="col">Hành động</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -38,10 +38,10 @@
                                                 <td>{{ $ycsccd->nhanVien->TenNhanVien }}</td>
                                                 <td><span class="badge bg-warning">Chờ duyệt</span></td>
                                                 <td>
-                                                    <div class="d-flex gap-2">
+                                                    <div class="d-flex justify-content-center gap-3">
                                                         <a href="{{ route('yeucausuachua.formduyet', $ycsccd->MaYeuCauSuaChua) }}"
                                                             class="btn btn-success btn-sm">
-                                                            <i class="fa-solid fa-check"></i>
+                                                            <i class="fa-solid fa-check"></i> Duyệt
                                                         </a>
                                                         <form action="{{ route('yeucausuachua.tuchoi', $ycsccd->MaYeuCauSuaChua) }}"
                                                             method="POST" class="d-inline-block">
@@ -49,7 +49,7 @@
                                                             @method('POST')
                                                             <button type="button" class="btn btn-danger btn-sm"
                                                                 onclick="event.stopPropagation(); confirmTuchoi(this)">
-                                                                <i class="fa-solid fa-xmark"></i>
+                                                                <i class="fa-solid fa-xmark"></i> Từ chối
                                                             </button>
                                                         </form>
                                                     </div>
@@ -120,7 +120,7 @@
 
                 <!-- Form tìm kiếm -->
                 <div class="col-2 p-0">
-                    <div style="margin-top: 70px;">
+                    <div style="margin-top: 50px;">
                         <form method="GET" action="{{ route('yeucausuachua.index') }}"
                             class="p-3 border rounded fixed-search-form">
                             <div class="mb-3">
