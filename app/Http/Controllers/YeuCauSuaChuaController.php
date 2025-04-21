@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Events\eventDuyetYeuCauSuaChua;
+use App\Events\eventUpdateTable;
 use App\Events\eventYeuCauSuaChua;
 use Illuminate\Http\Request;
 use App\Models\YeuCauSuaChua;
@@ -69,6 +70,7 @@ class YeuCauSuaChuaController extends Controller
         
         $TenNhanVien = Auth()->user()->nhanvien->TenNhanVien;
         event(new eventYeuCauSuaChua($TenNhanVien));
+        event(new eventUpdateTable());
         
         return redirect()->route('yeucausuachua.index')->with('success', 'Yêu cầu sửa chữa đã được gửi thành công!');
     }
@@ -78,6 +80,8 @@ class YeuCauSuaChuaController extends Controller
         $yeuCauSuaChua = YeuCauSuaChua::findOrFail($MaYeuCauSuaChua);
         $yeuCauSuaChua->TrangThai = '2';
         $yeuCauSuaChua->save();
+
+        event(new eventUpdateTable());
 
         return redirect()->route('yeucausuachua.index')->with('success', 'Yêu cầu sửa chữa đã bị từ chối!');
     }
@@ -103,7 +107,9 @@ class YeuCauSuaChuaController extends Controller
             'MaNhanVienKyThuat' => $request->input('MaNhanVienKyThuat'),
         ]);
         
+        event(new eventUpdateTable());
         event(new eventDuyetYeuCauSuaChua());
+
         return redirect()->route('yeucausuachua.index')->with('success', 'Yêu cầu sửa chữa đã được duyệt!');
     }
 }

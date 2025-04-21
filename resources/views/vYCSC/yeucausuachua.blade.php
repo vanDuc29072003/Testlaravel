@@ -14,65 +14,67 @@
                                 <i class="fa fa-plus"></i> Thêm mới
                             </a>
                         </div>
-                        @if($dsYeuCauSuaChuaChoDuyet->count() > 0)
-                            <table class="table table-responsive table-bordered table-hover">
-                                <thead>
-                                    <tr class="text-center">
-                                        <th scope="col">Mã</th>
-                                        <th scope="col">Thời Gian</th>
-                                        <th scope="col">Máy</th>
-                                        <th scope="col">Mô Tả</th>
-                                        <th scope="col">NVYC</th>
-                                        <th scope="col">Trạng Thái</th>
-                                        <th scope="col">Cập Nhật</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($dsYeuCauSuaChuaChoDuyet as $ycsccd)
+                        <div id="bang-cho-duyet">
+                            @if($dsYeuCauSuaChuaChoDuyet->count() > 0)
+                                <table class="table table-responsive table-bordered table-hover">
+                                    <thead>
                                         <tr class="text-center">
-                                            <td>{{ $ycsccd->MaYeuCauSuaChua }}</td>
-                                            <td>{{ $ycsccd->ThoiGianYeuCau }}</td>
-                                            <td>{{ $ycsccd->may->TenMay }}</td>
-                                            <td>{{ $ycsccd->MoTa }}</td>
-                                            <td>{{ $ycsccd->nhanVien->TenNhanVien }}</td>
-                                            <td><span class="badge bg-warning">Chờ duyệt</span></td>
-                                            <td>
-                                                <div class="d-flex gap-2">
-                                                    <a href="{{ route('yeucausuachua.formduyet', $ycsccd->MaYeuCauSuaChua) }}"
-                                                        class="btn btn-success btn-sm">
-                                                        <i class="fa-solid fa-check"></i>
-                                                    </a>
-                                                    <form action="{{ route('yeucausuachua.tuchoi', $ycsccd->MaYeuCauSuaChua) }}"
-                                                        method="POST" class="d-inline-block">
-                                                        @csrf
-                                                        @method('POST')
-                                                        <button type="button" class="btn btn-danger btn-sm"
-                                                            onclick="event.stopPropagation(); confirmTuchoi(this)">
-                                                            <i class="fa-solid fa-xmark"></i>
-                                                        </button>
-                                                    </form>
-                                                </div>
-                                            </td>
+                                            <th scope="col">Mã</th>
+                                            <th scope="col">Thời Gian</th>
+                                            <th scope="col">Máy</th>
+                                            <th scope="col">Mô Tả</th>
+                                            <th scope="col">NVYC</th>
+                                            <th scope="col">Trạng Thái</th>
+                                            <th scope="col">Hành động</th>
                                         </tr>
-                                    @endforeach
-                                </tbody>
-                                <tfoot>
-                                    <nav aria-label="Page navigation example">
-                                        {{ $dsYeuCauSuaChuaChoDuyet->links('pagination::bootstrap-5') }}
-                                    </nav>
-                                </tfoot>
-                            </table>
-                        @else
-                            <div class="alert alert-info text-center" role="alert" style="width: 99%;">
-                                <p class="fst-italic m-0">Không có yêu cầu sửa chữa nào đang chờ duyệt.</p>
-                            </div>
-                        @endif
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($dsYeuCauSuaChuaChoDuyet as $ycsccd)
+                                            <tr class="text-center">
+                                                <td>{{ $ycsccd->MaYeuCauSuaChua }}</td>
+                                                <td>{{ $ycsccd->ThoiGianYeuCau }}</td>
+                                                <td>{{ $ycsccd->may->TenMay }}</td>
+                                                <td>{{ $ycsccd->MoTa }}</td>
+                                                <td>{{ $ycsccd->nhanVien->TenNhanVien }}</td>
+                                                <td><span class="badge bg-warning">Chờ duyệt</span></td>
+                                                <td>
+                                                    <div class="d-flex justify-content-center gap-3">
+                                                        <a href="{{ route('yeucausuachua.formduyet', $ycsccd->MaYeuCauSuaChua) }}"
+                                                            class="btn btn-success btn-sm">
+                                                            <i class="fa-solid fa-check"></i> Duyệt
+                                                        </a>
+                                                        <form action="{{ route('yeucausuachua.tuchoi', $ycsccd->MaYeuCauSuaChua) }}"
+                                                            method="POST" class="d-inline-block">
+                                                            @csrf
+                                                            @method('POST')
+                                                            <button type="button" class="btn btn-danger btn-sm"
+                                                                onclick="event.stopPropagation(); confirmTuchoi(this)">
+                                                                <i class="fa-solid fa-xmark"></i> Từ chối
+                                                            </button>
+                                                        </form>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                    <tfoot>
+                                        <nav aria-label="Page navigation example">
+                                            {{ $dsYeuCauSuaChuaChoDuyet->links('pagination::bootstrap-5') }}
+                                        </nav>
+                                    </tfoot>
+                                </table>
+                            @else
+                                <div class="alert alert-info text-center" role="alert" style="width: 99%;">
+                                    <p class="fst-italic m-0">Không có yêu cầu sửa chữa nào đang chờ duyệt.</p>
+                                </div>
+                            @endif
+                        </div>
                     </div>
                 </div>
                 <div class="col-10">
                     <!-- Bảng yêu cầu đã xử lý -->
                     <div class="table-responsive">
-                        <table class="table table-responsive table-bordered table-hover">
+                        <table id="bang-da-xu-ly" class="table table-responsive table-bordered table-hover">
                             <thead>
                                 <tr class="text-center">
                                     <th scope="col">Mã</th>
@@ -118,7 +120,7 @@
 
                 <!-- Form tìm kiếm -->
                 <div class="col-2 p-0">
-                    <div style="margin-top: 70px;">
+                    <div style="margin-top: 50px;">
                         <form method="GET" action="{{ route('yeucausuachua.index') }}"
                             class="p-3 border rounded fixed-search-form">
                             <div class="mb-3">
@@ -224,5 +226,29 @@
                 }
             });
         }
+    </script>
+    <script>
+        pusher.subscribe('channel-all').bind('eventUpdateTable', function (data) {
+            if (data.reload) {
+                console.log('Có cập nhật mới');
+
+                $.ajax({
+                    url: window.location.href,
+                    type: 'GET',
+                    success: function (response) {
+                        // Tìm đúng bảng trong response
+                        const newChoDuyet = $(response).find('#bang-cho-duyet').html();
+                        const newDaXuLy = $(response).find('#bang-da-xu-ly').html();
+
+                        // Gán lại đúng chỗ
+                        $('#bang-cho-duyet').html(newChoDuyet);
+                        $('#bang-da-xu-ly').html(newDaXuLy);
+                    },
+                    error: function () {
+                        console.error('Lỗi khi load lại bảng!');
+                    }
+                });
+            }
+        });
     </script>
 @endsection

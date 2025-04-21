@@ -15,6 +15,7 @@ class LichSuaChua extends Model
     protected $fillable = [
         'MaYeuCauSuaChua',
         'MaNhanVienKyThuat',
+        'TrangThai'
     ];
     public function yeuCauSuaChua()
     {

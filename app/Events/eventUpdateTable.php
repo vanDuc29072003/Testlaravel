@@ -10,13 +10,16 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class eventYeuCauSuaChua implements ShouldBroadcast
+class eventUpdateTable implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
-    public $noidung;
-    public function __construct($TenNhanVien)
+
+    /**
+     * Create a new event instance.
+     */
+    public function __construct()
     {
-        $this->noidung = "{$TenNhanVien} đã tạo một yêu cầu sửa chữa";
+        //
     }
 
     /**
@@ -27,15 +30,14 @@ class eventYeuCauSuaChua implements ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            new PrivateChannel('channel-quanly'),
+            new Channel('channel-all'),
         ];
     }
-    public function broadcastWith() {
-        return [
-            'message' => $this->noidung
-        ];
+    public function broadcastWith()
+    {
+        return ['reload' => true];
     }
     public function broadcastAs(){
-        return 'eventYeuCauSuaChua';
+        return 'eventUpdateTable';
     }
 }

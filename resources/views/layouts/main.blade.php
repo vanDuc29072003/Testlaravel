@@ -76,8 +76,6 @@
   <script src="{{ asset('js/plugin/sweetalert/sweetalert.min.js') }}"></script>
   <script src="{{ asset('js/kaiadmin.min.js') }}"></script>
 
-  @yield('scripts')
-
   <script>
     var pusher = new Pusher('{{ env('PUSHER_APP_KEY') }}', {
       cluster: '{{ env('PUSHER_APP_CLUSTER') }}',
@@ -113,6 +111,8 @@
       });
     });
   </script>
+
+  @yield('scripts')
 </body>
 
 </html>

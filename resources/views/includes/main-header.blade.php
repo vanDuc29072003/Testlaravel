@@ -39,8 +39,8 @@
         </li>
         <li class="nav-item topbar-icon">
           <div class="d-flex flex-column align-items-center">
-            <b class="ms-2 mt-2">Xin chào, {{ Auth::user()->nhanvien->TenNhanVien }}</b>
-            <p class="m-0 fst-italic fs-6">{{ Auth::user()->nhanvien->bophan->TenBoPhan }}</p>
+            <b class="ms-2 mt-2">Xin chào, {{ $header_TenNhanVien }}</b>
+            <p class="m-0 fst-italic fs-6">{{ $header_TenBoPhan }}</p>
           </div>
         </li>
       </ul>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\eventUpdateTable;
 use Illuminate\Http\Request;
 use App\Models\May;
 use App\Models\NhaCungCap;
@@ -18,9 +19,10 @@ class MayController extends Controller
     //     return view('vMay.may', compact('dsMay'));
     // }
 
-    public function may(Request $request) {
+    public function may(Request $request)
+    {
         $query = May::query();
-    
+
         // Danh sách các trường cần lọc
         $filters = [
             'MaMay' => 'like',
@@ -32,7 +34,7 @@ class MayController extends Controller
             'NamSanXuat' => '=',
             'HangSanXuat' => 'like',
         ];
-    
+
         // Áp dụng các điều kiện lọc
         foreach ($filters as $field => $operator) {
             if ($request->filled($field)) {
@@ -40,46 +42,53 @@ class MayController extends Controller
                 $query->where($field, $operator, $value);
             }
         }
-    
+
         // Lấy danh sách máy với phân trang (mặc định 10 bản ghi mỗi trang)
         $dsMay = $query->paginate(10);
-    
+
         return view('vMay.may', compact('dsMay'));
     }
 
-    public function detailMay($MaMay) {
+    public function detailMay($MaMay)
+    {
         $may = May::with('nhaCungCap')->findOrFail($MaMay); // Eager load nhà cung cấp
         return view('vMay.detailmay', compact('may'));
     }
 
-    public function form_editmay($MaMay) {
+    public function form_editmay($MaMay)
+    {
         $may = May::with('nhaCungCap:MaNhaCungCap,TenNhaCungCap')->findOrFail($MaMay); // Eager load nhà cung cấp
         $nhaCungCaps = NhaCungCap::select('MaNhaCungCap', 'TenNhaCungCap')->get(); // Chỉ lấy các cột cần thiết
         return view('vMay.editmay', compact('may', 'nhaCungCaps'));
     }
 
-    public function editmay(Request $request, $MaMay) {
+    public function editmay(Request $request, $MaMay)
+    {
         $may = May::findOrFail($MaMay); // Tìm máy theo ID
         $may->update($request->only('ChuKyBaoTri'));
+
+        event(new eventUpdateTable());
         return redirect()->route('may.detail', ['MaMay' => $MaMay])->with('success', 'Cập nhật thành công!');
     }
 
-    public function addMay() {
+    public function addMay()
+    {
         $nhaCungCaps = NhaCungCap::all(); // Lấy danh sách nhà cung cấp
         return view('vMay.addmay', compact('nhaCungCaps'));
     }
-    public function storeMay(Request $request) {
+    public function storeMay(Request $request)
+    {
         try {
             $request->validate([
                 'TenMay' => 'required|string|max:255',
                 'SeriMay' => 'required|string|max:255|unique:may,SeriMay',
                 'ChuKyBaoTri' => 'required|integer|min:1',
-                'NamSanXuat' => 'required|integer|min:1900|max:'.date('Y'),
+                'NamSanXuat' => 'required|integer|min:1900|max:' . date('Y'),
                 'HangSanXuat' => 'required|string|max:255',
                 'ThoiGianDuaVaoSuDung' => 'required|date',
                 'ThoiGianBaoHanh' => 'required|integer|min:1',
             ]);
-    
+
             // Tạo mới máy
             May::create([
                 'TenMay' => $request->TenMay,
@@ -92,7 +101,9 @@ class MayController extends Controller
                 'ChiTietLinhKien' => $request->ChiTietLinhKien,
                 'MaNhaCungCap' => $request->MaNhaCungCap,
             ]);
-    
+
+            event(new eventUpdateTable());
+
             return redirect()->route('may')->with('success', 'Thêm máy thành công!');
         } catch (\Illuminate\Validation\ValidationException $e) {
             // Lưu lỗi vào session
@@ -101,9 +112,13 @@ class MayController extends Controller
                 ->withInput();
         }
     }
-    public function deleteMay($MaMay) {
+    public function deleteMay($MaMay)
+    {
         $may = May::findOrFail($MaMay); // Tìm máy theo ID
         $may->delete(); // Xóa máy
+
+        event(new eventUpdateTable());
+
         return redirect()->route('may')->with('success', 'Xóa máy thành công!');
     }
 }

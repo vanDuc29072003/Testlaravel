@@ -35,7 +35,7 @@ class eventDuyetYeuCauSuaChua implements ShouldBroadcast
     }
     public function broadcastWith() {
         return [
-            'message' => 'Bạn có 1 công việc mới'
+            'message' => 'Bạn có một công việc mới!'
         ];
     }
     public function broadcastAs(){
