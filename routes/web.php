@@ -24,6 +24,14 @@ Route::post('/login', [AuthController::class, 'login']);
 
 // Route yêu cầu đăng nhập
 Route::middleware('auth')->group(function () {
+    Route::get('/sidebar', function () {
+        return view('includes.sidebar'); // Trả về nội dung sidebar
+    })->name('sidebar');
+    
+    Route::get('/main-header', function () {
+        return view('includes.main-header'); // Trả về nội dung main header
+    })->name('main-header');
+
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::get('/lichvanhanh', [LichVanHanhController::class, 'lichVanHanh'])->name('lichvanhanh');
 

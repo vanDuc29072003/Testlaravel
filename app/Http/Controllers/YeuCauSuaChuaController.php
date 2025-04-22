@@ -4,12 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Events\eventDuyetYeuCauSuaChua;
 use App\Events\eventUpdateTable;
+use App\Events\eventUpdateUI;
 use App\Events\eventYeuCauSuaChua;
 use Illuminate\Http\Request;
 use App\Models\YeuCauSuaChua;
 use App\Models\May;
 use App\Models\NhanVien;
 use App\Models\LichSuaChua;
+use App\Models\ThongBao;
 use Illuminate\Support\Facades\Auth;
 
 class YeuCauSuaChuaController extends Controller
@@ -67,10 +69,18 @@ class YeuCauSuaChuaController extends Controller
             'MoTa' => $request->input('MoTa'),
             'TrangThai' => '0',
         ]);
+
+        ThongBao::create([
+            'NoiDung' => Auth()->user()->nhanvien->TenNhanVien . ' đã tạo một yêu cầu sửa chữa mới',
+            'Loai' => 'primary',
+            'Icon' => 'fa-solid fa-hammer',
+            'Route' => route('yeucausuachua.index')
+        ]);
         
         $TenNhanVien = Auth()->user()->nhanvien->TenNhanVien;
         event(new eventYeuCauSuaChua($TenNhanVien));
         event(new eventUpdateTable());
+        event(new eventUpdateUI());
         
         return redirect()->route('yeucausuachua.index')->with('success', 'Yêu cầu sửa chữa đã được gửi thành công!');
     }
@@ -82,6 +92,7 @@ class YeuCauSuaChuaController extends Controller
         $yeuCauSuaChua->save();
 
         event(new eventUpdateTable());
+        event(new eventUpdateUI());
 
         return redirect()->route('yeucausuachua.index')->with('success', 'Yêu cầu sửa chữa đã bị từ chối!');
     }
@@ -106,8 +117,16 @@ class YeuCauSuaChuaController extends Controller
             'MaYeuCauSuaChua' => $MaYeuCauSuaChua,
             'MaNhanVienKyThuat' => $request->input('MaNhanVienKyThuat'),
         ]);
+
+        ThongBao::create([
+            'NoiDung' => 'Có một lịch sửa chữa mới',
+            'Loai' => 'success',
+            'Icon' => 'fa-solid fa-calendar-days',
+            'Route' => route('lichsuachua.index')
+        ]);
         
         event(new eventUpdateTable());
+        event(new eventUpdateUI());
         event(new eventDuyetYeuCauSuaChua());
 
         return redirect()->route('yeucausuachua.index')->with('success', 'Yêu cầu sửa chữa đã được duyệt!');
