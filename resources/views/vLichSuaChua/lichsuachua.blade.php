@@ -82,13 +82,6 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr id="spinner-row" style="display: none;">
-                                    <td colspan="8" style="text-align: center;">
-                                        <div class="spinner-border" role="status">
-                                            <span class="visually-hidden">Loading...</span>
-                                        </div>
-                                    </td>
-                                </tr>
                                 @foreach ($dsLSCDaHoanThanh as $dth)
                                     <tr class="text-center">
                                         <td>{{ $dth->MaLichSuaChua }}</td>
