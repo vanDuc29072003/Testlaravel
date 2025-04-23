@@ -46,6 +46,8 @@ class YeuCauSuaChuaController extends Controller
                                                 ->paginate(10, ['*'], 'da_xu_ly');
         $dsYeuCauSuaChua = $dsYeuCauSuaChuaChoDuyet->merge($dsYeuCauSuaChuaDaXuLy);
 
+        ThongBao::where('Icon', 'fa-solid fa-hammer')->update(['TrangThai' => 1]);
+
         return view('vYCSC.yeucausuachua', compact('dsYeuCauSuaChua', 'dsYeuCauSuaChuaChoDuyet', 'dsYeuCauSuaChuaDaXuLy', 'dsMay', 'dsNhanVien'));
     }
 
@@ -125,9 +127,9 @@ class YeuCauSuaChuaController extends Controller
             'Route' => route('lichsuachua.index')
         ]);
         
+        event(new eventDuyetYeuCauSuaChua());
         event(new eventUpdateTable());
         event(new eventUpdateUI());
-        event(new eventDuyetYeuCauSuaChua());
 
         return redirect()->route('yeucausuachua.index')->with('success', 'Yêu cầu sửa chữa đã được duyệt!');
     }

@@ -27,13 +27,6 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr id="spinner-row" style="display: none;">
-                                            <td colspan="8" style="text-align: center;">
-                                                <div class="spinner-border text-dark" role="status">
-                                                    <span class="visually-hidden">Loading...</span>
-                                                </div>
-                                            </td>
-                                        </tr>
                                         @foreach ($dsLSCChuaHoanThanh as $cht)
                                             <tr class="text-center">
                                                 <td>{{ $cht->MaLichSuaChua }}</td>
@@ -44,9 +37,20 @@
                                                 <td>{{ $cht->nhanVienKyThuat->TenNhanVien }}</td>
                                                 <td><span class="badge bg-warning">Chưa hoàn thành</span></td>
                                                 <td>
-                                                    <a class="btn btn-sm btn-success">
-                                                        <i class="fa fa-check"></i> Bàn giao
-                                                    </a>
+                                                    <div class="d-flex justify-content-center gap-3">
+                                                        <a class="btn btn-sm btn-success">
+                                                            <i class="fa fa-check"></i> Bàn giao
+                                                        </a>
+                                                        <form action="{{ route('lichsuachua.lienhencc', $cht->MaLichSuaChua) }}"
+                                                            method="POST" class="d-inline-block">
+                                                            @csrf
+                                                            @method('POST')
+                                                            <button type="button" class="btn btn-danger btn-sm"
+                                                                onclick="event.stopPropagation(); confirmLienHe(this)">
+                                                                Liên hệ NCC
+                                                            </button>
+                                                        </form>
+                                                    </div>
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -82,7 +86,7 @@
                             <tbody>
                                 <tr id="spinner-row" style="display: none;">
                                     <td colspan="8" style="text-align: center;">
-                                        <div class="spinner-border text-dark" role="status">
+                                        <div class="spinner-border" role="status">
                                             <span class="visually-hidden">Loading...</span>
                                         </div>
                                     </td>
@@ -95,13 +99,19 @@
                                         <td>{{ $dth->yeuCauSuaChua->MoTa }}</td>
                                         <td>{{ $dth->yeuCauSuaChua->nhanVien->TenNhanVien }}</td>
                                         <td>{{ $dth->nhanVienKyThuat->TenNhanVien }}</td>
-                                        <td><span class="badge bg-success">Đã hoàn thành</span></td>
+                                        <td>
+                                            @if ($dth->TrangThai == '1')
+                                                <span class="badge bg-success">Đã hoàn thành</span>
+                                            @elseif ($dth->TrangThai == '2')
+                                                <span class="badge bg-danger">Liên hệ NCC</span>
+                                            @endif
+                                        </td>
                                     </tr>
                                 @endforeach
                             </tbody>
                             <tfoot>
                                 <nav aria-label="Page navigation example">
-                                    {{ $dsLSCDaHoanThanh->links('pagination::bootstrap-5') }}
+                                    {{ $dsLSCChuaHoanThanh->links('pagination::bootstrap-5') }}
                                 </nav>
                             </tfoot>
                         </table>
@@ -146,6 +156,31 @@
 
 @section('scripts')
     <script>
+        function confirmLienHe(button) {
+            swal({
+                title: 'Xác nhận?',
+                icon: 'warning',
+                buttons: {
+                    confirm: {
+                        text: 'Đồng ý',
+                        className: 'btn btn-danger'
+                    },
+                    cancel: {
+                        text: 'Hủy',
+                        visible: true,
+                        className: 'btn btn-success'
+                    }
+                }
+            }).then((confirm) => {
+                if (confirm) {
+                    button.closest('form').submit();
+                } else {
+                    swal.close();
+                }
+            });
+        }
+    </script>
+    <script>
         pusher.subscribe('channel-all').bind('eventUpdateTable', function (data) {
             if (data.reload) {
                 console.log('Có cập nhật mới');
@@ -154,14 +189,7 @@
                     url: window.location.href,
                     type: 'GET',
 
-                    beforeSend: function () {
-                        // Hiển thị spinner khi bắt đầu gửi request
-                        $('#spinner-row').show();
-                    },
-
                     success: function (response) {
-                        $('#spinner-row').hide();
-
                         const newChuaHoanThanh = $(response).find('#bang-chua-hoan-thanh').html();
                         const newDaHoanThanh = $(response).find('#bang-da-hoan-thanh').html();
 

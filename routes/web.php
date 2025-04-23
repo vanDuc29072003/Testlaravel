@@ -61,5 +61,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/yeucausuachua/{MaYeuCauSuaChua}/tuchoi', [YeuCauSuaChuaController::class, 'tuchoi'])->name('yeucausuachua.tuchoi');
 
     Route::get('/lichsuachua', [LichSuaChuaController::class, 'index'])->name('lichsuachua.index');
+    Route::post('/lichsuachua/{MaLichSuaChua}/lienhencc', [LichSuaChuaController::class, 'lienhencc'])->name('lichsuachua.lienhencc');
+
     Route::get('/lichbaotri', [LichBaoTriController::class, 'index'])->name('lichbaotri');
 });

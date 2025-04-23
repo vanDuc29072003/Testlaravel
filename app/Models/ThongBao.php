@@ -11,7 +11,7 @@ class ThongBao extends Model
 
     protected $table ='thongbao';
     protected $primaryKey = 'MaThongBao'; // Khóa chính
-    public $timestamps = true; // Không sử dụng created_at và updated_at
+    public $timestamps = true;
 
     protected $fillable = [
         'MaThongBao',

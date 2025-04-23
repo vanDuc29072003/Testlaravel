@@ -29,7 +29,9 @@
           <a class="nav-link dropdown-toggle" href="#" id="notifDropdown" role="button" data-bs-toggle="dropdown"
             aria-haspopup="true" aria-expanded="false">
             <i class="fa fa-bell"></i>
-            <span class="notification">{{ $chuadocCount }}</span>
+            @if ($chuadocCount >0)
+              <span class="notification">{{ $chuadocCount }}</span>
+            @endif
           </a>
           <ul class="dropdown-menu notif-box animated fadeIn" aria-labelledby="notifDropdown">
             <li>
@@ -40,9 +42,15 @@
                 <div class="notif-center">
                     @foreach ($dsThongBao as $tb)
                         <a href="{{ $tb->Route }}">
+                          @if ($tb->TrangThai == 0)
+                            <div class="notif-icon notif-{{ $tb->Loai }} avatar avatar-away flex-shrink-0"> 
+                                <i class="{{ $tb->Icon }}"></i> 
+                            </div>
+                          @else
                             <div class="notif-icon notif-{{ $tb->Loai }} flex-shrink-0"> 
                                 <i class="{{ $tb->Icon }}"></i> 
                             </div>
+                          @endif
                             <div class="notif-content">
                                 <span class="block">{{ $tb->NoiDung }}</span>
                                 <span class="time">{{ $tb->created_at->diffForHumans() }}</span>

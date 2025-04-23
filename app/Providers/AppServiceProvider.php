@@ -41,12 +41,6 @@ class AppServiceProvider extends ServiceProvider
                      ->with('count_lichsc', $count_lichsc)
                      ->with('dsThongBao', $dsThongBao)
                      ->with('chuadocCount', $chuadocCount);
-            } else {
-                // Gán mặc định để tránh lỗi khi chưa đăng nhập
-                $view->with('header_TenNhanVien', '')
-                     ->with('header_TenBoPhan', '')
-                     ->with('count_ycsc', 0)
-                     ->with('count_lichsc', 0);
             }
         });
     }
