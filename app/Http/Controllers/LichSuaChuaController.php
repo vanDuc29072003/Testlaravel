@@ -9,6 +9,7 @@ use App\Models\YeuCauSuaChua;
 use App\Models\NhanVien;
 use App\Models\ThongBao;
 use App\Events\eventUpdateUI;
+use Carbon\Carbon;
 
 class LichSuaChuaController extends Controller
 {
@@ -36,7 +37,11 @@ class LichSuaChuaController extends Controller
         $dsLSCChuaHoanThanh = $queryChuaHoanThanh->where('TrangThai', '0')
             ->with(['yeuCauSuaChua', 'nhanVienKyThuat'])
             ->orderBy('updated_at', 'desc')
-            ->paginate(10, ['*'], 'chua_hoan_thanh');
+            ->get();
+
+        $dsLSCtheongay = $dsLSCChuaHoanThanh->groupBy(function ($item) {
+            return Carbon::parse($item->yeuCauSuaChua->ThoiGianYeuCau)->format('d-m-Y');
+        });
 
         $dsLSCDaHoanThanh = $queryDaHoanThanh->whereIn('TrangThai', ['1', '2'])
             ->with(['yeuCauSuaChua', 'nhanVienKyThuat'])
@@ -45,7 +50,7 @@ class LichSuaChuaController extends Controller
 
         ThongBao::where('Icon', 'fa-solid fa-calendar-days')->update(['TrangThai' => 1]);
 
-        return view('vLichSuaChua.lichsuachua', compact('dsLSCChuaHoanThanh', 'dsLSCDaHoanThanh', 'dsNhanVien'));
+        return view('vLichSuaChua.lichsuachua', compact('dsLSCChuaHoanThanh', 'dsLSCDaHoanThanh', 'dsNhanVien', 'dsLSCtheongay'));
     }
 
     public function lienhencc($MaLichSuaChua)

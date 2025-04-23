@@ -120,7 +120,7 @@
           type: 'GET',
           success: function (response) {
             $('#sidebar-container').html(response); // Cập nhật nội dung sidebar
-            reloadScripts();
+            reloadSidebar();
           },
           error: function () {
             console.error('Lỗi khi load lại sidebar!');
@@ -133,23 +133,22 @@
           type: 'GET',
           success: function (response) {
             $('#main-header-container').html(response); // Cập nhật nội dung main header
-            reloadScripts();
+            reloadMainHeader();
           },
           error: function () {
             console.error('Lỗi khi load lại main header!');
           }
         });
 
-        function reloadScripts() {
-            // Xóa tệp JavaScript cũ
-            $('script[src]').each(function () {
-                const oldScript = $(this);
-                const newScript = $('<script>')
-                    .attr('src', oldScript.attr('src'))
-                    .attr('type', 'text/javascript');
-                oldScript.remove();
-                $('body').append(newScript); // Thêm lại tệp JavaScript
-            });
+        function reloadSidebar() {
+          
+        }
+        function reloadMainHeader() {
+          console.log('Gắn lại sự kiện và khởi tạo plugin Main Header');
+          // Khởi tạo lại jQuery Scrollbar (nếu sử dụng)
+          if ($.fn.scrollbar) {
+            $('.scrollbar-outer').scrollbar(); // Khởi tạo lại thanh cuộn tùy chỉnh
+          }
         }
       }
     });

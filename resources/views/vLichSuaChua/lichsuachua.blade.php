@@ -13,54 +13,52 @@
                         </div>
                         <div id="bang-chua-hoan-thanh">
                             @if ($dsLSCChuaHoanThanh->count() > 0)
-                                <table class="table table-responsive table-bordered table-hover">
-                                    <thead>
-                                        <tr class="text-center">
-                                            <th scope="col">Mã</th>
-                                            <th scope="col">Thời Gian</th>
-                                            <th scope="col">Máy</th>
-                                            <th scope="col">Mô Tả</th>
-                                            <th scope="col">NVYC</th>
-                                            <th scope="col">Người đảm nhận</th>
-                                            <th scope="col">Trạng thái</th>
-                                            <th scope="col">Hành động</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($dsLSCChuaHoanThanh as $cht)
+                                @foreach($dsLSCtheongay as $date => $group)
+                                    <h5 class="mt-4">Ngày {{ $date }}</h5>
+                                    <table class="table table-responsive table-bordered table-hover">
+                                        <thead>
                                             <tr class="text-center">
-                                                <td>{{ $cht->MaLichSuaChua }}</td>
-                                                <td>{{ $cht->yeuCauSuaChua->ThoiGianYeuCau }}</td>
-                                                <td>{{ $cht->yeuCauSuaChua->may->TenMay }}</td>
-                                                <td>{{ $cht->yeuCauSuaChua->MoTa }}</td>
-                                                <td>{{ $cht->yeuCauSuaChua->nhanVien->TenNhanVien }}</td>
-                                                <td>{{ $cht->nhanVienKyThuat->TenNhanVien }}</td>
-                                                <td><span class="badge bg-warning">Chưa hoàn thành</span></td>
-                                                <td>
-                                                    <div class="d-flex justify-content-center gap-3">
-                                                        <a class="btn btn-sm btn-success">
-                                                            <i class="fa fa-check"></i> Bàn giao
-                                                        </a>
-                                                        <form action="{{ route('lichsuachua.lienhencc', $cht->MaLichSuaChua) }}"
-                                                            method="POST" class="d-inline-block">
-                                                            @csrf
-                                                            @method('POST')
-                                                            <button type="button" class="btn btn-danger btn-sm"
-                                                                onclick="event.stopPropagation(); confirmLienHe(this)">
-                                                                Liên hệ NCC
-                                                            </button>
-                                                        </form>
-                                                    </div>
-                                                </td>
+                                                <th scope="col">Mã</th>
+                                                <th scope="col">Thời Gian</th>
+                                                <th scope="col">Máy</th>
+                                                <th scope="col">Mô Tả</th>
+                                                <th scope="col">NVYC</th>
+                                                <th scope="col">Người đảm nhận</th>
+                                                <th scope="col">Trạng thái</th>
+                                                <th scope="col">Hành động</th>
                                             </tr>
-                                        @endforeach
-                                    </tbody>
-                                    <tfoot>
-                                        <nav aria-label="Page navigation example">
-                                            {{ $dsLSCChuaHoanThanh->links('pagination::bootstrap-5') }}
-                                        </nav>
-                                    </tfoot>
-                                </table>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($group as $cht)
+                                                <tr class="text-center">
+                                                    <td>{{ $cht->MaLichSuaChua}}</td>
+                                                    <td>{{ $cht->yeuCauSuaChua->ThoiGianYeuCau }}</td>
+                                                    <td>{{ $cht->yeuCauSuaChua->may->TenMay }}</td>
+                                                    <td>{{ $cht->yeuCauSuaChua->MoTa }}</td>
+                                                    <td>{{ $cht->yeuCauSuaChua->nhanVien->TenNhanVien }}</td>
+                                                    <td>{{ $cht->nhanVienKyThuat->TenNhanVien }}</td>
+                                                    <td><span class="badge bg-warning">Chưa hoàn thành</span></td>
+                                                    <td>
+                                                        <div class="d-flex justify-content-center gap-3">
+                                                            <a class="btn btn-sm btn-success">
+                                                                <i class="fa fa-check"></i> Bàn giao
+                                                            </a>
+                                                            <form action="{{ route('lichsuachua.lienhencc', $cht->MaLichSuaChua) }}"
+                                                                method="POST" class="d-inline-block">
+                                                                @csrf
+                                                                @method('POST')
+                                                                <button type="button" class="btn btn-danger btn-sm"
+                                                                    onclick="event.stopPropagation(); confirmLienHe(this)">
+                                                                    Liên hệ NCC
+                                                                </button>
+                                                            </form>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody> 
+                                    </table>
+                                @endforeach
                             @else
                                 <div class="alert alert-info text-center" role="alert" style="width: 99%;">
                                     <p class="fst-italic m-0">Không có lịch sửa chữa nào chưa hoàn thành.</p>
@@ -111,7 +109,7 @@
                             </tbody>
                             <tfoot>
                                 <nav aria-label="Page navigation example">
-                                    {{ $dsLSCChuaHoanThanh->links('pagination::bootstrap-5') }}
+                                    {{ $dsLSCDaHoanThanh->links('pagination::bootstrap-5') }}
                                 </nav>
                             </tfoot>
                         </table>
