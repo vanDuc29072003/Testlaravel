@@ -14,12 +14,12 @@
                         <div id="bang-chua-hoan-thanh">
                             @if ($dsLSCChuaHoanThanh->count() > 0)
                                 @foreach($dsLSCtheongay as $date => $group)
-                                    <h5 class="mt-4">Ngày {{ $date }}</h5>
+                                    <h6 class="mt-4">Ngày {{ $date }}</h6>
                                     <table class="table table-responsive table-bordered table-hover">
                                         <thead>
                                             <tr class="text-center">
                                                 <th scope="col">Mã</th>
-                                                <th scope="col">Thời Gian</th>
+                                                <th scope="col">TGYC</th>
                                                 <th scope="col">Máy</th>
                                                 <th scope="col">Mô Tả</th>
                                                 <th scope="col">NVYC</th>
@@ -32,7 +32,7 @@
                                             @foreach ($group as $cht)
                                                 <tr class="text-center">
                                                     <td>{{ $cht->MaLichSuaChua}}</td>
-                                                    <td>{{ $cht->yeuCauSuaChua->ThoiGianYeuCau }}</td>
+                                                    <td>{{ \Carbon\Carbon::parse($cht->yeuCauSuaChua->ThoiGianYeuCau)->format('H:i') }}</td>
                                                     <td>{{ $cht->yeuCauSuaChua->may->TenMay }}</td>
                                                     <td>{{ $cht->yeuCauSuaChua->MoTa }}</td>
                                                     <td>{{ $cht->yeuCauSuaChua->nhanVien->TenNhanVien }}</td>
@@ -85,7 +85,7 @@
                                 @foreach ($dsLSCDaHoanThanh as $dth)
                                     <tr class="text-center">
                                         <td>{{ $dth->MaLichSuaChua }}</td>
-                                        <td>{{ $dth->yeuCauSuaChua->ThoiGianYeuCau }}</td>
+                                        <td>{{ \Carbon\Carbon::parse($dth->yeuCauSuaChua->ThoiGianYeuCau)->format('d-m-Y H:i') }}</td>
                                         <td>{{ $dth->yeuCauSuaChua->may->TenMay }}</td>
                                         <td>{{ $dth->yeuCauSuaChua->MoTa }}</td>
                                         <td>{{ $dth->yeuCauSuaChua->nhanVien->TenNhanVien }}</td>
