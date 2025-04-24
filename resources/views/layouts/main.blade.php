@@ -76,8 +76,6 @@
   <script src="{{ asset('js/plugin/sweetalert/sweetalert.min.js') }}"></script>
   <script src="{{ asset('js/kaiadmin.min.js') }}"></script>
 
-  @yield('scripts')
-
   <script>
     var pusher = new Pusher('{{ env('PUSHER_APP_KEY') }}', {
       cluster: '{{ env('PUSHER_APP_CLUSTER') }}',
@@ -97,7 +95,7 @@
         url: "{{ route('yeucausuachua.index') }}"
       }, {
         type: 'danger',
-        delay: 0
+        delay: 5000
       });
     });
 
@@ -109,10 +107,54 @@
         url: "{{ route('lichsuachua.index') }}"
       }, {
         type: 'danger',
-        delay: 0
+        delay: 5000
       });
     });
+
+    pusher.subscribe('channel-all').bind('eventUpdateUI', function (data) {
+      if (data.reload) {
+        console.log('Cập nhật giao diện sidebar và main header');
+        // Gửi AJAX để load lại sidebar
+        $.ajax({
+          url: '/sidebar', // Route để lấy nội dung sidebar
+          type: 'GET',
+          success: function (response) {
+            $('#sidebar-container').html(response); // Cập nhật nội dung sidebar
+            reloadSidebar();
+          },
+          error: function () {
+            console.error('Lỗi khi load lại sidebar!');
+          }
+        });
+
+        // Gửi AJAX để load lại main header
+        $.ajax({
+          url: '/main-header', // Route để lấy nội dung main header
+          type: 'GET',
+          success: function (response) {
+            $('#main-header-container').html(response); // Cập nhật nội dung main header
+            reloadMainHeader();
+          },
+          error: function () {
+            console.error('Lỗi khi load lại main header!');
+          }
+        });
+
+        function reloadSidebar() {
+          
+        }
+        function reloadMainHeader() {
+          console.log('Gắn lại sự kiện và khởi tạo plugin Main Header');
+          // Khởi tạo lại jQuery Scrollbar (nếu sử dụng)
+          if ($.fn.scrollbar) {
+            $('.scrollbar-outer').scrollbar(); // Khởi tạo lại thanh cuộn tùy chỉnh
+          }
+        }
+      }
+    });
   </script>
+
+  @yield('scripts')
 </body>
 
 </html>

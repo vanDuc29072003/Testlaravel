@@ -1,4 +1,4 @@
-<div class="sidebar" data-background-color="dark">
+<div id="sidebar-container" class="sidebar" data-background-color="dark">
   <div class="sidebar-logo">
     <!-- Logo Header -->
     <div class="logo-header" data-background-color="dark">
@@ -32,7 +32,11 @@
           <a data-bs-toggle="collapse" href="#phancong">
             <i class="fa-solid fa-calendar-days"></i>
             <p>Phân công</p>
-            <span class="caret"></span>
+            @if ($count_lichsc > 0)
+              <span class="badge badge-warning">{{ $count_lichsc }}</span>
+            @else
+              <span class="caret"></span>
+            @endif
           </a>
           <div class="collapse" id="phancong">
             <ul class="nav nav-collapse">
@@ -49,6 +53,9 @@
               <li>
                 <a href="{{ route('lichsuachua.index') }}">
                   <span class="sub-item">Lịch sửa chữa</span>
+                    @if($count_lichsc > 0)
+                      <span class="badge badge-warning">{{ $count_lichsc }}</span>
+                    @endif
                 </a>
               </li>
             </ul>
@@ -79,6 +86,9 @@
           <a href="{{ route('yeucausuachua.index') }}" class="collapsed" aria-expanded="false">
             <i class="fa-solid fa-hammer"></i>
             <p>Yêu cầu sửa chữa</p>
+            @if ($count_ycsc > 0)
+              <span class="badge badge-warning">{{ $count_ycsc }}</span>
+            @endif
           </a>
         </li>
         <li class="nav-item ">
