@@ -32,7 +32,7 @@
                                         @foreach ($dsYeuCauSuaChuaChoDuyet as $ycsccd)
                                             <tr class="text-center">
                                                 <td>{{ $ycsccd->MaYeuCauSuaChua }}</td>
-                                                <td>{{ $ycsccd->ThoiGianYeuCau }}</td>
+                                                <td>{{ \Carbon\Carbon::parse($ycsccd->ThoiGianYeuCau)->format('d-m-Y H:i') }}</td>
                                                 <td>{{ $ycsccd->may->TenMay }}</td>
                                                 <td>{{ $ycsccd->MoTa }}</td>
                                                 <td>{{ $ycsccd->nhanVien->TenNhanVien }}</td>
@@ -89,7 +89,7 @@
                                 @foreach ($dsYeuCauSuaChuaDaXuLy as $ycscdxl)
                                     <tr class="text-center">
                                         <td>{{ $ycscdxl->MaYeuCauSuaChua }}</td>
-                                        <td>{{ $ycscdxl->ThoiGianYeuCau }}</td>
+                                        <td>{{ \Carbon\Carbon::parse($ycscdxl->ThoiGianYeuCau)->format('d-m-Y H:i') }}</td>
                                         <td>{{ $ycscdxl->may->TenMay }}</td>
                                         <td>{{ $ycscdxl->MoTa }}</td>
                                         <td>{{ $ycscdxl->nhanVien->TenNhanVien }}</td>

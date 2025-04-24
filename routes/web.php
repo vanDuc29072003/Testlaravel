@@ -24,6 +24,14 @@ Route::post('/login', [AuthController::class, 'login']);
 
 // Route yêu cầu đăng nhập
 Route::middleware('auth')->group(function () {
+    Route::get('/sidebar', function () {
+        return view('includes.sidebar'); // Trả về nội dung sidebar
+    })->name('sidebar');
+    
+    Route::get('/main-header', function () {
+        return view('includes.main-header'); // Trả về nội dung main header
+    })->name('main-header');
+
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::get('/lichvanhanh', [LichVanHanhController::class, 'lichVanHanh'])->name('lichvanhanh');
 
@@ -53,5 +61,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/yeucausuachua/{MaYeuCauSuaChua}/tuchoi', [YeuCauSuaChuaController::class, 'tuchoi'])->name('yeucausuachua.tuchoi');
 
     Route::get('/lichsuachua', [LichSuaChuaController::class, 'index'])->name('lichsuachua.index');
+    Route::post('/lichsuachua/{MaLichSuaChua}/lienhencc', [LichSuaChuaController::class, 'lienhencc'])->name('lichsuachua.lienhencc');
+
     Route::get('/lichbaotri', [LichBaoTriController::class, 'index'])->name('lichbaotri');
 });

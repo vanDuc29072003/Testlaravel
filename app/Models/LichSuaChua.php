@@ -11,7 +11,7 @@ class LichSuaChua extends Model
 
     protected $table = 'lichsuachua';
     protected $primaryKey = 'MaLichSuaChua';
-    public $timestamps = false;
+    public $timestamps = true;
     protected $fillable = [
         'MaYeuCauSuaChua',
         'MaNhanVienKyThuat',
