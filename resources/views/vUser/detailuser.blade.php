@@ -6,8 +6,8 @@
     <div class="container">
         <div class="page-inner">
             <div class="card w-50 mx-auto">
-                
-                <div class="card-body p-5">
+
+                <div class="card-body pt-5 px-5">
                     <!-- Table Thông Tin Tài Khoản -->
                     <h3>Thông Tin Tài Khoản</h3>
                     <table class="table table-bordered table-striped mb-5">
@@ -19,10 +19,6 @@
                             <tr>
                                 <th scope="row">Tên Tài Khoản</th>
                                 <td>{{ $user->TenTaiKhoan }}</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">Mật Khẩu</th>
-                                <td>{{ $user->MatKhauChuaMaHoa }}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -57,21 +53,19 @@
                             </tr>
                         </tbody>
                     </table>
-                </div>  
+                </div>
                 <div class="card-footer">
-                    <div class="d-flex justify-content-between align-items-center flex-wrap">
+                    <div class="d-flex justify-content-between align-items-center flex-wrap m-3">
                         <a href="{{ route('may') }}" class="btn btn-secondary">
                             <i class="fa fa-arrow-left"></i> Quay lại
                         </a>
-                    
-                        <div class="d-flex gap-2">
-                        <a class="btn btn-warning">
-                            <i class="fas fa-unlock-alt"></i> Cấp lại mật khẩu
-                        </a>
-            
-                        <a class="btn btn-danger">
-                            <i class="fas fa-trash-alt"></i> Xóa tài khoản
-                        </a>
+                        <div class="d-flex gap-3">
+                            <a class="btn btn-warning">
+                                <i class="fas fa-unlock-alt"></i> Cấp lại mật khẩu
+                            </a>
+                            <a class="btn btn-danger">
+                                <i class="fas fa-trash-alt"></i> Xóa tài khoản
+                            </a>
                         </div>
                     </div>
                 </div>

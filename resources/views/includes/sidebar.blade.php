@@ -1,4 +1,4 @@
-<div class="sidebar" data-background-color="dark">
+<div id="sidebar-container" class="sidebar" data-background-color="dark">
   <div class="sidebar-logo">
     <!-- Logo Header -->
     <div class="logo-header" data-background-color="dark">
@@ -32,7 +32,11 @@
           <a data-bs-toggle="collapse" href="#phancong">
             <i class="fa-solid fa-calendar-days"></i>
             <p>Phân công</p>
-            <span class="caret"></span>
+            @if ($count_lichsc > 0)
+              <span class="badge badge-warning">{{ $count_lichsc }}</span>
+            @else
+              <span class="caret"></span>
+            @endif
           </a>
           <div class="collapse" id="phancong">
             <ul class="nav nav-collapse">
@@ -42,22 +46,49 @@
                 </a>
               </li>
               <li>
-                <a href="lichbaotri.html">
+                <a href="{{ route('lichbaotri') }}">
                   <span class="sub-item">Lịch bảo trì</span>
                 </a>
               </li>
               <li>
-                <a href="{{ route('lichsuachua') }}">
+                <a href="{{ route('lichsuachua.index') }}">
                   <span class="sub-item">Lịch sửa chữa</span>
+                    @if($count_lichsc > 0)
+                      <span class="badge badge-warning">{{ $count_lichsc }}</span>
+                    @endif
                 </a>
               </li>
             </ul>
           </div>
         </li>
         <li class="nav-item ">
-          <a href="yeucau.html" class="collapsed" aria-expanded="false">
+          <a data-bs-toggle="collapse" href="#lichsu">
+            <i class="fa-solid fa-clock-rotate-left"></i>
+            <p>Lịch sử</p>
+            <span class="caret"></span>
+          </a>
+          <div class="collapse" id="lichsu">
+            <ul class="nav nav-collapse">
+              <li>
+                <a href="">
+                  <span class="sub-item">Lịch sử bảo trì</span>
+                </a>
+              </li>
+              <li>
+                <a href="">
+                  <span class="sub-item">Lịch sử sửa chữa</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </li>
+        <li class="nav-item ">
+          <a href="{{ route('yeucausuachua.index') }}" class="collapsed" aria-expanded="false">
             <i class="fa-solid fa-hammer"></i>
             <p>Yêu cầu sửa chữa</p>
+            @if ($count_ycsc > 0)
+              <span class="badge badge-warning">{{ $count_ycsc }}</span>
+            @endif
           </a>
         </li>
         <li class="nav-item ">

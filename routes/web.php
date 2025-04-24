@@ -9,7 +9,10 @@ use App\Http\Controllers\LichVanHanhController;
 use App\Http\Controllers\MayController;
 use App\Http\Controllers\NhaCungCapController;
 use App\Http\Controllers\LinhKienController;
+use App\Http\Controllers\YeuCauSuaChuaController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\LichBaoTriController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -25,9 +28,16 @@ Route::post('/login', [AuthController::class, 'login']);
 
 // Route yêu cầu đăng nhập
 Route::middleware('auth')->group(function () {
+    Route::get('/sidebar', function () {
+        return view('includes.sidebar'); // Trả về nội dung sidebar
+    })->name('sidebar');
+    
+    Route::get('/main-header', function () {
+        return view('includes.main-header'); // Trả về nội dung main header
+    })->name('main-header');
+
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-    Route::get('/lichvanhanh', [LichVanHanhController::class, 'lichVanHanh'])->name('lichvanhanh');
-    Route::get('/lichsuachua', [LichSuaChuaController::class, 'lichSuaChua'])->name('lichsuachua');
+    
 
     Route::get('/dsphieunhap', [dsphieuNhapController::class, 'index'])->name('dsphieunhap');
     Route::get('/dsphieunhap/add', [dsphieuNhapController::class, 'create'])->name('dsphieunhap.add');
@@ -82,4 +92,28 @@ Route::middleware('auth')->group(function () {
     Route::delete('/nhacungcap/{MaNhaCungCap}', [NhaCungCapController::class, 'deleteNhaCungCap'])->name('nhacungcap.delete');
 
     Route::get('/detailuser', [DetailuserController::class, 'detailuser'])->name('detailuser');
+
+    Route::get('/yeucausuachua',[YeuCauSuaChuaController::class, 'index'])->name('yeucausuachua.index');
+    Route::get('/yeucausuachua/create', [YeuCauSuaChuaController::class, 'create'])->name('yeucausuachua.create');
+    Route::post('/yeucausuachua', [YeuCauSuaChuaController::class, 'store'])->name('yeucausuachua.store');
+    Route::get('/yeucausuachua/{MaYeuCauSuaChua}/duyet', [YeuCauSuaChuaController::class, 'formduyet'])->name('yeucausuachua.formduyet');
+    Route::post('/yeucausuachua/{MaYeuCauSuaChua}/duyet', [YeuCauSuaChuaController::class, 'duyet'])->name('yeucausuachua.duyet');
+    Route::post('/yeucausuachua/{MaYeuCauSuaChua}/tuchoi', [YeuCauSuaChuaController::class, 'tuchoi'])->name('yeucausuachua.tuchoi');
+
+    Route::get('/lichsuachua', [LichSuaChuaController::class, 'index'])->name('lichsuachua.index');
+    Route::post('/lichsuachua/{MaLichSuaChua}/lienhencc', [LichSuaChuaController::class, 'lienhencc'])->name('lichsuachua.lienhencc');
+    Route::get('/lichbaotri', [LichBaoTriController::class, 'index'])->name('lichbaotri');
+    Route::get('/lichbaotri/create', [LichBaoTriController::class, 'create'])->name('lichbaotri.create');
+    Route::post('/lichbaotri', [LichBaoTriController::class, 'store'])->name('lichbaotri.store');
+    Route::delete('/lichbaotri/{id}', [LichBaoTriController::class, 'destroy'])->name('lichbaotri.destroy');
+    //Lịch vận hành
+    Route::get('/lichvanhanh', [LichVanHanhController::class, 'index'])->name('lichvanhanh');
+    Route::get('/lichvanhanh/create', [LichVanHanhController::class, 'create'])->name('lichvanhanh.create');
+    Route::post('/lichvanhanh', [LichVanHanhController::class, 'store'])->name('lichvanhanh.store');
+    Route::get('/lichvanhanh/{id}/edit', [LichVanHanhController::class, 'edit'])->name('lichvanhanh.edit');
+    Route::delete('lichvanhanh/{id}', [LichVanHanhController::class, 'destroy'])->name('lichvanhanh.destroy');
+    Route::match(['put', 'patch'], '/lichvanhanh/{id}', [LichVanHanhController::class, 'update'])->name('lichvanhanh.update');
+
+   
+
 });

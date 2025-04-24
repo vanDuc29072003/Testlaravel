@@ -178,4 +178,24 @@
             });
         @endif
     </script>
+
+    <script>
+        pusher.subscribe('channel-all').bind('eventUpdateTable', function (data) {
+            if (data.reload) {
+                console.log('Có cập nhật mới');
+
+                $.ajax({
+                    url: window.location.href,
+                    type: 'GET',
+                    success: function (response) {
+                        const newTbody = $(response).find('table tbody').html();
+                        $('table tbody').html(newTbody);
+                    },
+                    error: function () {
+                        console.error('Lỗi khi load lại bảng!');
+                    }
+                });
+            }
+        });
+    </script>
 @endsection

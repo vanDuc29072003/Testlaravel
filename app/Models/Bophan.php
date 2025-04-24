@@ -14,8 +14,6 @@ class BoPhan extends Authenticatable
         'MaBoPhan',
         'TenBoPhan',
     ];
-
-    // Ghi đè phương thức getAuthPassword để sử dụng cột MatKhau
     
     public function nhanviens()
     {
