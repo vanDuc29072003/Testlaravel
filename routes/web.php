@@ -25,7 +25,7 @@ Route::post('/login', [AuthController::class, 'login']);
 // Route yêu cầu đăng nhập
 Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-    Route::get('/lichvanhanh', [LichVanHanhController::class, 'lichVanHanh'])->name('lichvanhanh');
+    
 
     Route::get('/may', [MayController::class, 'may'])->name('may');
     Route::get('/may/add', [MayController::class, 'addMay'])->name('may.add');
@@ -53,5 +53,19 @@ Route::middleware('auth')->group(function () {
     Route::post('/yeucausuachua/{MaYeuCauSuaChua}/tuchoi', [YeuCauSuaChuaController::class, 'tuchoi'])->name('yeucausuachua.tuchoi');
 
     Route::get('/lichsuachua', [LichSuaChuaController::class, 'index'])->name('lichsuachua.index');
+    //Lịch bảo trì
     Route::get('/lichbaotri', [LichBaoTriController::class, 'index'])->name('lichbaotri');
+    Route::get('/lichbaotri/create', [LichBaoTriController::class, 'create'])->name('lichbaotri.create');
+    Route::post('/lichbaotri', [LichBaoTriController::class, 'store'])->name('lichbaotri.store');
+    Route::delete('/lichbaotri/{id}', [LichBaoTriController::class, 'destroy'])->name('lichbaotri.destroy');
+    //Lịch vận hành
+    Route::get('/lichvanhanh', [LichVanHanhController::class, 'index'])->name('lichvanhanh');
+    Route::get('/lichvanhanh/create', [LichVanHanhController::class, 'create'])->name('lichvanhanh.create');
+    Route::post('/lichvanhanh', [LichVanHanhController::class, 'store'])->name('lichvanhanh.store');
+    Route::get('/lichvanhanh/{id}/edit', [LichVanHanhController::class, 'edit'])->name('lichvanhanh.edit');
+    Route::delete('lichvanhanh/{id}', [LichVanHanhController::class, 'destroy'])->name('lichvanhanh.destroy');
+    Route::match(['put', 'patch'], '/lichvanhanh/{id}', [LichVanHanhController::class, 'update'])->name('lichvanhanh.update');
+
+   
+
 });
