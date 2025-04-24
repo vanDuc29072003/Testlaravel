@@ -20,8 +20,18 @@ class NhaCungCap extends Model
         'Email',
         'MaSoThue'
     ];
-    public function nhaCungCap()
+    public function linhKiens()
     {
-        return $this->belongsTo(NhaCungCap::class, 'MaNhaCungCap', 'MaNhaCungCap');
+        return $this->belongsToMany(
+            LinhKien::class,
+            'nhacungcap_linhkien', // Tên bảng trung gian
+            'MaNhaCungCap', // Khóa ngoại trong bảng trung gian trỏ đến NhaCungCap
+            'MaLinhKien' // Khóa ngoại trong bảng trung gian trỏ đến LinhKien
+        );
+    }
+
+    public function mays()
+    {
+        return $this->hasMany(May::class, 'MaNhaCungCap', 'MaNhaCungCap');
     }
 }

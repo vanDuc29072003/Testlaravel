@@ -1,0 +1,225 @@
+@extends('layouts.main')
+
+@section('title', 'Thêm mới Phiếu Trả')
+
+@section('content')
+<div class="container">
+    <div class="page-inner">
+        <form action="{{ route('dsphieutra.store') }}" method="POST">
+            @csrf
+            <div class="row">
+                <!-- Cột bên trái: Danh sách linh kiện -->
+                <div class="col-9">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h3 class="mb-4">Thêm mới Phiếu Trả Kho</h3>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="searchLinhKien">Tìm kiếm linh kiện</label>
+                        <input type="text" class="form-control" id="searchLinhKien" placeholder="Nhập tên linh kiện">
+                        <div id="searchResults" class="list-group mt-2" style="max-height: 200px; overflow-y: auto;">
+                            <!-- Kết quả tìm kiếm sẽ được hiển thị ở đây -->
+                        </div>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover">
+                            <thead>
+                                <tr class="text-center">
+                                    <th scope="col">Mã Linh Kiện</th>
+                                    <th scope="col">Tên Linh Kiện</th>
+                                    <th scope="col">Đơn Vị Tính</th>
+                                    <th scope="col">Số Lượng</th>
+                                    <th scope="col">Cập Nhật</th>
+                                </tr>
+                            </thead>
+                            <tbody id="product-list">
+                                <!-- Không có dữ liệu cũ, trống mặc định -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Cột bên phải: Thông tin phiếu trả -->
+                <div class="col-3">
+                    <div class="border p-3 rounded">
+                        <div class="form-group">
+                            <label for="MaNhanVienTao">Nhân Viên Tạo</label>
+                            <input type="text" class="form-control" id="MaNhanVienTao" name="MaNhanVienTao"
+                                value="{{ Auth::user()->nhanVien->MaNhanVien }}" readonly>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="MaNhanVienTra">Nhân Viên Trả</label>
+                            <select class="form-control" id="MaNhanVienTra" name="MaNhanVienTra" required>
+                                <option value="">Chọn nhân viên trả</option>
+                                @foreach ($nhanViens as $nhanVien)
+                                    <option value="{{ $nhanVien->MaNhanVien }}">{{ $nhanVien->TenNhanVien }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="NgayTra">Ngày Trả</label>
+                            <input type="datetime-local" class="form-control" id="NgayTra" name="NgayTra"
+                                value="{{ date('Y-m-d\TH:i') }}" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="TongSoLuong">Tổng Số Lượng</label>
+                            <input type="number" class="form-control" id="TongSoLuong" name="TongSoLuong" value="0" readonly>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="GhiChu">Ghi Chú</label>
+                            <textarea class="form-control" id="GhiChu" name="GhiChu" rows="3"></textarea>
+                        </div>
+
+                        <div class="form-group mt-4 text-right">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fa fa-save"></i> Hoàn Thành
+                            </button>
+                            <a href="{{ route('dsphieutra') }}" class="btn btn-secondary ml-2">Trở lại</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+@endsection
+@section('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Xử lý tìm kiếm linh kiện
+        document.getElementById('searchLinhKien').addEventListener('input', function () {
+            let query = this.value;
+            let results = document.getElementById('searchResults');
+
+            if (query.length > 2) {
+                fetch(`/linhkien/search1?query=${query}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        results.innerHTML = '';
+                        if (data.length > 0) {
+                            data.forEach(item => {
+                                let resultItem = document.createElement('a');
+                                resultItem.href = '#';
+                                resultItem.classList.add('list-group-item', 'list-group-item-action');
+                                resultItem.textContent = `${item.TenLinhKien} (${item.MaLinhKien})`;
+                                resultItem.dataset.id = item.MaLinhKien;
+                                resultItem.dataset.name = item.TenLinhKien;
+                                resultItem.dataset.unit = item.don_vi_tinh ? item.don_vi_tinh.TenDonViTinh : 'Không xác định';
+
+                                resultItem.addEventListener('click', function (e) {
+                                    e.preventDefault();
+                                    addLinhKienToTable(this.dataset.id, this.dataset.name, this.dataset.unit);
+                                });
+
+                                results.appendChild(resultItem);
+                            });
+                        } else {
+                            results.innerHTML = '<div class="list-group-item">Không tìm thấy linh kiện</div>';
+                        }
+                    });
+            } else {
+                results.innerHTML = '';
+            }
+        });
+
+        // Thêm sự kiện cho các dòng linh kiện cũ (old input) sau khi load trang
+        document.querySelectorAll('#product-list tr').forEach(row => {
+            let quantityInput = row.querySelector('.quantity');
+            let removeBtn = row.querySelector('.remove-product');
+
+            if (quantityInput) {
+                quantityInput.addEventListener('input', updateTotals);
+            }
+
+            if (removeBtn) {
+                removeBtn.addEventListener('click', function () {
+                    row.remove();
+                    updateTotals();
+                });
+            }
+        });
+
+        // Khi trang load xong, luôn tính lại tổng số lượng
+        updateTotals();
+    });
+
+    // Hàm thêm linh kiện vào bảng
+    function addLinhKienToTable(maLinhKien, tenLinhKien, tenDonViTinh) {
+        let existingRows = document.querySelectorAll('input[name="MaLinhKien[]"]');
+        for (let row of existingRows) {
+            if (row.value === maLinhKien) {
+                $.notify({
+                title: 'Lỗi',
+                message: 'Linh kiện này đã được thêm!',
+                icon: 'icon-bell'
+            }, {
+                type: 'danger',
+                animate: {
+                    enter: 'animated fadeInDown',
+                    exit: 'animated fadeOutUp'
+                },
+            });
+
+            return;
+            }
+        }
+
+        let row = document.createElement('tr');
+        row.innerHTML = `
+            <td><input type="text" class="form-control" name="MaLinhKien[]" value="${maLinhKien}" readonly></td>
+            <td><input type="text" class="form-control" name="TenLinhKien[]" value="${tenLinhKien}" readonly></td>
+            <td><input type="text" class="form-control" name="TenDonViTinh[]" value="${tenDonViTinh}" readonly></td>
+            <td><input type="number" class="form-control quantity" name="SoLuong[]" placeholder="Số lượng" min="1" required></td>
+            <td class="text-center">
+                <button type="button" class="btn btn-danger btn-sm remove-product">
+                    <i class="fa fa-trash"></i> Xóa
+                </button>
+            </td>
+        `;
+        document.getElementById('product-list').appendChild(row);
+
+        // Bắt sự kiện xóa
+        row.querySelector('.remove-product').addEventListener('click', function () {
+            row.remove();
+            updateTotals();
+        });
+
+        // Bắt sự kiện thay đổi số lượng
+        row.querySelector('.quantity').addEventListener('input', updateTotals);
+
+        updateTotals();
+    }
+
+    // Hàm tính tổng số lượng linh kiện
+    function updateTotals() {
+        let totalQty = 0;
+        document.querySelectorAll('#product-list .quantity').forEach(input => {
+            let quantity = parseInt(input.value) || 0;
+            totalQty += quantity;
+        });
+        document.getElementById('TongSoLuong').value = totalQty;
+    }
+
+    // Thông báo lỗi từ session nếu có
+    @if (session('error'))
+        $.notify({
+            title: 'Lỗi',
+            message: '{!! session('error') !!}',
+            icon: 'icon-bell'
+        }, {
+            type: 'danger',
+            animate: {
+                enter: 'animated fadeInDown',
+                exit: 'animated fadeOutUp'
+            },
+        });
+
+        updateTotals();
+    @endif
+</script>
+@endsection
