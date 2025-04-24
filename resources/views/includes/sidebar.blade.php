@@ -98,7 +98,7 @@
           </a>
         </li>
         <li class="nav-item ">
-          <a href="linhkien.php" class="collapsed" aria-expanded="false">
+          <a href="{{ route('linhkien') }}">
             <i class="fa-solid fa-gears"></i>
             <p>Danh sách linh kiện</p>
           </a>
@@ -124,15 +124,21 @@
 
               </li>
               <li>
-                <a href="phieunhap.html">
+                <a href="{{ route('dsphieunhap') }}">
                   <span class="sub-item">Phiếu nhập kho</span>
                 </a>
 
               </li>
               <li>
-                <a href="phieuxuat.html">
+                <a href="{{ route('dsphieuxuat') }}">
                   <span class="sub-item">Phiếu xuất kho</span>
                 </a>
+              </li>
+              <li>
+                <a href="{{ route('dsphieutra') }}">
+                  <span class="sub-item">Phiếu trả kho</span>
+                </a>
+
               </li>
             </ul>
           </div>
