@@ -121,15 +121,9 @@
                                 value="{{ request('NgayNhap') }}">
                         </div>
                         <div class="mb-3">
-                            <label for="MaNhaCungCap" class="form-label">Nhà Cung Cấp</label>
-                            <select name="MaNhaCungCap" id="MaNhaCungCap" class="form-control">
-                                <option value="">-- Chọn nhà cung cấp --</option>
-                                @foreach ($dsNhaCungCap as $ncc)
-                                    <option value="{{ $ncc->MaNhaCungCap }}" {{ request('MaNhaCungCap') == $ncc->MaNhaCungCap ? 'selected' : '' }}>
-                                        {{ $ncc->TenNhaCungCap }}
-                                    </option>
-                                @endforeach
-                            </select>
+                            <label for="TenNhaCungCap" class="form-label">Tên Nhà Cung Cấp</label>
+                            <input type="text" name="TenNhaCungCap" id="TenNhaCungCap" class="form-control"
+                                placeholder="Nhập tên nhà cung cấp" value="{{ request('TenNhaCungCap') }}">
                         </div>
                         <div class="mb-3">
                             <label for="MaNhanVien" class="form-label">Nhân Viên Nhập</label>
@@ -181,7 +175,7 @@
                 },
             });
         @endif
-    </script>    
+    </script>
     <script>
         pusher.subscribe('channel-all').bind('eventUpdateTable', function (data) {
             if (data.reload) {

@@ -26,7 +26,6 @@ class dsphieuNhapController extends Controller
         $filters = [
             'MaPhieuNhap' => '=',
             'NgayNhap' => 'like',
-            'MaNhaCungCap' => '=',
             'MaNhanVien' => '=',
             'TongSoLuong' => 'like',
             'TongTien' => 'like',
@@ -39,6 +38,11 @@ class dsphieuNhapController extends Controller
                 $value = $operator === 'like' ? '%' . $request->$field . '%' : $request->$field;
                 $query->where($field, $operator, $value);
             }
+        }
+        if ($request->filled('TenNhaCungCap')) {
+            $query->whereHas('nhaCungCap', function ($q) use ($request) {
+                $q->where('TenNhaCungCap', 'like', '%' . $request->TenNhaCungCap . '%');
+            });
         }
 
         // Lấy danh sách phiếu nhập đã duyệt
