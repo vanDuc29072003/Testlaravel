@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\eventUpdateTable;
+use App\Events\eventUpdateUI;
 use Illuminate\Http\Request;
 use App\Models\PhieuNhap;
 use App\Models\NhaCungCap;
@@ -9,48 +11,58 @@ use App\Models\NhanVien;
 use App\Models\ChiTietPhieuNhap;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\LienKetLKNCC;
+use App\Events\eventPhieuNhap;
+use App\Models\ThongBao;
 class dsphieuNhapController extends Controller
 {
 
     public function index(Request $request)
     {
-        // Eager load quan hệ nhà cung cấp và nhân viên
-        $query = PhieuNhap::with(['nhaCungCap', 'nhanVien']);
+        $query = PhieuNhap::query(); // Khởi tạo query
+        $dsNhaCungCap = NhaCungCap::all();
+        $dsNhanVien = NhanVien::where('MaBoPhan', 4)->get();
 
         // Danh sách các trường cần lọc
         $filters = [
-            'MaPhieuNhap' => 'like',
-            'NgayNhap' => '=',
-            'nhaCungCap.TenNhaCungCap' => 'like',
-            'nhanVien.TenNhanVien' => 'like',
+            'MaPhieuNhap' => '=',
+            'NgayNhap' => 'like',
+            'MaNhanVien' => '=',
+            'TongSoLuong' => 'like',
+            'TongTien' => 'like',
+            'GhiChu' => 'like',
         ];
 
-        // Áp dụng các điều kiện lọc
+        // Áp dụng các điều kiện lọc chỉ cho dsPhieuNhapDaDuyet
         foreach ($filters as $field => $operator) {
             if ($request->filled($field)) {
                 $value = $operator === 'like' ? '%' . $request->$field . '%' : $request->$field;
-
-                // Kiểm tra nếu là quan hệ
-                if (str_contains($field, '.')) {
-                    [$relation, $column] = explode('.', $field);
-                    $query->whereHas($relation, function ($q) use ($column, $operator, $value) {
-                        $q->where($column, $operator, $value);
-                    });
-                } else {
-                    $query->where($field, $operator, $value);
-                }
+                $query->where($field, $operator, $value);
             }
         }
+        if ($request->filled('TenNhaCungCap')) {
+            $query->whereHas('nhaCungCap', function ($q) use ($request) {
+                $q->where('TenNhaCungCap', 'like', '%' . $request->TenNhaCungCap . '%');
+            });
+        }
 
-        // Lấy danh sách phiếu nhập chờ duyệt (TrangThai = 0) với phân trang
-        $dsPhieuNhapChoDuyet = (clone $query)->where('TrangThai', 0)->paginate(10, ['*'], 'cho-duyet');
+        // Lấy danh sách phiếu nhập đã duyệt
+        $dsPhieuNhapDaDuyet = $query
+            ->where('TrangThai', '1') // Chỉ lấy phiếu nhập đã duyệt
+            ->with('nhaCungCap', 'nhanVien')
+            ->orderBy('MaPhieuNhap', 'desc')
+            ->paginate(10, ['*'], 'da_duyet');
 
-        // Lấy danh sách phiếu nhập đã duyệt (TrangThai = 1) với phân trang
-        $dsPhieuNhapDaDuyet = (clone $query)->where('TrangThai', 1)->paginate(10, ['*'], 'da-duyet');
+        // Lấy danh sách phiếu nhập chờ duyệt (không áp dụng tìm kiếm)
+        $dsPhieuNhapChoDuyet = PhieuNhap::where('TrangThai', '0')
+            ->with('nhaCungCap', 'nhanVien')
+            ->orderBy('MaPhieuNhap', 'desc')
+            ->paginate(10, ['*'], 'cho_duyet');
+        
+        ThongBao::where('Icon', 'fas fa-pen')->update(['TrangThai' => 1]);
 
-        // Trả về view với hai danh sách riêng biệt
-        return view('vPNhap.dsphieunhap', compact('dsPhieuNhapChoDuyet', 'dsPhieuNhapDaDuyet'));
+        return view('vPNhap.dsphieunhap', compact('dsPhieuNhapChoDuyet', 'dsPhieuNhapDaDuyet', 'dsNhaCungCap', 'dsNhanVien'));
     }
+
     public function create()
     {
         $nhaCungCaps = NhaCungCap::all(); // Lấy danh sách nhà cung cấp
@@ -100,7 +112,16 @@ class dsphieuNhapController extends Controller
                 ]);
             }
 
+            ThongBao::create([
+                'NoiDung' => Auth()->user()->nhanvien->TenNhanVien . ' đã tạo một phiếu nhập mới cần duyệt',
+                'Loai' => 'info',
+                'Icon' => 'fas fa-pen',
+                'Route' => route('dsphieunhap')
+            ]);
 
+            event(new eventPhieuNhap());
+            event(new eventUpdateTable());
+            event(new eventUpdateUI());
 
             return redirect()->route('dsphieunhap')->with('success', 'Phiếu nhập mới đã được thêm vào danh sách chờ duyệt!');
         } catch (\Exception $e) {

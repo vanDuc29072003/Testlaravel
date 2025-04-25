@@ -17,7 +17,6 @@
                                 <a href="{{ route('linhkien.add') }}" class="btn btn-primary">
                                     <i class="fa fa-plus"></i> Thêm mới linh kiện
                                 </a>
-                            
                             </div>
                         </div>
 
@@ -87,11 +86,13 @@
                             </div>
 
                             <!-- Nút nằm dưới form thông tin phiếu nhập -->
-                            <div class="form-group mt-4 text-right">
+                            <div class="form-group mt-4 d-flex justify-content-between">
+                                <a href="{{ route('dsphieunhap') }}" class="btn btn-secondary">
+                                    <i class="fa fa-arrow-left"></i> Trở lại
+                                </a>
                                 <button type="submit" class="btn btn-primary">
                                     <i class="fa fa-save"></i> Hoàn Thành
                                 </button>
-                                <a href="{{ route('dsphieunhap') }}" class="btn btn-secondary ml-2">Trở lại</a>
                             </div>
                         </div>
                     </div>
@@ -204,7 +205,7 @@
 
                 // Tính toán thành tiền cho từng hàng
                 let rowTotal = parseInt(quantity) * parseFloat(price);
-                total.value = rowTotal.toFixed(4); // Hiển thị thành tiền với 2 chữ số thập phân
+                total.value = rowTotal.toFixed(0); // Hiển thị thành tiền với 0 chữ số thập phân
 
                 // Cộng dồn tổng số lượng và tổng thành tiền
                 totalQty += parseInt(quantity);
@@ -213,7 +214,7 @@
 
             // Cập nhật tổng số lượng và tổng thành tiền
             document.getElementById('TongSoLuong').value = totalQty;
-            document.getElementById('TongThanhTien').value = totalPriceValue.toFixed(2); // Hiển thị tổng thành tiền với 2 chữ số thập phân
+            document.getElementById('TongThanhTien').value = totalPriceValue.toFixed(0); // Hiển thị tổng thành tiền với 0 chữ số thập phân
         }
     </script>
 

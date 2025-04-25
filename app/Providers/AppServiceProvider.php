@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\PhieuNhap;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
 use App\Models\YeuCauSuaChua;
@@ -29,8 +30,9 @@ class AppServiceProvider extends ServiceProvider
                 $header_TenNhanVien = Auth::user()->nhanvien->TenNhanVien ?? 'Chưa xác định';
                 $header_TenBoPhan = Auth::user()->nhanvien->bophan->TenBoPhan ?? 'Chưa xác định';
     
-                $count_ycsc = YeuCauSuaChua::where('TrangThai', '=', '0')->count();
-                $count_lichsc = LichSuaChua::where('TrangThai', '=', '0')->count();
+                $count_ycsc = YeuCauSuaChua::where('TrangThai', '0')->count();
+                $count_lichsc = LichSuaChua::where('TrangThai', '0')->count();
+                $count_phieunhap = PhieuNhap::where('TrangThai', '0')->count();
 
                 $dsThongBao = ThongBao::orderBy('created_at', 'desc')->take(10)->get(); // Lấy 10 thông báo mới nhất
                 $chuadocCount = ThongBao::where('TrangThai', '=','0')->count(); // Đếm thông báo chưa đọc
@@ -39,6 +41,7 @@ class AppServiceProvider extends ServiceProvider
                      ->with('header_TenBoPhan', $header_TenBoPhan)
                      ->with('count_ycsc', $count_ycsc)
                      ->with('count_lichsc', $count_lichsc)
+                     ->with('count_phieunhap', $count_phieunhap)
                      ->with('dsThongBao', $dsThongBao)
                      ->with('chuadocCount', $chuadocCount);
             }
