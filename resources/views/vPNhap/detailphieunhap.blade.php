@@ -7,7 +7,7 @@
         <div class="card mb-5 mx-auto mt-5" style="width: 85%;">
             <div class="card-header">
                 <div class="mt-3 mx-3 d-flex justify-content-between">
-                    <h1 class="ps-3 mb-0">Thông Tin Phiếu Nhập</h1>
+                    <h2 class="ps-3 mb-0">Thông Tin Phiếu Nhập</h2>
                     <div class="d-flex justify-content-end">
                         @if ($phieuNhap->TrangThai == 0)
                             <a href="{{ route('dsphieunhap.edit', $phieuNhap->MaPhieuNhap) }}"
@@ -38,8 +38,8 @@
                                 <tr>
                                     <th>Mã Linh Kiện</th>
                                     <th>Tên Linh Kiện</th>
-                                    <th>ĐVT</th>
                                     <th>Số Lượng</th>
+                                    <th>ĐVT</th>
                                     <th>Giá Nhập</th>
                                     <th>Thành Tiền</th>
                                 </tr>
@@ -49,8 +49,8 @@
                                     <tr>
                                         <td>{{ $chiTiet->linhKien->MaLinhKien }}</td>
                                         <td>{{ $chiTiet->linhKien->TenLinhKien }}</td>
-                                        <td>{{ $chiTiet->linhKien->donViTinh->TenDonViTinh }}</td>
                                         <td>{{ $chiTiet->SoLuong }}</td>
+                                        <td>{{ $chiTiet->linhKien->donViTinh->TenDonViTinh }}</td>
                                         <td>{{ number_format($chiTiet->GiaNhap, 0, ',', '.') }} VND</td>
                                         <td>{{ number_format($chiTiet->TongCong, 0, ',', '.') }} VND</td>
                                     </tr>
