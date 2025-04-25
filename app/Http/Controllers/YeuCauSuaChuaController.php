@@ -19,9 +19,9 @@ class YeuCauSuaChuaController extends Controller
     public function index(Request $request) {
         $queryChoDuyet = YeuCauSuaChua::query();
         $queryDaXuLy = YeuCauSuaChua::query();
-        $query = YeuCauSuaChua::query();
         $dsMay = May::all();
         $dsNhanVien = NhanVien::all();
+  
         $filters = [
             'MaYeuCauSuaChua' => '=',
             'ThoiGianYeuCau' => 'like',
@@ -32,23 +32,24 @@ class YeuCauSuaChuaController extends Controller
         foreach ($filters as $field => $operator) {
             if ($request->filled($field)) {
                 $value = $operator === 'like' ? '%' . $request->$field . '%' : $request->$field;
-                $query->where($field, $operator, $value);
+                $queryDaXuLy->where($field, $operator, $value);
             }
         }
+
         $dsYeuCauSuaChuaChoDuyet = $queryChoDuyet->where('TrangThai', '0')
-                                                ->with(['may', 'nhanVien'])
-                                                ->orderBy('ThoiGianYeuCau', 'desc')
-                                                ->paginate(10, ['*'], 'cho_duyet');
-
+            ->with(['may', 'nhanVien'])
+            ->orderBy('ThoiGianYeuCau', 'desc')
+            ->paginate(10, ['*'], 'cho_duyet');
+    
         $dsYeuCauSuaChuaDaXuLy = $queryDaXuLy->whereIn('TrangThai', ['1', '2'])
-                                                ->with(['may', 'nhanVien'])
-                                                ->orderBy('ThoiGianYeuCau', 'desc')
-                                                ->paginate(10, ['*'], 'da_xu_ly');
-        $dsYeuCauSuaChua = $dsYeuCauSuaChuaChoDuyet->merge($dsYeuCauSuaChuaDaXuLy);
-
+            ->with(['may', 'nhanVien'])
+            ->orderBy('ThoiGianYeuCau', 'desc')
+            ->paginate(10, ['*'], 'da_xu_ly');
+    
         ThongBao::where('Icon', 'fa-solid fa-hammer')->update(['TrangThai' => 1]);
-
-        return view('vYCSC.yeucausuachua', compact('dsYeuCauSuaChua', 'dsYeuCauSuaChuaChoDuyet', 'dsYeuCauSuaChuaDaXuLy', 'dsMay', 'dsNhanVien'));
+    
+        return view('vYCSC.yeucausuachua', compact('dsYeuCauSuaChuaChoDuyet','dsYeuCauSuaChuaDaXuLy', 'dsMay', 'dsNhanVien'
+        ));
     }
 
     public function create(){

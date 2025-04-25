@@ -33,10 +33,10 @@
             <i class="fa-solid fa-calendar-days"></i>
             <p>Phân công</p>
             @if ($count_lichsc > 0)
-              <span class="badge badge-warning">{{ $count_lichsc }}</span>
-            @else
-              <span class="caret"></span>
-            @endif
+        <span class="badge">{{ $count_lichsc }}</span>
+      @else
+    <span class="caret"></span>
+  @endif
           </a>
           <div class="collapse" id="phancong">
             <ul class="nav nav-collapse">
@@ -53,9 +53,9 @@
               <li>
                 <a href="{{ route('lichsuachua.index') }}">
                   <span class="sub-item">Lịch sửa chữa</span>
-                    @if($count_lichsc > 0)
-                      <span class="badge badge-warning">{{ $count_lichsc }}</span>
-                    @endif
+                  @if($count_lichsc > 0)
+            <span class="badge">{{ $count_lichsc }}</span>
+          @endif
                 </a>
               </li>
             </ul>
@@ -87,8 +87,8 @@
             <i class="fa-solid fa-hammer"></i>
             <p>Yêu cầu sửa chữa</p>
             @if ($count_ycsc > 0)
-              <span class="badge badge-warning">{{ $count_ycsc }}</span>
-            @endif
+        <span class="badge">{{ $count_ycsc }}</span>
+      @endif
           </a>
         </li>
         <li class="nav-item ">
@@ -113,7 +113,11 @@
           <a data-bs-toggle="collapse" href="#submenu">
             <i class="fa-solid fa-clipboard-list"></i>
             <p>Lập phiếu</p>
-            <span class="caret"></span>
+            @if($count_phieunhap > 0)
+              <span class="badge">{{ $count_phieunhap }}</span>
+            @else
+              <span class="caret"></span>
+            @endif
           </a>
           <div class="collapse" id="submenu">
             <ul class="nav nav-collapse">
@@ -126,6 +130,9 @@
               <li>
                 <a href="{{ route('dsphieunhap') }}">
                   <span class="sub-item">Phiếu nhập kho</span>
+                  @if($count_phieunhap > 0)
+            <span class="badge">{{ $count_phieunhap }}</span>
+          @endif
                 </a>
 
               </li>

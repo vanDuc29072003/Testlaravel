@@ -26,9 +26,9 @@ class PhieuTra extends Model
         return $this->belongsTo(NhanVien::class, 'MaNhanVienTao', 'MaNhanVien');
     }
     public function nhanVienTra()
-{
-    return $this->belongsTo(NhanVien::class, 'MaNhanVienTra', 'MaNhanVien');
-}
+    {
+        return $this->belongsTo(NhanVien::class, 'MaNhanVienTra', 'MaNhanVien');
+    }
     public function chiTietPhieuTra()
     {
         return $this->hasMany(chiTietPhieuTra::class, 'MaPhieuTra', 'MaPhieuTra');
