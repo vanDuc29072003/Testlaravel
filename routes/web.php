@@ -102,6 +102,9 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/lichsuachua', [LichSuaChuaController::class, 'index'])->name('lichsuachua.index');
     Route::post('/lichsuachua/{MaLichSuaChua}/lienhencc', [LichSuaChuaController::class, 'lienhencc'])->name('lichsuachua.lienhencc');
+    Route::get('/lichsuachua/dahoanthanh', [LichSuaChuaController::class, 'lichSuDaHoanThanh'])->name('lichsuachua.dahoanthanh');
+    
+    
     Route::get('/lichbaotri', [LichBaoTriController::class, 'index'])->name('lichbaotri');
     Route::get('/lichbaotri/create', [LichBaoTriController::class, 'create'])->name('lichbaotri.create');
     Route::post('/lichbaotri', [LichBaoTriController::class, 'store'])->name('lichbaotri.store');

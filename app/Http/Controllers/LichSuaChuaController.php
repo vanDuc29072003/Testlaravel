@@ -13,11 +13,10 @@ use Carbon\Carbon;
 
 class LichSuaChuaController extends Controller
 {
+
     public function index(Request $request)
     {
         $queryChuaHoanThanh = LichSuaChua::query();
-        $queryDaHoanThanh = LichSuaChua::query();
-        $query = LichSuaChua::query();
         $dsNhanVien = NhanVien::all();
 
         // Danh sách các trường cần lọc
@@ -25,12 +24,11 @@ class LichSuaChuaController extends Controller
             'MaLichSuaChua' => '=',
             'MaYeuCauSuaChua' => '=',
             'MaNhanVienKyThuat' => '='
-
         ];
         foreach ($filters as $field => $operator) {
             if ($request->filled($field)) {
                 $value = $operator === 'like' ? '%' . $request->$field . '%' : $request->$field;
-                $query->where($field, $operator, $value);
+                $queryChuaHoanThanh->where($field, $operator, $value);
             }
         }
 
@@ -43,16 +41,35 @@ class LichSuaChuaController extends Controller
             return Carbon::parse($item->yeuCauSuaChua->ThoiGianYeuCau)->format('d-m-Y');
         });
 
+        ThongBao::where('Icon', 'fa-solid fa-calendar-days')->update(['TrangThai' => 1]);
+
+        return view('vLichSuaChua.lichsuachua', compact('dsLSCChuaHoanThanh', 'dsNhanVien', 'dsLSCtheongay'));
+    }
+
+    public function lichSuDaHoanThanh(Request $request)
+    {
+        $queryDaHoanThanh = LichSuaChua::query();
+        $dsNhanVien = NhanVien::all();
+
+        // Lọc theo các trường nếu cần
+        $filters = [
+            'MaLichSuaChua' => '=',
+            'MaYeuCauSuaChua' => '=',
+            'MaNhanVienKyThuat' => '='
+        ];
+        foreach ($filters as $field => $operator) {
+            if ($request->filled($field)) {
+                $value = $operator === 'like' ? '%' . $request->$field . '%' : $request->$field;
+                $queryDaHoanThanh->where($field, $operator, $value);
+            }
+        }
+
         $dsLSCDaHoanThanh = $queryDaHoanThanh->whereIn('TrangThai', ['1', '2'])
             ->with(['yeuCauSuaChua', 'nhanVienKyThuat'])
             ->orderBy('updated_at', 'desc')
             ->paginate(10, ['*'], 'da_hoan_thanh');
 
-        ThongBao::where('Icon', 'fa-solid fa-calendar-days')->update(['TrangThai' => 1]);
-
-        return view('vLichSuaChua.lichsuachua', compact('dsLSCChuaHoanThanh', 'dsLSCDaHoanThanh', 'dsNhanVien', 'dsLSCtheongay'));
-    }
-
+            return view('vLichSu.lichsusuachua', compact('dsLSCDaHoanThanh', 'dsNhanVien'));    }
     public function lienhencc($MaLichSuaChua)
     {
         $lichSuaChua = LichSuaChua::findOrFail($MaLichSuaChua);
