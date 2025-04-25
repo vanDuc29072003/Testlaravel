@@ -33,7 +33,7 @@
             <i class="fa-solid fa-calendar-days"></i>
             <p>Phân công</p>
             @if ($count_lichsc > 0)
-              <span class="badge badge-warning">{{ $count_lichsc }}</span>
+              <span class="badge">{{ $count_lichsc }}</span>
             @else
               <span class="caret"></span>
             @endif
@@ -54,7 +54,7 @@
                 <a href="{{ route('lichsuachua.index') }}">
                   <span class="sub-item">Lịch sửa chữa</span>
                     @if($count_lichsc > 0)
-                      <span class="badge badge-warning">{{ $count_lichsc }}</span>
+                      <span class="badge">{{ $count_lichsc }}</span>
                     @endif
                 </a>
               </li>
@@ -87,7 +87,7 @@
             <i class="fa-solid fa-hammer"></i>
             <p>Yêu cầu sửa chữa</p>
             @if ($count_ycsc > 0)
-              <span class="badge badge-warning">{{ $count_ycsc }}</span>
+              <span class="badge">{{ $count_ycsc }}</span>
             @endif
           </a>
         </li>
@@ -126,6 +126,9 @@
               <li>
                 <a href="{{ route('dsphieunhap') }}">
                   <span class="sub-item">Phiếu nhập kho</span>
+                  @if($count_phieunhap > 0)
+                    <span class="badge">{{ $count_phieunhap }}</span>
+                  @endif
                 </a>
 
               </li>

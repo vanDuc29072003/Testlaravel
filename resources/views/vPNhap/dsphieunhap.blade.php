@@ -10,12 +10,12 @@
                 <div class="col-12">
                     <div class="table-responsive">
                         <div class="d-flex justify-content-between align-items-center mb-3">
-                            <h3 class="mb-0">Danh sách Phiếu Chờ Duyệt</h3>
+                            <h3 class="mb-0">Danh sách Phiếu Nhập Chờ Duyệt</h3>
                             <a href="{{ route('dsphieunhap.add') }}" class="btn btn-primary">
                                 <i class="fa fa-plus"></i> Thêm mới
                             </a>
                         </div>
-                        <table class="table table-bordered table-hover">
+                        <table class="table table-bordered table-hover" id="bang-cho-duyet">
                             <thead>
                                 <tr class="text-center">
                                     <th scope="col">Mã Phiếu Nhập</th>
@@ -28,7 +28,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($dsPhieuNhapChoDuyet->where('TrangThai', 0) as $phieuNhap)
+                                @foreach ($dsPhieuNhapChoDuyet as $phieuNhap)
                                     <tr class="text-center"
                                         onclick="window.location='{{ route('phieunhap.show', $phieuNhap->MaPhieuNhap) }}'"
                                         style="cursor: pointer;">
@@ -41,29 +41,14 @@
                                             <span class="badge bg-warning text-dark">Chờ duyệt</span>
                                         </td>
                                         <td>
-                                            <div class="d-flex gap-2">
+                                            <div class="d-flex justify-content-center gap-2">
                                                 <a href="{{ route('dsphieunhap.edit', $phieuNhap->MaPhieuNhap) }}"
                                                     class="btn btn-warning btn-sm text-black">
                                                     <i class="fa fa-edit"></i> Sửa
                                                 </a>
-                                                <form action="{{ route('phieunhap.approve', $phieuNhap->MaPhieuNhap) }}" method="POST"
-                                                    class="d-inline-block">
-                                                    @csrf
-                                                    @method('PATCH')
-                                                    <button type="button" class="btn btn-success btn-sm"
-                                                        onclick="event.stopPropagation(); confirmApprove(this)">
-                                                        <i class="fa fa-check"></i> Duyệt
-                                                    </button>
-                                                </form>
-                                                <form action="{{ route('dsphieunhap.delete', $phieuNhap->MaPhieuNhap) }}" method="POST"
-                                                    class="d-inline-block"> 
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="button" class="btn btn-danger btn-sm"
-                                                        onclick="event.stopPropagation(); confirmDelete(this)">
-                                                        <i class="fa fa-times"></i> Từ Chối
-                                                    </button>
-                                                </form>
+                                                <button href="" class="btn btn-primary btn-sm">
+                                                    <i class="fas fa-info-circle"></i> Xem
+                                                </button>
                                             </div>
                                         </td>
                                     </tr>
@@ -72,7 +57,7 @@
                             <tfoot>
                                 <!-- Pagination cho trạng thái chờ duyệt -->
                                 <nav aria-label="Page navigation example">
-                                    {{ $dsPhieuNhapChoDuyet->appends(request()->query())->links('pagination::bootstrap-5') }}
+                                    {{ $dsPhieuNhapChoDuyet->links('pagination::bootstrap-5') }}
                                 </nav>
                             </tfoot>
                         </table>
@@ -84,8 +69,7 @@
                 <h3 class="mb-3">Phiếu Nhập Đã Duyệt</h3><!-- Bảng danh sách phiếu nhập đã duyệt -->
                 <div class="col-9">
                     <div class="table-responsive">
-                     
-                        <table class="table table-bordered table-hover">
+                        <table id="bang-da-duyet" class="table table-bordered table-hover">
                             <thead>
                                 <tr class="text-center">
                                     <th scope="col">Mã Phiếu Nhập</th>
@@ -97,7 +81,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($dsPhieuNhapDaDuyet->where('TrangThai', 1) as $phieuNhap)
+                                @foreach ($dsPhieuNhapDaDuyet as $phieuNhap)
                                     <tr class="text-center"
                                         onclick="window.location='{{ route('phieunhap.show', $phieuNhap->MaPhieuNhap) }}'"
                                         style="cursor: pointer;">
@@ -115,7 +99,7 @@
                             <tfoot>
                                 <!-- Pagination cho trạng thái đã duyệt -->
                                 <nav aria-label="Page navigation example">
-                                    {{ $dsPhieuNhapDaDuyet->appends(request()->query())->links('pagination::bootstrap-5') }}
+                                    {{ $dsPhieuNhapDaDuyet->links('pagination::bootstrap-5') }}
                                 </nav>
                             </tfoot>
                         </table>
@@ -137,14 +121,26 @@
                                 value="{{ request('NgayNhap') }}">
                         </div>
                         <div class="mb-3">
-                            <label for="TenNhaCungCap" class="form-label">Nhà Cung Cấp</label>
-                            <input type="text" name="TenNhaCungCap" id="TenNhaCungCap" class="form-control"
-                                placeholder="Nhập tên nhà cung cấp" value="{{ request('TenNhaCungCap') }}">
+                            <label for="MaNhaCungCap" class="form-label">Nhà Cung Cấp</label>
+                            <select name="MaNhaCungCap" id="MaNhaCungCap" class="form-control">
+                                <option value="">-- Chọn nhà cung cấp --</option>
+                                @foreach ($dsNhaCungCap as $ncc)
+                                    <option value="{{ $ncc->MaNhaCungCap }}" {{ request('MaNhaCungCap') == $ncc->MaNhaCungCap ? 'selected' : '' }}>
+                                        {{ $ncc->TenNhaCungCap }}
+                                    </option>
+                                @endforeach
+                            </select>
                         </div>
                         <div class="mb-3">
-                            <label for="TenNhanVien" class="form-label">Nhân Viên Nhập</label>
-                            <input type="text" name="TenNhanVien" id="TenNhanVien" class="form-control"
-                                placeholder="Nhập tên nhân viên" value="{{ request('TenNhanVien') }}">
+                            <label for="MaNhanVien" class="form-label">Nhân Viên Nhập</label>
+                            <select name="MaNhanVien" id="MaNhanVien" class="form-control">
+                                <option value="">-- Chọn nhân viên --</option>
+                                @foreach ($dsNhanVien as $nhanVien)
+                                    <option value="{{ $nhanVien->MaNhanVien }}" {{ request('MaNhanVien') == $nhanVien->MaNhanVien ? 'selected' : '' }}>
+                                        {{ $nhanVien->TenNhanVien }}
+                                    </option>
+                                @endforeach
+                            </select>
                         </div>
                         <div class="mb-3">
                             <label for="TongTien" class="form-label">Tổng Giá Trị</label>
@@ -153,15 +149,13 @@
                         </div>
                         <div class="mb-3">
                             <label for="SoLuong" class="form-label">Tổng Số Lượng</label>
-                            <input type="number" name="SoLuong" id="SoLuong" class="form-control"
-                                placeholder="Nhập tổng số lượng" value="{{ request('SoLuong') }}">
+                            <input type="number" name="TongSoLuong" id="SoLuong" class="form-control"
+                                placeholder="Nhập tổng số lượng" value="{{ request('TongSoLuong') }}">
                         </div>
                         <div class="mb-3">
-                            <label for="TrangThai" class="form-label">Trạng Thái</label>
-                            <select name="TrangThai" id="TrangThai" class="form-control">
-                                <option value="1" {{ request('TrangThai') == '1' ? 'selected' : '' }}>Đã duyệt</option>
-                             
-                            </select>
+                            <label for="GhiChu" class="form-label">Mô tả</label>
+                            <textarea type="text" name="GhiChu" id="GhiChu" class="form-control" placeholder="Nhập ghi chú"
+                                value="{{ request('GhiChu') }}" rows="3"></textarea>
                         </div>
                         <button type="submit" class="btn btn-primary w-100">
                             <i class="fa fa-search"></i> Tìm kiếm
@@ -173,67 +167,43 @@
     </div>
 @endsection
 @section('scripts')
-<script>
-    @if (session('success'))
-        $.notify({
-            title: 'Thành công',
-            message: '{{ session('success') }}',
-            icon: 'icon-bell'
-        }, {
-            type: 'success',
-            animate: {
-                enter: 'animated fadeInDown',
-                exit: 'animated fadeOutUp'
-            },
+    <script>
+        @if (session('success'))
+            $.notify({
+                title: 'Thành công',
+                message: '{{ session('success') }}',
+                icon: 'icon-bell'
+            }, {
+                type: 'success',
+                animate: {
+                    enter: 'animated fadeInDown',
+                    exit: 'animated fadeOutUp'
+                },
+            });
+        @endif
+    </script>    
+    <script>
+        pusher.subscribe('channel-all').bind('eventUpdateTable', function (data) {
+            if (data.reload) {
+                console.log('Có cập nhật mới');
+
+                $.ajax({
+                    url: window.location.href,
+                    type: 'GET',
+                    success: function (response) {
+                        // Tìm đúng bảng trong response
+                        const newChoDuyet = $(response).find('#bang-cho-duyet').html();
+                        const newDaDuyet = $(response).find('#bang-da-duyet').html();
+
+                        // Gán lại đúng chỗ
+                        $('#bang-cho-duyet').html(newChoDuyet);
+                        $('#bang-da-duyet').html(newDaDuyet);
+                    },
+                    error: function () {
+                        console.error('Lỗi khi load lại bảng!');
+                    }
+                });
+            }
         });
-    @endif
-    function confirmDelete(button) {
-            swal({
-                title: 'Bạn có chắc chắn?',
-                text: "Hành động này không thể hoàn tác!",
-                icon: 'warning',
-                buttons: {
-                    confirm: {
-                        text: 'Xóa',
-                        className: 'btn btn-danger'
-                    },
-                    cancel: {
-                        text: 'Hủy',
-                        visible: true,
-                        className: 'btn btn-success'
-                    }
-                }
-            }).then((willDelete) => {
-                if (willDelete) {
-                    button.closest('form').submit(); // Gửi form
-                } else {
-                    swal.close(); // Đóng hộp thoại
-                }
-            });
-        }
-        function confirmApprove(button) {
-            swal({
-                title: 'Sau khi duyệt số lượng linh kiện sẽ được thêm vào kho?',
-                text: "Hành động này không thể hoàn tác!",
-                icon: 'warning',
-                buttons: {
-                    confirm: {
-                        text: 'Đồng ý',
-                        className: 'btn btn-danger'
-                    },
-                    cancel: {
-                        text: 'Hủy',
-                        visible: true,
-                        className: 'btn btn-success'
-                    }
-                }
-            }).then((willDelete) => {
-                if (willDelete) {
-                    button.closest('form').submit(); // Gửi form
-                } else {
-                    swal.close(); // Đóng hộp thoại
-                }
-            });
-        }
-</script>
+    </script>
 @endsection
