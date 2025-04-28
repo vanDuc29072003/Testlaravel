@@ -69,7 +69,7 @@ class LichVanHanhController extends Controller
 
         
 
-        $lichvanhanh = $query->with(['may', 'nhanVien'])->orderBy('NgayVanHanh', 'asc')->get();
+        $lichvanhanh = $query->with(['may', 'nhanVien'])->orderBy('NgayVanHanh', 'asc')->get()->groupBy('NgayVanHanh');
 
         return view('Vlich.lichvanhanh', compact('lichvanhanh','may','nhanvien'));
     }
