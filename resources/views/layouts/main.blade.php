@@ -99,6 +99,18 @@
       });
     });
 
+    pusher.subscribe('private-channel-quanly').bind('eventPhieuNhap', function (data) {
+      $.notify({
+        icon: 'icon-bell',
+        title: 'Thông báo',
+        message: data.message,
+        url: "{{ route('yeucausuachua.index') }}"
+      }, {
+        type: 'danger',
+        delay: 5000
+      });
+    });
+
     pusher.subscribe('private-channel-kythuat').bind('eventDuyetYeuCauSuaChua', function (data) {
       $.notify({
         icon: 'icon-bell',

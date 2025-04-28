@@ -71,6 +71,7 @@
                         </div>
                     </div>
                 </div>
+                <h3 class="mb-3">Yêu cầu sửa chữa đã duyệt</h3>
                 <div class="col-10">
                     <!-- Bảng yêu cầu đã xử lý -->
                     <div class="table-responsive">
@@ -105,13 +106,7 @@
                             </tbody>
                             <tfoot>
                                 <nav aria-label="Page navigation example">
-                                    @if ($dsYeuCauSuaChuaDaXuLy->hasPages())
-                                        {{ $dsYeuCauSuaChuaDaXuLy->links('pagination::bootstrap-5') }}
-                                    @else
-                                        <ul class="pagination justify-content-end">
-                                            <li class="page-item disabled"><span class="page-link">1</span></li>
-                                        </ul>
-                                    @endif
+                                    {{ $dsYeuCauSuaChuaDaXuLy->links('pagination::bootstrap-5') }}
                                 </nav>
                             </tfoot>
                         </table>
@@ -120,51 +115,50 @@
 
                 <!-- Form tìm kiếm -->
                 <div class="col-2 p-0">
-                    <div style="margin-top: 50px;">
-                        <form method="GET" action="{{ route('yeucausuachua.index') }}"
-                            class="p-3 border rounded fixed-search-form">
-                            <div class="mb-3">
-                                <label for="MaYeuCauSuaChua" class="form-label">Mã yêu cầu sửa chữa</label>
-                                <input type="text" name="MaYeuCauSuaChua" id="MaYeuCauSuaChua" class="form-control"
-                                    placeholder="Nhập mã yêu cầu" value="{{ request('MaYeuCauSuaChua') }}">
-                            </div>
-                            <div class="mb-3">
-                                <label for="ThoiGianYeuCau" class="form-label">Thời gian yêu cầu</label>
-                                <input type="date" name="ThoiGianYeuCau" id="ThoiGianYeuCau" class="form-control"
-                                    value="{{ request('ThoiGianYeuCau') }}">
-                            </div>
-                            <div class="mb-3">
-                                <label for="MaMay" class="form-label">Tên máy</label>
-                                <select name="MaMay" id="MaMay" class="form-control">
-                                    <option value="">-- Chọn máy --</option>
-                                    @foreach ($dsMay as $may)
-                                        <option value="{{ $may->MaMay }}" {{ request('MaMay') == $may->MaMay ? 'selected' : '' }}>
-                                            {{ $may->TenMay }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="mb-3">
-                                <label for="MaNhanVien" class="form-label">Tên nhân viên</label>
-                                <select name="MaNhanVien" id="MaNhanVien" class="form-control">
-                                    <option value="">-- Chọn nhân viên --</option>
-                                    @foreach ($dsNhanVien as $nhanVien)
-                                        <option value="{{ $nhanVien->MaNhanVien }}" {{ request('MaNhanVien') == $nhanVien->MaNhanVien ? 'selected' : '' }}>
-                                            {{ $nhanVien->TenNhanVien }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="mb-3">
-                                <label for="MoTa" class="form-label">Mô tả</label>
-                                <input type="text" name="MoTa" id="MoTa" class="form-control" placeholder="Nhập mô tả"
-                                    value="{{ request('MoTa') }}">
-                            </div>
-                            <button type="submit" class="btn btn-primary w-100">
-                                <i class="fa fa-search"></i> Tìm kiếm
-                            </button>
-                        </form>
-                    </div>
+                    <form method="GET" action="{{ route('yeucausuachua.index') }}"
+                        class="p-3 border rounded">
+                        <h5 class="mb-3">Tìm kiếm</h5>
+                        <div class="mb-3">
+                            <label for="MaYeuCauSuaChua" class="form-label">Mã yêu cầu sửa chữa</label>
+                            <input type="text" name="MaYeuCauSuaChua" id="MaYeuCauSuaChua" class="form-control"
+                                placeholder="Nhập mã yêu cầu" value="{{ request('MaYeuCauSuaChua') }}">
+                        </div>
+                        <div class="mb-3">
+                            <label for="ThoiGianYeuCau" class="form-label">Thời gian yêu cầu</label>
+                            <input type="date" name="ThoiGianYeuCau" id="ThoiGianYeuCau" class="form-control"
+                                value="{{ request('ThoiGianYeuCau') }}">
+                        </div>
+                        <div class="mb-3">
+                            <label for="MaMay" class="form-label">Tên máy</label>
+                            <select name="MaMay" id="MaMay" class="form-control">
+                                <option value="">-- Chọn máy --</option>
+                                @foreach ($dsMay as $may)
+                                    <option value="{{ $may->MaMay }}" {{ request('MaMay') == $may->MaMay ? 'selected' : '' }}>
+                                        {{ $may->TenMay }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="MaNhanVien" class="form-label">Tên nhân viên yêu cầu</label>
+                            <select name="MaNhanVien" id="MaNhanVien" class="form-control">
+                                <option value="">-- Chọn nhân viên --</option>
+                                @foreach ($dsNhanVien as $nhanVien)
+                                    <option value="{{ $nhanVien->MaNhanVien }}" {{ request('MaNhanVien') == $nhanVien->MaNhanVien ? 'selected' : '' }}>
+                                        {{ $nhanVien->TenNhanVien }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="MoTa" class="form-label">Mô tả</label>
+                            <input type="text" name="MoTa" id="MoTa" class="form-control" placeholder="Nhập mô tả"
+                                value="{{ request('MoTa') }}">
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="fa fa-search"></i> Tìm kiếm
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>

@@ -104,11 +104,12 @@
                                 <textarea class="form-control" id="GhiChu" name="GhiChu" rows="3">{{ old('GhiChu') }}</textarea>
                             </div>
                     
-                            <div class="form-group mt-4 text-right">
+                            <div class="form-group mt-4 d-flex justify-content-between">
+                                <a href="{{ route('dsphieuxuat') }}" class="btn btn-secondary">
+                                    <i class="fa fa-arrow-left"></i> Trở lại</a>
                                 <button type="submit" class="btn btn-primary">
                                     <i class="fa fa-save"></i> Hoàn Thành
                                 </button>
-                                <a href="{{ route('dsphieuxuat') }}" class="btn btn-secondary ml-2">Trở lại</a>
                             </div>
                     
                         </div>

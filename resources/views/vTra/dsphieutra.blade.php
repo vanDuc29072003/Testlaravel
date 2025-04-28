@@ -72,7 +72,7 @@
                             
                             <div class="mb-3">
                                 <label for="TenNhanVienTao" class="form-label">Nhân Viên Tạo</label>
-                                <input type="text" name="TenNhanVien" id="TenNhanVienTao" class="form-control"
+                                <input type="text" name="TenNhanVienTao" id="TenNhanVienTao" class="form-control"
                                     placeholder="Nhập tên nhân viên tạo" value="{{ request('TenNhanVienTao') }}">
                             </div>
                             <div class="mb-3">

@@ -13,6 +13,7 @@ use App\Http\Controllers\YeuCauSuaChuaController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LichBaoTriController;
 use App\Http\Controllers\TaiKhoanController;
+use App\Http\Controllers\PhieuBanGiaoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,13 +33,13 @@ Route::middleware('auth')->group(function () {
     Route::get('/sidebar', function () {
         return view('includes.sidebar'); // Trả về nội dung sidebar
     })->name('sidebar');
-    
+
     Route::get('/main-header', function () {
         return view('includes.main-header'); // Trả về nội dung main header
     })->name('main-header');
 
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-    
+
 
     Route::get('/dsphieunhap', [dsphieuNhapController::class, 'index'])->name('dsphieunhap');
     Route::get('/dsphieunhap/add', [dsphieuNhapController::class, 'create'])->name('dsphieunhap.add');
@@ -94,7 +95,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/detailuser', [DetailuserController::class, 'detailuser'])->name('detailuser');
 
-    Route::get('/yeucausuachua',[YeuCauSuaChuaController::class, 'index'])->name('yeucausuachua.index');
+    Route::get('/yeucausuachua', [YeuCauSuaChuaController::class, 'index'])->name('yeucausuachua.index');
     Route::get('/yeucausuachua/create', [YeuCauSuaChuaController::class, 'create'])->name('yeucausuachua.create');
     Route::post('/yeucausuachua', [YeuCauSuaChuaController::class, 'store'])->name('yeucausuachua.store');
     Route::get('/yeucausuachua/{MaYeuCauSuaChua}/duyet', [YeuCauSuaChuaController::class, 'formduyet'])->name('yeucausuachua.formduyet');
@@ -103,6 +104,22 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/lichsuachua', [LichSuaChuaController::class, 'index'])->name('lichsuachua.index');
     Route::post('/lichsuachua/{MaLichSuaChua}/lienhencc', [LichSuaChuaController::class, 'lienhencc'])->name('lichsuachua.lienhencc');
+    Route::get('/lichsuachua/dahoanthanh', [LichSuaChuaController::class, 'lichSuDaHoanThanh'])->name('lichsuachua.dahoanthanh');
+    Route::get('/lichsuachua/{MaLichSuaChua}/taophieubangiaonoibo', [LichSuaChuaController::class, 'taoPhieuBanGiaoNoiBo'])->name('lichsuachua.taophieubangiaonoibo');
+    Route::get('/lichsuachua/{MaLichSuaChua}/bangiaonhacungcap', [LichSuaChuaController::class, 'bangiaoNhaCungCap'])->name('lichsuachua.bangiaonhacungcap');
+    Route::get('/lichsuachua/{MaLichSuaChua}/xem-ncc', [LichSuaChuaController::class, 'xemNCC'])->name('lichsuachua.xemncc');
+
+    Route::post('/phieubangiao/store', [PhieuBanGiaoController::class, 'store'])->name('phieubangiao.store');
+    
+    Route::get('/phieubangiao/{MaPhieuBanGiaoNoiBo}/export-pdf', [PhieuBanGiaoController::class, 'exportPDF'])->name('phieubangiao.exportPDF');
+
+    
+    Route::get('/phieubangiao/{MaPhieuBanGiaoSuaChua}/export-pdf1', [PhieuBanGiaoController::class, 'exportPDF1'])->name('phieubangiao.exportPDF1');
+
+    Route::post('/phieubangiao/store1', [PhieuBanGiaoController::class, 'store1'])->name('phieubangiao.store1');
+    Route::get('/lichsuachua/{MaLichSuaChua}', [LichSuaChuaController::class, 'show'])->name('lichsuachua.showpbg');
+    Route::get('/lichsuachua-bg/{MaLichSuaChua}', [LichSuaChuaController::class, 'show1'])->name('lichsuachua.showpbg1');
+
     Route::get('/lichbaotri', [LichBaoTriController::class, 'index'])->name('lichbaotri');
     Route::get('/lichbaotri/create', [LichBaoTriController::class, 'create'])->name('lichbaotri.create');
     Route::post('/lichbaotri', [LichBaoTriController::class, 'store'])->name('lichbaotri.store');

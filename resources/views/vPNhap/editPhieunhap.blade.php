@@ -13,14 +13,10 @@
                     <!-- Cột bên trái: Danh sách linh kiện -->
                     <div class="col-9">
                         <div class="d-flex justify-content-between align-items-center mb-3">
-                            <h3 class="mb-4">Chỉnh sửa Phiếu Nhập Hàng</h3>
-
+                            <h3>Chỉnh sửa Phiếu Nhập Hàng</h3>
                             <div>
                                 <a href="{{ route('linhkien.add') }}" class="btn btn-primary">
-                                    <i class="fa fa-plus"></i> Thêm mới linh kiện
-                                </a>
-                                <a href="" class="btn btn-success">
-                                    <i class="fa fa-plus"></i> Xuất FILE PDF
+                                    <i class="fa fa-plus"></i> Thêm linh kiện mới
                                 </a>
                             </div>
                         </div>
@@ -36,7 +32,7 @@
                             <table class="table table-bordered table-hover">
                                 <thead>
                                     <tr class="text-center">
-                                        <th scope="col">Mã Linh Kiện</th>
+                                        <th scope="col">Mã</th>
                                         <th scope="col">Tên Linh Kiện</th>
                                         <th scope="col">Đơn Vị Tính</th>
                                         <th scope="col">Số Lượng</th>

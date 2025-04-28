@@ -5,13 +5,29 @@
 @section('content')
     <div class="container">
         <div class="card mb-5 mx-auto mt-5" style="width: 85%;">
-            <div class="card-body">
-                <h5 class="card-title">Thông Tin Phiếu Nhập</h5>
+            <div class="card-header">
+                <div class="mt-3 mx-3 d-flex justify-content-between">
+                    <h2 class="ps-3 mb-0">Thông Tin Phiếu Nhập</h2>
+                    <div class="d-flex justify-content-end">
+                        @if ($phieuNhap->TrangThai == 0)
+                            <a href="{{ route('dsphieunhap.edit', $phieuNhap->MaPhieuNhap) }}"
+                                class="btn btn-warning text-black">
+                                <i class="fa fa-edit"></i> Sửa
+                            </a>
+                        @else
+                            <a href="{{ route('phieunhap.exportPDF', $phieuNhap->MaPhieuNhap) }}" class="btn btn-black btn-border ms-3">
+                                <i class="fas fa-file-download"></i> Xuất FILE PDF
+                            </a>
+                        @endif
+                    </div>
+                </div>
+            </div>
+            <div class="card-body pt-3 px-5">
                 <p><strong>Mã Phiếu Nhập:</strong> {{ $phieuNhap->MaPhieuNhap }}</p>
-                <p><strong>Nhà Cung Cấp:</strong> {{ $phieuNhap->nhaCungCap->TenNhaCungCap }}</p>
+                <p><strong>Ngày Nhập:</strong> {{ \Carbon\Carbon::parse($phieuNhap->NgayNhap)->format('H:i d/m/Y') }}</p>
                 <p><strong>Nhân Viên Nhập (Bộ phận: Kho) :</strong> {{ $phieuNhap->nhanVien->TenNhanVien }}</p>
+                <p><strong>Nhà Cung Cấp:</strong> {{ $phieuNhap->nhaCungCap->TenNhaCungCap }}</p>
                 <p><strong>Số Lượng:</strong> {{ $phieuNhap->TongSoLuong}}</p>
-                <p><strong>Ngày Nhập:</strong> {{ $phieuNhap->NgayNhap }}</p>
 
                 <!-- Danh sách chi tiết phiếu nhập -->
                 <div class="card mt-4">
@@ -23,6 +39,7 @@
                                     <th>Mã Linh Kiện</th>
                                     <th>Tên Linh Kiện</th>
                                     <th>Số Lượng</th>
+                                    <th>ĐVT</th>
                                     <th>Giá Nhập</th>
                                     <th>Thành Tiền</th>
                                 </tr>
@@ -32,7 +49,8 @@
                                     <tr>
                                         <td>{{ $chiTiet->linhKien->MaLinhKien }}</td>
                                         <td>{{ $chiTiet->linhKien->TenLinhKien }}</td>
-                                        <td>{{ $chiTiet->linhKien->donViTinh->TenDonViTinh }}</td>                                        <td>{{ $chiTiet->SoLuong }}</td>
+                                        <td>{{ $chiTiet->SoLuong }}</td>
+                                        <td>{{ $chiTiet->linhKien->donViTinh->TenDonViTinh }}</td>
                                         <td>{{ number_format($chiTiet->GiaNhap, 0, ',', '.') }} VND</td>
                                         <td>{{ number_format($chiTiet->TongCong, 0, ',', '.') }} VND</td>
                                     </tr>
@@ -54,18 +72,85 @@
             </div>
             <div class="card-footer">
                 <!-- Nút quay lại -->
-                <div class="m-3">
+                <div class="m-3 d-flex justify-content-between">
                     <a href="{{ route('dsphieunhap') }}" class="btn btn-secondary">
                         <i class="fa fa-arrow-left"></i> Quay lại
                     </a>
-                    <a href="{{ route('dsphieunhap.edit', $phieuNhap->MaPhieuNhap) }}" class="btn btn-warning text-black">
-                        <i class="fa fa-edit"></i> Sửa
-                    </a>
-                    <a href="{{ route('phieunhap.exportPDF', $phieuNhap->MaPhieuNhap) }}" class="btn btn-secondary">
-                        <i class="fas fa-file-alt"></i> Xuất FILE PDF
-                    </a>
+                    @if ($phieuNhap->TrangThai == 0)
+                        <div class="d-flex justify-content-end">
+                            <form action="{{ route('phieunhap.approve', $phieuNhap->MaPhieuNhap) }}" method="POST"
+                                class="d-inline-block">
+                                @csrf
+                                @method('PATCH')
+                                <button type="button" class="btn btn-success" onclick="confirmApprove(this)">
+                                    <i class="fa fa-check"></i> Duyệt
+                                </button>
+                            </form>
+                            <form action="{{ route('dsphieunhap.delete', $phieuNhap->MaPhieuNhap) }}" method="POST"
+                                class="d-inline-block">
+                                @csrf
+                                @method('DELETE')
+                                <button type="button" class="btn btn-danger ms-3" onclick="confirmDelete(this)">
+                                    <i class="fa fa-times"></i> Từ Chối
+                                </button>
+                            </form>
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>
     </div>
+@endsection
+
+@section('scripts')
+    <script>
+        function confirmApprove(button) {
+            swal({
+                title: 'Xác nhận các thông tin là chính xác',
+                text: "Hành động này không thể hoàn tác!",
+                icon: 'warning',
+                buttons: {
+                    confirm: {
+                        text: 'Đồng ý',
+                        className: 'btn btn-danger'
+                    },
+                    cancel: {
+                        text: 'Hủy',
+                        visible: true,
+                        className: 'btn btn-success'
+                    }
+                }
+            }).then((willDelete) => {
+                if (willDelete) {
+                    button.closest('form').submit(); // Gửi form
+                } else {
+                    swal.close(); // Đóng hộp thoại
+                }
+            });
+        }
+        function confirmDelete(button) {
+            swal({
+                title: 'Bạn có chắc chắn?',
+                text: "Hành động này không thể hoàn tác!",
+                icon: 'warning',
+                buttons: {
+                    confirm: {
+                        text: 'Xóa',
+                        className: 'btn btn-danger'
+                    },
+                    cancel: {
+                        text: 'Hủy',
+                        visible: true,
+                        className: 'btn btn-success'
+                    }
+                }
+            }).then((willDelete) => {
+                if (willDelete) {
+                    button.closest('form').submit(); // Gửi form
+                } else {
+                    swal.close(); // Đóng hộp thoại
+                }
+            });
+        }
+    </script>
 @endsection

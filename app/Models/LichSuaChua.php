@@ -25,4 +25,13 @@ class LichSuaChua extends Model
     {
         return $this->belongsTo(NhanVien::class, 'MaNhanVienKyThuat', 'MaNhanVien');
     }
+    public function phieuBanGiaoNoiBo()
+    {
+        return $this->belongsTo(PhieuBanGiaoNoiBo::class, 'MaLichSuaChua', 'MaLichSuaChua');
+    }
+    public function phieuBanGiaoSuaChuaNCC()
+{
+    return $this->belongsTo(PhieuBanGiaoSuaChuaNCC::class, 'MaLichSuaChua', 'MaLichSuaChua');
+}
+
 }
