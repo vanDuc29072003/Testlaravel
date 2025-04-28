@@ -75,9 +75,9 @@ class YeuCauSuaChuaController extends Controller
 
         ThongBao::create([
             'NoiDung' => Auth()->user()->nhanvien->TenNhanVien . ' đã tạo một yêu cầu sửa chữa mới',
-            'Loai' => 'primary',
+            'Loai' => 'danger',
             'Icon' => 'fa-solid fa-hammer',
-            'Route' => route('yeucausuachua.index')
+            'Route' => 'yeucausuachua.index'
         ]);
         
         $TenNhanVien = Auth()->user()->nhanvien->TenNhanVien;
@@ -123,9 +123,9 @@ class YeuCauSuaChuaController extends Controller
 
         ThongBao::create([
             'NoiDung' => 'Có một lịch sửa chữa mới',
-            'Loai' => 'success',
+            'Loai' => 'warning',
             'Icon' => 'fa-solid fa-calendar-days',
-            'Route' => route('lichsuachua.index')
+            'Route' => 'lichsuachua.index'
         ]);
         
         event(new eventDuyetYeuCauSuaChua());

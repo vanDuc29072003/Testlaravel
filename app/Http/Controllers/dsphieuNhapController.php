@@ -119,7 +119,7 @@ class dsphieuNhapController extends Controller
                 'NoiDung' => Auth()->user()->nhanvien->TenNhanVien . ' đã tạo một phiếu nhập mới cần duyệt',
                 'Loai' => 'info',
                 'Icon' => 'fas fa-pen',
-                'Route' => route('dsphieunhap')
+                'Route' => 'dsphieunhap'
             ]);
 
             event(new eventPhieuNhap());

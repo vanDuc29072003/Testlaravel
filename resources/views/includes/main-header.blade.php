@@ -41,7 +41,7 @@
               <div class="notif-scroll scrollbar-outer">
                 <div class="notif-center">
                     @foreach ($dsThongBao as $tb)
-                        <a href="{{ $tb->Route }}">
+                      <a href="{{ route($tb->Route) }}">
                           @if ($tb->TrangThai == 0)
                             <div class="notif-icon notif-{{ $tb->Loai }} avatar avatar-away flex-shrink-0"> 
                                 <i class="{{ $tb->Icon }}"></i> 
