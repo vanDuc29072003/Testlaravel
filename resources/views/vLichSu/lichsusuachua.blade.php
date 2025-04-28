@@ -21,6 +21,7 @@
                                     <th scope="col">NVYC</th>
                                     <th scope="col">Người đảm nhận</th>
                                     <th scope="col">Trạng thái</th>
+                                    <th scope="col">Xem chi tiết</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -37,6 +38,17 @@
                                                 <span class="badge bg-success">Đã hoàn thành</span>
                                             @elseif ($dth->TrangThai == '2')
                                                 <span class="badge bg-danger">Liên hệ NCC</span>
+                                            @endif
+                                        </td>
+                                        <td>
+                                            @if ($dth->TrangThai == '1')
+                                                <a href="{{ route('lichsuachua.showpbg', $dth->MaLichSuaChua) }}" class="btn btn-primary btn-sm">
+                                                    <i class="fas fa-info-circle"></i> Chi tiết
+                                                </a>
+                                            @elseif ($dth->TrangThai == '2')
+                                                <a href="{{ route('lichsuachua.showpbg1', $dth->MaLichSuaChua) }}" class="btn btn-primary btn-sm">
+                                                    <i class="fas fa-info-circle"></i> Chi tiết
+                                                </a>
                                             @endif
                                         </td>
                                     </tr>
@@ -136,4 +148,21 @@
             }
         })
     </script>
+    @section('scripts')
+    <script>
+        @if (session('success'))
+            $.notify({
+                title: 'Thành công',
+                message: '{{ session('success') }}',
+                icon: 'icon-bell'
+            }, {
+                type: 'success',
+                animate: {
+                    enter: 'animated fadeInDown',
+                    exit: 'animated fadeOutUp'
+                },
+            });
+        @endif
+    </script>
+    @endsection
 @endsection

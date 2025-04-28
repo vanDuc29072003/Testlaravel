@@ -11,17 +11,17 @@ class PhieuBanGiaoNoiBo extends Model
 
     protected $table = 'phieubangiaonoibo';
     protected $primaryKey = 'MaPhieuBanGiaoNoiBo';
-    public $timestamps = true;
+    public $timestamps = false;
     protected $fillable = [
-        'MaNhanVien',
+        'MaPhieuBanGiaoNoiBo',
         'MaLichSuaChua',
         'ThoiGianBanGiao',
         'BienPhapXuLy',   
         'GhiChu',   
     ];
-    public function nhanVien()
+    public function chiTietPhieuBanGiaoNoiBo()
     {
-        return $this->belongsTo(NhanVien::class, 'MaNhanVien', 'MaNhanVien');
+        return $this->hasMany(ChiTietPhieuBanGiaoNoiBo::class, 'MaPhieuBanGiaoNoiBo', 'MaPhieuBanGiaoNoiBo');
     }
 
     // Quan hệ đến bảng lịch sửa chữa

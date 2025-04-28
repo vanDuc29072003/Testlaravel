@@ -10,8 +10,8 @@ class ChiTietPhieuBanGiaoNoiBo extends Model
     use HasFactory;
 
     protected $table = 'chitietphieubangiaonoibo';
-    protected $primaryKey = 'MaChiTietPhieuSuaNoiBo';
-    public $timestamps = true;
+    protected $primaryKey = 'MaChiTietPhieuSuaNB';
+    public $timestamps = false ;
     protected $fillable = [
         'MaPhieuBanGiaoNoiBo',
         'MaLinhKien',

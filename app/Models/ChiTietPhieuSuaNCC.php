@@ -11,14 +11,15 @@ class ChiTietPhieuSuaNCC extends Model
 
     protected $table = 'chitietphieusuanhacungcap';
     protected $primaryKey = 'MaChiTietPhieuSuaNCC';
-    public $timestamps = true;
+    public $timestamps = false;
     protected $fillable = [
         'MaPhieuBanGiaoSuaChua',
-        'Tên Linh Kien',
+        'TenLinhKien',
         'SoLuong',
         'DonViTinh',
         'GiaThanh',
-        'GhiChu',
+        'BaoHanh',
+       
     ];
     public function phieuBanGiaoSuaNCC()
     {

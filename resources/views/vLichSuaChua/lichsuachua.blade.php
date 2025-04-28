@@ -40,17 +40,16 @@
                                                     <td><span class="badge bg-warning">Chưa hoàn thành</span></td>
                                                     <td>
                                                         <div class="d-flex justify-content-center gap-3">
-                                                            <a class="btn btn-sm btn-success">
+                                                            <a href="{{ route('lichsuachua.taophieubangiaonoibo', $cht->MaLichSuaChua) }}" class="btn btn-sm btn-success">
                                                                 <i class="fa fa-check"></i> Bàn giao
                                                             </a>
                                                             <form action="{{ route('lichsuachua.lienhencc', $cht->MaLichSuaChua) }}"
                                                                 method="POST" class="d-inline-block">
                                                                 @csrf
                                                                 @method('POST')
-                                                                <button type="button" class="btn btn-danger btn-sm"
-                                                                    onclick="event.stopPropagation(); confirmLienHe(this)">
-                                                                    Liên hệ NCC
-                                                                </button>
+                                                                <a href="{{ route('lichsuachua.xemncc', $cht->MaLichSuaChua) }}" class="btn btn-danger btn-sm">
+                                                                    <i class="fa fa-phone"></i> Liên hệ NCC
+                                                                </a>
                                                             </form>
                                                         </div>
                                                     </td>
