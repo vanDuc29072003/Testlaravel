@@ -123,7 +123,7 @@ class YeuCauSuaChuaController extends Controller
 
         ThongBao::create([
             'NoiDung' => 'Có một lịch sửa chữa mới',
-            'Loai' => 'warning',
+            'Loai' => 'success',
             'Icon' => 'fa-solid fa-calendar-days',
             'Route' => 'lichsuachua.index'
         ]);
