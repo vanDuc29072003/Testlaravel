@@ -75,7 +75,7 @@
                 </a>
               </li>
               <li>
-                <a href="">
+                <a href="{{ route('lichsuachua.dahoanthanh') }}">
                   <span class="sub-item">Lịch sử sửa chữa</span>
                 </a>
               </li>
