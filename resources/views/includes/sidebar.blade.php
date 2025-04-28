@@ -152,7 +152,7 @@
           <div class="collapse" id="admin">
             <ul class="nav nav-collapse">
               <li>
-                <a href="taikhoan.html">
+                <a href="{{ route('taikhoan.index') }}">
                   <span class="sub-item">Danh sách tài khoản</span>
                 </a>
               </li>

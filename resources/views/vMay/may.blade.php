@@ -9,11 +9,32 @@
                 <div class="col-10">
                     <div class="table-responsive">
                         <div class="d-flex justify-content-between align-items-center mb-3">
-                            <h1 class="mb-0">Danh sách Máy</h1>
+                            <div class="d-flex align-items-center gap-2">
+                                {{-- Nút lọc loại máy --}}
+                                <div class="dropdown">
+                                    <button class="btn btn-outline-secondary dropdown-toggle p-2" type="button"
+                                        id="dropdownLoaiMay" data-bs-toggle="dropdown" aria-expanded="false">
+                                        ☰
+                                    </button>
+                                    <ul class="dropdown-menu" aria-labelledby="dropdownLoaiMay">
+                                        <li><a class="dropdown-item" href="{{ route('may') }}">Tất cả</a></li>
+                                        @foreach ($dsLoaiMay as $loai)
+                                            <li>
+                                                <a class="dropdown-item"
+                                                    href="{{ route('may', ['MaLoai' => $loai->MaLoai] + request()->except('MaLoai')) }}">
+                                                    {{ $loai->TenLoai }}
+                                                </a>
+                                            </li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                                <h1 class="mb-0">Danh sách Máy</h1>
+                            </div>
                             <a href="{{ route('may.add') }}" class="btn btn-primary">
                                 <i class="fa fa-plus"></i> Thêm mới
                             </a>
                         </div>
+
                         <table class="table table-responsive table-bordered table-hover">
                             <thead>
                                 <tr class="text-center">
@@ -23,6 +44,7 @@
                                     <th scope="col">Chu Kì Bảo Trì (Tháng)</th>
                                     <th scope="col">Năm Sản Xuất</th>
                                     <th scope="col">Hãng Sản Xuất</th>
+                                    <th scope="col">Loại máy</th>
                                     <th scope="col">Cập Nhật</th>
                                 </tr>
                             </thead>
@@ -36,6 +58,7 @@
                                         <td>{{ $may->ChuKyBaoTri }}</td>
                                         <td>{{ $may->NamSanXuat }}</td>
                                         <td>{{ $may->HangSanXuat }}</td>
+                                        <td>{{ $may->loaiMay->TenLoai ?? 'Chưa xác định' }}</td>
                                         <td>
                                             <div class="d-flex gap-2">
                                                 <a href="{{ route('may.edit', $may->MaMay) }}"
@@ -57,41 +80,47 @@
                                 @endforeach
                             </tbody>
                             <tfoot>
-                                <!-- Pagination -->
-                                <nav aria-label="Page navigation example">
-                                    {{ $dsMay->appends(['search' => request('search')])->links('pagination::bootstrap-5') }}
-                                </nav>
+                                <tr>
+                                    <td colspan="7">
+                                        <nav aria-label="Page navigation example">
+                                            {{ $dsMay->appends(request()->query())->links('pagination::bootstrap-5') }}
+                                        </nav>
+                                    </td>
+                                </tr>
                             </tfoot>
                         </table>
                     </div>
                 </div>
+
+                {{-- Form lọc bên phải --}}
                 <div class="col-2 p-0">
                     <div style="margin-top: 105px;">
                         <form method="GET" action="{{ route('may') }}" class="p-3 border rounded fixed-search-form">
+                            <input type="hidden" name="MaLoaiMay" value="{{ request('MaLoaiMay') }}">
                             <div class="mb-3">
                                 <label for="MaMay" class="form-label">Mã máy</label>
-                                <input type="text" name="MaMay" id="MaMay" class="form-control" placeholder="Vui lòng nhập"
+                                <input type="text" name="MaMay" id="MaMay" class="form-control"
                                     value="{{ request('MaMay') }}">
                             </div>
                             <div class="mb-3">
                                 <label for="TenMay" class="form-label">Tên máy</label>
                                 <input type="text" name="TenMay" id="TenMay" class="form-control"
-                                    placeholder="Vui lòng nhập" value="{{ request('TenMay') }}">
+                                    value="{{ request('TenMay') }}">
                             </div>
                             <div class="mb-3">
                                 <label for="SeriMay" class="form-label">Seri máy</label>
                                 <input type="text" name="SeriMay" id="SeriMay" class="form-control"
-                                    placeholder="Vui lòng nhập" value="{{ request('SeriMay') }}">
+                                    value="{{ request('SeriMay') }}">
                             </div>
                             <div class="mb-3">
                                 <label for="ChuKyBaoTri" class="form-label">Chu kỳ bảo trì</label>
                                 <input type="number" name="ChuKyBaoTri" id="ChuKyBaoTri" class="form-control"
-                                    placeholder="Vui lòng nhập" value="{{ request('ChuKyBaoTri') }}">
+                                    value="{{ request('ChuKyBaoTri') }}">
                             </div>
                             <div class="mb-3">
                                 <label for="ThoiGianBaoHanh" class="form-label">Thời gian bảo hành</label>
                                 <input type="number" name="ThoiGianBaoHanh" id="ThoiGianBaoHanh" class="form-control"
-                                    placeholder="Vui lòng nhập" value="{{ request('ThoiGianBaoHanh') }}">
+                                    value="{{ request('ThoiGianBaoHanh') }}">
                             </div>
                             <div class="mb-3">
                                 <label for="ThoiGianDuaVaoSuDung" class="form-label">Thời gian đưa vào sử dụng</label>
@@ -101,12 +130,12 @@
                             <div class="mb-3">
                                 <label for="NamSanXuat" class="form-label">Năm sản xuất</label>
                                 <input type="number" name="NamSanXuat" id="NamSanXuat" class="form-control"
-                                    placeholder="Vui lòng nhập" value="{{ request('NamSanXuat') }}">
+                                    value="{{ request('NamSanXuat') }}">
                             </div>
                             <div class="mb-3">
                                 <label for="HangSanXuat" class="form-label">Hãng sản xuất</label>
                                 <input type="text" name="HangSanXuat" id="HangSanXuat" class="form-control"
-                                    placeholder="Vui lòng nhập" value="{{ request('HangSanXuat') }}">
+                                    value="{{ request('HangSanXuat') }}">
                             </div>
                             <button type="submit" class="btn btn-primary w-100">
                                 <i class="fa fa-search"></i> Tìm kiếm
@@ -127,21 +156,14 @@
                 text: "Hành động này không thể hoàn tác!",
                 icon: 'warning',
                 buttons: {
-                    confirm: {
-                        text: 'Xóa',
-                        className: 'btn btn-danger'
-                    },
-                    cancel: {
-                        text: 'Hủy',
-                        visible: true,
-                        className: 'btn btn-success'
-                    }
+                    confirm: { text: 'Xóa', className: 'btn btn-danger' },
+                    cancel: { text: 'Hủy', visible: true, className: 'btn btn-success' }
                 }
             }).then((willDelete) => {
                 if (willDelete) {
-                    button.closest('form').submit(); // Gửi form
+                    button.closest('form').submit();
                 } else {
-                    swal.close(); // Đóng hộp thoại
+                    swal.close();
                 }
             });
         }
@@ -155,10 +177,7 @@
                 icon: 'icon-bell'
             }, {
                 type: 'success',
-                animate: {
-                    enter: 'animated fadeInDown',
-                    exit: 'animated fadeOutUp'
-                },
+                animate: { enter: 'animated fadeInDown', exit: 'animated fadeOutUp' },
             });
         @endif
     </script>
@@ -171,10 +190,7 @@
                 icon: 'icon-bell'
             }, {
                 type: 'danger',
-                animate: {
-                    enter: 'animated fadeInDown',
-                    exit: 'animated fadeOutUp'
-                },
+                animate: { enter: 'animated fadeInDown', exit: 'animated fadeOutUp' },
             });
         @endif
     </script>
@@ -183,7 +199,6 @@
         pusher.subscribe('channel-all').bind('eventUpdateTable', function (data) {
             if (data.reload) {
                 console.log('Có cập nhật mới');
-
                 $.ajax({
                     url: window.location.href,
                     type: 'GET',

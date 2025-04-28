@@ -12,6 +12,7 @@ use App\Http\Controllers\LinhKienController;
 use App\Http\Controllers\YeuCauSuaChuaController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LichBaoTriController;
+use App\Http\Controllers\TaiKhoanController;
 
 /*
 |--------------------------------------------------------------------------
@@ -114,6 +115,12 @@ Route::middleware('auth')->group(function () {
     Route::delete('lichvanhanh/{id}', [LichVanHanhController::class, 'destroy'])->name('lichvanhanh.destroy');
     Route::match(['put', 'patch'], '/lichvanhanh/{id}', [LichVanHanhController::class, 'update'])->name('lichvanhanh.update');
 
-   
+   //Tài khoản
+    Route::get('/taikhoan', [TaiKhoanController::class, 'index'])->name('taikhoan.index');
+    Route::get('/taikhoan/create', [TaiKhoanController::class, 'create'])->name('taikhoan.create');
+    Route::post('/taikhoan/store', [TaiKhoanController::class, 'store'])->name('taikhoan.store');
+    Route::get('/taikhoan/{id}/edit', [TaiKhoanController::class, 'edit'])->name('taikhoan.edit');
+    Route::match(['put', 'patch'], '/taikhoan/{id}', [TaiKhoanController::class, 'update'])->name('taikhoan.update');
+    Route::delete('/taikhoan/{id}', [TaiKhoanController::class, 'destroy'])->name('taikhoan.destroy');
 
 });

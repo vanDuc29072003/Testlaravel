@@ -10,6 +10,7 @@ class LichBaoTri extends Model
     use HasFactory;
     public $timestamps = false; // Bỏ qua timestamps
     protected $table = 'lichbaotri';
+    protected $primaryKey = 'MaLichBaoTri'; // Khóa chính
     protected $fillable = [
         'MoTa',
         'NgayBaoTri',

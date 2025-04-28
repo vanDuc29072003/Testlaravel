@@ -23,9 +23,14 @@ class May extends Model
         'HangSanXuat',
         'ChiTietLinhKien',
         'MaNhaCungCap',
+        'MaLoaiMay',
     ];
     public function nhaCungCap()
     {
         return $this->belongsTo(NhaCungCap::class, 'MaNhaCungCap', 'MaNhaCungCap');
+    }
+    public function loaiMay()
+    {
+        return $this->belongsTo(LoaiMay::class, 'MaLoai', 'MaLoai');
     }
 }

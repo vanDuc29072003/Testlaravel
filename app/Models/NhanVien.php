@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class NhanVien extends Model
 {
-    protected $table = 'nhanvien'; // Tên bảng trong database
+    protected $table = 'nhanvien'; // Tên bảng trong cơ sở dữ liệu
     protected $primaryKey = 'MaNhanVien'; // Khóa chính
     public $timestamps = false; // Không sử dụng created_at và updated_at
 
@@ -21,13 +21,15 @@ class NhanVien extends Model
         'MaBoPhan',
     ];
 
-    // Thiết lập mối quan hệ với bảng bophan
+    // Mối quan hệ với bảng bophan
     public function bophan()
     {
         return $this->belongsTo(BoPhan::class, 'MaBoPhan', 'MaBoPhan');
     }
+
+    // Mối quan hệ với bảng taikhoan
     public function taikhoan()
     {
-        return $this->hasOne(User::class, 'MaNhanVien', 'MaNhanVien');
+        return $this->hasOne(TaiKhoan::class, 'MaNhanVien', 'MaNhanVien');
     }
 }

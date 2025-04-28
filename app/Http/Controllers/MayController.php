@@ -6,7 +6,7 @@ use App\Events\eventUpdateTable;
 use Illuminate\Http\Request;
 use App\Models\May;
 use App\Models\NhaCungCap;
-
+use App\Models\LoaiMay;
 class MayController extends Controller
 {
     // public function may() {
@@ -22,7 +22,9 @@ class MayController extends Controller
     public function may(Request $request)
     {
         $query = May::query();
-
+        if ($request->filled('MaLoai')) {
+            $query->where('MaLoai', $request->MaLoai);
+        }
         // Danh sách các trường cần lọc
         $filters = [
             'MaMay' => 'like',
@@ -44,9 +46,10 @@ class MayController extends Controller
         }
 
         // Lấy danh sách máy với phân trang (mặc định 10 bản ghi mỗi trang)
-        $dsMay = $query->paginate(10);
+        $dsMay = $query->paginate(10)->appends($request->query());
+        $dsLoaiMay = LoaiMay::all(); // Lấy danh sách loại máy
 
-        return view('vMay.may', compact('dsMay'));
+        return view('vMay.may', compact('dsMay','dsLoaiMay'));
     }
 
     public function detailMay($MaMay)

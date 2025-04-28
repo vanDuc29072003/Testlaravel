@@ -9,6 +9,9 @@ use App\Models\NhanVien;
 use App\Models\ChiTietPhieuNhap;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\LienKetLKNCC;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
+
 class dsphieuNhapController extends Controller
 {
 
@@ -106,7 +109,7 @@ class dsphieuNhapController extends Controller
         } catch (\Exception $e) {
 
             // Ghi log lỗi để kiểm tra
-            \Log::error('Lỗi khi lưu phiếu nhập: ' . $e->getMessage());
+            Log::error('Lỗi khi lưu phiếu nhập: ' . $e->getMessage());
 
             return redirect()->back()->withInput()->with('error', 'Đã xảy ra lỗi khi lưu phiếu nhập. Vui lòng thử lại!');
         }
@@ -174,7 +177,7 @@ class dsphieuNhapController extends Controller
 
             return redirect()->route('dsphieunhap')->with('success', 'Phiếu nhập đã được cập nhật thành công!');
         } catch (\Exception $e) {
-            \Log::error('Lỗi khi cập nhật phiếu nhập: ' . $e->getMessage());
+            Log::error('Lỗi khi cập nhật phiếu nhập: ' . $e->getMessage());
             return redirect()->back()->withInput()->with('error', 'Đã xảy ra lỗi khi cập nhật phiếu nhập.');
         }
     }
@@ -210,7 +213,7 @@ class dsphieuNhapController extends Controller
         $phieuNhap = PhieuNhap::with('chiTietPhieuNhap.linhKien')->findOrFail($MaPhieuNhap);
         try {
             // Bắt đầu transaction để đảm bảo tính toàn vẹn dữ liệu
-            \DB::beginTransaction();
+            DB::beginTransaction();
 
             // Cập nhật số lượng tồn kho cho từng linh kiện
             foreach ($phieuNhap->chiTietPhieuNhap as $chiTiet) {
@@ -220,7 +223,7 @@ class dsphieuNhapController extends Controller
                     $linhKien->save();
 
                     // Kiểm tra và thêm dữ liệu vào bảng liên kết
-                    $exists = \DB::table('nhacungcap_linhkien')
+                    $exists = DB::table('nhacungcap_linhkien')
                         ->where('MaLinhKien', $linhKien->MaLinhKien)
                         ->where('MaNhaCungCap', $phieuNhap->MaNhaCungCap)
                         ->exists();
@@ -241,15 +244,15 @@ class dsphieuNhapController extends Controller
             ]);
 
             // Commit transaction
-            \DB::commit();
+            DB::commit();
 
             return redirect()->route('dsphieunhap')->with('success', 'Phiếu nhập đã được phê duyệt và số lượng linh kiện đã được cập nhật!');
         } catch (\Exception $e) {
             // Rollback transaction nếu có lỗi
-            \DB::rollBack();
+            DB::rollBack();
 
             // Ghi log lỗi để kiểm tra
-            \Log::error('Lỗi khi phê duyệt phiếu nhập: ' . $e->getMessage());
+            Log::error('Lỗi khi phê duyệt phiếu nhập: ' . $e->getMessage());
 
             return redirect()->route('dsphieunhap')->with('error', 'Đã xảy ra lỗi khi phê duyệt phiếu nhập. Vui lòng thử lại!');
         }
