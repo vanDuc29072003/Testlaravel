@@ -40,14 +40,18 @@
                     <td>{{ $lich->may->nhaCungCap->TenNhaCungCap ?? 'Không xác định' }}</td>
                     <td style="width: 200px;">
                       <div class="d-flex gap-2">
-                        <form action="" method="POST">
-                          @csrf
-                          <button type="submit" class="btn btn-success btn-sm">Hoàn thành</button>
-                        </form>
+                        
+                        <a href="{{ route('lichbaotri.taophieubangiao', $lich->MaLichBaoTri) }}" class="btn btn-sm btn-success">
+                          <i class="fa fa-check"></i> Bàn giao
+                        </a>
+                      
                         <form action="{{ route('lichbaotri.destroy', $lich->MaLichBaoTri) }}" method="POST">
                           @csrf
                           @method('DELETE')
-                          <button type="submit" class="btn btn-danger btn-sm">Hủy</button>
+                          <button type="button" class="btn btn-danger btn-sm"
+                          onclick="event.stopPropagation(); confirmDelete(this)">
+                          <i class="fa fa-trash"></i> Xóa
+                           </button>
                         </form>
                       </div>
                     </td>
@@ -89,4 +93,37 @@
       </div>
     </div>
   </div>
+@endsection
+@section('scripts')
+<script>
+  function confirmDelete(button) {
+      swal({
+          title: 'Bạn có chắc chắn?',
+          text: "Hành động này không thể hoàn tác!",
+          icon: 'warning',
+          buttons: {
+              confirm: { text: 'Xóa', className: 'btn btn-danger' },
+              cancel: { text: 'Hủy', visible: true, className: 'btn btn-success' }
+          }
+      }).then((willDelete) => {
+          if (willDelete) {
+              button.closest('form').submit();  
+          } else {
+              swal.close();
+          }
+      });
+  }
+</script>
+<script>
+  @if (session('success'))
+      $.notify({
+          title: 'Thành công',
+          message: '{{ session('success') }}',
+          icon: 'icon-bell'
+      }, {
+          type: 'success',
+          animate: { enter: 'animated fadeInDown', exit: 'animated fadeOutUp' },
+      });
+  @endif
+</script>
 @endsection

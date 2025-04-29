@@ -20,4 +20,8 @@ class LichBaoTri extends Model
     {
         return $this->belongsTo(May::class, 'MaMay', 'MaMay');
     }
+    public function phieuBanGiaoBaoTri()
+    {
+        return $this->belongsTo(PhieuBanGiaoBaoTri::class, 'MaLichBaoTri', 'MaLichBaoTri');
+    }
 }
