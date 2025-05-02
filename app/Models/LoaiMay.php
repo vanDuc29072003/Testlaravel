@@ -13,7 +13,7 @@ class LoaiMay extends Model
 
     public $timestamps = false;
     protected $fillable = [
-        'TenLoaiMay', 
+        'TenLoai', 
         'MoTa', 
     ];
     public function may()
