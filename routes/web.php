@@ -148,6 +148,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/taikhoan/{id}/edit', [TaiKhoanController::class, 'edit'])->name('taikhoan.edit');
     Route::match(['put', 'patch'], '/taikhoan/{id}', [TaiKhoanController::class, 'update'])->name('taikhoan.update');
     Route::delete('/taikhoan/{id}', [TaiKhoanController::class, 'destroy'])->name('taikhoan.destroy');
+    Route::get('/taikhoan/{TenTaiKhoan}', [TaiKhoanController::class, 'show'])->name('taikhoan.show');
+    Route::get('/{TenTaiKhoan}/editThongTin', [TaiKhoanController::class, 'editThongTin'])->name('taikhoan.editThongTin');
+    Route::match(['put','patch'],'/{TenTaiKhoan}/updateThongTin', [TaiKhoanController::class, 'updateThongTin'])->name('taikhoan.updateThongTin');
     //Loại máy
     Route::get('/loaimay', [LoaiMayController::class, 'index'])->name('loaimay.index');
     Route::get('/loaimay/create', [LoaiMayController::class, 'create'])->name('loaimay.create');

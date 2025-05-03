@@ -6,7 +6,7 @@
 <div class="container">
   <div class="page-inner">
     <div class="row">
-      
+
       <!-- Phần bảng -->
       <div class="col-md-9">
         <div class="d-flex justify-content-between align-items-center mb-3">
@@ -29,10 +29,19 @@
           <tbody>
             @foreach ($taikhoans as $index => $taikhoan)
               <tr>
-                <td>{{ $loop->iteration }}</td>
-                <td>{{ $taikhoan->nhanvien->TenNhanVien ?? 'Chưa xác định' }}</td>
-                <td>{{ $taikhoan->TenTaiKhoan }}</td>
-                <td>{{ $taikhoan->MatKhauChuaMaHoa }}</td>
+                <!-- Cột có sự kiện onclick toàn dòng trừ hành động -->
+                <td onclick="window.location='{{ route('taikhoan.show', $taikhoan->TenTaiKhoan) }}'" style="cursor:pointer;">
+                  {{ $loop->iteration }}
+                </td>
+                <td onclick="window.location='{{ route('taikhoan.show', $taikhoan->TenTaiKhoan) }}'" style="cursor:pointer;">
+                  {{ $taikhoan->nhanvien->TenNhanVien ?? 'Chưa xác định' }}
+                </td>
+                <td onclick="window.location='{{ route('taikhoan.show', $taikhoan->TenTaiKhoan) }}'" style="cursor:pointer;">
+                  {{ $taikhoan->TenTaiKhoan }}
+                </td>
+                <td onclick="window.location='{{ route('taikhoan.show', $taikhoan->TenTaiKhoan) }}'" style="cursor:pointer;">
+                  {{ $taikhoan->MatKhauChuaMaHoa }}
+                </td>
                 <td>
                   <div class="d-flex gap-2">
                     <a href="{{ route('taikhoan.edit', $taikhoan->TenTaiKhoan) }}" class="btn btn-warning btn-sm">Sửa</a>

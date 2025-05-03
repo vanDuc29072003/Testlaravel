@@ -10,7 +10,7 @@
 
         <div class="card shadow-sm">
           <div class="card-header">
-            <h1 class="m-3">Sửa Tài Khoản</h1>
+            <h1 class="m-3">Đổi mật khẩu</h1>
           </div>
 
           <div class="card-body">
