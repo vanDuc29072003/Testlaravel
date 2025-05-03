@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LichBaoTriController;
 use App\Http\Controllers\TaiKhoanController;
 use App\Http\Controllers\PhieuBanGiaoController;
+use App\Http\Controllers\LoaiMayController;
 
 /*
 |--------------------------------------------------------------------------
@@ -139,5 +140,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/taikhoan/{id}/edit', [TaiKhoanController::class, 'edit'])->name('taikhoan.edit');
     Route::match(['put', 'patch'], '/taikhoan/{id}', [TaiKhoanController::class, 'update'])->name('taikhoan.update');
     Route::delete('/taikhoan/{id}', [TaiKhoanController::class, 'destroy'])->name('taikhoan.destroy');
-
+    //Loại máy
+    Route::get('/loaimay', [LoaiMayController::class, 'index'])->name('loaimay.index');
+    Route::get('/loaimay/create', [LoaiMayController::class, 'create'])->name('loaimay.create');
+    Route::post('/loaimay/store', [LoaiMayController::class, 'store'])->name('loaimay.store');
+    Route::delete('/loaimay/{id}', [LoaiMayController::class, 'destroy'])->name('loaimay.destroy');
 });
