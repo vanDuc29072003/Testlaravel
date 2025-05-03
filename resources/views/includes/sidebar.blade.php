@@ -70,7 +70,7 @@
           <div class="collapse" id="lichsu">
             <ul class="nav nav-collapse">
               <li>
-                <a href="">
+                <a href="{{ route('lichbaotri.dabangiao') }}">
                   <span class="sub-item">Lịch sử bảo trì</span>
                 </a>
               </li>

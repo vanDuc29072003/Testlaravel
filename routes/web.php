@@ -111,20 +111,28 @@ Route::middleware('auth')->group(function () {
     Route::get('/lichsuachua/{MaLichSuaChua}/xem-ncc', [LichSuaChuaController::class, 'xemNCC'])->name('lichsuachua.xemncc');
 
     Route::post('/phieubangiao/store', [PhieuBanGiaoController::class, 'store'])->name('phieubangiao.store');
-    
     Route::get('/phieubangiao/{MaPhieuBanGiaoNoiBo}/export-pdf', [PhieuBanGiaoController::class, 'exportPDF'])->name('phieubangiao.exportPDF');
 
     
     Route::get('/phieubangiao/{MaPhieuBanGiaoSuaChua}/export-pdf1', [PhieuBanGiaoController::class, 'exportPDF1'])->name('phieubangiao.exportPDF1');
-
     Route::post('/phieubangiao/store1', [PhieuBanGiaoController::class, 'store1'])->name('phieubangiao.store1');
     Route::get('/lichsuachua/{MaLichSuaChua}', [LichSuaChuaController::class, 'show'])->name('lichsuachua.showpbg');
     Route::get('/lichsuachua-bg/{MaLichSuaChua}', [LichSuaChuaController::class, 'show1'])->name('lichsuachua.showpbg1');
+    Route::post('/phieubangiao/storeBT', [PhieuBanGiaoController::class, 'storeBT'])->name('phieubangiao.storeBT');
+    
+    
+
+
+    Route::get('/lichbaotri/dabangiao', [LichBaoTriController::class, 'lichSuBaoTri'])->name('lichbaotri.dabangiao');
+    Route::get('/lichbaotri/{MaLichBaoTri}', [LichBaoTriController::class, 'show'])->name('lichbaotri.showpbg');
+    Route::get('/phieubangiao/{MaPhieuBanGiaoBaoTri}/export-pdf2', [PhieuBanGiaoController::class, 'exportPDF2'])->name('phieubangiaobaotri.exportPDF');
 
     Route::get('/lichbaotri', [LichBaoTriController::class, 'index'])->name('lichbaotri');
     Route::get('/lichbaotri/create', [LichBaoTriController::class, 'create'])->name('lichbaotri.create');
     Route::post('/lichbaotri', [LichBaoTriController::class, 'store'])->name('lichbaotri.store');
     Route::delete('/lichbaotri/{id}', [LichBaoTriController::class, 'destroy'])->name('lichbaotri.destroy');
+    Route::get('/lichbaotri/{MaLichBaoTri}/taophieubangiao', [LichBaoTriController::class, 'taophieubangiao'])->name('lichbaotri.taophieubangiao');
+
     //Lịch vận hành
     Route::get('/lichvanhanh', [LichVanHanhController::class, 'index'])->name('lichvanhanh');
     Route::get('/lichvanhanh/create', [LichVanHanhController::class, 'create'])->name('lichvanhanh.create');
