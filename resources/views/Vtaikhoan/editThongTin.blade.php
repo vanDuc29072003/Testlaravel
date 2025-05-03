@@ -9,7 +9,7 @@
             <div class="card-header">
                 <div class="row">
                     <div class="col-md-6">
-                        <h1>Chỉnh sửa tài khoản</h1>
+                        <h1>Chỉnh sửa thông tin chi tiết</h1>
                     </div>
                 </div>
             </div>
