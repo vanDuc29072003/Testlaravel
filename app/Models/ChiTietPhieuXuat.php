@@ -11,7 +11,7 @@ class chiTietPhieuXuat extends Model
 
     protected $table = 'chitietphieuxuat'; // Tên bảng trong database
     protected $primaryKey = 'MaChiTietPhieuXuat'; // Khóa chính
-    public $timestamps = false; // Không sử dụng created_at và updated_at
+    public $timestamps = true;
 
     protected $fillable = [
         'MaPhieuXuat',

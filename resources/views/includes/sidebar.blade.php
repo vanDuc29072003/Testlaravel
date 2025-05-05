@@ -151,6 +151,37 @@
           </div>
         </li>
         <li class="nav-item ">
+          <a data-bs-toggle="collapse" href="#baocao">
+            <i class="fa-solid fa-chart-line"></i>
+            <p>Báo cáo & Thống kê</p>
+            <span class="caret"></span>
+          </a>
+          <div class="collapse" id="baocao">
+          <ul class="nav nav-collapse">
+            <li>
+                <a href="{{ route('thongkekho') }}">
+                    <span class="sub-item">Báo cáo kiểm kho</span>
+                </a>
+            </li>
+            <li>
+                <a href="">
+                    <span class="sub-item">Hiệu suất linh kiện</span>
+                </a>
+            </li>
+            <li>
+                <a href="">
+                    <span class="sub-item">Tình trạng tồn kho</span>
+                </a>
+            </li>
+            <li>
+                <a href="">
+                    <span class="sub-item">Hiệu quả nhân viên</span>
+                </a>
+            </li>
+        </ul>
+          </div>
+        </li>
+        <li class="nav-item ">
           <a data-bs-toggle="collapse" href="#admin">
             <i class="fa-solid fa-users"></i>
             <p>Quản trị viên</p>

@@ -36,4 +36,12 @@ class LinhKien extends Model
     {
         return $this->hasMany(ChiTietPhieuNhap::class, 'MaLinhKien', 'MaLinhKien');
     }
+    public function chiTietPhieuXuat()
+    {
+        return $this->hasMany(ChiTietPhieuXuat::class, 'MaLinhKien', 'MaLinhKien');
+    }
+    public function chiTietPhieuBanGiaoNoiBo()
+    {
+        return $this->hasMany(ChiTietPhieuBanGiaoNoiBo::class, 'MaLinhKien', 'MaLinhKien');
+    }
 }

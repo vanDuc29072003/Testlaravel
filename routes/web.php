@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LichBaoTriController;
 use App\Http\Controllers\TaiKhoanController;
 use App\Http\Controllers\PhieuBanGiaoController;
+use App\Http\Controllers\ThongKeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -140,4 +141,7 @@ Route::middleware('auth')->group(function () {
     Route::match(['put', 'patch'], '/taikhoan/{id}', [TaiKhoanController::class, 'update'])->name('taikhoan.update');
     Route::delete('/taikhoan/{id}', [TaiKhoanController::class, 'destroy'])->name('taikhoan.destroy');
 
+    //Thống kê
+    Route::get('/thongke', [ThongKeController::class, 'thongkekho'])->name('thongkekho');
+    Route::get('/thongke/pdf', [ThongKeController::class, 'exportPDF'])->name('thongkekho.pdf');
 });

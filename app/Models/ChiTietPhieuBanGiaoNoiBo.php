@@ -11,7 +11,7 @@ class ChiTietPhieuBanGiaoNoiBo extends Model
 
     protected $table = 'chitietphieubangiaonoibo';
     protected $primaryKey = 'MaChiTietPhieuSuaNB';
-    public $timestamps = false ;
+    public $timestamps = true ;
     protected $fillable = [
         'MaPhieuBanGiaoNoiBo',
         'MaLinhKien',
