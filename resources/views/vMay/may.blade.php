@@ -194,7 +194,7 @@
             });
         @endif
     </script>
-
+    
     <script>
         pusher.subscribe('channel-all').bind('eventUpdateTable', function (data) {
             if (data.reload) {

@@ -115,8 +115,7 @@
 
                 <!-- Form tìm kiếm -->
                 <div class="col-2 p-0">
-                    <form method="GET" action="{{ route('yeucausuachua.index') }}"
-                        class="p-3 border rounded">
+                    <form method="GET" action="{{ route('yeucausuachua.index') }}" class="p-3 border rounded">
                         <h5 class="mb-3">Tìm kiếm</h5>
                         <div class="mb-3">
                             <label for="MaYeuCauSuaChua" class="form-label">Mã yêu cầu sửa chữa</label>

@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Events\eventUpdateTable;
 use Illuminate\Http\Request;
 use App\Models\LoaiMay;
 class LoaiMayController extends Controller
@@ -41,7 +41,7 @@ class LoaiMayController extends Controller
     {
         $loaimay = LoaiMay::findOrFail($id);
         $loaimay->delete();
-
+        event(new eventUpdateTable());
         return redirect()->route('loaimay.index')->with('success', 'Xóa loại máy thành công.');
     }
 }
