@@ -14,7 +14,8 @@ class LichBaoTri extends Model
     protected $fillable = [
         'MoTa',
         'NgayBaoTri',
-        'MaMay'
+        'MaMay',
+        'TrangThai'
     ];
     function may()
     {

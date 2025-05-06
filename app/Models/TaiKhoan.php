@@ -2,42 +2,38 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class TaiKhoan extends Model
+class TaiKhoan extends Authenticatable
 {
-    use HasFactory;
+    protected $table = 'taikhoan'; // Tên bảng trong database
+    protected $primaryKey = 'MaNhanVien'; // Khóa chính
+    public $timestamps = false; // Không sử dụng created_at và updated_at
 
-    // Tên bảng trong cơ sở dữ liệu
-    protected $table = 'taikhoan';
-
-    // Đặt khóa chính là TenTaiKhoan
-    protected $primaryKey = 'TenTaiKhoan';
-
-    // Không sử dụng timestamps
-    public $timestamps = false;
-
-    // Định nghĩa keyType là string nếu TenTaiKhoan là string
-    protected $keyType = 'string';
-
-    // Các trường có thể gán
     protected $fillable = [
         'MaNhanVien',
         'TenTaiKhoan',
+        'MatKhauChuaMaHoa',
         'MatKhau',
-        'MatKhauChuaMaHoa'
     ];
 
-    // Mối quan hệ với model NhanVien
+    // Ghi đè phương thức getAuthPassword để sử dụng cột MatKhau
+    public function getAuthPassword()
+    {
+        return $this->MatKhau;
+    }
     public function nhanvien()
     {
         return $this->belongsTo(NhanVien::class, 'MaNhanVien', 'MaNhanVien');
     }
-
-    // Hàm lấy mật khẩu cho chức năng đăng nhập
-    public function getAuthPassword()
+    public static function boot()
     {
-        return $this->MatKhau;
+        parent::boot();
+
+        static::saving(function ($model) {
+            if ($model->MatKhauChuaMaHoa) {
+                $model->MatKhau = bcrypt($model->MatKhauChuaMaHoa); // Mã hóa mật khẩu
+            }
+        });
     }
 }

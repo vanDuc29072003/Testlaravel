@@ -12,18 +12,19 @@ use App\Models\May;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 class LichBaoTriController extends Controller
 {
     public function index(Request $request)
     {
         $query = LichBaoTri::query();
 
-        // Chỉ lấy lịch bảo trì có TrangThai = 0
+        // Chỉ lấy lịch bảo trì có TrangThai = 0 (chưa hoàn thành)
         $query->where('TrangThai', 0);
 
         // Lọc theo năm
         if ($request->filled('nam')) {
-            $query->whereYear('NgayBaoTri', $request->input('nam'));
+            $query->whereYear('NgayBaoTri', '=', $request->input('nam'));
         }
 
         // Lọc theo quý
@@ -34,16 +35,25 @@ class LichBaoTriController extends Controller
                 ->whereMonth('NgayBaoTri', '<=', $ketthuc);
         }
 
+        // ✅ Lọc theo tên máy nếu có
+        if ($request->filled('ten_may')) {
+            $tenMay = $request->input('ten_may');
+            $query->whereHas('may', function ($q) use ($tenMay) {
+                $q->whereRaw('LOWER(TenMay) LIKE ?', ['%' . mb_strtolower($tenMay, 'UTF8') . '%']);
+            });
+        }
+
         // Lấy danh sách lịch bảo trì từ cơ sở dữ liệu
         $lichbaotri = $query->with('may')->orderBy('NgayBaoTri', 'asc')->get();
 
-        // Nhóm theo tháng (theo Y-m format)
+        // Nhóm theo tháng-năm
         $lichbaotriGrouped = $lichbaotri->groupBy(function ($item) {
-            return \Carbon\Carbon::parse($item->NgayBaoTri)->format('Y-m'); // Nhóm theo năm-tháng
+            return \Carbon\Carbon::parse($item->NgayBaoTri)->format('Y-m');
         });
 
         return view('vLich.lichbaotri', compact('lichbaotriGrouped'));
     }
+
     public function lichSuBaoTri(Request $request)
     {
         $query = LichBaoTri::query();
@@ -91,22 +101,41 @@ class LichBaoTriController extends Controller
             'MaMay' => 'required|exists:may,MaMay',
         ]);
 
+        // Kiểm tra chu kỳ bảo trì
         $chuKy = DB::table('may')->where('MaMay', $validated['MaMay'])->value('ChuKyBaoTri');
+        if (!$chuKy) {
+            return redirect()->back()->with('error', 'Không tìm thấy chu kỳ bảo trì cho máy này!');
+        }
+
         $ngayBaoTri = Carbon::parse($validated['NgayBaoTri']);
 
+        // In dữ liệu ra để kiểm tra
+        Log::info('Chu kỳ: ' . $chuKy);
+        Log::info('Ngày bảo trì: ' . $ngayBaoTri);
+
+        // Lặp lại việc tạo lịch bảo trì cho 12 tháng
         for ($i = 0; $i < 12; $i++) {
+            Log::info('Tạo lịch bảo trì: ', [
+                'MoTa' => $validated['MoTa'],
+                'NgayBaoTri' => $ngayBaoTri->format('Y-m-d'),
+                'MaMay' => $validated['MaMay'],
+                'TrangThai' => 0,
+            ]);
+
             LichBaoTri::create([
                 'MoTa' => $validated['MoTa'],
                 'NgayBaoTri' => $ngayBaoTri->format('Y-m-d'),
                 'MaMay' => $validated['MaMay'],
-                'TrangThai' => 0, // Gán thêm trạng thái 0 khi lưu
+                'TrangThai' => 0, // Trạng thái 0 khi lưu
             ]);
 
+            // Thêm chu kỳ vào ngày bảo trì tiếp theo
             $ngayBaoTri->addMonths($chuKy);
         }
 
         return redirect()->route('lichbaotri')->with('success', 'Tạo lịch bảo trì thành công cho 12 tháng!');
     }
+
 
     function destroy($id)
     {
