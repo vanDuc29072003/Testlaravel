@@ -12,7 +12,7 @@ use App\Events\eventUpdateUI;
 use Carbon\Carbon;
 use App\Models\PhieuBanGiaoNoiBo;
 use App\Models\PhieuBanGiaoSuaChuaNCC;
-
+use App\Models\May;
 class LichSuaChuaController extends Controller
 {
 
@@ -47,31 +47,60 @@ class LichSuaChuaController extends Controller
 
         return view('vLichSuaChua.lichsuachua', compact('dsLSCChuaHoanThanh', 'dsNhanVien', 'dsLSCtheongay'));
     }
+  
+
     public function lichSuDaHoanThanh(Request $request)
     {
-        $queryDaHoanThanh = LichSuaChua::query();
-        $dsNhanVien = NhanVien::all();
+        // Lấy danh sách nhân viên theo bộ phận
+        $dsNhanVienYeuCau = NhanVien::where('MaBoPhan', 2)->get(); // Bộ phận yêu cầu
+        $dsNhanVienKyThuat = NhanVien::where('MaBoPhan', 3)->get(); // Bộ phận kỹ thuật
+        $dsMay = May::all();
 
-        // Lọc theo các trường nếu cần
-        $filters = [
-            'MaLichSuaChua' => '=',
-            'MaYeuCauSuaChua' => '=',
-            'MaNhanVienKyThuat' => '='
-        ];
-        foreach ($filters as $field => $operator) {
-            if ($request->filled($field)) {
-                $value = $operator === 'like' ? '%' . $request->$field . '%' : $request->$field;
-                $queryDaHoanThanh->where($field, $operator, $value);
-            }
+        $query = LichSuaChua::query()
+            ->join('yeucausuachua', 'lichsuachua.MaYeuCauSuaChua', '=', 'yeucausuachua.MaYeuCauSuaChua')
+            ->join('may', 'yeucausuachua.MaMay', '=', 'may.MaMay') // để lọc theo tên máy
+            ->whereIn('lichsuachua.TrangThai', ['1', '2'])
+            ->orderByDesc('yeucausuachua.ThoiGianYeuCau')
+            ->select('lichsuachua.*');
+
+        // Lọc theo tháng
+        if ($request->filled('thang')) {
+            $month = date('m', strtotime($request->thang));
+            $year = date('Y', strtotime($request->thang));
+            $query->whereMonth('yeucausuachua.ThoiGianYeuCau', $month)
+                ->whereYear('yeucausuachua.ThoiGianYeuCau', $year);
         }
 
-        $dsLSCDaHoanThanh = $queryDaHoanThanh->whereIn('TrangThai', ['1', '2'])
+        // Lọc theo tên máy
+        if ($request->filled('TenMay')) {
+            $query->where('may.TenMay', $request->TenMay);
+        }
+
+        // Lọc theo nhân viên yêu cầu (bộ phận 2)
+        if ($request->filled('MaNhanVienYeuCau')) {
+            $query->where('yeucausuachua.MaNhanVienYeuCau', $request->MaNhanVienYeuCau);
+        }
+
+        // Lọc theo nhân viên kỹ thuật (bộ phận 3)
+        if ($request->filled('MaNhanVienKyThuat')) {
+            $query->where('lichsuachua.MaNhanVienKyThuat', $request->MaNhanVienKyThuat);
+        }
+
+        $dsLSCDaHoanThanh = $query
             ->with(['yeuCauSuaChua', 'nhanVienKyThuat'])
-            ->orderBy('updated_at', 'desc')
             ->paginate(10, ['*'], 'da_hoan_thanh');
 
-        return view('vLichSu.lichsusuachua', compact('dsLSCDaHoanThanh', 'dsNhanVien'));
+        return view('vLichSu.lichsusuachua', [
+            'dsLSCDaHoanThanh' => $dsLSCDaHoanThanh,
+            'dsNhanVien' => $dsNhanVienKyThuat, // dùng nếu view cũ cần
+            'dsNhanVienYeuCau' => $dsNhanVienYeuCau,
+            'dsNhanVienKyThuat' => $dsNhanVienKyThuat,
+            'dsMay' => $dsMay,
+        ]);
     }
+
+
+
     public function taoPhieuBanGiaoNoiBo($MaLichSuaChua)
     {
         // Lấy thông tin lịch sửa chữa cùng với phiếu bàn giao nội bộ
@@ -132,22 +161,22 @@ class LichSuaChuaController extends Controller
             'nhanVienKyThuat',
             'phieuBanGiaoNoiBo.chiTietPhieuBanGiaoNoiBo.LinhKienSuaChua.donViTinh'
         ])->findOrFail($MaLichSuaChua);
-    
+
         $phieuBanGiaoNoiBo = $lichSuaChua->phieuBanGiaoNoiBo;
-    
+
         return view('vPhieuBanGiao.detailpbgNB', compact('lichSuaChua', 'phieuBanGiaoNoiBo'));
     }
-    
 
-    // Hàm show1: xem phiếu bàn giao nhà cung cấp
+
+
     public function show1($MaLichSuaChua)
     {
         // Lấy lịch sửa chữa + yêu cầu sửa chữa + máy + nhà cung cấp + phiếu bàn giao NCC
         $lichSuaChua = LichSuaChua::with([
-            'yeuCauSuaChua.may.nhaCungCap', 
+            'yeuCauSuaChua.may.nhaCungCap',
             'phieuBanGiaoSuaChuaNCC',
             'phieuBanGiaoSuaChuaNCC.chiTietPhieuBanGiaoSuaChuaNCC',
-            ])->findOrFail($MaLichSuaChua);
+        ])->findOrFail($MaLichSuaChua);
 
         // Lấy luôn nhà cung cấp
         $nhaCungCap = $lichSuaChua->yeuCauSuaChua->may->nhaCungCap ?? null;

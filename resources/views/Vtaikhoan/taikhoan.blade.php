@@ -6,15 +6,33 @@
 <div class="container">
   <div class="page-inner">
     <div class="row">
-      
+
       <!-- Phần bảng -->
       <div class="col-md-9">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-          <h1 class="mb-0">Danh Sách Tài Khoản</h1>
+        <div class="d-flex flex-wrap justify-content-between align-items-center mb-3">
+          <div class="dropdown me-2">
+              <button class="btn btn-outline-secondary dropdown-toggle p-2" type="button"
+                      id="dropdownBoPhan" data-bs-toggle="dropdown" aria-expanded="false">
+                  ☰ 
+              </button>
+              <ul class="dropdown-menu" aria-labelledby="dropdownBoPhan">
+                  <li><a class="dropdown-item" href="{{ route('taikhoan.index') }}">Tất cả</a></li>
+                  @foreach ($bophans as $bp)
+                      <li>
+                          <a class="dropdown-item" href="{{ route('taikhoan.index', ['MaBoPhan' => $bp->MaBoPhan]) }}">
+                              {{ $bp->TenBoPhan }}
+                          </a>
+                      </li>
+                  @endforeach
+              </ul>
+          </div>
+      
+          <h1 class="mb-0 flex-grow-1">Danh Sách Tài Khoản</h1>
+      
           <a href="{{ route('taikhoan.create') }}" class="btn btn-primary">
-            <i class="fa fa-plus"></i> Thêm mới
+              <i class="fa fa-plus"></i> Thêm mới
           </a>
-        </div>
+      </div>
 
         <table class="table table-bordered table-striped">
           <thead style="background-color: #ffc0cb; color: black;">
@@ -29,13 +47,22 @@
           <tbody>
             @foreach ($taikhoans as $index => $taikhoan)
               <tr>
-                <td>{{ $loop->iteration }}</td>
-                <td>{{ $taikhoan->nhanvien->TenNhanVien ?? 'Chưa xác định' }}</td>
-                <td>{{ $taikhoan->TenTaiKhoan }}</td>
-                <td>{{ $taikhoan->MatKhauChuaMaHoa }}</td>
+                <!-- Cột có sự kiện onclick toàn dòng trừ hành động -->
+                <td onclick="window.location='{{ route('taikhoan.show', $taikhoan->TenTaiKhoan) }}'" style="cursor:pointer;">
+                  {{ $loop->iteration }}
+                </td>
+                <td onclick="window.location='{{ route('taikhoan.show', $taikhoan->TenTaiKhoan) }}'" style="cursor:pointer;">
+                  {{ $taikhoan->nhanvien->TenNhanVien ?? 'Chưa xác định' }}
+                </td>
+                <td onclick="window.location='{{ route('taikhoan.show', $taikhoan->TenTaiKhoan) }}'" style="cursor:pointer;">
+                  {{ $taikhoan->TenTaiKhoan }}
+                </td>
+                <td onclick="window.location='{{ route('taikhoan.show', $taikhoan->TenTaiKhoan) }}'" style="cursor:pointer;">
+                  {{ $taikhoan->MatKhauChuaMaHoa }}
+                </td>
                 <td>
                   <div class="d-flex gap-2">
-                    <a href="{{ route('taikhoan.edit', $taikhoan->TenTaiKhoan) }}" class="btn btn-warning btn-sm">Sửa</a>
+                    <a href="{{ route('taikhoan.edit', $taikhoan->MaNhanVien) }}" class="btn btn-warning btn-sm">Đổi mật khẩu</a>
                     <form action="{{ route('taikhoan.destroy', $taikhoan->TenTaiKhoan) }}" method="POST" onsubmit="return confirm('Bạn có chắc chắn muốn xóa tài khoản này?')">
                       @csrf
                       @method('DELETE')
@@ -79,4 +106,33 @@
     </div>
   </div>
 </div>
+@endsection
+@section('scripts')
+<script>
+    @if (session('success'))
+        $.notify({
+            title: 'Thành công',
+            message: '{{ session('success') }}',
+            icon: 'icon-bell'
+        }, {
+            type: 'success',
+            animate: {
+                enter: 'animated fadeInDown',
+                exit: 'animated fadeOutUp'
+            },
+        });
+    @endif
+</script>
+<script>
+    @if (session('error'))
+        $.notify({
+            title: 'Lỗi',
+            message: '{{ session('error') }}',
+            icon: 'icon-bell'
+        }, {
+            type: 'danger',
+            animate: { enter: 'animated fadeInDown', exit: 'animated fadeOutUp' },
+        });
+    @endif
+</script>
 @endsection
