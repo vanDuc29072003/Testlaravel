@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\PhieuNhap;
+use App\Models\PhieuThanhLy;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
 use App\Models\YeuCauSuaChua;
@@ -33,6 +34,7 @@ class AppServiceProvider extends ServiceProvider
                 $count_ycsc = YeuCauSuaChua::where('TrangThai', '0')->count();
                 $count_lichsc = LichSuaChua::where('TrangThai', '0')->count();
                 $count_phieunhap = PhieuNhap::where('TrangThai', '0')->count();
+                $count_phieuthanhly = PhieuThanhLy::where('TrangThai', '0')->count();
 
                 $dsThongBao = ThongBao::orderBy('created_at', 'desc')->take(10)->get(); // Lấy 10 thông báo mới nhất
                 $chuadocCount = ThongBao::where('TrangThai', '=','0')->count(); // Đếm thông báo chưa đọc
@@ -42,6 +44,7 @@ class AppServiceProvider extends ServiceProvider
                      ->with('count_ycsc', $count_ycsc)
                      ->with('count_lichsc', $count_lichsc)
                      ->with('count_phieunhap', $count_phieunhap)
+                     ->with('count_phieuthanhly', $count_phieuthanhly)
                      ->with('dsThongBao', $dsThongBao)
                      ->with('chuadocCount', $chuadocCount);
             }

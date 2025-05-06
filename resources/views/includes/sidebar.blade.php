@@ -33,10 +33,10 @@
             <i class="fa-solid fa-calendar-days"></i>
             <p>Phân công</p>
             @if ($count_lichsc > 0)
-        <span class="badge">{{ $count_lichsc }}</span>
-      @else
-    <span class="caret"></span>
-  @endif
+              <span class="badge">{{ $count_lichsc }}</span>
+            @else
+              <span class="caret"></span>
+            @endif
           </a>
           <div class="collapse" id="phancong">
             <ul class="nav nav-collapse">
@@ -54,8 +54,8 @@
                 <a href="{{ route('lichsuachua.index') }}">
                   <span class="sub-item">Lịch sửa chữa</span>
                   @if($count_lichsc > 0)
-            <span class="badge">{{ $count_lichsc }}</span>
-          @endif
+                    <span class="badge">{{ $count_lichsc }}</span>
+                  @endif
                 </a>
               </li>
             </ul>
@@ -87,8 +87,8 @@
             <i class="fa-solid fa-hammer"></i>
             <p>Yêu cầu sửa chữa</p>
             @if ($count_ycsc > 0)
-        <span class="badge">{{ $count_ycsc }}</span>
-      @endif
+              <span class="badge">{{ $count_ycsc }}</span>
+            @endif
           </a>
         </li>
         <li class="nav-item ">
@@ -113,8 +113,8 @@
           <a data-bs-toggle="collapse" href="#submenu">
             <i class="fa-solid fa-clipboard-list"></i>
             <p>Lập phiếu</p>
-            @if($count_phieunhap > 0)
-              <span class="badge">{{ $count_phieunhap }}</span>
+            @if(($count_phieunhap + $count_phieuthanhly) > 0)
+              <span class="badge">{{ $count_phieunhap + $count_phieuthanhly }}</span>
             @else
               <span class="caret"></span>
             @endif
@@ -131,8 +131,8 @@
                 <a href="{{ route('dsphieunhap') }}">
                   <span class="sub-item">Phiếu nhập kho</span>
                   @if($count_phieunhap > 0)
-            <span class="badge">{{ $count_phieunhap }}</span>
-          @endif
+                    <span class="badge">{{ $count_phieunhap }}</span>
+                  @endif
                 </a>
 
               </li>
@@ -147,6 +147,14 @@
                 </a>
 
               </li>
+              <li>
+                <a href="{{ route('phieuthanhly.index') }}">
+                  <span class="sub-item">Phiếu thanh lý</span>
+                  @if($count_phieuthanhly > 0)
+                    <span class="badge">{{ $count_phieuthanhly }}</span>
+                  @endif
+                </a>
+              </li>
             </ul>
           </div>
         </li>
@@ -157,28 +165,13 @@
             <span class="caret"></span>
           </a>
           <div class="collapse" id="baocao">
-          <ul class="nav nav-collapse">
-            <li>
+            <ul class="nav nav-collapse">
+              <li>
                 <a href="{{ route('thongkekho') }}">
-                    <span class="sub-item">Báo cáo kiểm kho</span>
+                  <span class="sub-item">Báo cáo kiểm kho</span>
                 </a>
-            </li>
-            <li>
-                <a href="">
-                    <span class="sub-item">Hiệu suất linh kiện</span>
-                </a>
-            </li>
-            <li>
-                <a href="">
-                    <span class="sub-item">Tình trạng tồn kho</span>
-                </a>
-            </li>
-            <li>
-                <a href="">
-                    <span class="sub-item">Hiệu quả nhân viên</span>
-                </a>
-            </li>
-        </ul>
+              </li>
+            </ul>
           </div>
         </li>
         <li class="nav-item ">
