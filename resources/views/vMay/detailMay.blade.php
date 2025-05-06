@@ -7,9 +7,19 @@
         <div class="page-inner">
             <div class="card">
                 <div class="card-header">
-                    <h1 class="m-3">Thông Tin Máy</h1>
+                    <div class="mt-3 mx-3 d-flex justify-content-between">
+                        <h2 class="ps-3 mb-0">Thông Tin Máy</h2>
+                        <div class="d-flex justify-content-end">
+                            @if ($may->TrangThai == 0)
+                                <a href="{{ route('phieuthanhly.create', ['MaMay' => $may->MaMay]) }}"
+                                    class="btn btn-black btn-border">
+                                    <i class="fas fa-recycle"></i> Thanh lý
+                                </a>
+                            @endif
+                        </div>
+                    </div>
                 </div>
-                <div class="card-body p-5">
+                <div class="card-body pt-6 px-5">
                     <table class="table table-bordered table-striped">
                         <tbody>
                             <tr>
@@ -34,7 +44,8 @@
                                 <th scope="row">Chu Kỳ Bảo Trì</th>
                                 <td>{{ $may->ChuKyBaoTri }} tháng</td>
                                 <th scope="row">Chi Tiết Linh Kiện</th>
-                                <td><a href="{{ $may->ChiTietLinhKien }}" target="_blank"><i class="fas fa-link"></i> Mở file chi tiết</a></td>
+                                <td><a href="{{ $may->ChiTietLinhKien }}" target="_blank"><i class="fas fa-link"></i> Mở
+                                        file chi tiết</a></td>
                             </tr>
                             <tr>
                                 <th scope="row">Thời Gian Bảo Hành</th>
@@ -63,19 +74,19 @@
 @endsection
 
 @section('scripts')
-<script>
-    @if (session('success'))
-        $.notify({
-            title: 'Thành công',
-            message: '{{ session('success') }}',
-            icon: 'icon-bell'
-        }, {
-            type: 'success',
-            animate: {
-                enter: 'animated fadeInDown',
-                exit: 'animated fadeOutUp'
-            },
-        });
-    @endif
-</script>
+    <script>
+        @if (session('success'))
+            $.notify({
+                title: 'Thành công',
+                message: '{{ session('success') }}',
+                icon: 'icon-bell'
+            }, {
+                type: 'success',
+                animate: {
+                    enter: 'animated fadeInDown',
+                    exit: 'animated fadeOutUp'
+                },
+            });
+        @endif
+    </script>
 @endsection

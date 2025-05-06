@@ -48,10 +48,12 @@ class PhieuThanhLyController extends Controller
 
         return view('vPhieuThanhLy.phieuthanhly', compact('dsPhieuThanhLyDaDuyet', 'dsPhieuThanhLyChoDuyet', 'dsNhanVien', 'dsMay'));
     }
-    public function create()
+    public function create(Request $request)
     {
         $dsMay = May::all();
-        return view('vPhieuThanhLy.addphieuthanhly', compact('dsMay'));
+        $selectedMaMay = $request->input('MaMay');
+
+        return view('vPhieuThanhLy.addphieuthanhly', compact('dsMay', 'selectedMaMay'));
     }
     public function getThongTinMay($MaMay)
     {
@@ -125,6 +127,27 @@ class PhieuThanhLyController extends Controller
         $phieuThanhLy->TrangThai = '1';
         $phieuThanhLy->save();
 
+        $may = $phieuThanhLy->may;
+        if ($may) {
+            $may->TrangThai = '1';
+            $may->save();
+
+            $lichBaoTri = $may->lichBaoTri();
+            if ($lichBaoTri) {
+                $lichBaoTri->delete();
+            }
+            $yeuCauSuaChua = $may->yeuCauSuaChua();
+            if ($yeuCauSuaChua) {
+                $yeuCauSuaChua->update(['TrangThai' => '2']);
+
+                foreach ($yeuCauSuaChua->get() as $item) {
+                    if ($item->lichSuaChua) {
+                        $item->lichSuaChua->delete();
+                    }
+                }
+            }
+        }
+
         event(new eventUpdateTable());
 
         return redirect()->route('phieuthanhly.index')->with('success', 'Phiếu thanh lý đã được duyệt!');
@@ -143,6 +166,6 @@ class PhieuThanhLyController extends Controller
     {
         $phieuThanhLy = PhieuThanhLy::with(['nhanVien', 'may'])->findOrFail($MaPhieuThanhLy);
         $pdf = PDF::loadView('vPhieuThanhLy.pdfphieuthanhly', compact('phieuThanhLy'));
-        return $pdf->stream('phieu_thanh_ly_' . $MaPhieuThanhLy . '.pdf');
+        return $pdf->stream('phieu_thanh_ly.pdf');
     }
 }

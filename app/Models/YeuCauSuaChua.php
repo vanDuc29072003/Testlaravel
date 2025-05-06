@@ -27,4 +27,8 @@ class YeuCauSuaChua extends Model
     {
         return $this->belongsTo(NhanVien::class, 'MaNhanVienYeuCau', 'MaNhanVien');
     }
+    public function lichSuaChua()
+    {
+        return $this->hasOne(LichSuaChua::class, 'MaYeuCauSuaChua', 'MaYeuCauSuaChua');
+    }
 }

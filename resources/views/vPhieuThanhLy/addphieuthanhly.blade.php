@@ -35,7 +35,9 @@
                                     <select class="form-control" id="MaMay" name="MaMay" required>
                                         <option value="">-- Chọn máy --</option>
                                         @foreach ($dsMay as $may)
-                                            <option value="{{ $may->MaMay }}">{{ $may->TenMay }}</option>
+                                            <option value="{{ $may->MaMay }}" {{ isset($selectedMaMay) && $selectedMaMay == $may->MaMay ? 'selected' : '' }}>
+                                                {{ $may->TenMay }}
+                                            </option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -151,9 +153,7 @@
         document.addEventListener('DOMContentLoaded', function () {
             const maMaySelect = document.getElementById('MaMay');
 
-            maMaySelect.addEventListener('change', function () {
-                const maMay = this.value;
-
+            function loadThongTinMay(maMay) {
                 if (maMay) {
                     fetch(`/may/${maMay}/thongtin`)
                         .then(response => response.json())
@@ -180,7 +180,18 @@
                     document.getElementById('TenNhaCungCap').value = '';
                     document.getElementById('TenLoai').value = '';
                 }
+            }
+
+            maMaySelect.addEventListener('change', function () {
+                const maMay = this.value;
+                loadThongTinMay(maMay);
             });
+
+            // Gọi hàm khi trang được tải nếu đã có selectedMaMay
+            const selectedMaMay = maMaySelect.value;
+            if (selectedMaMay) {
+                loadThongTinMay(selectedMaMay);
+            }
         });
     </script>
 @endsection

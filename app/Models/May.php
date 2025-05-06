@@ -34,4 +34,12 @@ class May extends Model
     {
         return $this->belongsTo(LoaiMay::class, 'MaLoai', 'MaLoai');
     }
+    public function lichBaoTri()
+    {
+        return $this->hasMany(LichBaoTri::class, 'MaMay', 'MaMay');
+    }
+    public function yeuCauSuaChua()
+    {
+        return $this->hasMany(YeuCauSuaChua::class, 'MaMay', 'MaMay');
+    }
 }

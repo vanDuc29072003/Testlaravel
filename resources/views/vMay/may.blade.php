@@ -65,15 +65,6 @@
                                                     class="btn btn-warning btn-sm text-black">
                                                     <i class="fa fa-edit"></i> Sửa
                                                 </a>
-                                                <form action="{{ route('may.delete', $may->MaMay) }}" method="POST"
-                                                    class="d-inline-block">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="button" class="btn btn-danger btn-sm"
-                                                        onclick="event.stopPropagation(); confirmDelete(this)">
-                                                        <i class="fa fa-trash"></i> Xóa
-                                                    </button>
-                                                </form>
                                             </div>
                                         </td>
                                     </tr>
@@ -149,26 +140,6 @@
 @endsection
 
 @section('scripts')
-    <script>
-        function confirmDelete(button) {
-            swal({
-                title: 'Bạn có chắc chắn?',
-                text: "Hành động này không thể hoàn tác!",
-                icon: 'warning',
-                buttons: {
-                    confirm: { text: 'Xóa', className: 'btn btn-danger' },
-                    cancel: { text: 'Hủy', visible: true, className: 'btn btn-success' }
-                }
-            }).then((willDelete) => {
-                if (willDelete) {
-                    button.closest('form').submit();
-                } else {
-                    swal.close();
-                }
-            });
-        }
-    </script>
-
     <script>
         @if (session('success'))
             $.notify({
