@@ -154,6 +154,6 @@ class ThongKeController extends Controller
         // Render view PDF
         $pdf = PDF::loadView('vThongKe.pdfthongkekho', compact('thongKe', 'startDate', 'endDate', 'ngayLap', 'nguoiTao'));
 
-        return $pdf->stream('thong_khe_kho_' . $ngayLap . '.pdf');
+        return $pdf->stream('thongkekho.pdf');
     }
 }

@@ -166,6 +166,6 @@ class PhieuThanhLyController extends Controller
     {
         $phieuThanhLy = PhieuThanhLy::with(['nhanVien', 'may'])->findOrFail($MaPhieuThanhLy);
         $pdf = PDF::loadView('vPhieuThanhLy.pdfphieuthanhly', compact('phieuThanhLy'));
-        return $pdf->stream('phieu_thanh_ly.pdf');
+        return $pdf->stream('phieuthanhly_' . $MaPhieuThanhLy . '.pdf');
     }
 }
