@@ -123,16 +123,15 @@ Route::middleware('auth')->group(function () {
     
 
 
-    Route::get('/lichbaotri/dabangiao', [LichBaoTriController::class, 'lichSuBaoTri'])->name('lichbaotri.dabangiao');
-    Route::get('/lichbaotri/{MaLichBaoTri}', [LichBaoTriController::class, 'show'])->name('lichbaotri.showpbg');
-    Route::get('/phieubangiao/{MaPhieuBanGiaoBaoTri}/export-pdf2', [PhieuBanGiaoController::class, 'exportPDF2'])->name('phieubangiaobaotri.exportPDF');
-
+    // Lịch bảo trì
     Route::get('/lichbaotri', [LichBaoTriController::class, 'index'])->name('lichbaotri');
     Route::get('/lichbaotri/create', [LichBaoTriController::class, 'create'])->name('lichbaotri.create');
     Route::post('/lichbaotri', [LichBaoTriController::class, 'store'])->name('lichbaotri.store');
     Route::delete('/lichbaotri/{id}', [LichBaoTriController::class, 'destroy'])->name('lichbaotri.destroy');
+    Route::get('/lichbaotri/{MaLichBaoTri}', [LichBaoTriController::class, 'show'])->name('lichbaotri.showpbg');
     Route::get('/lichbaotri/{MaLichBaoTri}/taophieubangiao', [LichBaoTriController::class, 'taophieubangiao'])->name('lichbaotri.taophieubangiao');
-
+    Route::get('/lichbaotri/dabangiao', [LichBaoTriController::class, 'lichSuBaoTri'])->name('lichbaotri.dabangiao');
+    Route::get('/phieubangiao/{MaPhieuBanGiaoBaoTri}/export-pdf2', [PhieuBanGiaoController::class, 'exportPDF2'])->name('phieubangiaobaotri.exportPDF');
     //Lịch vận hành
     Route::get('/lichvanhanh', [LichVanHanhController::class, 'index'])->name('lichvanhanh');
     Route::get('/lichvanhanh/create', [LichVanHanhController::class, 'create'])->name('lichvanhanh.create');
@@ -145,7 +144,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/taikhoan', [TaiKhoanController::class, 'index'])->name('taikhoan.index');
     Route::get('/taikhoan/create', [TaiKhoanController::class, 'create'])->name('taikhoan.create');
     Route::post('/taikhoan/store', [TaiKhoanController::class, 'store'])->name('taikhoan.store');
-    Route::get('/taikhoan/{id}/edit', [TaiKhoanController::class, 'edit'])->name('taikhoan.edit');
+    Route::get('/taikhoan/{MaNhanVien}/edit', [TaiKhoanController::class, 'edit'])->name('taikhoan.edit');
+
     Route::match(['put', 'patch'], '/taikhoan/{id}', [TaiKhoanController::class, 'update'])->name('taikhoan.update');
     Route::delete('/taikhoan/{id}', [TaiKhoanController::class, 'destroy'])->name('taikhoan.destroy');
     Route::get('/taikhoan/{TenTaiKhoan}', [TaiKhoanController::class, 'show'])->name('taikhoan.show');

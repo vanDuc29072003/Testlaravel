@@ -62,11 +62,17 @@
           @endforeach
         </div>
 
-        <!-- Phần lọc -->
+              <!-- Phần lọc -->
         <div class="col-md-3">
           <div style="margin-top: 50px">
             <h5 class="mb-3">Bộ lọc</h5>
             <form action="{{ route('lichbaotri') }}" method="GET">
+              <!-- 👇 Di chuyển ô tìm kiếm lên trên cùng -->
+              <div class="mb-3">
+                <label for="ten_may" class="form-label">Tìm theo tên máy</label>
+                <input type="text" name="ten_may" id="ten_may" class="form-control" value="{{ request('ten_may') }}" placeholder="Nhập tên máy...">
+              </div>
+
               <div class="mb-3">
                 <label for="quy" class="form-label">Chọn quý</label>
                 <select name="quy" id="quy" class="form-select">
@@ -77,6 +83,7 @@
                   <option value="4" {{ request('quy') == 4 ? 'selected' : '' }}>Quý 4</option>
                 </select>
               </div>
+
               <div class="mb-3">
                 <label for="nam" class="form-label">Chọn năm</label>
                 <select name="nam" id="nam" class="form-select">
@@ -86,6 +93,7 @@
                   @endfor
                 </select>
               </div>
+
               <button type="submit" class="btn btn-primary w-100">Lọc</button>
             </form>
           </div>

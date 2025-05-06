@@ -14,7 +14,8 @@
           </div>
 
           <div class="card-body">
-            <form action="{{ route('taikhoan.update', $taikhoan->TenTaiKhoan) }}" method="POST">
+            <form action="{{ route('taikhoan.update', $taikhoan->MaNhanVien) }}" method="POST">
+
               @csrf
               @method('PUT')
 

@@ -44,7 +44,7 @@
                 </td>
                 <td>
                   <div class="d-flex gap-2">
-                    <a href="{{ route('taikhoan.edit', $taikhoan->TenTaiKhoan) }}" class="btn btn-warning btn-sm">Sửa</a>
+                    <a href="{{ route('taikhoan.edit', $taikhoan->MaNhanVien) }}" class="btn btn-warning btn-sm">Sửa</a>
                     <form action="{{ route('taikhoan.destroy', $taikhoan->TenTaiKhoan) }}" method="POST" onsubmit="return confirm('Bạn có chắc chắn muốn xóa tài khoản này?')">
                       @csrf
                       @method('DELETE')

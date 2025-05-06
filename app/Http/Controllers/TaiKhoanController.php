@@ -92,11 +92,16 @@ class TaiKhoanController extends Controller
     
         return redirect()->route('taikhoan.index')->with('success', 'Thêm tài khoản thành công!');
     }
-    public function edit($TenTaiKhoan)
+    public function edit($MaNhanVien)
     {
-        $taikhoan = TaiKhoan::with('nhanvien')->findOrFail($TenTaiKhoan);
+        
+        // Truy vấn tài khoản với mối quan hệ nhanvien
+        $taikhoan = TaiKhoan::with('nhanvien')->findOrFail($MaNhanVien);
+        
+        // Trả về view sửa tài khoản
         return view('Vtaikhoan.editTaiKhoan', compact('taikhoan'));
     }
+    
     public function editThongTin($TenTaiKhoan)
     {
         $taikhoan = TaiKhoan::with('nhanvien.bophan')->where('TenTaiKhoan', $TenTaiKhoan)->firstOrFail();
@@ -131,28 +136,22 @@ class TaiKhoanController extends Controller
         }
         return redirect()->route('taikhoan.show', $taikhoan->TenTaiKhoan)->with('success', 'Cập nhật thành công!');
     }
+
     public function update(Request $request, $id)
-    {
-        // Kiểm tra và xác thực dữ liệu với thông báo lỗi bằng tiếng Việt
-        $request->validate([
-            'MatKhauChuaMaHoa' => 'required|string|min:6', // Đảm bảo mật khẩu mới dài ít nhất 6 ký tự
-        ], [
-            'MatKhauChuaMaHoa.required' => 'Vui lòng nhập mật khẩu.',
-            'MatKhauChuaMaHoa.min' => 'Vui lòng nhập mật khẩu trên 6 kí tự.',
-        ]);
-    
-        // Tìm tài khoản theo TenTaiKhoan (hoặc ID)
-        $taikhoan = TaiKhoan::where('TenTaiKhoan', $id)->firstOrFail();
-    
-        // Cập nhật mật khẩu chưa mã hóa và mật khẩu mã hóa
-        $taikhoan->update([
-            'MatKhauChuaMaHoa' => $request->MatKhauChuaMaHoa,  // Lưu mật khẩu chưa mã hóa
-            'MatKhau' => bcrypt($request->MatKhauChuaMaHoa),     // Mã hóa mật khẩu và lưu vào trường MatKhau
-        ]);
-    
-        // Thông báo thành công và quay lại trang danh sách
-        return redirect()->route('taikhoan.index')->with('success', 'Cập nhật mật khẩu thành công.');
-    }
+        {
+            $request->validate([
+                'MatKhauChuaMaHoa' => 'required|string|min:6',
+            ]);
+
+            $taikhoan = TaiKhoan::findOrFail($id); // Không cần where('TenTaiKhoan', ...)
+
+            $taikhoan->MatKhauChuaMaHoa = $request->MatKhauChuaMaHoa;
+            $taikhoan->MatKhau = Hash::make($request->MatKhauChuaMaHoa); // mã hóa đúng
+            $taikhoan->save(); // dùng save thay vì update để đảm bảo model ghi đúng
+            
+            return redirect()->route('taikhoan.index')->with('success', 'Cập nhật mật khẩu thành công.');
+        }
+
     
 
     public function show($TenTaiKhoan)
