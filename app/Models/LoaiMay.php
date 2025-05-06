@@ -16,7 +16,7 @@ class LoaiMay extends Model
         'TenLoai', 
         'MoTa', 
     ];
-    public function may()
+    public function mays()
     {
         return $this->hasMany(May::class, 'MaLoai', 'MaLoai');
     }
