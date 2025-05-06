@@ -109,6 +109,7 @@
                   <span class="sub-item">Danh sách loại máy</span>
                 </a>
               </li>
+              
             </ul>
           </div>
         </li>
@@ -176,6 +177,11 @@
               <li>
                 <a href="{{ route('taikhoan.index') }}">
                   <span class="sub-item">Danh sách tài khoản</span>
+                </a>
+              </li>
+              <li>
+                <a href="{{ route('bophan.index') }}">
+                  <span class="sub-item">Danh sách bộ phận</span>
                 </a>
               </li>
             </ul>

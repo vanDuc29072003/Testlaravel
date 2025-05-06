@@ -14,28 +14,30 @@ class TaiKhoanController extends Controller
     {
         $taikhoans = TaiKhoan::query();
     
-        // Lọc theo tên nhân viên
+        // Lọc theo tên nhân viên (nếu có)
         if ($request->filled('TenNhanVien')) {
             $taikhoans->whereHas('nhanvien', function ($query) use ($request) {
                 $query->where('TenNhanVien', 'like', '%' . $request->TenNhanVien . '%');
             });
         }
     
-        // Lọc theo bộ phận
+        // Lọc theo mã bộ phận (nếu có)
         if ($request->filled('MaBoPhan')) {
             $taikhoans->whereHas('nhanvien', function ($query) use ($request) {
                 $query->where('MaBoPhan', $request->MaBoPhan);
             });
         }
     
+        // Lấy danh sách kết quả sau khi lọc
         $taikhoans = $taikhoans->get();
     
-        // Lấy danh sách nhân viên và bộ phận để lọc
-        $nhanviens = NhanVien::all();
-        $bophans = BoPhan::all();  // Giả sử bạn có model `BoPhan` để lấy danh sách bộ phận
+        // Dữ liệu cho dropdown lọc
+        $nhanviens = NhanVien::all(); // nếu cần dùng tên nhân viên cho ô tìm kiếm
+        $bophans = BoPhan::all();     // danh sách bộ phận cho dropdown lọc
     
         return view('Vtaikhoan.taikhoan', compact('taikhoans', 'nhanviens', 'bophans'));
     }
+    
     
 
 

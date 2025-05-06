@@ -9,17 +9,18 @@ class LoaiMayController extends Controller
     public function index(Request $request)
     {
         $search = $request->input('search');
-        $loaimays = LoaiMay::query();
-
+    
+        $loaimays = LoaiMay::withCount('mays');
+    
         if ($search) {
             $loaimays->where('TenLoai', 'like', '%' . $search . '%');
         }
-
-        $loaimays = $loaimays->get(); // Lấy tất cả loại máy (hoặc dùng paginate nếu cần)
-
+    
+        $loaimays = $loaimays->get(); // hoặc ->paginate(10) nếu muốn phân trang
+    
         return view('vMay.loaiMay', compact('loaimays'));
     }
-    public function create()
+        public function create()
     {
         return view('vMay.createLoaiMay');
     }
