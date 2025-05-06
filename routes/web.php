@@ -14,6 +14,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LichBaoTriController;
 use App\Http\Controllers\TaiKhoanController;
 use App\Http\Controllers\PhieuBanGiaoController;
+use App\Http\Controllers\ThongKeController;
+use App\Http\Controllers\PhieuThanhLyController;
 use App\Http\Controllers\LoaiMayController;
 use App\Http\Controllers\BophanController;
 
@@ -228,4 +230,19 @@ Route::middleware('auth')->group(function () {
     ->middleware('kiemtraquyen:33')
     ->name('bophan.destroy');
 
+    //Thống kê
+    Route::get('/thongke', [ThongKeController::class, 'thongkekho'])->name('thongkekho');
+    Route::get('/thongke/pdf', [ThongKeController::class, 'exportPDF'])->name('thongkekho.pdf');
+
+    //Phiếu thanh lý
+    Route::get('/phieuthanhly', [PhieuThanhLyController::class, 'index'])->name('phieuthanhly.index');
+    Route::get('/phieuthanhly/create', [PhieuThanhLyController::class, 'create'])->name('phieuthanhly.create');
+    Route::post('/phieuthanhly/store', [PhieuThanhLyController::class, 'store'])->name('phieuthanhly.store');
+    Route::get(('phieuthanhly/{MaPhieuThanhLy}'), [PhieuThanhLyController::class, 'detail'])->name('phieuthanhly.detail');
+    Route::get('/phieuthanhly/{MaPhieuThanhLy}/edit', [PhieuThanhLyController::class, 'edit'])->name('phieuthanhly.edit');
+    Route::match(['put', 'patch'], '/phieuthanhly/{MaPhieuThanhLy}', [PhieuThanhLyController::class, 'update'])->name('phieuthanhly.update');
+    Route::patch('/phieuthanhly/{MaPhieuThanhLy}/duyet', [PhieuThanhLyController::class, 'duyet'])->name('phieuthanhly.duyet');
+    Route::patch('/phieuthanhly/{MaPhieuThanhLy}/tuchoi', [PhieuThanhLyController::class, 'tuchoi'])->name('phieuthanhly.tuchoi');
+    Route::get('/phieuthanhly/{MaPhieuThanhLy}/pdf', [PhieuThanhLyController::class, 'exportPDF'])->name('phieuthanhly.exportPDF');
+    Route::get('/may/{MaMay}/thongtin', [PhieuThanhLyController::class, 'getThongTinMay'])->name('may.thongtin');
 });

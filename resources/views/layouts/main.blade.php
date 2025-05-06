@@ -104,7 +104,19 @@
         icon: 'icon-bell',
         title: 'Thông báo',
         message: data.message,
-        url: "{{ route('yeucausuachua.index') }}"
+        url: "{{ route('dsphieunhap') }}"
+      }, {
+        type: 'danger',
+        delay: 5000
+      });
+    });
+
+    pusher.subscribe('private-channel-quanly').bind('eventPhieuThanhLy', function (data) {
+      $.notify({
+        icon: 'icon-bell',
+        title: 'Thông báo',
+        message: data.message,
+        url: "{{ route('phieuthanhly.index') }}"
       }, {
         type: 'danger',
         delay: 5000
