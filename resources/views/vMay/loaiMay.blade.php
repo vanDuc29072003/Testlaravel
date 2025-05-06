@@ -33,11 +33,13 @@
                                     <td>{{ $loai->TenLoai }}</td>
                                     <td>{{ $loai->MoTa }}</td>
                                     <td>
-                                        <form action="{{ route('loaimay.destroy', ['id' => $loai->MaLoai]) }}" method="POST" style="display:inline-block">
+                                        <form action="{{ route('loaimay.destroy', ['id' => $loai->MaLoai]) }}" method="POST"
+                                            class="d-inline-block">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Bạn có chắc muốn xóa?')">
-                                                <i class="fa fa-trash"></i> Xóa
+                                            <button type="button" class="btn btn-danger btn-sm"
+                                                        onclick="event.stopPropagation(); confirmDelete(this)">
+                                                        <i class="fa fa-trash"></i> Xóa
                                             </button>
                                         </form>
                                     </td>
@@ -74,4 +76,39 @@
             </div>
         </div>
     </div>
+@endsection
+
+@section('scripts')
+    <script>
+        function confirmDelete(button) {
+            swal({
+                title: 'Bạn có chắc chắn?',
+                text: "Hành động này không thể hoàn tác!",
+                icon: 'warning',
+                buttons: {
+                    confirm: { text: 'Xóa', className: 'btn btn-danger' },
+                    cancel: { text: 'Hủy', visible: true, className: 'btn btn-success' }
+                }
+            }).then((willDelete) => {
+                if (willDelete) {
+                    button.closest('form').submit();
+                } else {
+                    swal.close();
+                }
+            });
+        }
+    </script>
+    <script>
+        @if (session('error'))
+            $.notify({
+                title: 'Lỗi',
+                message: '{{ session('error') }}',
+                icon: 'icon-bell'
+            }, {
+                type: 'danger',
+                animate: { enter: 'animated fadeInDown'
+                , exit: 'animated fadeOutUp' },
+            });
+        @endif
+    </script>
 @endsection
