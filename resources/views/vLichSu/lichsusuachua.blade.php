@@ -10,12 +10,12 @@
                     <div class="table-responsive mb-5">
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <h3 class="mb-3">Lịch sử sửa chữa</h3>
-                        </div>
+                        </div>               
                         <table id="bang-da-hoan-thanh" class="table table-responsive table-bordered table-hover">
                             <thead>
                                 <tr class="text-center">
                                     <th scope="col">Mã</th>
-                                    <th scope="col">Thời Gian</th>
+                                    <th scope="col">Thời Gian Yêu Cầu Sửa Chữa</th>
                                     <th scope="col">Máy</th>
                                     <th scope="col">Mô Tả</th>
                                     <th scope="col">NVYC</th>
@@ -65,29 +65,49 @@
                 <!-- Form tìm kiếm -->
                 <div class="col-2 p-0">
                     <div style="margin-top: 50px;">
-                        <form method="GET" action="{{ route('lichsuachua.index') }}"
+                        <form method="GET" action="{{ route('lichsuachua.dahoanthanh') }}"
                             class="p-3 border rounded fixed-search-form">
                             <div class="mb-3">
-                                <label for="MaLichSuaChua" class="form-label">Mã lịch sửa chữa</label>
-                                <input type="text" name="MaLichSuaChua" id="MaLichSuaChua" class="form-control"
-                                    placeholder="Nhập mã lịch sửa chữa" value="{{ request('MaLichSuaChua') }}">
+                                <label for="thang" class="form-label">Tháng yêu cầu</label>
+                                <input type="month" name="thang" id="thang" class="form-control"
+                                       value="{{ request('thang') }}">
                             </div>
+                            
                             <div class="mb-3">
-                                <label for="MaYeuCauSuaChua" class="form-label">Mã yêu cầu sửa chữa</label>
-                                <input type="text" name="MaYeuCauSuaChua" id="MaYeuCauSuaChua" class="form-control"
-                                    placeholder="Nhập mã yêu cầu sửa chữa" value="{{ request('MaYeuCauSuaChua') }}">
+                                <label for="TenMay" class="form-label">Tên máy</label>
+                                <select name="TenMay" id="TenMay" class="form-control">
+                                    <option value="">-- Chọn máy --</option>
+                                    @foreach ($dsMay as $may)
+                                        <option value="{{ $may->TenMay }}" {{ request('TenMay') == $may->TenMay ? 'selected' : '' }}>
+                                            {{ $may->TenMay }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>   
+                            <div class="mb-3">
+                                <label for="MaNhanVienYeuCau" class="form-label">Nhân viên yêu cầu sửa chữa</label>
+                                <select name="MaNhanVienYeuCau" id="MaNhanVienYeuCau" class="form-control">
+                                    <option value="">-- Chọn nhân viên --</option>
+                                    @foreach ($dsNhanVienYeuCau as $nv)
+                                        <option value="{{ $nv->MaNhanVien }}" {{ request('MaNhanVienYeuCau') == $nv->MaNhanVien ? 'selected' : '' }}>
+                                            {{ $nv->TenNhanVien }}
+                                        </option>
+                                    @endforeach
+                                </select>
                             </div>
+                            
                             <div class="mb-3">
                                 <label for="MaNhanVienKyThuat" class="form-label">Nhân viên đảm nhận</label>
                                 <select name="MaNhanVienKyThuat" id="MaNhanVienKyThuat" class="form-control">
                                     <option value="">-- Chọn nhân viên --</option>
-                                    @foreach ($dsNhanVien as $nv)
+                                    @foreach ($dsNhanVienKyThuat as $nv)
                                         <option value="{{ $nv->MaNhanVien }}" {{ request('MaNhanVienKyThuat') == $nv->MaNhanVien ? 'selected' : '' }}>
                                             {{ $nv->TenNhanVien }}
                                         </option>
                                     @endforeach
                                 </select>
                             </div>
+                            
                             <button type="submit" class="btn btn-primary w-100">
                                 <i class="fa fa-search"></i> Tìm kiếm
                             </button>

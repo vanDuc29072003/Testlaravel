@@ -14,10 +14,15 @@ class LichBaoTri extends Model
     protected $fillable = [
         'MoTa',
         'NgayBaoTri',
-        'MaMay'
+        'MaMay',
+        'TrangThai'
     ];
     function may()
     {
         return $this->belongsTo(May::class, 'MaMay', 'MaMay');
+    }
+    public function phieuBanGiaoBaoTri()
+    {
+        return $this->belongsTo(PhieuBanGiaoBaoTri::class, 'MaLichBaoTri', 'MaLichBaoTri');
     }
 }

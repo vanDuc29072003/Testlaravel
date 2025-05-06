@@ -19,4 +19,9 @@ class BoPhan extends Authenticatable
     {
         return $this->hasMany(NhanVien::class, 'MaBoPhan', 'MaBoPhan');
     }
+    
+    public function phanQuyens()
+    {
+        return $this->belongsToMany(PhanQuyen::class, 'phanquyen_bophan', 'MaBoPhan', 'MaPhanQuyen');
+    }
 }

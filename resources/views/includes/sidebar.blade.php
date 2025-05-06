@@ -70,7 +70,7 @@
           <div class="collapse" id="lichsu">
             <ul class="nav nav-collapse">
               <li>
-                <a href="">
+                <a href="{{ route('lichbaotri.dabangiao') }}">
                   <span class="sub-item">Lịch sử bảo trì</span>
                 </a>
               </li>
@@ -92,10 +92,26 @@
           </a>
         </li>
         <li class="nav-item ">
-          <a href="{{ route('may') }}">
+          <a data-bs-toggle="collapse" href="#may">
             <i class="fa-solid fa-sliders"></i>
-            <p>Danh sách máy</p>
+            <p>Máy</p>
+            <span class="caret"></span>
           </a>
+          <div class="collapse" id="may">
+            <ul class="nav nav-collapse">
+              <li>
+                <a href="{{route('may')}}">
+                  <span class="sub-item">Danh sách máy</span>
+                </a>
+              </li>
+              <li>
+                <a href="{{route('loaimay.index')}}">
+                  <span class="sub-item">Danh sách loại máy</span>
+                </a>
+              </li>
+              
+            </ul>
+          </div>
         </li>
         <li class="nav-item ">
           <a href="{{ route('linhkien') }}">
@@ -185,6 +201,11 @@
               <li>
                 <a href="{{ route('taikhoan.index') }}">
                   <span class="sub-item">Danh sách tài khoản</span>
+                </a>
+              </li>
+              <li>
+                <a href="{{ route('bophan.index') }}">
+                  <span class="sub-item">Danh sách bộ phận</span>
                 </a>
               </li>
             </ul>

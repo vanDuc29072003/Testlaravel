@@ -5,13 +5,13 @@
 @section('content')
     <div class="container">
         <div class="page-inner">
-            <form action="{{ route('phieubangiao.store1') }}" method="POST">
+            <form action="{{ route('phieubangiao.storeBT') }}" method="POST">
                 @csrf
                 <div class="row">
                     <!-- Cột bên trái: Bảng danh sách linh kiện -->
                     <div class="col-md-9">
                         <div class="d-flex flex-column mb-3">
-                            <h3 class="mb-2">Phiếu Bàn Giao Nhà Cung Cấp</h3>
+                            <h3 class="mb-2">Phiếu Bàn Giao Sau Bảo Trì</h3>
                             <h4 class="fs-5 mb-2">Danh sách linh kiện sửa chữa</h4>
                         </div>
 
@@ -67,22 +67,27 @@
                     <!-- Cột bên phải: Thông tin phiếu bàn giao -->
                     <div class="col-md-3">
                         <div class="border p-3 rounded">
-                            <div class="form-group ">
-                                <label for="MaLichSuaChua">Mã Lịch Sửa Chữa</label>
-                                <input type="text" class="form-control" id="MaLichSuaChua" name="MaLichSuaChua"
-                                    value="{{ $lichSuaChua->MaLichSuaChua }}" readonly>
+                            <div class="form-group">
+                                <label for="MaLichBaoTri">Mã Lịch Bảo Trì</label>
+                                <input type="text" class="form-control" id="MaLichBaoTri" name="MaLichBaoTri"
+                                    value="{{ $lichbaotri->MaLichBaoTri }}" readonly>
                             </div>
 
-                            <div class="form-group ">
+                            <div class="form-group">
                                 <label for="MaNhaCungCap">Mã Nhà Cung Cấp</label>
                                 <input type="text" class="form-control" id="MaNhaCungCap" name="MaNhaCungCap"
                                     value="{{ $nhaCungCap->MaNhaCungCap }}" readonly>
                             </div>
 
-                            <div class="form-group ">
+                            <div class="form-group">
                                 <label for="TenNhaCungCap">Tên Nhà Cung Cấp</label>
                                 <input type="text" class="form-control" id="TenNhaCungCap"
                                     value="{{ $nhaCungCap->TenNhaCungCap }}" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="MaNhanVien">Mã Nhân Viên Tạo Phiếu</label>
+                                <input type="text" class="form-control" id="MaNhanVien" name="MaNhanVien"
+                                    value="{{ Auth::user()->MaNhanVien ?? '' }}" readonly>
                             </div>
 
                             <div class="form-group ">
@@ -97,15 +102,9 @@
                             </div>
 
                             <div class="form-group ">
-                                <label for="BienPhapXuLy">Biện Pháp Xử Lý</label>
-                                <textarea class="form-control" id="BienPhapXuLy" name="BienPhapXuLy" rows="2"
-                                    placeholder="Nhập biện pháp xử lý"></textarea>
-                            </div>
-
-                            <div class="form-group ">
-                                <label for="GhiChu">Ghi Chú</label>
-                                <textarea class="form-control" id="GhiChu" name="GhiChu" rows="2"
-                                    placeholder="Nhập ghi chú"></textarea>
+                                <label for="LuuY">Lưu Ý</label>
+                                <textarea class="form-control" id="LuuY" name="LuuY" rows="2"
+                                    placeholder="Nhập những lưu ý"></textarea>
                             </div>
 
                             <div class="form-group d-flex justify-content-between">
@@ -137,20 +136,20 @@
         // Thêm dòng mới
         function themDong() {
             const row = `
-                                        <tr>
-                                            <td><input type="text" class="form-control" name="TenLinhKien[]" placeholder="Tên Linh Kiện" required></td>
-                                            <td><input type="text" class="form-control" name="DonViTinh[]" placeholder="Đơn Vị Tính" required></td>
-                                            <td><input type="number" class="form-control soLuong" name="SoLuong[]" placeholder="Số Lượng" min="1" required></td>
-                                            <td><input type="number" class="form-control GiaThanh" name="GiaThanh[]" placeholder="Giá Thành" min="1000" required></td>
-                                            <td class="text-center">
-                                                <input type="hidden" name="BaoHanh[]" value="0" class="hiddenBaoHanh">
-                                                <input class="form-check-input baoHanh" type="checkbox" style="transform: scale(1.5);">
-                                            </td>
-                                            <td><input type="number" class="form-control thanhTien" name="ThanhTien[]" readonly></td>
-                                            <td class="text-center">
+                                            <tr>
+                                                <td><input type="text" class="form-control" name="TenLinhKien[]" placeholder="Tên Linh Kiện" required></td>
+                                                <td><input type="text" class="form-control" name="DonViTinh[]" placeholder="Đơn Vị Tính" required></td>
+                                                <td><input type="number" class="form-control soLuong" name="SoLuong[]" placeholder="Số Lượng" min="1" required></td>
+                                                <td><input type="number" class="form-control GiaThanh" name="GiaThanh[]" placeholder="Giá Thành" min="1000" required></td>
+                                                <td class="text-center">
+                                                    <input type="hidden" name="BaoHanh[]" value="0" class="hiddenBaoHanh">
+                                                    <input class="form-check-input baoHanh" type="checkbox" style="transform: scale(1.5);">
+                                                </td>
+                                                <td><input type="number" class="form-control thanhTien" name="ThanhTien[]" readonly></td>
+                                                <td class="text-center">
                                                  <button type="button" class="btn btn-danger btn-sm xoaDong">X</button>
                                                 </td>
-                                        </tr>`;
+                                            </tr>`;
             document.getElementById('linhkien-list').insertAdjacentHTML('beforeend', row);
         }
 
@@ -186,6 +185,8 @@
                 tinhTongTien();
             }
         });
+
+        // Sự kiện click Xóa dòng
         document.addEventListener('click', function (e) {
             if (e.target.classList.contains('xoaDong')) {
                 const row = e.target.closest('tr');
@@ -193,7 +194,6 @@
                 tinhTongTien(); // Sau khi xóa phải tính lại tổng tiền
             }
         });
-
 
     </script>
 @endsection

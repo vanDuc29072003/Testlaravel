@@ -13,10 +13,10 @@ class LoaiMay extends Model
 
     public $timestamps = false;
     protected $fillable = [
-        'TenLoaiMay', 
+        'TenLoai', 
         'MoTa', 
     ];
-    public function may()
+    public function mays()
     {
         return $this->hasMany(May::class, 'MaLoai', 'MaLoai');
     }

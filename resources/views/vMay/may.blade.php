@@ -94,7 +94,7 @@
 
                 {{-- Form lọc bên phải --}}
                 <div class="col-2 p-0">
-                    <div style="margin-top: 105px;">
+                    <div style="margin-top: 60px;">
                         <form method="GET" action="{{ route('may') }}" class="p-3 border rounded fixed-search-form">
                             <input type="hidden" name="MaLoaiMay" value="{{ request('MaLoaiMay') }}">
                             <div class="mb-3">
@@ -194,7 +194,7 @@
             });
         @endif
     </script>
-
+    
     <script>
         pusher.subscribe('channel-all').bind('eventUpdateTable', function (data) {
             if (data.reload) {

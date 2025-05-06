@@ -40,14 +40,18 @@
                     <td>{{ $lich->may->nhaCungCap->TenNhaCungCap ?? 'Không xác định' }}</td>
                     <td style="width: 200px;">
                       <div class="d-flex gap-2">
-                        <form action="" method="POST">
-                          @csrf
-                          <button type="submit" class="btn btn-success btn-sm">Hoàn thành</button>
-                        </form>
+                        
+                        <a href="{{ route('lichbaotri.taophieubangiao', $lich->MaLichBaoTri) }}" class="btn btn-sm btn-success">
+                          <i class="fa fa-check"></i> Bàn giao
+                        </a>
+                      
                         <form action="{{ route('lichbaotri.destroy', $lich->MaLichBaoTri) }}" method="POST">
                           @csrf
                           @method('DELETE')
-                          <button type="submit" class="btn btn-danger btn-sm">Hủy</button>
+                          <button type="button" class="btn btn-danger btn-sm"
+                          onclick="event.stopPropagation(); confirmDelete(this)">
+                          <i class="fa fa-trash"></i> Xóa
+                           </button>
                         </form>
                       </div>
                     </td>
@@ -58,11 +62,17 @@
           @endforeach
         </div>
 
-        <!-- Phần lọc -->
+              <!-- Phần lọc -->
         <div class="col-md-3">
           <div style="margin-top: 50px">
             <h5 class="mb-3">Bộ lọc</h5>
             <form action="{{ route('lichbaotri') }}" method="GET">
+              <!-- 👇 Di chuyển ô tìm kiếm lên trên cùng -->
+              <div class="mb-3">
+                <label for="ten_may" class="form-label">Tìm theo tên máy</label>
+                <input type="text" name="ten_may" id="ten_may" class="form-control" value="{{ request('ten_may') }}" placeholder="Nhập tên máy...">
+              </div>
+
               <div class="mb-3">
                 <label for="quy" class="form-label">Chọn quý</label>
                 <select name="quy" id="quy" class="form-select">
@@ -73,6 +83,7 @@
                   <option value="4" {{ request('quy') == 4 ? 'selected' : '' }}>Quý 4</option>
                 </select>
               </div>
+
               <div class="mb-3">
                 <label for="nam" class="form-label">Chọn năm</label>
                 <select name="nam" id="nam" class="form-select">
@@ -82,6 +93,7 @@
                   @endfor
                 </select>
               </div>
+
               <button type="submit" class="btn btn-primary w-100">Lọc</button>
             </form>
           </div>
@@ -89,4 +101,52 @@
       </div>
     </div>
   </div>
+@endsection
+@section('scripts')
+<script>
+  function confirmDelete(button) {
+      swal({
+          title: 'Bạn có chắc chắn?',
+          text: "Hành động này không thể hoàn tác!",
+          icon: 'warning',
+          buttons: {
+              confirm: { text: 'Xóa', className: 'btn btn-danger' },
+              cancel: { text: 'Hủy', visible: true, className: 'btn btn-success' }
+          }
+      }).then((willDelete) => {
+          if (willDelete) {
+              button.closest('form').submit();  
+          } else {
+              swal.close();
+          }
+      });
+  }
+</script>
+<script>
+  @if (session('success'))
+      $.notify({
+          title: 'Thành công',
+          message: '{{ session('success') }}',
+          icon: 'icon-bell'
+      }, {
+          type: 'success',
+          animate: { enter: 'animated fadeInDown', exit: 'animated fadeOutUp' },
+      });
+  @endif
+</script>
+<script>
+  @if (session('error'))
+      $.notify({
+          title: 'Lỗi',
+          message: '{{ session('error') }}',
+          icon: 'icon-bell'
+      }, {
+          type: 'danger',
+          animate: {
+              enter: 'animated fadeInDown',
+              exit: 'animated fadeOutUp'
+          },
+      });
+  @endif
+</script>
 @endsection

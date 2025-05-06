@@ -13,7 +13,9 @@ use App\Models\ChiTietPhieuSuaNCC;
 use App\Models\YeuCauSuaChua;
 use App\Models\ChiTietPhieuBanGiaoNCC;
 use Barryvdh\DomPDF\Facade\Pdf;
-
+use App\Models\PhieuBanGiaoBaoTri;
+use App\Models\ChiTietPhieuBanGiaoBaoTri;
+use App\Models\LichBaoTri;
 
 class PhieuBanGiaoController extends Controller
 {
@@ -133,4 +135,58 @@ class PhieuBanGiaoController extends Controller
         return $pdf->stream('phieu_ban_giao_' . $MaPhieuBanGiaoSuaChua . '.pdf');
     }
     
+    public function storeBT(Request $request)
+    {
+        // Validate input
+        $request->validate([
+            'MaLichBaoTri' => 'required|exists:lichbaotri,MaLichBaoTri',
+            'MaNhanVien' => 'required|exists:nhanvien,MaNhanVien',
+            'TongTien' => 'required|numeric|min:0',
+            'ThoiGianBanGiao' => 'required|date',
+            'LuuY' => 'nullable|string|max:255',
+            'TenLinhKien' => 'required|array',
+            'DonViTinh' => 'required|array',
+            'SoLuong' => 'required|array',
+            'GiaThanh' => 'required|array',
+            'BaoHanh' => 'nullable|array', // BaoHanh có thể không tồn tại nếu không có checkbox nào được chọn
+        ]);
+
+        // Tạo phiếu bàn giao bảo trì
+        $phieuBanGiaoBaoTri = new PhieuBanGiaoBaoTri();
+        $phieuBanGiaoBaoTri->MaPhieuBanGiaoBaoTri =$request ->MaLichBaoTri; // Gán MaPhieuBanGiaoBaoTri bằng MaLichBaoTri
+        $phieuBanGiaoBaoTri->MaNhanVien = $request->MaNhanVien;
+        $phieuBanGiaoBaoTri->MaLichBaoTri = $request->MaLichBaoTri;
+        $phieuBanGiaoBaoTri->ThoiGianBanGiao = $request->ThoiGianBanGiao;
+        $phieuBanGiaoBaoTri->TongTien = $request->TongTien;
+        $phieuBanGiaoBaoTri->LuuY = $request->LuuY;
+        $phieuBanGiaoBaoTri->save();
+
+        // Lưu chi tiết phiếu bàn giao
+        foreach ($request->TenLinhKien as $index => $tenLinhKien) {
+            ChiTietPhieuBanGiaoBaoTri::create([
+                'MaPhieuBanGiaoBaoTri' => $phieuBanGiaoBaoTri->MaLichBaoTri,
+                'TenLinhKien' => $tenLinhKien,
+                'DonViTinh' => $request->DonViTinh[$index],
+                'SoLuong' => $request->SoLuong[$index],
+                'GiaThanh' => $request->GiaThanh[$index],
+                'BaoHanh' => $request->BaoHanh[$index] == '1' ? 1 : 0, // Kiểm tra nếu checkbox được chọn
+            ]);
+        } 
+        $lichBaoTri = LichBaoTri::findOrFail($request->MaLichBaoTri);
+        $lichBaoTri->TrangThai = 1; // Cập nhật trạng thái
+        $lichBaoTri->save();
+
+        return redirect()->route('lichbaotri.dahoanthanh1')->with('success', 'Phiếu bàn giao bảo trì được tạo thành công!');
+    }
+    public function exportPDF2($MaPhieuBanGiaoBaoTri)
+    {
+        $phieuBanGiao = PhieuBanGiaoBaoTri::with(['lichBaoTri', 'nhanVien', 'chiTietPhieuBanGiaoBaoTri'])
+            ->where('MaPhieuBanGiaoBaoTri', $MaPhieuBanGiaoBaoTri)
+            ->firstOrFail();
+    
+        $pdf = PDF::loadView('vPhieuBanGiao.exportBT', ['phieuBanGiao' => $phieuBanGiao]);
+    
+        return $pdf->stream('phieu_ban_giao_' . $MaPhieuBanGiaoBaoTri . '.pdf');
+    }
+     
 }
