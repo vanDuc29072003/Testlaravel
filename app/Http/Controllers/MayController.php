@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use Illuminate\Support\Str;
 
 use App\Events\eventUpdateTable;
 use Illuminate\Http\Request;
@@ -22,22 +23,25 @@ class MayController extends Controller
     public function may(Request $request)
     {
         $query = May::query();
+
         if ($request->filled('MaLoai')) {
             $query->where('MaLoai', $request->MaLoai);
         }
-        // Danh sách các trường cần lọc
+
+        if ($request->filled('TenNhaCungCap')) {
+            $query->where('MaNhaCungCap', $request->TenNhaCungCap);
+        }
+
+
         $filters = [
-            'MaMay' => 'like',
             'TenMay' => 'like',
             'SeriMay' => 'like',
             'ChuKyBaoTri' => '=',
             'ThoiGianBaoHanh' => '=',
             'ThoiGianDuaVaoSuDung' => '=',
             'NamSanXuat' => '=',
-            'HangSanXuat' => 'like',
         ];
 
-        // Áp dụng các điều kiện lọc
         foreach ($filters as $field => $operator) {
             if ($request->filled($field)) {
                 $value = $operator === 'like' ? '%' . $request->$field . '%' : $request->$field;
@@ -45,12 +49,15 @@ class MayController extends Controller
             }
         }
 
-        // Lấy danh sách máy với phân trang (mặc định 10 bản ghi mỗi trang)
+        $query->orderBy('MaMay2', 'asc');
         $dsMay = $query->paginate(10)->appends($request->query());
-        $dsLoaiMay = LoaiMay::all(); // Lấy danh sách loại máy
 
-        return view('vMay.may', compact('dsMay','dsLoaiMay'));
+        $dsLoaiMay = LoaiMay::all();
+        $dsNhaCungCap = NhaCungCap::all();
+
+        return view('vMay.may', compact('dsMay', 'dsLoaiMay', 'dsNhaCungCap'));
     }
+
 
     public function detailMay($MaMay)
     {
@@ -76,33 +83,65 @@ class MayController extends Controller
 
     public function addMay()
     {
+        
+        $loaiMays = LoaiMay::all(); // Lấy danh sách loại máy
+      
         $nhaCungCaps = NhaCungCap::all(); // Lấy danh sách nhà cung cấp
-        return view('vMay.addmay', compact('nhaCungCaps'));
+        return view('vMay.addmay', compact('nhaCungCaps', 'loaiMays'));
     }
     public function storeMay(Request $request)
     {
+        
         try {
             $request->validate([
                 'TenMay' => 'required|string|max:255',
                 'SeriMay' => 'required|string|max:255|unique:may,SeriMay',
                 'ChuKyBaoTri' => 'required|integer|min:1',
                 'NamSanXuat' => 'required|integer|min:1900|max:' . date('Y'),
-                'HangSanXuat' => 'required|string|max:255',
                 'ThoiGianDuaVaoSuDung' => 'required|date',
                 'ThoiGianBaoHanh' => 'required|integer|min:1',
+                'ChiTietLinhKien' => 'nullable|string|max:255',
+                'MaNhaCungCap' => 'required|exists:nhacungcap,MaNhaCungCap',
+                'MaLoai' => 'required|exists:loaimay,MaLoai',
             ]);
+            $loaiMay = LoaiMay::where('MaLoai', $request->MaLoai)->first();
+            // Lấy tiền tố theo mã loại máy
+            $prefix = match ($request->MaLoai) {
+                '2' => 'MC',
+                '1' => 'MI',
+                '3' => 'MB',
+                '4' => 'ME',
+                '5' => 'MĐ',
+                '6' => 'MD',
+                '7' => 'MC',
+                '8' => 'MG',
+                '9' => 'MDG',
+                '10' => 'MCM',
+                default => 'MX',
+            };
 
-            // Tạo mới máy
+            // Tìm mã máy cuối cùng có cùng tiền tố
+            $lastMachine = May::where('MaMay2', 'like', $prefix . '%')
+                ->orderBy('MaMay2', 'desc')
+                ->first();
+
+            $newNumber = $lastMachine
+                ? ((int) substr($lastMachine->MaMay2, strlen($prefix)) + 1)
+                : 1;
+
+            $newMaMay = $prefix . str_pad($newNumber, 2, '0', STR_PAD_LEFT);
+
             May::create([
+                'MaMay2' => $newMaMay,
                 'TenMay' => $request->TenMay,
                 'SeriMay' => $request->SeriMay,
                 'ChuKyBaoTri' => $request->ChuKyBaoTri,
                 'NamSanXuat' => $request->NamSanXuat,
-                'HangSanXuat' => $request->HangSanXuat,
                 'ThoiGianDuaVaoSuDung' => $request->ThoiGianDuaVaoSuDung,
                 'ThoiGianBaoHanh' => $request->ThoiGianBaoHanh,
                 'ChiTietLinhKien' => $request->ChiTietLinhKien,
                 'MaNhaCungCap' => $request->MaNhaCungCap,
+                'MaLoai' => $request->MaLoai,
             ]);
 
             event(new eventUpdateTable());

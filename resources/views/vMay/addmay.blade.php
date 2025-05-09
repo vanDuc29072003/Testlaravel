@@ -17,6 +17,17 @@
                             <!-- Cột 1 -->
                             <div class="col-md-4">
                                 <div class="form-group">
+                                    <label for="MaLoai">Loại Máy</label>
+                                    <select class="form-control" id="MaLoai" name="MaLoai" required>
+                                        <option value="">Chọn loại máy</option>
+                                        @foreach ($loaiMays as $loaiMay)
+                                            <option value="{{ $loaiMay->MaLoai }}"
+                                                {{ old('MaLoai') == $loaiMay->MaLoai ? 'selected' : '' }}>
+                                                {{ $loaiMay->TenLoai }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="form-group">
                                     <label for="SeriMay">Seri Máy</label>
                                     <input type="text" class="form-control" id="SeriMay" name="SeriMay"
                                         placeholder="Nhập seri máy" value="{{ old('SeriMay') }}" required>
@@ -28,11 +39,7 @@
                                         placeholder="Nhập tên máy" value="{{ old('TenMay') }}" required>
                                 </div>
 
-                                <div class="form-group">
-                                    <label for="HangSanXuat">Hãng Sản Xuất</label>
-                                    <input type="text" class="form-control" id="HangSanXuat" name="HangSanXuat"
-                                        placeholder="Nhập hãng sản xuất" value="{{ old('HangSanXuat') }}" required>
-                                </div>
+                              
                             </div>
 
                             <!-- Cột 2 -->
@@ -48,7 +55,7 @@
                                         @endforeach
                                     </select>
                                 </div>
-
+                              
                                 <div class="form-group">
                                     <label for="NamSanXuat">Năm Sản Xuất</label>
                                     <input type="number" class="form-control" id="NamSanXuat" name="NamSanXuat"

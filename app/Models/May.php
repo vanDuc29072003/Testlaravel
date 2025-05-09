@@ -14,16 +14,16 @@ class May extends Model
     public $timestamps = false; // Không sử dụng created_at và updated_at
 
     protected $fillable = [
+        'MaMay2',
         'TenMay', 
         'SeriMay', 
         'ChuKyBaoTri', 
         'ThoiGianBaoHanh',
         'ThoiGianDuaVaoSuDung',
-        'NamSanXuat', 
-        'HangSanXuat',
+        'NamSanXuat',   
         'ChiTietLinhKien',
         'MaNhaCungCap',
-        'MaLoaiMay',
+        'MaLoai',
         'TrangThai',
     ];
     public function nhaCungCap()
