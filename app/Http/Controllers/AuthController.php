@@ -17,16 +17,37 @@ class AuthController extends Controller
             'MaNhanVien' => 'required',
             'MatKhau' => 'required'
         ]);
-
+    
         if (Auth::attempt(['MaNhanVien' => $credentials['MaNhanVien'], 'password' => $credentials['MatKhau']])) {
             $request->session()->regenerate();
-            return redirect()->route('may')->with('success', 'Chào mừng quay trở lại!');
+    
+            $user = Auth::user();
+    
+            // Lấy MaBoPhan từ quan hệ với bảng nhanvien
+            $maBoPhan = $user->nhanVien->MaBoPhan ?? null;
+    
+            // Chuyển hướng dựa theo mã bộ phận
+            switch ($maBoPhan) {
+                case 1:
+                    return redirect()->route('thongkekho');
+                case 2:
+                    return redirect()->route('lichvanhanh');
+                case 3:
+                    return redirect()->route('lichsuachua.index');
+                    case 4:
+                    return redirect()->route('linhkien');
+                case 5:
+                    return redirect()->route('taikhoan.index');
+                default:
+                    return redirect()->route('auth.login')->with('error', 'Bộ phận không được xác định');
+            }
         }
-
+    
         return back()
             ->with('error', 'Tài khoản hoặc mật khẩu không đúng.')
             ->withInput();
     }
+
 
     public function logout(Request $request)
     {

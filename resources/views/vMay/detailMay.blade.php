@@ -24,7 +24,7 @@
                         <tbody>
                             <tr>
                                 <th scope="row">Mã Máy</th>
-                                <td>{{ $may->MaMay }}</td>
+                                <td>{{ $may->MaMay2 }}</td>
                                 <th scope="row">Thời Gian Đưa Vào Sử Dụng</th>
                                 <td>{{ $may->ThoiGianDuaVaoSuDung }}</td>
                             </tr>
@@ -34,12 +34,7 @@
                                 <th scope="row">Năm Sản Xuất</th>
                                 <td>{{ $may->NamSanXuat }}</td>
                             </tr>
-                            <tr>
-                                <th scope="row">Seri Máy</th>
-                                <td>{{ $may->SeriMay }}</td>
-                                <th scope="row">Hãng Sản Xuất</th>
-                                <td>{{ $may->HangSanXuat }}</td>
-                            </tr>
+                           
                             <tr>
                                 <th scope="row">Chu Kỳ Bảo Trì</th>
                                 <td>{{ $may->ChuKyBaoTri }} tháng</td>
@@ -52,6 +47,11 @@
                                 <td>{{ $may->ThoiGianBaoHanh }} tháng</td>
                                 <th scope="row">Nhà Cung Cấp</th>
                                 <td>{{ $may->nhaCungCap->TenNhaCungCap}}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Seri Máy</th>
+                                <td>{{ $may->SeriMay }}</td>
+                                
                             </tr>
                         </tbody>
                     </table>

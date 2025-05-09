@@ -24,6 +24,11 @@
                         <!-- Cột 1 -->
                         <div class="col-md-4">
                             <div class="form-group">
+                                <label for="MaMay">Mã Máy</label>
+                                <input type="text" class="form-control" id="MaMay2" name="MaMay2"
+                                    placeholder="Nhập mã máy" value="{{ $may->MaMay2 }}" required readonly>
+                            </div>
+                            <div class="form-group">
                                 <label for="SeriMay">Seri Máy</label>
                                 <input type="text" class="form-control" id="SeriMay" name="SeriMay"
                                     placeholder="Nhập seri máy" value="{{ $may->SeriMay }}" required readonly>
@@ -35,11 +40,7 @@
                                     placeholder="Nhập tên máy" value="{{ $may->TenMay }}" required readonly>
                             </div>
 
-                            <div class="form-group">
-                                <label for="HangSanXuat">Hãng Sản Xuất</label>
-                                <input type="text" class="form-control" id="HangSanXuat" name="HangSanXuat"
-                                    placeholder="Nhập hãng sản xuất" value="{{ $may->HangSanXuat }}" required readonly>
-                            </div>
+                           
                         </div>
 
                         <!-- Cột 2 -->
