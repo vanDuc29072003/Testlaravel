@@ -21,6 +21,7 @@ class May extends Model
         'ThoiGianDuaVaoSuDung',
         'NamSanXuat', 
         'HangSanXuat',
+        'GiaTriBanDau',
         'ChiTietLinhKien',
         'MaNhaCungCap',
         'MaLoaiMay',
