@@ -43,7 +43,7 @@
                                     <th scope="col">Seri Máy</th>
                                     <th scope="col">Chu Kì Bảo Trì (Tháng)</th>
                                     <th scope="col">Năm Sản Xuất</th>
-                                    <th scope="col">Hãng Sản Xuất</th>
+                                    <th scope="col">Tên Nhà Cung Cấp</th>
                                     <th scope="col">Loại máy</th>
                                     <th scope="col">Cập Nhật</th>
                                 </tr>
@@ -52,12 +52,12 @@
                                 @foreach ($dsMay as $may)
                                     <tr class="text-center" onclick="window.location='{{ route('may.detail', $may->MaMay) }}'"
                                         style="cursor: pointer;">
-                                        <td>{{ $may->MaMay }}</td>
+                                        <td>{{ $may->MaMay2 }}</td>
                                         <td>{{ $may->TenMay }}</td>
                                         <td>{{ $may->SeriMay }}</td>
                                         <td>{{ $may->ChuKyBaoTri }}</td>
                                         <td>{{ $may->NamSanXuat }}</td>
-                                        <td>{{ $may->HangSanXuat }}</td>
+                                        <td>{{ $may->nhaCungCap->TenNhaCungCap }}</td>
                                         <td>{{ $may->loaiMay->TenLoai ?? 'Chưa xác định' }}</td>
                                         <td>
                                             <div class="d-flex gap-2">
@@ -72,7 +72,7 @@
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <td colspan="7">
+                                    <td colspan="8">
                                         <nav aria-label="Page navigation example">
                                             {{ $dsMay->appends(request()->query())->links('pagination::bootstrap-5') }}
                                         </nav>
@@ -89,9 +89,15 @@
                         <form method="GET" action="{{ route('may') }}" class="p-3 border rounded fixed-search-form">
                             <input type="hidden" name="MaLoaiMay" value="{{ request('MaLoaiMay') }}">
                             <div class="mb-3">
-                                <label for="MaMay" class="form-label">Mã máy</label>
-                                <input type="text" name="MaMay" id="MaMay" class="form-control"
-                                    value="{{ request('MaMay') }}">
+                                <label for="TenNhaCungCap" class="form-label">Tên nhà cung cấp</label>
+                                <select name="TenNhaCungCap" id="TenNhaCungCap" class="form-control">
+                                    <option value="">Chọn nhà cung cấp</option>
+                                    @foreach ($dsNhaCungCap as $nhaCungCap)
+                                        <option value="{{ $nhaCungCap->MaNhaCungCap }}" {{ request('TenNhaCungCap') == $nhaCungCap->MaNhaCungCap ? 'selected' : '' }}>
+                                            {{ $nhaCungCap->TenNhaCungCap }}
+                                        </option>
+                                    @endforeach
+                                </select>
                             </div>
                             <div class="mb-3">
                                 <label for="TenMay" class="form-label">Tên máy</label>
@@ -123,11 +129,7 @@
                                 <input type="number" name="NamSanXuat" id="NamSanXuat" class="form-control"
                                     value="{{ request('NamSanXuat') }}">
                             </div>
-                            <div class="mb-3">
-                                <label for="HangSanXuat" class="form-label">Hãng sản xuất</label>
-                                <input type="text" name="HangSanXuat" id="HangSanXuat" class="form-control"
-                                    value="{{ request('HangSanXuat') }}">
-                            </div>
+                           
                             <button type="submit" class="btn btn-primary w-100">
                                 <i class="fa fa-search"></i> Tìm kiếm
                             </button>
