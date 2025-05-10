@@ -176,7 +176,7 @@ class PhieuBanGiaoController extends Controller
         $lichBaoTri->TrangThai = 1; // Cập nhật trạng thái
         $lichBaoTri->save();
 
-        return redirect()->route('lichbaotri.dahoanthanh1')->with('success', 'Phiếu bàn giao bảo trì được tạo thành công!');
+        return redirect()->route('lichbaotri.dabangiao')->with('success', 'Phiếu bàn giao bảo trì được tạo thành công!');
     }
     public function exportPDF2($MaPhieuBanGiaoBaoTri)
     {

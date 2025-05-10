@@ -174,11 +174,12 @@ Route::middleware('auth')->group(function () {
   Route::delete('/lichbaotri/{id}', [LichBaoTriController::class, 'destroy'])
     ->middleware('kiemtraquyen:4')
     ->name('lichbaotri.destroy');
-  Route::get('/lichbaotri/{MaLichBaoTri}', [LichBaoTriController::class, 'show'])->name('lichbaotri.showpbg');
+  
   Route::get('/lichbaotri/{MaLichBaoTri}/taophieubangiao', [LichBaoTriController::class, 'taophieubangiao'])
     ->middleware('kiemtraquyen:3')
     ->name('lichbaotri.taophieubangiao');
   Route::get('/lichbaotri/dabangiao', [LichBaoTriController::class, 'lichSuBaoTri'])->name('lichbaotri.dabangiao');
+  Route::get('/lichbaotri/{MaLichBaoTri}', [LichBaoTriController::class, 'show'])->name('lichbaotri.showpbg');
   Route::get('/phieubangiao/{MaPhieuBanGiaoBaoTri}/export-pdf2', [PhieuBanGiaoController::class, 'exportPDF2'])->name('phieubangiaobaotri.exportPDF');
 
   //Lịch vận hành
