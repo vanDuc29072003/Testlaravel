@@ -114,8 +114,8 @@
 
 <table class="info-table">
     <tr>
-        <td class="label">Mã Lịch Bảo Trì:</td>
-        <td>{{ $phieuBanGiao->lichBaoTri->MaLichBaoTri }}</td>
+        <td class="label">Người Lập:</td>
+        <td>{{ $phieuBanGiao->nhanVien->TenNhanVien }}</td>
     </tr>
     <tr>
         <td class="label">Ngày Bảo Trì:</td>
@@ -124,6 +124,18 @@
     <tr>
         <td class="label">Tên Máy:</td>
         <td>{{ $phieuBanGiao->lichBaoTri->may->TenMay }}</td>
+    </tr>
+    <tr>
+        <td class="label">Seri Máy:</td>
+        <td>{{ $phieuBanGiao->lichBaoTri->may->SeriMay }}</td>
+    </tr>
+    <tr>
+        <td class="label">Ngày Nhập:</td>
+        <td>{{ \Carbon\Carbon::parse($phieuBanGiao->lichBaoTri->may->ThoiGianDuaVaoSuDung)->format('d/m/Y') }}</td>
+    </tr>
+    <tr>
+        <td class="label">Thời Gian Bảo Hành:</td>
+        <td>{{ $phieuBanGiao->lichBaoTri->may->ThoiGianBaoHanh }} tháng</td>
     </tr>
 </table>
 
@@ -148,11 +160,7 @@
     </tr>
 </table>
 
-<h4>III, Nội dung bàn giao</h4>
-
-<p class="danhgia"><strong>Nhân Viên Xác Nhận:</strong> {{ $phieuBanGiao->nhanVien->TenNhanVien ?? 'Không có' }}</p>
-
-<h4>IV, Linh kiện bàn giao</h4>
+<h4>III, Linh kiện bàn giao</h4>
 
 <table class="linhkien-table">
     <thead>

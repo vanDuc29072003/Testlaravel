@@ -15,38 +15,55 @@
                 </div>
             </div>
             <div class="card-body pt-3 px-5">
-                <p><strong>Mã Phiếu Trả:</strong> {{ $phieuTra->MaPhieuTra }}</p>
-                <p><strong>Ngày Trả:</strong> {{ \Carbon\Carbon::parse($phieuTra->NgayTra)->format('H:i d/m/Y') }}</p>
-                <p><strong>Nhân Viên Tạo (Bộ phận: Kho) :</strong>{{ $phieuTra->nhanVienTao->TenNhanVien ?? 'Không xác định' }}
-                <p><strong>Nhân Viên Trả (Bộ phận: Kĩ Thuật) :</strong>{{ $phieuTra->nhanVienTra->TenNhanVien ?? 'Không xác định' }}
-                <p><strong>Tổng Số Lượng Trả:</strong> {{ $phieuTra->TongSoLuong }}</p>
+                <h5 class="fst-italic ms-3">Thông tin chung</h5>
+                <table class="table table-bordered table-striped">
+                    <tbody>
+                        <tr>
+                            <th>Mã Phiếu Trả</th>
+                            <td>{{ $phieuTra->MaPhieuTra }}</td>
+                            <th>Ngày Trả</th>
+                            <td>{{ \Carbon\Carbon::parse($phieuTra->NgayTra)->format('H:i d/m/Y') }}</td>
+                        </tr>
+                        <tr>
+                            <th>Người Lập Phiếu:</th>
+                            <td>{{ $phieuTra->nhanVienTao->TenNhanVien ?? 'Không xác định' }}</td>
+                            <th>Người Trả:</th>
+                            <td>{{ $phieuTra->nhanVienTra->TenNhanVien ?? 'Không xác định' }}</td>
+                        </tr>
+                        <tr>
+                            <th>Ghi Chú</th>
+                            <td colspan="3">{{ $phieuTra->GhiChu ?? 'Không có ghi chú' }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+
                 <!-- Danh sách chi tiết phiếu trả -->
-                <div class="card mt-4">
-                    <div class="card-body">
-                        <h5 class="card-title">Danh Sách Linh Kiện</h5>
-                        <table class="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>Mã Linh Kiện</th>
-                                    <th>Tên Linh Kiện</th>
-                                    <th>Số Lượng</th>
-                                    <th>Đơn Vị Tính</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($phieuTra->chiTietPhieuTra as $chiTiet)
-                                    <tr>
-                                        <td>{{ $chiTiet->linhKien->MaLinhKien }}</td>
-                                        <td>{{ $chiTiet->linhKien->TenLinhKien }}</td>
-                                        <td>{{ $chiTiet->SoLuong }}</td>
-                                        <td>{{ $chiTiet->linhKien->donViTinh->TenDonViTinh ?? 'Không xác định' }}</td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                <p><strong>Ghi Chú:</strong> {{ $phieuTra->GhiChu ?? 'Không có ghi chú' }}</p>
+                <h5 class="fst-italic ms-3">Danh sách linh kiện</h5>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Mã Linh Kiện</th>
+                            <th>Tên Linh Kiện</th>
+                            <th>Đơn Vị Tính</th>
+                            <th>Số Lượng</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($phieuTra->chiTietPhieuTra as $chiTiet)
+                            <tr>
+                                <td>{{ $chiTiet->linhKien->MaLinhKien }}</td>
+                                <td>{{ $chiTiet->linhKien->TenLinhKien }}</td>
+                                <td>{{ $chiTiet->linhKien->donViTinh->TenDonViTinh ?? 'Không xác định' }}</td>
+                                <td>{{ $chiTiet->SoLuong }}</td>
+                            </tr>
+                        @endforeach
+                        <!-- Dòng tổng số lượng -->
+                        <tr>
+                            <th colspan="3" class="text-end">Tổng số lượng</th>
+                            <td colspan="1">{{ $phieuTra->TongSoLuong }}</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
             <div class="card-footer">
                 <!-- Nút quay lại -->

@@ -58,7 +58,6 @@
     }
 
     .note {
-        margin-top: 30px;
         font-size: 12px;
         font-style: italic;
     }
@@ -66,7 +65,6 @@
     .signature-table {
         width: 100%;
         font-weight: bold;
-        margin-top: 20px;
         text-align: center;
         border: none;
     }
@@ -133,6 +131,14 @@
     <tr>
         <td class="label">Seri Máy:</td>
         <td>{{ $phieuBanGiao->lichSuaChua->yeuCauSuaChua->may->SeriMay }}</td>
+    </tr>
+    <tr>
+        <td class="label">Ngày Nhập:</td>
+        <td>{{ \Carbon\Carbon::parse($phieuBanGiao->lichSuaChua->yeuCauSuaChua->may->ThoiGianDuaVaoSuDung)->format('d/m/Y') }}</td>
+    </tr>
+    <tr>
+        <td class="label">Thời Gian Bảo Hành:</td>
+        <td>{{ $phieuBanGiao->lichSuaChua->yeuCauSuaChua->may->ThoiGianBaoHanh }} tháng</td>
     </tr>
     <tr>
         <td class="label">Tình Trạng:</td>
