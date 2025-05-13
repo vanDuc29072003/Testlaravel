@@ -235,6 +235,10 @@ Route::middleware('auth')->group(function () {
     //Thống kê
     Route::get('/thongke', [ThongKeController::class, 'thongkekho'])->name('thongkekho');
     Route::get('/thongke/pdf', [ThongKeController::class, 'exportPDF'])->name('thongkekho.pdf');
+    Route::get('/thongkesuachua', [ThongKeController::class, 'thongkesuachua'])->name('thongkesuachua');
+    Route::get('/thongkesuachua/pdf', [ThongKeController::class, 'exportPDF1'])->name('thongkesuachua.pdf');
+    Route::get('/thongkesuachua/detail/{maMay}', [ThongKeController::class, 'detail'])->name('thongkesuachua.detail');
+
 
     //Phiếu thanh lý
     Route::get('/phieuthanhly', [PhieuThanhLyController::class, 'index'])->name('phieuthanhly.index');
