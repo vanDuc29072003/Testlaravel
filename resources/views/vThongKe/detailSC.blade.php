@@ -29,7 +29,7 @@
                                 @foreach ($chiTietSuaChua as $yc)
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
-                                        <td>{{ \Carbon\Carbon::parse($yc->thoigianyeucau)->format('d/m/Y H:i') }}</td>
+                                        <td>{{ \Carbon\Carbon::parse($yc->ThoiGianYeuCau)->format('d/m/Y H:i') }}</td>
                                         <td>{{ $yc->nhanVien->TenNhanVien ?? 'N/A' }}</td>
                                         <td>{{ $yc->MoTa }}</td>
                                     </tr>

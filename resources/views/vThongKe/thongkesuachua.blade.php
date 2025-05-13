@@ -52,7 +52,12 @@
                             </thead>
                             <tbody>
                                 @foreach ($thongKeSuaChua as $item)
-                                    <tr onclick="window.location='{{ route('thongkesuachua.detail', ['maMay' => $item['MaMay']]) }}'" style="cursor: pointer;">
+                                    <tr onclick="window.location='{{ route('thongkesuachua.detail', [
+                                        'maMay' => $item['MaMay'],
+                                        'time_filter' => request('time_filter'),
+                                        'start_date' => request('start_date'),
+                                        'end_date' => request('end_date')
+                                    ]) }}'" style="cursor: pointer;">
                                         <td>{{ $item['MaMay2'] }}</td>
                                         <td>{{ $item['TenMay'] }}</td>
                                         <td class="text-end">{{ $item['SoLanSuaChua'] }}</td>
