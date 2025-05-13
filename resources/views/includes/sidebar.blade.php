@@ -191,6 +191,11 @@
                 <a href="{{ route('nhatki.thongke') }}">
                   <span class="sub-item">Nhật kí vận hành</span>
                 </a>
+               </li>
+               <li>
+                <a href="{{ route('thongkesuachua') }}">
+                  <span class="sub-item">Thống kê sửa chữa</span>
+                </a>
               </li>
             </ul>
               

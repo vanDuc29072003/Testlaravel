@@ -31,7 +31,7 @@
                                     <tr class="text-center"
                                         onclick="window.location='{{ route('phieuthanhly.detail', $phieuThanhLy->MaPhieuThanhLy) }}'"
                                         style="cursor: pointer;">
-                                        <td>{{ $phieuThanhLy->MaPhieuThanhLy }}</td>
+                                        <td>{{ $phieuThanhLy->MaHienThi }}</td>
                                         <td>{{ $phieuThanhLy->NgayLapPhieu }}</td>
                                         <td>{{ $phieuThanhLy->nhanVien->TenNhanVien ?? 'Không xác định' }}</td>
                                         <td>{{ $phieuThanhLy->may->TenMay ?? 'Không xác định' }}</td>
@@ -82,7 +82,7 @@
                                     <tr class="text-center"
                                         onclick="window.location='{{ route('phieuthanhly.detail', $phieuThanhLy->MaPhieuThanhLy) }}'"
                                         style="cursor: pointer;">
-                                        <td>{{ $phieuThanhLy->MaPhieuThanhLy }}</td>
+                                        <td>{{ $phieuThanhLy->MaHienThi }}</td>
                                         <td>{{ $phieuThanhLy->NgayLapPhieu }}</td>
                                         <td>{{ $phieuThanhLy->nhanVien->TenNhanVien ?? 'Không xác định' }}</td>
                                         <td>{{ $phieuThanhLy->may->TenMay ?? 'Không xác định' }}</td>
@@ -111,9 +111,9 @@
                     <form method="GET" action="{{ route('phieuthanhly.index') }}" class="p-3 border rounded">
                         <h5 class="mb-3">Tìm kiếm</h5>
                         <div class="mb-3">
-                            <label for="MaPhieuThanhLy" class="form-label">Mã Phiếu Thanh Lý</label>
-                            <input type="text" name="MaPhieuThanhLy" id="MaPhieuThanhLy" class="form-control"
-                                placeholder="Nhập mã phiếu thanh lý" value="{{ request('MaPhieuThanhLy') }}">
+                            <label for="MaHienThi" class="form-label">Mã Phiếu Thanh Lý</label>
+                            <input type="text" name="MaHienThi" id="MaHienThi" class="form-control"
+                                placeholder="Nhập mã phiếu thanh lý" value="{{ request('MaHienThi') }}">
                         </div>
                         <div class="mb-3">
                             <label for="NgayLapPhieu" class="form-label">Ngày Lập</label>

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 
 class PhieuNhap extends Model
 {
@@ -21,7 +22,18 @@ class PhieuNhap extends Model
         'MaNhanVien',
         'MaNhaCungCap',
         'TrangThai',
+        'MaHienThi',
     ];
+    protected static function boot()
+    {
+        parent::boot();
+
+        // Sự kiện `creating` để tạo mã phiếu nhập
+        static::creating(function ($phieuNhap) {
+            $now = Carbon::now(); // Lấy thời gian hiện tại
+            $phieuNhap->MaHienThi = 'PN' . $now->format('ymd-His'); // Tạo mã phiếu nhập theo định dạng
+        });
+    }
     public function nhaCungCap()
     {
         return $this->belongsTo(NhaCungCap::class, 'MaNhaCungCap', 'MaNhaCungCap');

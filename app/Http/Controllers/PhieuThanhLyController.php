@@ -22,7 +22,7 @@ class PhieuThanhLyController extends Controller
         $dsMay = May::all();
 
         $filters = [
-            'MaPhieuThanhLy' => '=',
+            'MaHienThi' => 'like',
             'NgayLapPhieu' => 'like',
             'MaNhanVien' => '=',
             'MaMay' => '=',
@@ -65,6 +65,7 @@ class PhieuThanhLyController extends Controller
             'ThoiGianKhauHao' => $may->ThoiGianBaoHanh, // Giả sử Thời Gian Khấu Hao là Thời Gian Bảo Hành
             'NamSanXuat' => $may->NamSanXuat,
             'HangSanXuat' => $may->HangSanXuat,
+            'GiaTriBanDau' => $may->GiaTriBanDau,
             'TenNhaCungCap' => $may->nhaCungCap->TenNhaCungCap ?? 'Không xác định',
             'TenLoai' => $may->loaiMay->TenLoai ?? 'Không xác định',
         ]);
@@ -136,7 +137,7 @@ class PhieuThanhLyController extends Controller
             if ($lichBaoTri) {
                 $lichBaoTri->delete();
             }
-            $yeuCauSuaChua = $may->yeuCauSuaChua();
+            $yeuCauSuaChua = $may->yeuCauSuaChua()->where('TrangThai', '0');
             if ($yeuCauSuaChua) {
                 $yeuCauSuaChua->update(['TrangThai' => '2']);
 
@@ -165,7 +166,7 @@ class PhieuThanhLyController extends Controller
     public function exportPDF($MaPhieuThanhLy)
     {
         $phieuThanhLy = PhieuThanhLy::with(['nhanVien', 'may'])->findOrFail($MaPhieuThanhLy);
-        $pdf = PDF::loadView('vPhieuThanhLy.pdfphieuthanhly', compact('phieuThanhLy'));
-        return $pdf->stream('phieuthanhly_' . $MaPhieuThanhLy . '.pdf');
+        $pdf = PDF::loadView('vPhieuThanhLy.export', compact('phieuThanhLy'));
+        return $pdf->stream('PhieuThanhLy.pdf');
     }
 }

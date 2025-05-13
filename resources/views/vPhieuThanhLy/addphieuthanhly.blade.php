@@ -93,7 +93,7 @@
                                 <div class="form-group">
                                     <label for="GiaTriBanDau">Giá trị ban đầu</label>
                                     <input type="number" class="form-control" id="GiaTriBanDau" name="GiaTriBanDau"
-                                        placeholder="Nhập giá trị ban đầu..." required>
+                                        readonly>
                                 </div>
                             </div>
                             <div class="col-3">
@@ -164,6 +164,7 @@
                             document.getElementById('ThoiGianKhauHao').value = data.ThoiGianKhauHao || '';
                             document.getElementById('NamSanXuat').value = data.NamSanXuat || '';
                             document.getElementById('HangSanXuat').value = data.HangSanXuat || '';
+                            document.getElementById('GiaTriBanDau').value = data.GiaTriBanDau || '';
                             document.getElementById('TenNhaCungCap').value = data.TenNhaCungCap || '';
                             document.getElementById('TenLoai').value = data.TenLoai || '';
                         })
@@ -177,6 +178,7 @@
                     document.getElementById('ThoiGianKhauHao').value = '';
                     document.getElementById('NamSanXuat').value = '';
                     document.getElementById('HangSanXuat').value = '';
+                    document.getElementById('GiaTriBanDau').value = data.GiaTriBanDau || '';
                     document.getElementById('TenNhaCungCap').value = '';
                     document.getElementById('TenLoai').value = '';
                 }

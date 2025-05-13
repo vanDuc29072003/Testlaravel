@@ -151,6 +151,7 @@ Route::middleware('auth')->group(function () {
   Route::get('/lichsuachua/{MaLichSuaChua}/xem-ncc', [LichSuaChuaController::class, 'xemNCC'])
     ->middleware('kiemtraquyen:9')
     ->name('lichsuachua.xemncc');
+  Route::get('/lichsuachua/{MaLichSuaChua}/xem-ncc/export', [LichSuaChuaController::class, 'exporttscSC'])->name('lichsuachua.xemncc.export');
 
   Route::post('/phieubangiao/store', [PhieuBanGiaoController::class, 'store'])->name('phieubangiao.store');
   Route::get('/phieubangiao/{MaPhieuBanGiaoNoiBo}/export-pdf', [PhieuBanGiaoController::class, 'exportPDF'])->name('phieubangiao.exportPDF');
@@ -174,11 +175,12 @@ Route::middleware('auth')->group(function () {
   Route::delete('/lichbaotri/{id}', [LichBaoTriController::class, 'destroy'])
     ->middleware('kiemtraquyen:4')
     ->name('lichbaotri.destroy');
-  Route::get('/lichbaotri/{MaLichBaoTri}', [LichBaoTriController::class, 'show'])->name('lichbaotri.showpbg');
+  
   Route::get('/lichbaotri/{MaLichBaoTri}/taophieubangiao', [LichBaoTriController::class, 'taophieubangiao'])
     ->middleware('kiemtraquyen:3')
     ->name('lichbaotri.taophieubangiao');
   Route::get('/lichbaotri/dabangiao', [LichBaoTriController::class, 'lichSuBaoTri'])->name('lichbaotri.dabangiao');
+  Route::get('/lichbaotri/{MaLichBaoTri}', [LichBaoTriController::class, 'show'])->name('lichbaotri.showpbg');
   Route::get('/phieubangiao/{MaPhieuBanGiaoBaoTri}/export-pdf2', [PhieuBanGiaoController::class, 'exportPDF2'])->name('phieubangiaobaotri.exportPDF');
 
   //Lịch vận hành
@@ -244,6 +246,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/thongke', [ThongKeController::class, 'thongkekho'])->name('thongkekho');
     // Đảm bảo rằng route xuất PDF không bị middleware CSRF chặn
     Route::get('/thongke/pdf', [ThongKeController::class, 'exportPDF'])->withoutMiddleware([\App\Http\Middleware\VerifyCsrfToken::class])->name('thongkekho.pdf');
+    Route::get('/thongke/pdf', [ThongKeController::class, 'exportPDF'])->name('thongkekho.pdf');
+    Route::get('/thongkesuachua', [ThongKeController::class, 'thongkesuachua'])->name('thongkesuachua');
+    Route::get('/thongkesuachua/pdf', [ThongKeController::class, 'exportPDF1'])->name('thongkesuachua.pdf');
+    Route::get('/thongkesuachua/detail/{maMay}', [ThongKeController::class, 'detail'])->name('thongkesuachua.detail');
+
 
 
     //Phiếu thanh lý

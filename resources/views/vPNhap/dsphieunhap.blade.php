@@ -32,8 +32,8 @@
                                     <tr class="text-center"
                                         onclick="window.location='{{ route('phieunhap.show', $phieuNhap->MaPhieuNhap) }}'"
                                         style="cursor: pointer;">
-                                        <td>{{ $phieuNhap->MaPhieuNhap }}</td>
-                                        <td>{{ $phieuNhap->NgayNhap }}</td>
+                                        <td>{{ $phieuNhap->MaHienThi }}</td>
+                                        <td>{{ \Carbon\Carbon::parse($phieuNhap->NgayNhap)->format('H:i - d/m/Y') }}</td>
                                         <td>{{ $phieuNhap->nhaCungCap->TenNhaCungCap ?? 'Không xác định' }}</td>
                                         <td>{{ $phieuNhap->nhanVien->TenNhanVien ?? 'Không xác định' }}</td>
                                         <td>{{ number_format($phieuNhap->TongTien, 0, ',', '.') }} VND</td>
@@ -85,8 +85,8 @@
                                     <tr class="text-center"
                                         onclick="window.location='{{ route('phieunhap.show', $phieuNhap->MaPhieuNhap) }}'"
                                         style="cursor: pointer;">
-                                        <td>{{ $phieuNhap->MaPhieuNhap }}</td>
-                                        <td>{{ $phieuNhap->NgayNhap }}</td>
+                                        <td>{{ $phieuNhap->MaHienThi }}</td>
+                                        <td>{{ \Carbon\Carbon::parse($phieuNhap->NgayNhap)->format('H:i - d/m/Y') }}</td>
                                         <td>{{ $phieuNhap->nhaCungCap->TenNhaCungCap }}</td>
                                         <td>{{ $phieuNhap->nhanVien->TenNhanVien }}</td>
                                         <td>{{ number_format($phieuNhap->TongTien, 0, ',', '.') }} VND</td>
@@ -111,9 +111,9 @@
                     <form method="GET" action="{{ route('dsphieunhap') }}" class="p-3 border rounded">
                         <h5 class="mb-3">Tìm kiếm</h5>
                         <div class="mb-3">
-                            <label for="MaPhieuNhap" class="form-label">Mã Phiếu Nhập</label>
-                            <input type="text" name="MaPhieuNhap" id="MaPhieuNhap" class="form-control"
-                                placeholder="Nhập mã phiếu nhập" value="{{ request('MaPhieuNhap') }}">
+                            <label for="MaHienThi" class="form-label">Mã Phiếu Nhập</label>
+                            <input type="text" name="MaHienThi" id="MaHienThi" class="form-control"
+                                placeholder="Nhập mã phiếu nhập" value="{{ request('MaHienThi') }}">
                         </div>
                         <div class="mb-3">
                             <label for="NgayNhap" class="form-label">Ngày Nhập</label>

@@ -32,7 +32,7 @@
                                     <tr class="text-center"
                                         onclick="window.location='{{ route('phieutra.show', $phieuTra->MaPhieuTra) }}'"
                                         style="cursor: pointer;">
-                                        <td>{{ $phieuTra->MaPhieuTra }}</td>
+                                        <td>{{ $phieuTra->MaHienThi }}</td>
                                         <td>{{ \Carbon\Carbon::parse($phieuTra->NgayTra)->format('d/m/Y H:i:s') }}</td>
                                         <td>{{ $phieuTra->nhanVienTao->TenNhanVien ?? 'Không xác định' }}</td>
                                         <td>{{ $phieuTra->nhanVienTra->TenNhanVien ?? 'Không xác định' }}</td>
@@ -60,9 +60,9 @@
                         <form method="GET" action="{{ route('dsphieutra') }}">
                             <h5 class="mb-3">Tìm kiếm</h5>
                             <div class="mb-3">
-                                <label for="MaPhieuTra" class="form-label">Mã Phiếu Trả</label>
-                                <input type="text" name="MaPhieuTra" id="MaPhieuTra" class="form-control"
-                                    placeholder="Nhập mã phiếu trả" value="{{ request('MaPhieuTra') }}">
+                                <label for="MaHienThi" class="form-label">Mã Phiếu Trả</label>
+                                <input type="text" name="MaHienThi" id="MaHienThi" class="form-control"
+                                    placeholder="Nhập mã phiếu trả" value="{{ request('MaHienThi') }}">
                             </div>
                             <div class="mb-3">
                                 <label for="NgayTra" class="form-label">Ngày Trả</label>

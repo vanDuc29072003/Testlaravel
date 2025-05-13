@@ -99,7 +99,7 @@
                                 <div class="form-group">
                                     <label for="GiaTriBanDau">Giá trị ban đầu</label>
                                     <input type="number" class="form-control" id="GiaTriBanDau" name="GiaTriBanDau"
-                                        value="{{ $phieuThanhLy->GiaTriBanDau }}" required>
+                                        value="{{ $phieuThanhLy->GiaTriBanDau }}" readonly>
                                 </div>
                             </div>
                             <div class="col-3">

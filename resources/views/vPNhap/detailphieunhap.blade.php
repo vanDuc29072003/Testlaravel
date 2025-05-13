@@ -15,7 +15,8 @@
                                 <i class="fa fa-edit"></i> Sửa
                             </a>
                         @else
-                            <a href="{{ route('phieunhap.exportPDF', $phieuNhap->MaPhieuNhap) }}" class="btn btn-black btn-border ms-3">
+                            <a href="{{ route('phieunhap.exportPDF', $phieuNhap->MaPhieuNhap) }}"
+                                class="btn btn-black btn-border ms-3">
                                 <i class="fas fa-file-download"></i> Xuất FILE PDF
                             </a>
                         @endif
@@ -23,52 +24,71 @@
                 </div>
             </div>
             <div class="card-body pt-3 px-5">
-                <p><strong>Mã Phiếu Nhập:</strong> {{ $phieuNhap->MaPhieuNhap }}</p>
-                <p><strong>Ngày Nhập:</strong> {{ \Carbon\Carbon::parse($phieuNhap->NgayNhap)->format('H:i d/m/Y') }}</p>
-                <p><strong>Nhân Viên Nhập (Bộ phận: Kho) :</strong> {{ $phieuNhap->nhanVien->TenNhanVien }}</p>
-                <p><strong>Nhà Cung Cấp:</strong> {{ $phieuNhap->nhaCungCap->TenNhaCungCap }}</p>
-                <p><strong>Số Lượng:</strong> {{ $phieuNhap->TongSoLuong}}</p>
+                <h5 class="fst-italic ms-3">Thông tin chung</h5>
+                <table class="table table-bordered table-striped">
+                    <tbody>
+                        <tr>
+                            <th>Mã Phiếu Nhập</th>
+                            <td>{{ $phieuNhap->MaHienThi }}</td>
+                            <th>Ngày Nhập</th>
+                            <td>{{ \Carbon\Carbon::parse($phieuNhap->NgayNhap)->format('H:i d/m/Y') }}</td>
+                        </tr>
+                        <tr>
+                            <th>Người Lập Phiếu:</th>
+                            <td>{{ $phieuNhap->nhanVien->TenNhanVien }}</td>
+                            <th>Nhà Cung Cấp</th>
+                            <td>{{ $phieuNhap->nhaCungCap->TenNhaCungCap }}</td>
+                        </tr>
+                        <tr>
+                            <th>Trạng Thái</th>
+                            <td>
+                                @if ($phieuNhap->TrangThai == 0)
+                                    <span class="badge bg-warning text-dark">Chờ duyệt</span>
+                                @elseif ($phieuNhap->TrangThai == 1)
+                                    <span class="badge bg-success text-white">Đã nhập kho</span>
+                                @endif
+                            </td>
+                            <th>Ghi Chú</th>
+                            <td>{{ $phieuNhap->GhiChu ?? 'Không có' }}</td>
+                        </tr>
+                    </tbody>
+                </table>
 
                 <!-- Danh sách chi tiết phiếu nhập -->
-                <div class="card mt-4">
-                    <div class="card-body">
-                        <h5 class="card-title">Danh Sách Linh Kiện</h5>
-                        <table class="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>Mã Linh Kiện</th>
-                                    <th>Tên Linh Kiện</th>
-                                    <th>Số Lượng</th>
-                                    <th>ĐVT</th>
-                                    <th>Giá Nhập</th>
-                                    <th>Thành Tiền</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($phieuNhap->chiTietPhieuNhap as $chiTiet)
-                                    <tr>
-                                        <td>{{ $chiTiet->linhKien->MaLinhKien }}</td>
-                                        <td>{{ $chiTiet->linhKien->TenLinhKien }}</td>
-                                        <td>{{ $chiTiet->SoLuong }}</td>
-                                        <td>{{ $chiTiet->linhKien->donViTinh->TenDonViTinh }}</td>
-                                        <td>{{ number_format($chiTiet->GiaNhap, 0, ',', '.') }} VND</td>
-                                        <td>{{ number_format($chiTiet->TongCong, 0, ',', '.') }} VND</td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <p><strong>Tổng Tiền:</strong> {{ number_format($phieuNhap->TongTien, 0, ',', '.') }} VND</p>
-                <p><strong>Ghi Chú:</strong> {{ $phieuNhap->GhiChu }}</p>
-                <p><strong>Trạng Thái:</strong>
-                    @if ($phieuNhap->TrangThai == 0)
-                        <span class="badge bg-warning text-dark">Chờ duyệt</span>
-                    @elseif ($phieuNhap->TrangThai == 1)
-                        <span class="badge bg-success text-white">Đã nhập kho</span>
-                    @endif
-                </p>
+                <h5 class="fst-italic ms-3">Danh sách linh kiện</h5>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Mã Linh Kiện</th>
+                            <th>Tên Linh Kiện</th>
+                            <th>Số Lượng</th>
+                            <th>ĐVT</th>
+                            <th>Giá Nhập</th>
+                            <th>Thành Tiền</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($phieuNhap->chiTietPhieuNhap as $chiTiet)
+                            <tr>
+                                <td>{{ $chiTiet->linhKien->MaLinhKien }}</td>
+                                <td>{{ $chiTiet->linhKien->TenLinhKien }}</td>
+                                <td>{{ $chiTiet->SoLuong }}</td>
+                                <td>{{ $chiTiet->linhKien->donViTinh->TenDonViTinh }}</td>
+                                <td>{{ number_format($chiTiet->GiaNhap, 0, ',', '.') }} VND</td>
+                                <td>{{ number_format($chiTiet->TongCong, 0, ',', '.') }} VND</td>
+                            </tr>
+                        @endforeach
+                        <tr>
+                            <th colspan="5" class="text-end">Tổng số lượng</th>
+                            <td>{{ $phieuNhap->TongSoLuong }}</td>
+                        </tr>
+                        <!-- Dòng tổng tiền -->
+                        <tr>
+                            <th colspan="5" class="text-end">Tổng tiền</th>
+                            <td>{{ number_format($phieuNhap->TongTien, 0, ',', '.') }} VND</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
             <div class="card-footer">
                 <!-- Nút quay lại -->
@@ -153,7 +173,7 @@
             });
         }
     </script>
-     <script>
+    <script>
         @if (session('error'))
             $.notify({
                 title: 'Lỗi',

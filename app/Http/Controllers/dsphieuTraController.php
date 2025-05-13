@@ -15,8 +15,8 @@ class dsphieuTraController extends Controller
         $query = PhieuTra::with(['nhanVienTao', 'nhanVienTra']);
 
         // Lọc theo các điều kiện tìm kiếm
-        if ($request->filled('MaPhieuTra')) {
-            $query->where('MaPhieuTra', 'LIKE', '%' . $request->MaPhieuTra . '%');
+        if ($request->filled('MaHienThi')) {
+            $query->where('MaHienThi', 'LIKE', '%' . $request->MaHienThi . '%');
         }
 
         if ($request->filled('NgayTra')) {
