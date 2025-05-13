@@ -13,6 +13,7 @@ use Carbon\Carbon;
 use App\Models\PhieuBanGiaoNoiBo;
 use App\Models\PhieuBanGiaoSuaChuaNCC;
 use App\Models\May;
+use Barryvdh\DomPDF\Facade\Pdf;
 class LichSuaChuaController extends Controller
 {
 
@@ -137,6 +138,18 @@ class LichSuaChuaController extends Controller
         // Trả về view hiển thị thông tin nhà cung cấp và lịch sửa chữa
         return view('vPhieuBanGiao.xemnhacungcap', compact('nhaCungCap', 'lichSuaChua'));
     }
+
+    public function exporttscSC($MaLichSuaChua)
+    {
+        $lichSuaChua = LichSuaChua::with(['yeuCauSuaChua'])
+            ->where('MaLichSuaChua', $MaLichSuaChua)
+            ->firstOrFail();
+    
+        $pdf = PDF::loadView('vLichSuaChua.exporttscSC', ['lichSuaChua' => $lichSuaChua]);
+    
+        return $pdf->stream('phieu_ban_giao_' . $MaLichSuaChua . '.pdf');
+    }
+
     public function bangiaoNhaCungCap($MaLichSuaChua)
     {
         // Lấy thông tin lịch sửa chữa cùng với nhà cung cấp

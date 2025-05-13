@@ -151,6 +151,7 @@ Route::middleware('auth')->group(function () {
   Route::get('/lichsuachua/{MaLichSuaChua}/xem-ncc', [LichSuaChuaController::class, 'xemNCC'])
     ->middleware('kiemtraquyen:9')
     ->name('lichsuachua.xemncc');
+  Route::get('/lichsuachua/{MaLichSuaChua}/xem-ncc/export', [LichSuaChuaController::class, 'exporttscSC'])->name('lichsuachua.xemncc.export');
 
   Route::post('/phieubangiao/store', [PhieuBanGiaoController::class, 'store'])->name('phieubangiao.store');
   Route::get('/phieubangiao/{MaPhieuBanGiaoNoiBo}/export-pdf', [PhieuBanGiaoController::class, 'exportPDF'])->name('phieubangiao.exportPDF');

@@ -46,12 +46,20 @@
                             <i class="fa fa-arrow-left"></i> Quay lại
                         </a>
                     </div>
-                
-                    <!-- Nút tạo phiếu bàn giao -->
-                    <div class="m-3">
-                        <a href="{{ route('lichsuachua.bangiaonhacungcap', $lichSuaChua->MaLichSuaChua) }}" class="btn btn-success">
-                            <i class="fa fa-save"></i> Tạo Phiếu Bàn Giao
-                        </a>
+                    <div class="d-flex justify-content-end">
+                        <div class="my-3">
+                            <a href="{{ route('lichsuachua.xemncc.export', $lichSuaChua->MaLichSuaChua) }}" target="_blank') }}" class="btn btn-warning">
+                                <i class="fas fa-print"></i> In
+                            </a>
+                        </div>
+
+                        <!-- Nút tạo phiếu bàn giao -->
+                        <div class="m-3">
+                            <a href="{{ route('lichsuachua.bangiaonhacungcap', $lichSuaChua->MaLichSuaChua) }}"
+                                class="btn btn-success">
+                                <i class="fa fa-save"></i> Tạo Phiếu Bàn Giao
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
