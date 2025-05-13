@@ -37,13 +37,13 @@
             </thead>
             <tbody>
               @forelse ($lichs as $index => $lich)
-                <tr>
+               <tr onclick="window.location='{{ route('lichvanhanh.showNhatKi', $lich->MaLichVanHanh) }}'" style="cursor: pointer;">
                   <td>{{ $loop->iteration }}</td>
                   <td>{{ \Carbon\Carbon::parse($lich->NgayVanHanh)->format('d/m/Y') }}</td>
                   <td>{{ $lich->MaMay }}</td>
                   <td>{{ $lich->may->TenMay ?? 'Không xác định' }}</td>
                   <td>{{ $lich->nhanVien->TenNhanVien ?? 'Không xác định' }}</td>
-                  <td>{{ $lich->MoTa }}</td>
+                  <td>{{$lich->MoTa}}</td>
                   <td>
                     @if ($lich->CaLamViec == 'Sáng')
                       Ca 1
@@ -166,48 +166,4 @@
     </div>
   </div>
 </div>
-@endsection
-
-@section('scripts')
-<script>
-  $(document).ready(function() {
-    function formatDate(dateString) {
-      const date = new Date(dateString);
-      if (!isNaN(date)) {
-        const day = String(date.getDate()).padStart(2, '0');
-        const month = String(date.getMonth() + 1).padStart(2, '0');
-        const year = date.getFullYear();
-        return `${day}.${month}.${year}`;
-      }
-      return dateString;
-    }
-
-    $('#from_date').on('change', function() {
-      var selectedDate = $(this).val();
-      var formattedDate = formatDate(selectedDate);
-      $('#from_date_display').text('Ngày đã chọn: ' + formattedDate);
-    });
-
-    $('#to_date').on('change', function() {
-      var selectedDate = $(this).val();
-      var formattedDate = formatDate(selectedDate);
-      $('#to_date_display').text('Ngày đã chọn: ' + formattedDate);
-    });
-  });
-</script>
-<script>
-  @if (session('error'))
-      $.notify({
-          title: 'Lỗi',
-          message: '{{ session('error') }}',
-          icon: 'icon-bell'
-      }, {
-          type: 'danger',
-          animate: {
-              enter: 'animated fadeInDown',
-              exit: 'animated fadeOutUp'
-          },
-      });
-  @endif
-</script>
 @endsection

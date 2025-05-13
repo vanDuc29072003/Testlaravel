@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class LichVanHanh extends Model
 {
     use HasFactory;
-    public $timestamps = false; 
+    
     
     protected $table = 'lichvanhanh';
     protected $primaryKey = 'MaLichVanHanh';
@@ -18,7 +18,9 @@ class LichVanHanh extends Model
         'MoTa',
         'NgayVanHanh',
         'MaMay',
-        'CaLamViec'
+        'CaLamViec',
+        'NhatKi',
+        'trangthai'
     ];
     function may()
     {

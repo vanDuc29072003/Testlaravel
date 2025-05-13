@@ -187,7 +187,14 @@
                   <span class="sub-item">Báo cáo kiểm kho</span>
                 </a>
               </li>
+              <li>
+                <a href="{{ route('nhatki.thongke') }}">
+                  <span class="sub-item">Nhật kí vận hành</span>
+                </a>
+              </li>
             </ul>
+              
+            
           </div>
         </li>
         <li class="nav-item ">
