@@ -20,7 +20,7 @@
                     <tbody>
                         <tr>
                             <th>Mã Phiếu Xuất</th>
-                            <td>{{ $phieuXuat->MaPhieuXuat }}</td>
+                            <td>{{ $phieuXuat->MaHienThi }}</td>
                             <th>Ngày Xuất</th>
                             <td>{{ \Carbon\Carbon::parse($phieuXuat->NgayXuat)->format('H:i d/m/Y') }}</td>
                         </tr>

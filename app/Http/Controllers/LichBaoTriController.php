@@ -48,7 +48,7 @@ class LichBaoTriController extends Controller
 
         // Nhóm theo tháng-năm
         $lichbaotriGrouped = $lichbaotri->groupBy(function ($item) {
-            return \Carbon\Carbon::parse($item->NgayBaoTri)->format('Y-m');
+            return Carbon::parse($item->NgayBaoTri)->format('Y-m');
         });
 
         return view('vLich.lichbaotri', compact('lichbaotriGrouped'));
@@ -79,7 +79,7 @@ class LichBaoTriController extends Controller
 
         // Nhóm theo tháng (theo Y-m format)
         $lichbaotriGrouped = $lichbaotri->groupBy(function ($item) {
-            return \Carbon\Carbon::parse($item->NgayBaoTri)->format('Y-m');
+            return Carbon::parse($item->NgayBaoTri)->format('Y-m');
         });
 
         return view('vLichSu.lichsubaotri', compact('lichbaotriGrouped'));

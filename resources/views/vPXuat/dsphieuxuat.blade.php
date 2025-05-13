@@ -32,7 +32,7 @@
                                     <tr class="text-center"
                                         onclick="window.location='{{ route('phieuxuat.show', $phieuXuat->MaPhieuXuat) }}'"
                                         style="cursor: pointer;">
-                                        <td>{{ $phieuXuat->MaPhieuXuat }}</td>
+                                        <td>{{ $phieuXuat->MaHienThi }}</td>
                                         <td>{{ \Carbon\Carbon::parse($phieuXuat->NgayXuat)->format('d/m/Y H:i:s') }}</td>
                                         <td>{{ $phieuXuat->nhanVienTao->TenNhanVien ?? 'Không xác định' }}</td>
                                         <td>{{ $phieuXuat->nhanVienNhan->TenNhanVien ?? 'Không xác định' }}</td>
@@ -60,9 +60,9 @@
                         <form method="GET" action="{{ route('dsphieuxuat') }}">
                             <h5 class="mb-3">Tìm kiếm</h5>
                             <div class="mb-3">
-                                <label for="MaPhieuXuat" class="form-label">Mã Phiếu Xuất</label>
-                                <input type="text" name="MaPhieuXuat" id="MaPhieuXuat" class="form-control"
-                                    placeholder="Nhập mã phiếu xuất" value="{{ request('MaPhieuXuat') }}">
+                                <label for="MaHienThi" class="form-label">Mã Phiếu Xuất</label>
+                                <input type="text" name="MaHienThi" id="MaHienThi" class="form-control"
+                                    placeholder="Nhập mã phiếu xuất" value="{{ request('MaHienThi') }}">
                             </div>
                             <div class="mb-3">
                                 <label for="NgayXuat" class="form-label">Ngày Xuất</label>
