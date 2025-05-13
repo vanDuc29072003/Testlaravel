@@ -231,10 +231,11 @@ class ThongKeController extends Controller
         })->values(); // Reset lại index sau khi sort
         return view('vThongKe.thongkesuachua', compact('thongKeSuaChua', 'startDate', 'endDate', 'tongSoYeuCauSuaChua'));
     }
-    public function exportPDF1(Request $request)
+
+    public function detail(Request $request, $maMay)
     {
-        // Lấy dữ liệu thống kê từ phương thức `thongkesuachua`
-        $timeFilter = $request->input('time_filter', 'this_day');
+        $timeFilter = $request->input('time_filter', 'today');
+
         $startDate = now()->startOfDay();
         $endDate = now()->endOfDay();
 
@@ -264,55 +265,19 @@ class ThongKeController extends Controller
                 $endDate = now()->lastOfQuarter();
                 break;
             case 'custom':
-                $startDate = $request->input('start_date');
-                $endDate = $request->input('end_date');
+                $startDate = $request->input('start_date') ?? now()->startOfDay();
+                $endDate = $request->input('end_date') ?? now()->endOfDay();
                 break;
         }
 
-        // Tổng số yêu cầu sửa chữa trong khoảng thời gian
-        $tongSoYeuCauSuaChua = DB::table('yeucausuachua')
-            ->whereBetween('thoigianyeucau', [$startDate, $endDate])
-            ->count();
-
-        // Đếm số lần yêu cầu sửa chữa theo máy
-        $thongKeSuaChua = DB::table('yeucausuachua')
-            ->select('mamay', DB::raw('count(*) as SoLanSuaChua'))
-            ->whereBetween('thoigianyeucau', [$startDate, $endDate])
-            ->groupBy('mamay')
-            ->orderByDesc('SoLanSuaChua')
-            ->get();
-
-        // Lấy tên máy từ bảng máy (nếu cần)
-        $danhSachMay = DB::table('may')->pluck('TenMay', 'MaMay');
-        $MaMay2 = DB::table('may')->pluck('MaMay2', 'MaMay');
-        // Gộp dữ liệu
-        $thongKeSuaChua = $thongKeSuaChua->map(function ($item) use ($danhSachMay, $MaMay2) {
-            return [
-                'MaMay' => $item->mamay,
-                'MaMay2' => $MaMay2[$item->mamay] ?? 'Không rõ',
-                'TenMay' => $danhSachMay[$item->mamay] ?? 'Không rõ',
-                'SoLanSuaChua' => $item->SoLanSuaChua,
-            ];
-        });
-
-        // Thông tin bổ sung
-        $ngayLap = now()->format('d/m/Y H:i');
-        $nguoiTao = Auth::user()->nhanvien->TenNhanVien;
-
-        // Render view PDF
-        $pdf = PDF::loadView('vThongKe.pdfthongkesuachua', compact('thongKeSuaChua', 'startDate', 'endDate', 'ngayLap', 'nguoiTao', 'tongSoYeuCauSuaChua'));
-
-        return $pdf->stream('thongkesuachua.pdf');
-    }
-    public function detail($maMay)
-    {
+        // Truy vấn theo mã máy và khoảng thời gian
         $chiTietSuaChua = YeuCauSuaChua::where('MaMay', $maMay)
-            ->with('nhanVien', 'may') // nếu có liên kết với model NhanVien
-            ->orderBy('thoigianyeucau', 'desc')
+            ->whereBetween('ThoiGianYeuCau', [$startDate, $endDate])
+            ->with('nhanVien', 'may')
+            ->orderBy('ThoiGianYeuCau', 'desc')
             ->get();
 
-        return view('vThongKe.detailSC', compact('chiTietSuaChua', 'maMay'));
+        return view('vThongKe.detailSC', compact('chiTietSuaChua', 'maMay', 'startDate', 'endDate', 'timeFilter'));
     }
-
 
 }
