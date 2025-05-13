@@ -10,7 +10,7 @@ use App\Models\ChiTietPhieuTra;
 use App\Models\YeuCauSuaChua;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
-use Auth;
+use Illuminate\Support\Facades\Auth;
 
 class ThongKeController extends Controller
 {
