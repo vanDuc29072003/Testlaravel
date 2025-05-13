@@ -20,7 +20,7 @@
                     <tbody>
                         <tr>
                             <th>Mã Phiếu Trả</th>
-                            <td>{{ $phieuTra->MaPhieuTra }}</td>
+                            <td>{{ $phieuTra->MaHienThi }}</td>
                             <th>Ngày Trả</th>
                             <td>{{ \Carbon\Carbon::parse($phieuTra->NgayTra)->format('H:i d/m/Y') }}</td>
                         </tr>

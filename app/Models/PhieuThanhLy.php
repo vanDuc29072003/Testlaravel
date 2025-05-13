@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 
 class PhieuThanhLy extends Model
 {
@@ -20,7 +21,16 @@ class PhieuThanhLy extends Model
         'DanhGia',
         'GhiChu',
         'TrangThai',
+        'MaHienThi',
     ];
+    protected static function boot()
+    {
+        parent::boot();
+        static::creating(function ($phieuThanhLy) {
+            $now = Carbon::now();
+            $phieuThanhLy->MaHienThi = 'PTL' . $now->format('ymd-His');
+        });
+    }
     public function may()
     {
         return $this->belongsTo(May::class, 'MaMay', 'MaMay');

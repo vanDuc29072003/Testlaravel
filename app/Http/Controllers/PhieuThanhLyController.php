@@ -22,7 +22,7 @@ class PhieuThanhLyController extends Controller
         $dsMay = May::all();
 
         $filters = [
-            'MaPhieuThanhLy' => '=',
+            'MaHienThi' => 'like',
             'NgayLapPhieu' => 'like',
             'MaNhanVien' => '=',
             'MaMay' => '=',

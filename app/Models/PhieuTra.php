@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 
 class PhieuTra extends Model
 {
@@ -19,7 +20,17 @@ class PhieuTra extends Model
         'GhiChu',
         'MaNhanVienTao',
         'MaNhanVienTra',
+        'MaHienThi',
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+        static::creating(function ($phieuTra) {
+            $now = Carbon::now();
+            $phieuTra->MaHienThi = 'PT' . $now->format('ymd-His');
+        });
+    }
 
     public function nhanVienTao()
     {

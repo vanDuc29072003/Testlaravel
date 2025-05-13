@@ -109,7 +109,7 @@
 
 <div class="title">
     <h3>PHIẾU NHẬP KHO</h3>
-    <em>Mã Phiếu: {{ $phieuNhap->MaPhieuNhap }} ({{ \Carbon\Carbon::parse($phieuNhap->NgayNhap)->format('d/m/Y') }})</em>
+    <em>Mã Phiếu: {{ $phieuNhap->MaHienThi }} ({{ \Carbon\Carbon::parse($phieuNhap->NgayNhap)->format('d/m/Y') }})</em>
 </div>
 
 <h4>I, Thông tin chung</h4>

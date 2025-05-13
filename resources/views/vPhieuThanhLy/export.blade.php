@@ -86,7 +86,7 @@
 
 <div class="title">
     <h3>PHIẾU THANH LÝ</h3>
-    <em>Mã Phiếu: {{ $phieuThanhLy->MaPhieuThanhLy }}
+    <em>Mã Phiếu: {{ $phieuThanhLy->MaHienThi }}
         ({{ \Carbon\Carbon::parse($phieuThanhLy->NgayLapPhieu)->format('d/m/Y') }})</em>
 </div>
 

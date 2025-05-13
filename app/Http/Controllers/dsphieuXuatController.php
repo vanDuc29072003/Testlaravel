@@ -17,8 +17,8 @@ class dsphieuXuatController extends Controller
         $query = PhieuXuat::with(['nhanVienTao', 'nhanVienNhan']);
 
         // Lọc theo các điều kiện tìm kiếm
-        if ($request->filled('MaPhieuXuat')) {
-            $query->where('MaPhieuXuat', 'LIKE', '%' . $request->MaPhieuXuat . '%');
+        if ($request->filled('MaHienThi')) {
+            $query->where('MaHienThi', 'LIKE', '%' . $request->MaHienThi . '%');
         }
 
         if ($request->filled('NgayXuat')) {

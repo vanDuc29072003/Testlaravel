@@ -27,7 +27,7 @@ class dsphieuNhapController extends Controller
 
         // Danh sách các trường cần lọc
         $filters = [
-            'MaPhieuNhap' => '=',
+            'MaHienThi' => '=',
             'NgayNhap' => 'like',
             'MaNhanVien' => '=',
             'TongSoLuong' => 'like',
@@ -52,13 +52,13 @@ class dsphieuNhapController extends Controller
         $dsPhieuNhapDaDuyet = $query
             ->where('TrangThai', '1') // Chỉ lấy phiếu nhập đã duyệt
             ->with('nhaCungCap', 'nhanVien')
-            ->orderBy('MaPhieuNhap', 'desc')
+            ->orderBy('MaHienThi', 'desc')
             ->paginate(10, ['*'], 'da_duyet');
 
         // Lấy danh sách phiếu nhập chờ duyệt (không áp dụng tìm kiếm)
         $dsPhieuNhapChoDuyet = PhieuNhap::where('TrangThai', '0')
             ->with('nhaCungCap', 'nhanVien')
-            ->orderBy('MaPhieuNhap', 'desc')
+            ->orderBy('MaHienThi', 'desc')
             ->paginate(10, ['*'], 'cho_duyet');
         
         ThongBao::where('Icon', 'fas fa-pen')->update(['TrangThai' => 1]);

@@ -104,7 +104,7 @@
 
 <div class="title">
     <h3>PHIẾU XUẤT KHO</h3>
-    <em>Mã Phiếu: {{ $phieuXuat->MaPhieuXuat }} ({{ \Carbon\Carbon::parse($phieuXuat->NgayXuat)->format('d/m/Y') }})</em>
+    <em>Mã Phiếu: {{ $phieuXuat->MaHienThi }} ({{ \Carbon\Carbon::parse($phieuXuat->NgayXuat)->format('d/m/Y') }})</em>
 </div>
 
 <h4>I, Thông tin chung</h4>
