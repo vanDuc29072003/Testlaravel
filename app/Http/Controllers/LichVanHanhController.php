@@ -21,8 +21,6 @@ class LichVanHanhController extends Controller
         $may = May::all();
         $nhanvien = NhanVien::all();
   
-
-
         // Sửa lại xử lý ngày từ form
         if ($request->filled('from_date') && $request->filled('to_date')) {
             try {

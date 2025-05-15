@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;    
+use Illuminate\Http\Request;
 use App\Models\LichVanHanh;
 use App\Models\May;
 use App\Models\NhanVien;
@@ -13,59 +13,77 @@ use Illuminate\Support\Carbon;
 class NhatKiVanHanhController extends Controller
 {
     public function index(Request $request)
-{
-    $query = DB::table('lichvanhanh')
-        ->join('may', 'lichvanhanh.MaMay', '=', 'may.MaMay')
-        ->join('nhanvien', 'lichvanhanh.MaNhanVien', '=', 'nhanvien.MaNhanVien')
-        ->select(
-            'lichvanhanh.MaLichVanHanh',
-            'lichvanhanh.NgayVanHanh',
-            'lichvanhanh.updated_at',
-            'may.TenMay',
-            'nhanvien.TenNhanVien',
-            'lichvanhanh.CaLamViec',
-            'lichvanhanh.trangthai'
-        )
-        ->whereNotNull('lichvanhanh.NhatKi');
+    {
+        $query = DB::table('lichvanhanh')
+            ->join('may', 'lichvanhanh.MaMay', '=', 'may.MaMay')
+            ->join('nhanvien', 'lichvanhanh.MaNhanVien', '=', 'nhanvien.MaNhanVien')
+            ->select(
+                'lichvanhanh.MaLichVanHanh',
+                'lichvanhanh.NgayVanHanh',
+                'lichvanhanh.updated_at',
+                'may.TenMay',
+                'nhanvien.TenNhanVien',
+                'lichvanhanh.CaLamViec',
+                'lichvanhanh.trangthai'
+            )
+            ->whereNotNull('lichvanhanh.NhatKi');
 
-    // Xử lý lọc theo thời gian
-    $timeFilter = $request->input('time_filter');
+        // Xử lý lọc theo thời gian
+        $timeFilter = $request->input('time_filter');
+        $timeDescription = ''; // Chuỗi mô tả để truyền ra view
 
-    if ($timeFilter === 'today') {
-        $query->whereDate('NgayVanHanh', Carbon::today());
-    } elseif ($timeFilter === 'yesterday') {
-        $query->whereDate('NgayVanHanh', Carbon::yesterday());
-    } elseif ($timeFilter === 'last_7_days') {
-        $query->whereBetween('NgayVanHanh', [Carbon::now()->subDays(6)->startOfDay(), Carbon::now()->endOfDay()]);
-    } elseif ($timeFilter === 'this_month') {
-        $query->whereMonth('NgayVanHanh', Carbon::now()->month)
-              ->whereYear('NgayVanHanh', Carbon::now()->year);
-    } elseif ($timeFilter === 'last_month') {
-        $query->whereMonth('NgayVanHanh', Carbon::now()->subMonth()->month)
-              ->whereYear('NgayVanHanh', Carbon::now()->subMonth()->year);
-    } elseif ($timeFilter === 'this_quarter') {
-        $start = Carbon::now()->firstOfQuarter();
-        $end = Carbon::now()->lastOfQuarter();
-        $query->whereBetween('NgayVanHanh', [$start, $end]);
-    } elseif ($timeFilter === 'custom') {
-        if ($request->filled('start_date') && $request->filled('end_date')) {
-            $start = Carbon::parse($request->start_date)->startOfDay();
-            $end = Carbon::parse($request->end_date)->endOfDay();
-            $query->whereBetween('NgayVanHanh', [$start, $end]);
+        if ($timeFilter === 'today') {
+           $startDate = Carbon::today()->startOfDay();  // 00:00
+            $endDate = Carbon::today()->endOfDay();  // 23:59
+            $query->whereDate('NgayVanHanh', $startDate, $endDate);
+            $timeDescription = 'Hôm nay';
+        } elseif ($timeFilter === 'yesterday') {
+            $startDate = $endDate = Carbon::yesterday();
+            $endDate = Carbon::yesterday()->endOfDay();
+            $query->whereDate('NgayVanHanh', $startDate, $endDate);
+            $timeDescription = 'Hôm qua';
+        } elseif ($timeFilter === 'last_7_days') {
+            $startDate = Carbon::now()->subDays(6)->startOfDay();
+            $endDate = Carbon::now()->endOfDay();
+            $query->whereBetween('NgayVanHanh', [$startDate, $endDate]);
+            $timeDescription = '7 ngày gần nhất';
+        } elseif ($timeFilter === 'this_month') {
+            $startDate = Carbon::now()->startOfMonth();
+            $endDate = Carbon::now()->endOfMonth();
+            $query->whereBetween('NgayVanHanh', [$startDate, $endDate]);
+            $timeDescription = 'Tháng này';
+        } elseif ($timeFilter === 'last_month') {
+            $startDate = Carbon::now()->subMonth()->startOfMonth();
+            $endDate = Carbon::now()->subMonth()->endOfMonth();
+            $query->whereBetween('NgayVanHanh', [$startDate, $endDate]);
+            $timeDescription = 'Tháng trước';
+        } elseif ($timeFilter === 'this_quarter') {
+            $startDate = Carbon::now()->firstOfQuarter();
+            $endDate = Carbon::now()->lastOfQuarter();
+            $query->whereBetween('NgayVanHanh', [$startDate, $endDate]);
+            $timeDescription = 'Quý này';
+        } elseif ($timeFilter === 'custom') {
+            if ($request->filled('start_date') && $request->filled('end_date')) {
+                $startDate = Carbon::parse($request->start_date)->startOfDay();
+                $endDate = Carbon::parse($request->end_date)->endOfDay();
+                $query->whereBetween('NgayVanHanh', [$startDate, $endDate]);
+                $timeDescription = 'Tùy chỉnh';
+            }
+        } else {
+            $startDate = $endDate = Carbon::today();
+            $query->whereDate('NgayVanHanh', $startDate);
+            $timeDescription = 'Hôm nay';
         }
-    } else {
-        // Mặc định: hôm nay
-        $query->whereDate('NgayVanHanh', Carbon::today());
+
+        $thongke = $query->orderBy('NgayVanHanh', 'desc')->get();
+
+        // Dữ liệu dropdown nếu bạn cần cho các bộ lọc nâng cao
+        $may = DB::table('may')->get();
+        $nhanvien = DB::table('nhanvien')->get();
+
+      return view('Vthongke.thongkevanhanh', compact('thongke', 'may', 'nhanvien', 'startDate', 'endDate', 'timeDescription'));
+
     }
-
-    $thongke = $query->orderBy('NgayVanHanh', 'desc')->get();
-
-    // Dữ liệu dropdown nếu bạn cần cho các bộ lọc nâng cao
-    $may = DB::table('may')->get();
-    $nhanvien = DB::table('nhanvien')->get();
-
-    return view('Vthongke.thongkevanhanh', compact('thongke', 'may', 'nhanvien'));
-}
 
     public function show($id)
     {
