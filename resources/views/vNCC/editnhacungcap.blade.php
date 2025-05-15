@@ -46,6 +46,9 @@
                             <input type="text" class="form-control" id="MaSoThue" name="MaSoThue"
                                 value="{{ $nhaCungCap->MaSoThue }}" required>
                         </div>
+                    </form>
+                </div>
+                <div class="card-footer">
                         <!-- Nút hành động -->
                         <div class="form-group mt-4">
                             <button type="submit" class="btn btn-primary">
@@ -53,7 +56,7 @@
                             </button>
                             <a href="{{ route('nhacungcap') }}" class="btn btn-secondary mx-3">Trở lại</a>
                         </div>
-                    </form>
+                </div>
                 </div>
             </div>
         </div>

@@ -3,100 +3,121 @@
 @section('title', 'Nhật Ký Vận Hành')
 
 @section('content')
-<div class="container mt-5">
-    <div class="row justify-content-center" style="margin-top: 20px;">
-        <div class="col-lg-8 col-md-10">
-            <div class="card shadow-sm p-4">
-                <h2 class="mb-4 text-center" style="font-weight: bold;">Nhật Ký Vận Hành</h2>
+<div class="container">
+    <div class="page-inner">
+        <div class="card w-50 mx-auto">
+            <div class="card-header">
+                <h1 class="m-3 text-center">Nhật Ký Vận Hành</h1>
+            </div>
 
-                <form action="{{ route('lichvanhanh.updateNhatKi', $lich->MaLichVanHanh) }}" method="POST">
+            <div class="card-body">
+                <form action="{{ route('lichvanhanh.updateNhatKi', $lich->MaLichVanHanh) }}" method="POST" id="formNhatKi">
                     @csrf
                     @method('PUT')
 
                     {{-- Ngày vận hành --}}
-                    <div class="mb-3">
-                        <label class="form-label" style="font-size: 1.1rem;">Ngày vận hành:</label>
-                        <input type="text" class="form-control form-control-lg"
+                    <div class="form-group mb-3">
+                        <label for="NgayVanHanh">Ngày vận hành</label>
+                        <input type="text" class="form-control" id="NgayVanHanh"
                             value="{{ \Carbon\Carbon::parse($lich->NgayVanHanh)->format('d/m/Y') }}" readonly>
                     </div>
 
                     {{-- Tên máy --}}
-                    <div class="mb-3">
-                        <label class="form-label" style="font-size: 1.1rem;">Tên máy:</label>
-                        <input type="text" class="form-control form-control-lg"
+                    <div class="form-group mb-3">
+                        <label for="TenMay">Tên máy</label>
+                        <input type="text" class="form-control" id="TenMay"
                             value="{{ $lich->may->TenMay ?? 'Không xác định' }}" readonly>
                     </div>
 
                     {{-- Ca làm việc --}}
-                    <div class="mb-3">
-                        <label class="form-label" style="font-size: 1.1rem;">Ca làm việc:</label>
-                        <input type="text" class="form-control form-control-lg"
-                            value="{{ $lich->CaLamViec }}" readonly>
+                    <div class="form-group mb-3">
+                        <label for="CaLamViec">Ca làm việc</label>
+                        <input type="text" class="form-control" id="CaLamViec" value="{{ $lich->CaLamViec }}" readonly>
                     </div>
 
-                    {{-- Nhật ký --}}
-                    <div class="mb-3">
-                        <label for="NhatKi" class="form-label" style="font-size: 1.1rem;">Nhật ký:</label>
-                        <textarea name="NhatKi" id="NhatKi" class="form-control form-control-lg" rows="4"
-                        placeholder="Nhập nhật ký vận hành..." disabled>{{ $lich->NhatKi }}</textarea>
+                    {{-- Nhật ký (editable & required) --}}
+                    <div class="form-group mb-3">
+                        <label for="NhatKi">Nhật ký <span class="text-danger">*</span></label>
+                        <textarea name="NhatKi" id="NhatKi" class="form-control" rows="4" 
+                            placeholder="Nhập nhật ký vận hành...">{{ old('NhatKi', $lich->NhatKi) }}</textarea>
+                        <small id="nhatKiError" class="text-danger d-none">👉 Vui lòng nhập nội dung nhật ký trước khi lưu.</small>
                     </div>
 
-                    {{-- Trạng thái máy (Checkbox) --}}
-                    <div class="mb-3">
-                        <label class="form-label" style="font-size: 3rem;">Trạng thái máy:</label>
+                    {{-- Trạng thái máy --}}
+                    <div class="form-group mb-3">
+                        <label>Trạng thái máy</label>
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="TrangThai" value="0"
-                                id="status_hoatdong" {{ $lich->may->TrangThai == 0 ? 'checked' : '' }}>
+                            <input class="form-check-input" type="radio" name="TrangThai" value="0" id="status_hoatdong"
+                                {{ $lich->may->TrangThai == 0 ? 'checked' : '' }} required>
                             <label class="form-check-label" for="status_hoatdong">Hoạt động bình thường</label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="TrangThai" value="2"
-                                id="status_suco" {{ $lich->may->TrangThai == 2 ? 'checked' : '' }}>
+                            <input class="form-check-input" type="radio" name="TrangThai" value="2" id="status_suco"
+                                {{ $lich->may->TrangThai == 2 ? 'checked' : '' }}>
                             <label class="form-check-label" for="status_suco">Có sự cố</label>
                         </div>
                     </div>
 
-                    {{-- Nút lưu và chỉnh sửa --}}
-                    <div class="d-flex justify-content-between">
-                        <a href="{{ route('lichvanhanh') }}" class="btn btn-secondary btn-lg">
-                            <i class="fa fa-arrow-left"></i> Quay lại
-                        </a>
-
-                        <div>
-                            <button type="submit" class="btn btn-primary btn-lg me-2">
-                                <i class="fa fa-save"></i> Lưu
-                            </button>
-
-                            <button type="button" id="btnEdit" class="btn btn-success btn-lg">
-                                <i class="fa fa-edit"></i> Chỉnh sửa
-                            </button>
-                        </div>
+                    {{-- Mô tả sự cố (ẩn/hiện theo chọn) --}}
+                    <div class="form-group mb-3" id="moTaSuCoGroup" style="display: none;">
+                        <label for="MoTaSuCo">Mô tả sự cố <span class="text-danger">*</span></label>
+                        <textarea name="MoTaSuCo" id="MoTaSuCo" class="form-control" rows="3"
+                            placeholder="Nhập mô tả sự cố nếu có...">{{ old('MoTaSuCo') }}</textarea>
                     </div>
+
                 </form>
+            </div>
+
+            <div class="card-footer d-flex justify-content-between">
+                <a href="{{ route('lichvanhanh') }}" class="btn btn-secondary">
+                    <i class="fa fa-arrow-left"></i> Trở lại
+                </a>
+
+                <button type="submit" class="btn btn-primary" form="formNhatKi">
+                    <i class="fa fa-save"></i> Lưu
+                </button>
             </div>
         </div>
     </div>
 </div>
 @endsection
-
 @section('scripts')
 <script>
-    // Bật chỉnh sửa nhật ký
-    document.getElementById('btnEdit').addEventListener('click', function () {
-        document.getElementById('NhatKi').removeAttribute('disabled');
-        document.getElementById('NhatKi').focus();
-    });
+    document.addEventListener('DOMContentLoaded', function () {
+        // Hiển thị hoặc ẩn phần mô tả sự cố
+        function toggleMoTaSuCo() {
+            const isSuCoChecked = document.getElementById('status_suco').checked;
+            const moTaSuCoGroup = document.getElementById('moTaSuCoGroup');
 
-    // Đảm bảo chỉ chọn 1 checkbox trạng thái
-    const checkboxes = document.querySelectorAll('input[name="TrangThai"]');
-    checkboxes.forEach(cb => {
-        cb.addEventListener('change', function () {
-            checkboxes.forEach(other => {
-                if (other !== this) {
-                    other.checked = false;
-                }
-            });
+            if (isSuCoChecked) {
+                moTaSuCoGroup.style.display = 'block';
+                document.getElementById('MoTaSuCo').setAttribute('required', 'required');
+            } else {
+                moTaSuCoGroup.style.display = 'none';
+                document.getElementById('MoTaSuCo').removeAttribute('required');
+            }
+        }
+
+        toggleMoTaSuCo(); // Gọi khi load trang
+
+        document.getElementById('status_hoatdong').addEventListener('change', toggleMoTaSuCo);
+        document.getElementById('status_suco').addEventListener('change', toggleMoTaSuCo);
+
+        // Kiểm tra Nhật ký trước khi submit
+        const form = document.getElementById('formNhatKi');
+        const nhatKi = document.getElementById('NhatKi');
+        const error = document.getElementById('nhatKiError');
+
+        form.addEventListener('submit', function (e) {
+            if (!nhatKi.value.trim()) {
+                e.preventDefault();
+                error.classList.remove('d-none');
+                nhatKi.focus();
+            } else {
+                error.classList.add('d-none');
+            }
         });
     });
 </script>
 @endsection
+

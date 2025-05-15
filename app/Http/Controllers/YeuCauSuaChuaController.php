@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Models\LichVanHanh;
 use App\Events\eventDuyetYeuCauSuaChua;
 use App\Events\eventUpdateTable;
 use App\Events\eventUpdateUI;
@@ -52,11 +52,22 @@ class YeuCauSuaChuaController extends Controller
         ));
     }
 
-    public function create(){
-        $dsMay = May::all();
-        $nhanVien = Auth::user()->nhanvien;
-        return view('vYCSC.createyeucausuachua', compact('dsMay', 'nhanVien'));
+   public function create(Request $request)
+{
+    $maLich = $request->input('ma_lich');
+    $dsMay = May::all();
+    $nhanVien = Auth::user()->nhanvien;
+
+    $lichVanHanh = null;
+    if ($maLich) {
+        $lichVanHanh = LichVanHanh::with(['may', 'nhanVien'])->find($maLich);
+        if (!$lichVanHanh) {
+            return redirect()->route('lichvanhanh.index')->with('error', 'Không tìm thấy lịch vận hành.');
+        }
     }
+
+    return view('vYCSC.createyeucausuachua', compact('dsMay', 'nhanVien', 'lichVanHanh'));
+}   
 
     public function store(Request $request)
     {
