@@ -33,8 +33,8 @@ class NhatKiVanHanhController extends Controller
         $timeDescription = ''; // Chuỗi mô tả để truyền ra view
 
         if ($timeFilter === 'today') {
-           $startDate = Carbon::today()->startOfDay();  // 00:00
-            $endDate = Carbon::today()->endOfDay();  // 23:59
+            $startDate = Carbon::today()->startOfDay();  
+            $endDate = Carbon::today()->endOfDay();  
             $query->whereDate('NgayVanHanh', $startDate, $endDate);
             $timeDescription = 'Hôm nay';
         } elseif ($timeFilter === 'yesterday') {
@@ -71,17 +71,31 @@ class NhatKiVanHanhController extends Controller
             }
         } else {
             $startDate = $endDate = Carbon::today();
-            $query->whereDate('NgayVanHanh', $startDate);
+            $endDate = Carbon::today()->endOfDay();
+            $query->whereDate('NgayVanHanh', $startDate, $endDate);
             $timeDescription = 'Hôm nay';
         }
+        // Lấy tổng số bản ghi có nhật ký
+        $totalWithNhatKi = (clone $query)->count();
 
+        // Lấy danh sách dữ liệu
         $thongke = $query->orderBy('NgayVanHanh', 'desc')->get();
+
 
         // Dữ liệu dropdown nếu bạn cần cho các bộ lọc nâng cao
         $may = DB::table('may')->get();
         $nhanvien = DB::table('nhanvien')->get();
 
-      return view('Vthongke.thongkevanhanh', compact('thongke', 'may', 'nhanvien', 'startDate', 'endDate', 'timeDescription'));
+        return view('Vthongke.thongkevanhanh', compact(
+            'thongke',
+            'may',
+            'nhanvien',
+            'startDate',
+            'endDate',
+            'timeDescription',
+            'totalWithNhatKi'
+        ));
+
 
     }
 

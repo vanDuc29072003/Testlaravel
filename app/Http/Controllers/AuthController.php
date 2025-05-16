@@ -29,15 +29,16 @@ class AuthController extends Controller
             // Chuyển hướng dựa theo mã bộ phận
             switch ($maBoPhan) {
                 case 1:
-                    return redirect()->route('thongkekho');
+                    return redirect()->route('thongkesuachua')->with('success', 'Chào mừng quay trở lại!');
+
                 case 2:
-                    return redirect()->route('lichvanhanh');
+                    return redirect()->route('lichvanhanh')->with('success', 'Chào mừng quay trở lại!');
                 case 3:
-                    return redirect()->route('lichsuachua.index');
+                    return redirect()->route('lichsuachua.index')->with('success', 'Chào mừng quay trở lại!');
                     case 4:
-                    return redirect()->route('linhkien');
+                    return redirect()->route('linhkien')->with('success', 'Chào mừng quay trở lại!');
                 case 5:
-                    return redirect()->route('taikhoan.index');
+                    return redirect()->route('taikhoan.index')->with('success', 'Chào mừng quay trở lại!');
                 default:
                     return redirect()->route('auth.login')->with('error', 'Bộ phận không được xác định');
             }
