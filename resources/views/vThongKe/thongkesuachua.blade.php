@@ -118,6 +118,18 @@
 
 
 @section('scripts')
+ <script>
+        @if (session('success'))
+            $.notify({
+                title: 'Thành công',
+                message: '{{ session('success') }}',
+                icon: 'icon-bell'
+            }, {
+                type: 'success',
+                animate: { enter: 'animated fadeInDown', exit: 'animated fadeOutUp' },
+            });
+        @endif
+    </script>
     <script>
         // Hiển thị/ẩn ô chọn ngày khi chọn "Lựa chọn khác"
         document.addEventListener("DOMContentLoaded", function () {

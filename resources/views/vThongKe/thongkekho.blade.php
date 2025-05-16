@@ -76,7 +76,7 @@
                             </div>
                             <div class="form-check p-0">
                                 <input class="form-check-input" type="radio" name="time_filter" id="this_month"
-                                    value="this_month" checked>
+                                    value="this_month" {{ request('time_filter', 'this_month') == 'this_month' ? 'checked' : '' }}>
                                 <label class="form-check-label" for="this_month">Tháng này</label>
                             </div>
                             <div class="form-check p-0">
@@ -115,7 +115,18 @@
         </div>
     </div>
 @endsection
-
 @section('scripts')
+    <script>
+        // Hiển thị/ẩn ô chọn ngày khi chọn "Lựa chọn khác"
+        document.addEventListener("DOMContentLoaded", function () {
+            function toggleDateRange() {
+                const isCustom = document.getElementById('custom').checked;
+                document.getElementById('custom-date-range').style.display = isCustom ? 'block' : 'none';
+            }
 
+            const radios = document.querySelectorAll('input[name="time_filter"]');
+            radios.forEach(r => r.addEventListener('change', toggleDateRange));
+            toggleDateRange(); // gọi khi load trang
+        });
+    </script>
 @endsection
