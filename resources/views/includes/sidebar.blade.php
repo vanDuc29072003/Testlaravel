@@ -23,7 +23,7 @@
     <div class="sidebar-content">
       <ul class="nav nav-secondary">
         <li class="nav-item ">
-          <a href="index.php" class="collapsed" aria-expanded="false">
+          <a href="{{ route('dashboard.index') }}" class="collapsed" aria-expanded="false">
             <i class="fas fa-home"></i>
             <p>Dashboard</p>
           </a>
@@ -137,12 +137,6 @@
           </a>
           <div class="collapse" id="submenu">
             <ul class="nav nav-collapse">
-              <li>
-                <a href="phieubangiao.html">
-                  <span class="sub-item">Phiếu bàn giao</span>
-                </a>
-
-              </li>
               <li>
                 <a href="{{ route('dsphieunhap') }}">
                   <span class="sub-item">Phiếu nhập kho</span>
