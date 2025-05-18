@@ -56,6 +56,12 @@
                        placeholder="Nhập địa chỉ" value="{{ old('DiaChi') }}" required>
               </div>
 
+            </div>
+
+            {{-- Cột 2: Thông tin tài khoản --}}
+            <div class="col-md-6">
+              
+              <h4 class="mb-4 fw-bold text-primary">Thông tin tài khoản</h4>
               <div class="form-group mb-3">
                 <label for="MaBoPhan">Bộ phận</label>
                 <select class="form-control" id="MaBoPhan" name="MaBoPhan" required>
@@ -68,16 +74,10 @@
                   @endforeach
                 </select>
               </div>
-            </div>
-
-            {{-- Cột 2: Thông tin tài khoản --}}
-            <div class="col-md-6">
-              <h4 class="mb-4 fw-bold text-primary">Thông tin tài khoản</h4>
-
               <div class="form-group mb-3">
-                <label for="TenTaiKhoan">Tên Tài khoản</label>
-                <input type="text" class="form-control" id="TenTaiKhoan" name="TenTaiKhoan"
-                       placeholder="Nhập tên tài khoản" value="{{ old('TenTaiKhoan') }}" required>
+                  <label for="TenTaiKhoan">Tên Tài khoản</label>
+                  <input type="text" class="form-control" id="TenTaiKhoan" name="TenTaiKhoan"
+                        value="{{ old('TenTaiKhoan') }}" readonly>
               </div>
 
               <div class="form-group mb-3">
@@ -102,4 +102,28 @@
     </div>
   </div>
 </div>
+@endsection
+@section('scripts')
+<script>
+  const boPhanSelect = document.getElementById('MaBoPhan');
+  const tenTaiKhoanInput = document.getElementById('TenTaiKhoan');
+
+  const tenRutGonMap = {
+    @foreach ($bophans as $bp)
+      '{{ $bp->MaBoPhan }}': '{{ $bp->TenRutGon }}',
+    @endforeach
+  };
+
+  const nextMaNhanVien = {{ $maNhanVien }};
+
+  boPhanSelect.addEventListener('change', function () {
+    const maBoPhan = this.value;
+    const rutGon = tenRutGonMap[maBoPhan] || '';
+    if (rutGon) {
+      tenTaiKhoanInput.value = rutGon + nextMaNhanVien;
+    } else {
+      tenTaiKhoanInput.value = '';
+    }
+  });
+</script>
 @endsection

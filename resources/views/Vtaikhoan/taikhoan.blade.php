@@ -58,7 +58,11 @@
                   {{ $taikhoan->TenTaiKhoan }}
                 </td>
                 <td onclick="window.location='{{ route('taikhoan.show', $taikhoan->TenTaiKhoan) }}'" style="cursor:pointer;">
-                  {{ $taikhoan->MatKhauChuaMaHoa }}
+                  <span class="password-mask" id="pw-{{ $loop->index }}">********</span>
+                  <span class="password-real d-none" id="pw-real-{{ $loop->index }}">{{ $taikhoan->MatKhauChuaMaHoa }}</span>
+                  <button type="button" class="btn btn-link btn-sm p-0" onclick="togglePassword({{ $loop->index }})">
+                    <i class="fa fa-eye" id="eye-{{ $loop->index }}"></i>
+                  </button>
                 </td>
                 <td>
                   <div class="d-flex gap-2">
@@ -134,5 +138,23 @@
             animate: { enter: 'animated fadeInDown', exit: 'animated fadeOutUp' },
         });
     @endif
+</script>
+<script>
+function togglePassword(index) {
+    const mask = document.getElementById('pw-' + index);
+    const real = document.getElementById('pw-real-' + index);
+    const eye = document.getElementById('eye-' + index);
+    if (mask.classList.contains('d-none')) {
+        mask.classList.remove('d-none');
+        real.classList.add('d-none');
+        eye.classList.remove('fa-eye-slash');
+        eye.classList.add('fa-eye');
+    } else {
+        mask.classList.add('d-none');
+        real.classList.remove('d-none');
+        eye.classList.remove('fa-eye');
+        eye.classList.add('fa-eye-slash');
+    }
+}
 </script>
 @endsection
