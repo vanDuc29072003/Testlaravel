@@ -48,19 +48,14 @@ class TaiKhoanController extends Controller
     {
         $bophans = Bophan::all(); 
         // Lấy danh sách nhân viên để chọn
-        $nhanviens = NhanVien::all();
-        return view('Vtaikhoan.createTaiKhoan', compact('nhanviens','bophans'));
+        $maNhanVien = NhanVien::max('MaNhanVien')+1;
+        return view('Vtaikhoan.createTaiKhoan', compact('maNhanVien','bophans'));
     }
 
     // Lưu tài khoản mới
     public function store(Request $request)
     {
-        // Kiểm tra xem MaNhanVien đã tồn tại trong bảng taikhoan chưa
-        $existingAccount = TaiKhoan::where('MaNhanVien', $request->MaNhanVien)->first();
-        if ($existingAccount) {
-            return redirect()->route('taikhoan.index')->with('error', 'Tài khoản cho nhân viên này đã tồn tại.');
-        }
-
+        // Validate dữ liệu (bỏ validate TenTaiKhoan vì sẽ sinh tự động)
         $validated = $request->validate([
             'TenNhanVien' => 'required|string|max:100',
             'Email' => 'required|email|unique:nhanvien,Email',
@@ -69,10 +64,9 @@ class TaiKhoanController extends Controller
             'SDT' => 'required|string|max:15',
             'DiaChi' => 'required|string|max:255',
             'MaBoPhan' => 'required|exists:bophan,MaBoPhan',
-            'TenTaiKhoan' => 'required|string|unique:taikhoan,TenTaiKhoan',
             'MatKhauChuaMaHoa' => 'required|string|min:6',
         ]);
-    
+
         // Tạo mới nhân viên
         $nhanvien = new NhanVien();
         $nhanvien->TenNhanVien = $validated['TenNhanVien'];
@@ -82,19 +76,38 @@ class TaiKhoanController extends Controller
         $nhanvien->SDT = $validated['SDT'];
         $nhanvien->DiaChi = $validated['DiaChi'];
         $nhanvien->MaBoPhan = $validated['MaBoPhan'];
-        $nhanvien->save(); // MaNhanVien được sinh tự động
-    
-        // Tạo tài khoản liên kết với nhân viên vừa tạo
+        $nhanvien->save(); // 
+
+        // Lấy TenRutGon từ bảng bophan
+        $bophan = BoPhan::find($validated['MaBoPhan']);
+        $tenRutGon = $bophan->TenRutGon ?? 'XX';
+
+        // Tạo TenTaiKhoan tự động
+        $tenTaiKhoan = $tenRutGon . $nhanvien->MaNhanVien;
+
+        // Kiểm tra xem TenTaiKhoan đã tồn tại chưa
+        if (TaiKhoan::where('TenTaiKhoan', $tenTaiKhoan)->exists()) {
+            // Nếu trùng thì thêm hậu tố số tăng dần (QL101_1, QL101_2, ...)
+            $suffix = 1;
+            $base = $tenTaiKhoan;
+            while (TaiKhoan::where('TenTaiKhoan', $base . '_' . $suffix)->exists()) {
+                $suffix++;
+            }
+            $tenTaiKhoan = $base . '_' . $suffix;
+        }
+
+        // Tạo tài khoản
         $taikhoan = new TaiKhoan();
         $taikhoan->MaNhanVien = $nhanvien->MaNhanVien;
-        $taikhoan->TenTaiKhoan = $validated['TenTaiKhoan'];
-        $taikhoan->MatKhau = bcrypt($validated['MatKhauChuaMaHoa']); // lưu mật khẩu đã mã hóa
-        $taikhoan->MatKhauChuaMaHoa = $validated['MatKhauChuaMaHoa']; // (nếu bạn cần lưu lại bản rõ)
+        $taikhoan->TenTaiKhoan = $tenTaiKhoan;
+        $taikhoan->MatKhau = bcrypt($validated['MatKhauChuaMaHoa']);
+        $taikhoan->MatKhauChuaMaHoa = $validated['MatKhauChuaMaHoa'];
         $taikhoan->save();
-    
+
         return redirect()->route('taikhoan.index')->with('success', 'Thêm tài khoản thành công!');
     }
-    public function edit($MaNhanVien)
+
+        public function edit($MaNhanVien)
     {
         
         // Truy vấn tài khoản với mối quan hệ nhanvien

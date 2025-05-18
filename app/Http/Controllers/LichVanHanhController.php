@@ -83,35 +83,68 @@ class LichVanHanhController extends Controller
 
     public function store(Request $request)
     {
-        $thang = $request->thang;
-        $nam = $request->nam;
-        $tuan = $request->tuan;
+        $kieuLich = $request->kieuLich;
 
-        // Tính ngày bắt đầu tuần
-        $startOfMonth = Carbon::create($nam, $thang, 1);
-        $startOfWeek = $startOfMonth->copy()->addWeeks($tuan - 1)->startOfWeek(Carbon::MONDAY);
+        // Validate cơ bản
+        $request->validate([
+            'kieuLich' => 'required|in:tuan,ngay',
+            'entries' => 'required|array|min:1',
+            'entries.*.MaMay' => 'required',
+            'entries.*.MaNhanVien' => 'required',
+            'entries.*.CaLamViec' => 'required',
+        ]);
 
-        // Mỗi ngày trong tuần
         $daysInWeek = collect();
-        for ($i = 0; $i < 7; $i++) {
-            $daysInWeek->push($startOfWeek->copy()->addDays($i));
-        }
 
-    // Dữ liệu dòng máy
-    foreach ($request->entries as $entry) {
-        foreach ($daysInWeek as $day) {
-            DB::table('lichvanhanh')->insert([
-                'NgayVanHanh' => $day->format('Y-m-d'),
-                'MaMay' => $entry['MaMay'],
-                'MaNhanVien' => $entry['MaNhanVien'],
-                'CaLamViec' => $entry['CaLamViec'],
-                'MoTa' => $entry['MoTa'],
+        if ($kieuLich === 'tuan') {
+            $thang = $request->thang;
+            $nam = $request->nam;
+            $tuan = $request->tuan;
+
+            $startOfMonth = Carbon::create($nam, $thang, 1);
+            $firstMonday = $startOfMonth->copy()->startOfWeek(Carbon::MONDAY);
+            if ($firstMonday->month != $thang) {
+                $firstMonday = $firstMonday->copy()->addWeek();
+            }
+            $startOfWeek = $firstMonday->copy()->addWeeks($tuan - 1);
+
+            for ($i = 0; $i < 7; $i++) {
+                $daysInWeek->push($startOfWeek->copy()->addDays($i));
+            }
+        } 
+        else if ($kieuLich === 'ngay') {
+            $request->validate([
+                'ngayDotXuat' => 'required|date',
             ]);
+            $ngayDotXuat = Carbon::parse($request->ngayDotXuat);
+            $daysInWeek->push($ngayDotXuat);
+        }
+
+        foreach ($request->entries as $entry) {
+        foreach ($daysInWeek as $day) {
+            $exists = DB::table('lichvanhanh')->whereDate('NgayVanHanh', $day->format('Y-m-d'))
+                ->where('MaMay', $entry['MaMay'])
+                ->where('CaLamViec', $entry['CaLamViec'])
+                ->exists();
+
+            if (!$exists) {
+                DB::table('lichvanhanh')->insert([
+                    'NgayVanHanh' => $day->format('Y-m-d'),
+                    'MaMay' => $entry['MaMay'],
+                    'MaNhanVien' => $entry['MaNhanVien'],
+                    'CaLamViec' => $entry['CaLamViec'],
+                    'MoTa' => $entry['MoTa'] ?? null,
+                ]);
+            } else {
+                // Nếu cần hiển thị lỗi cụ thể:
+                return back()->withErrors(['error' => 'Lịch trùng: ' . $day->format('d/m/Y') . ' - Máy: ' . $entry['MaMay'] . ' - Ca: ' . $entry['CaLamViec']]);
+            }
         }
     }
 
-    return redirect()->route('lichvanhanh')->with('success', 'Thêm lịch thành công!');
+        return redirect()->route('lichvanhanh')->with('success', 'Thêm lịch thành công!');
     }
+
 
     public function edit($id)
     {

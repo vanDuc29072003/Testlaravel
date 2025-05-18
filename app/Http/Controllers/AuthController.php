@@ -14,11 +14,11 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $credentials = $request->validate([
-            'MaNhanVien' => 'required',
+            'TenTaiKhoan' => 'required',
             'MatKhau' => 'required'
         ]);
     
-        if (Auth::attempt(['MaNhanVien' => $credentials['MaNhanVien'], 'password' => $credentials['MatKhau']])) {
+        if (Auth::attempt(['TenTaiKhoan' => $credentials['TenTaiKhoan'], 'password' => $credentials['MatKhau']])) {
             $request->session()->regenerate();
     
             $user = Auth::user();
