@@ -1,5 +1,6 @@
 <?php
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DetailuserController;
 use App\Http\Controllers\LichSuaChuaController;
 use App\Http\Controllers\dsphieuNhapController;
@@ -34,6 +35,8 @@ Route::post('/login', [AuthController::class, 'login']);
 
 // Route yêu cầu đăng nhập
 Route::middleware('auth')->group(function () {
+  Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
+
   Route::get('/sidebar', function () {
     return view('includes.sidebar'); // Trả về nội dung sidebar
   })->name('sidebar');
