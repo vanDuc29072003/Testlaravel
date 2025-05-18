@@ -75,43 +75,75 @@
             
 
             <!-- Form lọc thời gian -->
-            <div class="col-3">
-                <form method="GET" action="{{ route('thongkesuachua') }}" class="p-3 border rounded">
-                    <h5 class="mb-3">Bộ lọc</h5>
-                    <div class="mb-3">
-                        @php
-                            $time_filter = request('time_filter', 'today');
-                        @endphp
-                        @foreach ([
-                            'today' => 'Hôm nay',
-                            'yesterday' => 'Hôm qua',
-                            'last_7_days' => '7 ngày trước',
-                            'this_month' => 'Tháng này',
-                            'last_month' => 'Tháng trước',
-                            'this_quarter' => 'Quý này',
-                            'custom' => 'Lựa chọn khác',
-                        ] as $key => $label)
-                            <div class="form-check p-0">
-                                <input class="form-check-input" type="radio" name="time_filter" id="{{ $key }}"
-                                    value="{{ $key }}" {{ $time_filter == $key ? 'checked' : '' }}>
-                                <label class="form-check-label" for="{{ $key }}">{{ $label }}</label>
-                            </div>
-                        @endforeach
-                    </div>
+                <div class="col-3">
+                    <form method="GET" action="{{ route('thongkesuachua') }}" class="p-3 border rounded">
+                        <h5 class="mb-3">Bộ lọc</h5>
+                        {{-- Lọc theo loại máy --}}
+                        <div class="mb-3">
+                            <label for="loai_may" class="form-label">Loại máy</label>
+                            <select name="loai_may" id="loai_may" class="form-select">
+                                <option value="">-- Tất cả loại máy --</option>
+                                @foreach ($dsLoaiMay as $loai)
+                                    <option value="{{ $loai->MaLoai }}" {{ request('loai_may') == $loai->MaLoai ? 'selected' : '' }}>
+                                        {{ $loai->TenLoai }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
 
-                    <div id="custom-date-range" class="mb-3">
-                        <label for="start_date" class="form-label">Từ ngày</label>
-                        <input type="date" name="start_date" id="start_date" class="form-control"
-                            value="{{ request('start_date') }}">
-                        <label for="end_date" class="form-label mt-2">Đến ngày</label>
-                        <input type="date" name="end_date" id="end_date" class="form-control"
-                            value="{{ request('end_date') }}">
-                    </div>
+                        {{-- Lọc theo mã máy --}}                       
 
-                    <button type="submit" class="btn btn-primary w-100">
-                        <i class="fa fa-filter"></i> Lọc
-                    </button>
-                </form>
+                        {{-- Lọc theo tên máy --}}
+                        <div class="mb-3">
+                            <label for="ten_may" class="form-label">Tên máy</label>
+                            <input type="text" name="ten_may" id="ten_may" class="form-control"
+                                value="{{ request('ten_may') }}">
+                        </div>
+
+                        {{-- Sắp xếp tăng/giảm --}}
+                        <div class="mb-3">
+                            <label for="sort_order" class="form-label">Sắp xếp</label>
+                            <select name="sort_order" id="sort_order" class="form-select">
+                                <option value="desc" {{ request('sort_order') == 'desc' ? 'selected' : '' }}>Giảm dần (nhiều nhất)</option>
+                                <option value="asc" {{ request('sort_order') == 'asc' ? 'selected' : '' }}>Tăng dần (ít nhất)</option>
+                            </select>
+                        </div>
+                        {{-- Lọc theo thời gian --}}
+                        <div class="mb-3">
+                            <label class="form-label">Thời gian</label>
+
+                            @php
+                                $time_filter = request('time_filter', 'today');
+                            @endphp
+                            @foreach ([
+                                'today' => 'Hôm nay',
+                                'yesterday' => 'Hôm qua',
+                                'this_month' => 'Tháng này',
+                                'custom' => 'Tùy chọn khác',
+                            ] as $key => $label)
+                                <div class="form-check p-0">
+                                    <input class="form-check-input" type="radio" name="time_filter" id="{{ $key }}"
+                                        value="{{ $key }}" {{ $time_filter == $key ? 'checked' : '' }}>
+                                    <label class="form-check-label" for="{{ $key }}">{{ $label }}</label>
+                                </div>
+                            @endforeach
+                        </div>
+
+                        {{-- Ngày bắt đầu và kết thúc (chỉ hiển thị nếu chọn "custom") --}}
+                        <div id="custom-date-range" class="mb-3" style="{{ $time_filter === 'custom' ? '' : 'display:none;' }}">
+                            <label for="start_date" class="form-label">Từ ngày</label>
+                            <input type="date" name="start_date" id="start_date" class="form-control"
+                                value="{{ request('start_date') }}">
+                            <label for="end_date" class="form-label mt-2">Đến ngày</label>
+                            <input type="date" name="end_date" id="end_date" class="form-control"
+                                value="{{ request('end_date') }}">
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="fa fa-filter"></i> Lọc
+                        </button>
+                    </form>
+
+
             </div>
             @endsection
                         

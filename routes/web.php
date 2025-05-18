@@ -250,6 +250,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/thongkesuachua', [ThongKeController::class, 'thongkesuachua'])->name('thongkesuachua');
     Route::get('/thongkesuachua/pdf', [ThongKeController::class, 'exportPDF1'])->name('thongkesuachua.pdf');
     Route::get('/thongkesuachua/detail/{maMay}', [ThongKeController::class, 'detail'])->name('thongkesuachua.detail');
+    Route::get('/thongkelinhkienxuat', [ThongKeController::class, 'thongkelinhkienxuat'])->name('thongkelinhkienxuat');
+    Route::get('/thongkelinhkienxuat/pdf', [ThongKeController::class, 'exportPDF2'])->name('thongkelinhkienxuat.pdf');
+    Route::get('/canhbaonhaphang', [ThongKeController::class, 'canhbaonhaphang'])->name('canhbaonhaphang');
+    Route::get('/canhbaonhaphang/pdf', [ThongKeController::class, 'exportPDF3'])->name('canhbaonhaphang.pdf');
+
 
 
 

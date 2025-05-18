@@ -17,7 +17,12 @@
                         <p class="fst-italic">Từ ngày {{ $startDate }} - Đến ngày {{ $endDate }}</p>
                     </div>
                 </div>
-                <div class="col-3"></div>
+                <div class="col-3">
+                    <a href="{{ route('canhbaonhaphang') }}" class="btn btn-black btn-border"
+                        style="color: black;">
+                        <i class="fab fa-hotjar" style="color: red;"></i> Cảnh Báo Nhập Hàng
+                    </a>
+                </div>
                 <div class="col-9">
                     <table class="table table-responsive table-bordered table-striped">
                         <thead class="text-center bg-light">

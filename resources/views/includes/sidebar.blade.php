@@ -197,6 +197,11 @@
                   <span class="sub-item">Thống kê sửa chữa</span>
                 </a>
               </li>
+              <li>
+                <a href="{{ route('thongkelinhkienxuat') }}">
+                  <span class="sub-item">Thống kê linh kiện xuất kho</span>
+                </a>
+              </li>
             </ul>
               
             
