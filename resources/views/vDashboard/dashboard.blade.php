@@ -6,7 +6,7 @@
     <div class="container">
         <div class="page-inner">
             <div class="row">
-                <div class="col-sm-6 col-md-2">
+                <div class="col-sm-6 col-md-4 col-xxl-2">
                     <a href="{{ route('lichvanhanh') }}">
                         <div class="card card-stats card-round">
                             <div class="card-body ">
@@ -27,7 +27,7 @@
                         </div>
                     </a>
                 </div>
-                <div class="col-sm-6 col-md-2">
+                <div class="col-sm-6 col-md-4 col-xxl-2">
                     <a href="{{ route('lichbaotri') }}">
                         <div class="card card-stats card-round">
                             <div class="card-body ">
@@ -48,7 +48,7 @@
                         </div>
                     </a>
                 </div>
-                <div class="col-sm-6 col-md-2">
+                <div class="col-sm-6 col-md-4 col-xxl-2">
                     <a href="{{ route('lichsuachua.index') }}">
                         <div class="card card-stats card-round">
                             <div class="card-body ">
@@ -69,7 +69,7 @@
                         </div>
                     </a>
                 </div>
-                <div class="col-sm-6 col-md-2">
+                <div class="col-sm-6 col-md-4 col-xxl-2">
                     <a href="{{ route('yeucausuachua.index') }}">
                         <div class="card card-stats card-round">
                             <div class="card-body ">
@@ -90,7 +90,7 @@
                         </div>
                     </a>
                 </div>
-                <div class="col-sm-6 col-md-2">
+                <div class="col-sm-6 col-md-4 col-xxl-2">
                     <a href="{{ route('dsphieunhap') }}">
                         <div class="card card-stats card-round">
                             <div class="card-body ">
@@ -111,7 +111,7 @@
                         </div>
                     </a>
                 </div>
-                <div class="col-sm-6 col-md-2">
+                <div class="col-sm-6 col-md-4 col-xxl-2">
                     <a href="{{ route('phieuthanhly.index') }}">
                         <div class="card card-stats card-round">
                             <div class="card-body ">
@@ -177,7 +177,7 @@
                             <div class="card-head-row">
                                 <div class="card-title">Yêu cầu sửa chữa</div>
                                 <div class="card-tools">
-                                    <ul class="nav nav-pills nav-secondary nav-pills-no-bd nav-sm" id="pills-tab"
+                                    <ul class="nav nav-pills nav-black nav-pills-no-bd nav-sm" id="pills-tab"
                                         role="tablist">
                                         <li class="nav-item">
                                             <a class="nav-link active" id="pills-today" data-bs-toggle="pill"
@@ -203,7 +203,7 @@
                             <div class="card-head-row">
                                 <div class="card-title">Chi phí</div>
                                 <div class="card-tools">
-                                    <ul class="nav nav-pills nav-secondary nav-pills-no-bd nav-sm" id="pills-tab"
+                                    <ul class="nav nav-pills nav-black nav-pills-no-bd nav-sm" id="pills-tab"
                                         role="tablist">
                                         <li class="nav-item">
                                             <a class="nav-link active" id="chiphi-this-month" data-bs-toggle="pill"
