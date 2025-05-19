@@ -7,7 +7,7 @@
         <div class="page-inner">
             <div class="row">
                 <!-- Danh sách lịch vận hành -->
-                <div class="col-10">
+                <div class="col-xl-10 col-sm-12">
                     <div class="table-responsive">
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <h1 class="mb-0">Lịch Vận Hành</h1>
@@ -52,18 +52,17 @@
                                             </td>
                                             <td>
                                                 <div class="d-flex gap-2 justify-content-center">
-                                                    <a href="{{ route('lichvanhanh.edit', $lich->MaLichVanHanh) }}"
+                                                    <a href="{{ route('yeucausuachua.create', ['ma_lich' => $lich->MaLichVanHanh]) }}"
+                                                         class="btn btn-primary btn-sm text-white">
+                                                         <i class="fa fa-wrench"></i> YCSC
+                                                     </a>
+
+                                                     <a href="{{ route('lichvanhanh.edit', $lich->MaLichVanHanh) }}"
                                                         class="btn btn-warning btn-sm text-black">
                                                         <i class="fa fa-edit"></i> Sửa
                                                     </a>
-                                                    <a href="{{ route('yeucausuachua.create', ['ma_lich' => $lich->MaLichVanHanh]) }}"
-                                                         class="btn btn-primary btn-sm text-white">
-                                                         <i class="fa fa-wrench"></i> Yêu cầu sửa chữa
-                                                     </a>
-
                                                     <form action="{{ route('lichvanhanh.destroy', $lich->MaLichVanHanh) }}"
-                                                        method="POST" class="d-inline-block"
-                                                        onsubmit="return confirm('Bạn có chắc chắn muốn xóa?')">
+                                                        method="POST" class="d-inline-block">
                                                         @csrf
                                                         @method('DELETE')
                                                         <!-- Giữ lại điều kiện lọc -->
@@ -71,9 +70,10 @@
                                                             <input type="hidden" name="{{ $filter }}"
                                                                 value="{{ request($filter) }}">
                                                         @endforeach
-                                                        <button type="submit" class="btn btn-danger btn-sm">
-                                                            <i class="fa fa-trash"></i> Xóa
-                                                        </button>
+                                                        <button type="button" class="btn btn-danger btn-sm"
+                                                        onclick="event.stopPropagation(); confirmDelete(this)">
+                                                        <i class="fa fa-trash"></i> Xóa
+                                                    </button>
                                                     </form>
                                                 </div>
                                             </td>
@@ -92,9 +92,10 @@
                 </div>
 
                 <!-- Bộ lọc -->
-                <div class="col-2 p-0">
-                    <div style="margin-top: 140px;">
+                <div class="col-xl-2 col-sm-12 p-0">
+                    <div>
                         <form method="GET" action="{{ route('lichvanhanh') }}" class="p-3 border rounded fixed-search-form">
+                            <h5 class="mb-3">Bộ lọc</h5>    
                             <div class="mb-3">
                                 <label for="nam" class="form-label">Chọn năm</label>
                                 <select name="nam" id="nam" class="form-control">
@@ -160,7 +161,7 @@
                             </div>
 
                             <button type="submit" class="btn btn-primary w-100">
-                                <i class="fa fa-search"></i> Lọc
+                                <i class="fa fa-filter"></i> Lọc
                             </button>
                         </form>
                     </div>
@@ -170,7 +171,32 @@
     </div>
 @endsection
 @section('scripts')
-  
+  <script>
+    function confirmDelete(button) {
+            swal({
+                title: 'Bạn có chắc chắn?',
+                text: "Hành động này không thể hoàn tác!",
+                icon: 'warning',
+                buttons: {
+                    confirm: {
+                        text: 'Xóa',
+                        className: 'btn btn-danger'
+                    },
+                    cancel: {
+                        text: 'Hủy',
+                        visible: true,
+                        className: 'btn btn-success'
+                    }
+                }
+            }).then((willDelete) => {
+                if (willDelete) {
+                    button.closest('form').submit(); // Gửi form
+                } else {
+                    swal.close(); // Đóng hộp thoại
+                }
+            });
+        }
+  </script>
  <script>
         @if (session('success'))
             $.notify({
@@ -183,5 +209,16 @@
             });
         @endif
     </script>
-
+    <script>
+        @if (session('error'))
+            $.notify({
+                title: 'Lỗi',
+                message: '{{ session('error') }}',
+                icon: 'icon-bell'
+            }, {
+                type: 'danger',
+                animate: { enter: 'animated fadeInDown', exit: 'animated fadeOutUp' },
+            });
+        @endif
+    </script>
 @endsection
