@@ -6,7 +6,7 @@
     <div class="container">
         <div class="page-inner">
             <div class="row">
-                <div class="col-10">
+                <div class="col-xl-10 col-sm-12">
                     <div class="table-responsive">
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <div class="d-flex align-items-center gap-2">
@@ -71,23 +71,20 @@
                                 @endforeach
                             </tbody>
                             <tfoot>
-                                <tr>
-                                    <td colspan="8">
-                                        <nav aria-label="Page navigation example">
-                                            {{ $dsMay->appends(request()->query())->links('pagination::bootstrap-5') }}
-                                        </nav>
-                                    </td>
-                                </tr>
+                                <nav aria-label="Page navigation example">
+                                    {{ $dsMay->appends(request()->query())->links('pagination::bootstrap-5') }}
+                                </nav>
                             </tfoot>
                         </table>
                     </div>
                 </div>
 
                 {{-- Form lọc bên phải --}}
-                <div class="col-2 p-0">
-                    <div style="margin-top: 60px;">
+                <div class="col-xl-2 col-sm-12 p-0">
+                    <div>
                         <form method="GET" action="{{ route('may') }}" class="p-3 border rounded fixed-search-form">
                             <input type="hidden" name="MaLoaiMay" value="{{ request('MaLoaiMay') }}">
+                            <h5 class="mb-3">Tìm kiếm</h5>
                             <div class="mb-3">
                                 <label for="TenNhaCungCap" class="form-label">Tên nhà cung cấp</label>
                                 <select name="TenNhaCungCap" id="TenNhaCungCap" class="form-control">
@@ -102,22 +99,22 @@
                             <div class="mb-3">
                                 <label for="TenMay" class="form-label">Tên máy</label>
                                 <input type="text" name="TenMay" id="TenMay" class="form-control"
-                                    value="{{ request('TenMay') }}">
+                                    placeholder="Nhập tên máy..." value="{{ request('TenMay') }}">
                             </div>
                             <div class="mb-3">
                                 <label for="SeriMay" class="form-label">Seri máy</label>
                                 <input type="text" name="SeriMay" id="SeriMay" class="form-control"
-                                    value="{{ request('SeriMay') }}">
+                                    placeholder="Nhập seri máy..." value="{{ request('SeriMay') }}">
                             </div>
                             <div class="mb-3">
                                 <label for="ChuKyBaoTri" class="form-label">Chu kỳ bảo trì</label>
                                 <input type="number" name="ChuKyBaoTri" id="ChuKyBaoTri" class="form-control"
-                                    value="{{ request('ChuKyBaoTri') }}">
+                                    placeholder="Nhập chu kỳ bảo trì..." value="{{ request('ChuKyBaoTri') }}" min="0">
                             </div>
                             <div class="mb-3">
                                 <label for="ThoiGianBaoHanh" class="form-label">Thời gian bảo hành</label>
                                 <input type="number" name="ThoiGianBaoHanh" id="ThoiGianBaoHanh" class="form-control"
-                                    value="{{ request('ThoiGianBaoHanh') }}">
+                                    placeholder="Nhập thời gian bảo hành..." value="{{ request('ThoiGianBaoHanh') }}" min="0">
                             </div>
                             <div class="mb-3">
                                 <label for="ThoiGianDuaVaoSuDung" class="form-label">Thời gian đưa vào sử dụng</label>
@@ -127,7 +124,7 @@
                             <div class="mb-3">
                                 <label for="NamSanXuat" class="form-label">Năm sản xuất</label>
                                 <input type="number" name="NamSanXuat" id="NamSanXuat" class="form-control"
-                                    value="{{ request('NamSanXuat') }}">
+                                    placeholder="Nhập năm sản xuất..." value="{{ request('NamSanXuat') }}" min="2000">
                             </div>
                            
                             <button type="submit" class="btn btn-primary w-100">

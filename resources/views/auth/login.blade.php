@@ -61,8 +61,8 @@
                                     @csrf <!-- Thêm CSRF token -->
                                     <div class="form-group">
                                         <label for="MaNhanVien">Mã nhân viên</label>
-                                        <input type="text" name="MaNhanVien" id="MaNhanVien" class="form-control"
-                                            placeholder="Nhập mã nhân viên" required>
+                                        <input type="text" name="TenTaiKhoan" id="TenTaiKhoan" class="form-control"
+                                            placeholder="Nhập tên tài khoản" required>
                                     </div>
                                     <div class="form-group">
                                         <label for="MatKhau">Mật khẩu</label>

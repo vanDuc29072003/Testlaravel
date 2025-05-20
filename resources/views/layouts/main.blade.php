@@ -65,7 +65,7 @@
 
   <!-- Plugins -->
   <script src="{{ asset('js/plugin/jquery-scrollbar/jquery.scrollbar.min.js') }}"></script>
-  <script src="{{ asset('js/plugin/chart.js/chart.min.js') }}"></script>
+  <!-- <script src="{{ asset('js/plugin/chart.js/chart.min.js') }}"></script> -->
   <script src="{{ asset('js/plugin/jquery.sparkline/jquery.sparkline.min.js') }}"></script>
   <script src="{{ asset('js/plugin/chart-circle/circles.min.js') }}"></script>
   <script src="{{ asset('js/plugin/datatables/datatables.min.js') }}"></script>
@@ -75,6 +75,8 @@
   <script src="{{ asset('js/plugin/gmaps/gmaps.js') }}"></script>
   <script src="{{ asset('js/plugin/sweetalert/sweetalert.min.js') }}"></script>
   <script src="{{ asset('js/kaiadmin.min.js') }}"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <script>
     var pusher = new Pusher('{{ env('PUSHER_APP_KEY') }}', {

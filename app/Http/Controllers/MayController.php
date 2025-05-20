@@ -69,7 +69,8 @@ class MayController extends Controller
     {
         $may = May::with('nhaCungCap:MaNhaCungCap,TenNhaCungCap')->findOrFail($MaMay); // Eager load nhà cung cấp
         $nhaCungCaps = NhaCungCap::select('MaNhaCungCap', 'TenNhaCungCap')->get(); // Chỉ lấy các cột cần thiết
-        return view('vMay.editmay', compact('may', 'nhaCungCaps'));
+        $loaiMays = LoaiMay::select('MaLoai', 'TenLoai')->get();
+        return view('vMay.editmay', compact('may', 'nhaCungCaps', 'loaiMays'));
     }
 
     public function editmay(Request $request, $MaMay)
