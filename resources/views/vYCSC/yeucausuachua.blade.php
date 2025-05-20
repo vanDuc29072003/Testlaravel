@@ -72,7 +72,7 @@
                     </div>
                 </div>
                 <h3 class="mb-3">Yêu cầu sửa chữa đã duyệt</h3>
-                <div class="col-10">
+                <div class="col-xl-10 col-sm-12">
                     <!-- Bảng yêu cầu đã xử lý -->
                     <div class="table-responsive">
                         <table id="bang-da-xu-ly" class="table table-responsive table-bordered table-hover">
@@ -114,7 +114,7 @@
                 </div>
 
                 <!-- Form tìm kiếm -->
-                <div class="col-2 p-0">
+                <div class="col-xl-2 col-sm-12 p-0">
                     <form method="GET" action="{{ route('yeucausuachua.index') }}" class="p-3 border rounded">
                         <h5 class="mb-3">Tìm kiếm</h5>
                         <div class="mb-3">

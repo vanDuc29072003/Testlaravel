@@ -10,7 +10,7 @@
                 <div class="col-xl-10 col-sm-12">
                     <div class="table-responsive">
                         <div class="d-flex justify-content-between align-items-center mb-3">
-                            <h1 class="mb-0">Lịch Vận Hành</h1>
+                            <h3 class="mb-0">Lịch Vận Hành</h3>
                             <a href="{{ route('lichvanhanh.create') }}" class="btn btn-primary">
                                 <i class="fa fa-plus"></i> Thêm mới
                             </a>
@@ -25,11 +25,11 @@
                                 <thead>                                 
                                     <tr class="text-center">
                                         <th>STT</th>
-                                        <th>Ngày</th>
                                         <th>Mã Máy</th>
                                         <th>Tên Máy</th>
-                                        <th>Người Đảm Nhận</th>
                                         <th>Ca làm việc</th>
+                                        <th>Người Đảm Nhận</th>
+                                        <th>Mô tả</th>
                                         <th>Hành Động</th>
                                     </tr>
                                 </thead>
@@ -39,10 +39,8 @@
                                             onclick="window.location='{{ route('lichvanhanh.showNhatKi', $lich->MaLichVanHanh) }}'"
                                             style="cursor: pointer;">
                                             <td>{{ $loop->iteration }}</td>
-                                            <td>{{ \Carbon\Carbon::parse($lich->NgayVanHanh)->format('d/m/Y') }}</td>
                                             <td>{{ $lich->may->MaMay2 }}</td>
                                             <td>{{ $lich->may->TenMay ?? 'Không xác định' }}</td>
-                                            <td>{{ $lich->nhanVien->TenNhanVien ?? 'Không xác định' }}</td>
                                             <td>
                                                 @switch($lich->CaLamViec)
                                                     @case('Sáng') Ca 1 @break
@@ -50,6 +48,8 @@
                                                     @default Ca 3
                                                 @endswitch
                                             </td>
+                                            <td>{{ $lich->nhanVien->TenNhanVien ?? 'Không xác định' }}</td>
+                                            <td>{{ $lich->MoTa ?? 'Không có mô tả' }}</td>
                                             <td>
                                                 <div class="d-flex gap-2 justify-content-center">
                                                     <a href="{{ route('yeucausuachua.create', ['ma_lich' => $lich->MaLichVanHanh]) }}"

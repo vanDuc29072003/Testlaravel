@@ -12,7 +12,7 @@
               <h1 class="mt-3">Thêm Lịch Vận Hành</h1>
             </div>
             <div class="card-body">
-              <form action="{{ route('lichvanhanh.store') }}" method="POST">
+              <form id="formLichVanHanh" action="{{ route('lichvanhanh.store') }}" method="POST">
                 @csrf
                 {{-- Chọn kiểu lịch --}}
                 <div class="form-group">
@@ -121,7 +121,7 @@
                 <a href="{{ route('lichvanhanh') }}" class="btn btn-secondary">
                   <i class="fa fa-arrow-left"></i> Quay lại
                 </a>
-                <button type="submit" class="btn btn-success">
+                <button type="submit" class="btn btn-success" form="formLichVanHanh">
                   <i class="fa fa-save"></i> Lưu
                 </button>
               </div>

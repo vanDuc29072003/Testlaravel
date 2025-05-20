@@ -16,7 +16,7 @@ class LinhKienController extends Controller
 
         // Danh sách các trường cần lọc
         $filters = [
-            'MaLinhKien' => 'like',
+            'MaLinhKien' => '=',
             'TenLinhKien' => 'like',
             'SoLuong' => '=',
         ];

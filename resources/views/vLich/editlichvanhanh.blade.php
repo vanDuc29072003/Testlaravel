@@ -12,7 +12,7 @@
                             <h1 class="mt-3 mx-3">Chỉnh Sửa Lịch Vận Hành</h1>
                         </div>
                         <div class="card-body">
-                            <form action="{{ route('lichvanhanh.update', $lich->MaLichVanHanh) }}" method="POST">
+                            <form id="formLichVanHanh" action="{{ route('lichvanhanh.update', $lich->MaLichVanHanh) }}" method="POST">
                                 @csrf
                                 @method('PATCH')
 
@@ -77,7 +77,7 @@
                                 <a href="{{ route('lichvanhanh') }}" class="btn btn-secondary">
                                     <i class="fa fa-arrow-left"></i> Trở lại
                                 </a>
-                                <button type="submit" class="btn btn-primary">
+                                <button type="submit" class="btn btn-primary" form="formLichVanHanh">
                                     <i class="fa fa-save"></i> Lưu Thay Đổi
                                 </button>
                             </div>
@@ -89,18 +89,19 @@
     </div>
 @endsection
 @section('scripts')
-<script>
-    @if (session('error'))
-        $.notify({
-            title: 'Lỗi',
-            message: '{{ session('error') }}',
-        }, {
-            type: 'danger',
-            delay: 5000,
-            placement: {
-                from: "top",
-                align: "right"
-            }
-        });
-    @endif
-</script>
+    <script>
+        @if (session('error'))
+            $.notify({
+                title: 'Lỗi',
+                message: '{{ session('error') }}',
+            }, {
+                type: 'danger',
+                delay: 5000,
+                placement: {
+                    from: "top",
+                    align: "right"
+                }
+            });
+        @endif
+    </script>
+@endsection
