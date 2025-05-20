@@ -6,10 +6,10 @@
     <div class="container">
         <div class="page-inner">
             <div class="row">
-                <div class="col-10">
+                <div class="col-xl-10 col-sm-12">
                     <div class="table-responsive">
                         <div class="d-flex justify-content-between align-items-center mb-3">
-                            <h1 class="mb-0">Danh sách Linh Kiện</h1>
+                            <h3 class="mb-0">Danh sách Linh Kiện</h3>
                             <a href="{{ route('linhkien.add') }}" class="btn btn-primary">
                                 <i class="fa fa-plus"></i> Thêm mới
                             </a>
@@ -38,7 +38,7 @@
                                                 @foreach ($linhKien->nhaCungCaps as $nhaCungCap)
                                                     <li class="list-group-item">{{ $nhaCungCap->TenNhaCungCap }}</li>
                                                 @endforeach
-                                                </ul>
+                                            </ul>
                                         </td>
                                         <td>
                                             <div class="d-flex gap-2">
@@ -69,9 +69,10 @@
                         </table>
                     </div>
                 </div>
-                <div class="col-2 p-0">
-                    <div style="margin-top: 105px;">
+                <div class="col-xl-2 col-sm-12 p-0">
+                    <div>
                         <form method="GET" action="{{ route('linhkien') }}" class="p-3 border rounded fixed-search-form">
+                            <h5 class="mb-3">Tìm kiếm</h5>
                             <div class="mb-3">
                                 <label for="MaLinhKien" class="form-label">Mã linh kiện</label>
                                 <input type="text" name="MaLinhKien" id="MaLinhKien" class="form-control" placeholder="Vui lòng nhập"

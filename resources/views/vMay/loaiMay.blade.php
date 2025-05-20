@@ -7,7 +7,7 @@
         <div class="page-inner">
             <div class="row">
                 <!-- Cột trái: Danh sách loại máy -->
-                <div class="col-md-9">
+                <div class="col-md-9 col-sm-12">
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <h1 class="mb-0">Danh Sách Loại Máy</h1>
                         <a href="{{ route('loaimay.create') }}" class="btn btn-primary">
@@ -15,10 +15,9 @@
                         </a>
                     </div>
 
-                    <table class="table table-responsive table-bordered table-hover">
-                        <thead class="table-light">
+                    <table class="table table-responsive table-bordered table-hover text-center">
+                        <thead>
                             <tr>
-                                <th>STT</th>
                                 <th>Mã Loại Máy</th>
                                 <th>Tên Loại Máy</th>
                                 <th>Tổng số lượng máy</th>
@@ -28,9 +27,8 @@
                         <tbody>
                             @forelse ($loaimays as $index => $loai)
                                 <tr>
-                                    <td>{{ $loop->iteration }}</td>
                                     <td>{{ $loai->MaLoai }}</td>
-                                    <td>{{ $loai->TenLoai }}</td>
+                                    <td class="text-start">{{ $loai->TenLoai }}</td>
                                     <td>{{ $loai->mays_count }}</td>
                                     <td>
                                         <form action="{{ route('loaimay.destroy', ['id' => $loai->MaLoai]) }}" method="POST"
@@ -38,8 +36,8 @@
                                             @csrf
                                             @method('DELETE')
                                             <button type="button" class="btn btn-danger btn-sm"
-                                                        onclick="event.stopPropagation(); confirmDelete(this)">
-                                                        <i class="fa fa-trash"></i> Xóa
+                                                onclick="event.stopPropagation(); confirmDelete(this)">
+                                                <i class="fa fa-trash"></i> Xóa
                                             </button>
                                         </form>
                                     </td>
@@ -54,23 +52,22 @@
                 </div>
 
                 <!-- Cột phải: Tìm kiếm -->
-                <div class="col-md-3">
-                    <div class="p-3 border rounded fixed-search-form" style="margin-top: 60px;">
-                       
-                        <div class="card-body">
-                            <form action="{{ route('loaimay.index') }}" method="GET">
-                                <div class="mb-3">
-                                    <label for="search" class="form-label">Tên loại máy</label>
-                                    <input type="text" name="search" class="form-control" placeholder="Nhập tên..." value="{{ request('search') }}">
-                                </div>
-                                <button class="btn btn-primary w-100" type="submit">
-                                    <i class="fa fa-search"></i> Tìm kiếm
-                                </button>
-                            </form>
-                        </div>
+                <div class="col-md-3 col-sm-12 p-0">
+                    <div>
+                        <form action="{{ route('loaimay.index') }}" method="GET"
+                            class="p-3 border rounded fixed-search-form" style="margin-top: 60px;">
+                            <h5 class="mb-3">Tìm kiếm</h5>
+                            <div class="mb-3">
+                                <label for="search" class="form-label">Tên loại máy</label>
+                                <input type="text" name="search" class="form-control" placeholder="Nhập tên..."
+                                    value="{{ request('search') }}">
+                            </div>
+                            <button class="btn btn-primary w-100" type="submit">
+                                <i class="fa fa-search"></i> Tìm kiếm
+                            </button>
+                        </form>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
@@ -104,8 +101,10 @@
                 icon: 'icon-bell'
             }, {
                 type: 'danger',
-                animate: { enter: 'animated fadeInDown'
-                , exit: 'animated fadeOutUp' },
+                animate: {
+                    enter: 'animated fadeInDown'
+                    , exit: 'animated fadeOutUp'
+                },
             });
         @endif
     </script>

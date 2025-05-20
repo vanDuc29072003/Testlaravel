@@ -41,7 +41,7 @@
             <!-- Bảng thống kê -->
             <div class="col-9">
                 @if ($thongKe->isNotEmpty())
-                    <table class="table table-responsive table-bordered table-hover table-striped">
+                    <table class="table table-responsive table-bordered table-striped">
                         <thead class="text-center bg-light">
                             <tr>
                                 <th>Mã linh kiện</th>

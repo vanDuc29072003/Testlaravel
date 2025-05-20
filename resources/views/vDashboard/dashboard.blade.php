@@ -251,38 +251,40 @@
                         </div>
                     </div>
                     <div class="card">
-                        <div class="card-header">
-                            <div class="card-head-row">
-                                <i class="fas fa-exclamation-circle me-2 text-danger"></i>
-                                <div class="card-title">Cảnh báo hạn mức linh kiện</div>
+                        <a href="{{ route('canhbaonhaphang') }}">
+                            <div class="card-header">
+                                <div class="card-head-row">
+                                    <i class="fas fa-exclamation-circle me-2 text-danger"></i>
+                                    <div class="card-title">Cảnh báo hạn mức linh kiện</div>
+                                </div>
                             </div>
-                        </div>
-                        <div class="card-body p-0">
-                            <div class="table-responsive">
-                                <!-- Projects table -->
-                                <table class="table align-items-center mb-0">
-                                    <thead class="thead-light">
-                                        <tr>
-                                            <th scope="col">Tên linh kiện</th>
-                                            <th scope="col" class="text-center">Số lượng</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @forelse($linhkienCanhBao as $lk)
-                                            <tr class="table-danger">
-                                                <td>{{ $lk->TenLinhKien }}</td>
-                                                <td class="text-center"><strong>{{ $lk->SoLuong }}</strong></td>
-                                            </tr>
-                                        @empty
+                            <div class="card-body p-0">
+                                <div class="table-responsive">
+                                    <!-- Projects table -->
+                                    <table class="table align-items-center mb-0">
+                                        <thead class="thead-light">
                                             <tr>
-                                                <td colspan="4" class="text-center text-muted">Không có linh kiện nào dưới hạn
-                                                    mức.</td>
+                                                <th scope="col">Tên linh kiện</th>
+                                                <th scope="col" class="text-center">Số lượng</th>
                                             </tr>
-                                        @endforelse
-                                    </tbody>
-                                </table>
+                                        </thead>
+                                        <tbody>
+                                            @forelse($linhkienCanhBao as $lk)
+                                                <tr class="table-danger">
+                                                    <td>{{ $lk->TenLinhKien }}</td>
+                                                    <td class="text-center"><strong>{{ $lk->SoLuong }}</strong></td>
+                                                </tr>
+                                            @empty
+                                                <tr>
+                                                    <td colspan="4" class="text-center text-muted">Không có linh kiện nào dưới hạn
+                                                        mức.</td>
+                                                </tr>
+                                            @endforelse
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
-                        </div>
+                        </a>
                     </div>
                 </div>
             </div>

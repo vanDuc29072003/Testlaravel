@@ -6,11 +6,9 @@
     <div class="container">
         <div class="page-inner">
             <div class="row">
-                <div class="col-10">
-                    <div class="table-responsive mb-5">
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <h3 class="mb-3">Lịch sử sửa chữa</h3>
-                        </div>               
+                <h3 class="mb-3">Lịch sử sửa chữa</h3>
+                <div class="col-xl-10 col-sm-12">
+                    <div class="table-responsive">
                         <table id="bang-da-hoan-thanh" class="table table-responsive table-bordered table-hover">
                             <thead>
                                 <tr class="text-center">
@@ -63,10 +61,11 @@
                     </div>
                 </div>
                 <!-- Form tìm kiếm -->
-                <div class="col-2 p-0">
-                    <div style="margin-top: 50px;">
+                <div class="col-xl-2 col-sm-12 p-0">
+                    <div>
                         <form method="GET" action="{{ route('lichsuachua.dahoanthanh') }}"
                             class="p-3 border rounded fixed-search-form">
+                            <h5 class="mb-3">Bộ lọc</h5>
                             <div class="mb-3">
                                 <label for="thang" class="form-label">Tháng yêu cầu</label>
                                 <input type="month" name="thang" id="thang" class="form-control"
@@ -109,7 +108,7 @@
                             </div>
                             
                             <button type="submit" class="btn btn-primary w-100">
-                                <i class="fa fa-search"></i> Tìm kiếm
+                                <i class="fa fa-filter"></i> Lọc
                             </button>
                         </form>
                     </div>

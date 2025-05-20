@@ -67,7 +67,7 @@
 
             <div class="row mt-5">
                 <h3 class="mb-3">Phiếu Nhập Đã Duyệt</h3><!-- Bảng danh sách phiếu nhập đã duyệt -->
-                <div class="col-9">
+                <div class="col-lg-9">
                     <div class="table-responsive">
                         <table id="bang-da-duyet" class="table table-bordered table-hover">
                             <thead>
@@ -107,7 +107,7 @@
                 </div>
 
                 <!-- Form tìm kiếm -->
-                <div class="col-3">
+                <div class="col-lg-3">
                     <form method="GET" action="{{ route('dsphieunhap') }}" class="p-3 border rounded">
                         <h5 class="mb-3">Tìm kiếm</h5>
                         <div class="mb-3">
