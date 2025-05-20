@@ -90,9 +90,6 @@
                                 @endforeach
                             </select>
                         </div>
-
-                        {{-- Lọc theo mã máy --}}                       
-
                         {{-- Lọc theo tên máy --}}
                         <div class="mb-3">
                             <label for="ten_may" class="form-label">Tên máy</label>
