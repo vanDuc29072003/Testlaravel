@@ -32,7 +32,7 @@
           <div class="mb-3">
             <label for="NgayBaoTri" class="form-label">Ngày bảo trì bắt đầu</label>
             <input type="date" name="NgayBaoTri" id="NgayBaoTri" class="form-control" value="{{ old('NgayBaoTri') }}"     
-             required>
+                  min="{{ \Carbon\Carbon::now()->format('Y-m-d') }}" required>
           </div>
 
           <!-- Tên máy -->
