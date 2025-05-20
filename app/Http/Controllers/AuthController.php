@@ -29,7 +29,7 @@ class AuthController extends Controller
             // Chuyển hướng dựa theo mã bộ phận
             switch ($maBoPhan) {
                 case 1:
-                    return redirect()->route('thongkesuachua')->with('success', 'Chào mừng quay trở lại!');
+                    return redirect()->route('dashboard.index')->with('success', 'Chào mừng quay trở lại!');
 
                 case 2:
                     return redirect()->route('lichvanhanh')->with('success', 'Chào mừng quay trở lại!');
