@@ -92,40 +92,55 @@
 @section('scripts')
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        // Xử lý tìm kiếm linh kiện
-        document.getElementById('searchLinhKien').addEventListener('input', function () {
-            let query = this.value;
-            let results = document.getElementById('searchResults');
+        const searchInput = document.getElementById('searchLinhKien');
 
-            if (query.length > 2) {
-                fetch(`/linhkien/search1?query=${query}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        results.innerHTML = '';
-                        if (data.length > 0) {
-                            data.forEach(item => {
-                                let resultItem = document.createElement('a');
-                                resultItem.href = '#';
-                                resultItem.classList.add('list-group-item', 'list-group-item-action');
-                                resultItem.textContent = `${item.TenLinhKien} (${item.MaLinhKien})`;
-                                resultItem.dataset.id = item.MaLinhKien;
-                                resultItem.dataset.name = item.TenLinhKien;
-                                resultItem.dataset.unit = item.don_vi_tinh ? item.don_vi_tinh.TenDonViTinh : 'Không xác định';
+    // Danh sách ký tự không cho nhập
+    const blockedChars = /[!@~`#$%^&*()+=\[\]{};:"\\|,.<>\/?]/;
 
-                                resultItem.addEventListener('click', function (e) {
-                                    e.preventDefault();
-                                    addLinhKienToTable(this.dataset.id, this.dataset.name, this.dataset.unit);
-                                });
+    // Chặn nhập ký tự đặc biệt
+    searchInput.addEventListener('keydown', function (e) {
+        const char = e.key;
+        if (blockedChars.test(char)) {
+            e.preventDefault(); // Ngăn không cho nhập
+        }
+    });
 
-                                results.appendChild(resultItem);
+    // Xử lý tìm kiếm
+    searchInput.addEventListener('input', function () {
+        let query = this.value;
+
+        if (query.length > 2) {
+            fetch(`/linhkien/search1?query=${query}`)
+                .then(response => response.json())
+                .then(data => {
+                    let results = document.getElementById('searchResults');
+                    results.innerHTML = '';
+
+                    if (data.length > 0) {
+                        data.forEach(item => {
+                            let resultItem = document.createElement('a');
+                            resultItem.href = '#';
+                            resultItem.classList.add('list-group-item', 'list-group-item-action');
+                            resultItem.textContent = `${item.TenLinhKien} (${item.MaLinhKien})`;
+                            resultItem.dataset.id = item.MaLinhKien;
+                            resultItem.dataset.name = item.TenLinhKien;
+                            resultItem.dataset.unit = item.don_vi_tinh ? item.don_vi_tinh.TenDonViTinh : 'Không xác định';
+
+                            // Sự kiện click
+                            resultItem.addEventListener('click', function (e) {
+                                e.preventDefault();
+                                addLinhKienToTable(this.dataset.id, this.dataset.name, this.dataset.unit);
                             });
-                        } else {
-                            results.innerHTML = '<div class="list-group-item">Không tìm thấy linh kiện</div>';
-                        }
-                    });
-            } else {
-                results.innerHTML = '';
-            }
+
+                            results.appendChild(resultItem);
+                        });
+                    } else {
+                        results.innerHTML = '<div class="list-group-item">Không tìm thấy linh kiện</div>';
+                    }
+                });
+        } else {
+            document.getElementById('searchResults').innerHTML = '';
+        }
         });
 
         // Thêm sự kiện cho các dòng linh kiện cũ (old input) sau khi load trang

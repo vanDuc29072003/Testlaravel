@@ -63,7 +63,8 @@ class PhieuBanGiaoController extends Controller
 
     public function store1(Request $request)
     {
-
+        try {
+            // Validate input
         // Validate input
         $request->validate([
             'MaLichSuaChua' => 'required|exists:lichsuachua,MaLichSuaChua',
@@ -71,8 +72,11 @@ class PhieuBanGiaoController extends Controller
             'ThoiGianBanGiao' => 'required|date',
             'BienPhapXuLy' => 'nullable|string|max:255',
             'GhiChu' => 'nullable|string|max:255',
-            'TenLinhKien' => 'required|array',
-            'DonViTinh' => 'required|array',
+            'TenLinhKien' => ['required', 'array'],
+            'TenLinhKien.*' => ['required', 'regex:/^[\pL\s]+$/u'], 
+
+            'DonViTinh' => ['required', 'array'],
+            'DonViTinh.*' => ['required', 'regex:/^[\pL\s]+$/u'],
             'SoLuong' => 'required|array',
             'GiaThanh' => 'required|array',
             'ThanhTien' => 'required|array',
@@ -109,6 +113,13 @@ class PhieuBanGiaoController extends Controller
         $lichSuaChua->save();
 
         return redirect()->route('lichsuachua.dahoanthanh')->with('success', 'Phiếu bàn giao nhà cung cấp đã được tạo thành công!');
+        
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return redirect()->back()
+                ->withErrors($e->validator) // <== THÊM DÒNG NÀY để gửi lỗi validation
+                ->withInput()
+                ->with('error', 'Tên linh kiện và đơn vị tính không được nhập kí tự đặc biệt và số!');
+        }
     }
     public function exportPDF($MaPhieuBanGiaoNoiBo)
     {
@@ -137,19 +148,27 @@ class PhieuBanGiaoController extends Controller
     
     public function storeBT(Request $request)
     {
-        // Validate input
+     try {
         $request->validate([
             'MaLichBaoTri' => 'required|exists:lichbaotri,MaLichBaoTri',
             'MaNhanVien' => 'required|exists:nhanvien,MaNhanVien',
             'TongTien' => 'required|numeric|min:0',
             'ThoiGianBanGiao' => 'required|date',
             'LuuY' => 'nullable|string|max:255',
-            'TenLinhKien' => 'required|array',
-            'DonViTinh' => 'required|array',
-            'SoLuong' => 'required|array',
-            'GiaThanh' => 'required|array',
+            'TenLinhKien' => ['required', 'array'],
+            'TenLinhKien.*' => ['required', 'regex:/^[\pL\s]+$/u'], 
+
+            'DonViTinh' => ['required', 'array'],
+            'DonViTinh.*' => ['required', 'regex:/^[\pL\s]+$/u'],
+
+            'SoLuong' => ['required', 'array'],
+            
+
+            'GiaThanh' => ['required', 'array'],
+           
             'BaoHanh' => 'nullable|array', // BaoHanh có thể không tồn tại nếu không có checkbox nào được chọn
         ]);
+
 
         // Tạo phiếu bàn giao bảo trì
         $phieuBanGiaoBaoTri = new PhieuBanGiaoBaoTri();
@@ -177,6 +196,13 @@ class PhieuBanGiaoController extends Controller
         $lichBaoTri->save();
 
         return redirect()->route('lichbaotri.dabangiao')->with('success', 'Phiếu bàn giao bảo trì được tạo thành công!');
+    }
+    catch (\Illuminate\Validation\ValidationException $e) {
+    return redirect()->back()
+        ->withErrors($e->validator) // <== THÊM DÒNG NÀY để gửi lỗi validation
+        ->withInput()
+        ->with('error', 'Tên linh kiện và đơn vị tính không được nhập kí tự đặc biệt và số!');
+        }
     }
     public function exportPDF2($MaPhieuBanGiaoBaoTri)
     {

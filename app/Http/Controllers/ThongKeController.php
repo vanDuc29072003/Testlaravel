@@ -198,7 +198,7 @@ class ThongKeController extends Controller
         $query = DB::table('yeucausuachua')
             ->join('may', 'yeucausuachua.mamay', '=', 'may.MaMay')
             ->select('yeucausuachua.mamay', DB::raw('count(*) as SoLanSuaChua'))
-            ->whereBetween('yeucausuachua.thoigianyeucau', [$startDate, $endDate]);
+            ->whereBetween('yeucausuachua.thoigianyeucau', [$startDate, $endDate]); 
 
         if ($loaiMay) {
             $query->where('may.MaLoai', $loaiMay);
