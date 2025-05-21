@@ -29,28 +29,38 @@
                                     </tr>
                                 </thead>
                                 <tbody id="linhkien-list">
-                                    <tr>
-                                        <td><input type="text" class="form-control" name="TenLinhKien[]"
-                                                placeholder="Tên Linh Kiện" required></td>
-                                        <td><input type="text" class="form-control" name="DonViTinh[]"
-                                                placeholder="Đơn Vị Tính" required></td>
-                                        <td><input type="number" class="form-control soLuong" name="SoLuong[]"
-                                                placeholder="Số Lượng" min="1" required></td>
-                                        <td><input type="number" class="form-control GiaThanh" name="GiaThanh[]"
-                                                placeholder="Giá Thành" min="1000" required></td>
-                                        <td class="text-center">
-                                            <input type="hidden" name="BaoHanh[]" value="0" class="hiddenBaoHanh">
-                                            <input class="form-check-input baoHanh" type="checkbox"
-                                                style="transform: scale(1.5);">
-                                        </td>
-
-                                        <td><input type="number" class="form-control thanhTien" name="ThanhTien[]" readonly>
-                                        </td>
-                                        <td class="text-center">
-                                            <button type="button" class="btn btn-danger btn-sm xoaDong">X</button>
-                                        </td>
-
-                                    </tr>
+                                    @php
+                                            $oldTenLinhKien = old('TenLinhKien', ['']);
+                                            $oldDonViTinh = old('DonViTinh', ['']);
+                                            $oldSoLuong = old('SoLuong', ['']);
+                                            $oldGiaThanh = old('GiaThanh', ['']);
+                                            $oldBaoHanh = old('BaoHanh', []);
+                                            $tongTien = 0;
+                                    @endphp
+                                    @foreach ($oldTenLinhKien as $index => $tenLinhKien)
+                                            @php
+                                                $soLuong = (float) ($oldSoLuong[$index] ?? 0);
+                                                $giaThanh = (float) ($oldGiaThanh[$index] ?? 0);
+                                                $baoHanh = isset($oldBaoHanh[$index]) ? $oldBaoHanh[$index] : 0;
+                                                $thanhTien = ($baoHanh == 1) ? 0 : $soLuong * $giaThanh;
+                                                $tongTien += $thanhTien;
+                                            @endphp
+                                    
+                                        <tr>
+                                            <td><input type="text" class="form-control" name="TenLinhKien[]" value="{{ $tenLinhKien }}" placeholder="Nhập tên linh kiện" required></td>
+                                            <td><input type="text" class="form-control" name="DonViTinh[]" value="{{ $oldDonViTinh[$index] ?? '' }}" placeholder="Nhập đơn vị tính" required></td>
+                                            <td><input type="number" class="form-control soLuong" name="SoLuong[]" value="{{ $oldSoLuong[$index] ?? '' }}" min="1" placeholder="Nhập số lượng" required></td>
+                                            <td><input type="number" class="form-control GiaThanh" name="GiaThanh[]" value="{{ $oldGiaThanh[$index] ?? '' }}" min="1000" placeholder="Nhập đơn giá" required></td>
+                                            <td class="text-center">
+                                                <input type="checkbox" class="form-check-input baoHanh" style="transform: scale(1.5);" {{ $baoHanh == 1 ? 'checked' : '' }}>
+                                                <input type="hidden" class="hiddenBaoHanh" name="BaoHanh[{{ $index }}]" value="{{ $baoHanh }}">
+                                            </td>
+                                            <td><input type="number" class="form-control thanhTien" name="ThanhTien[]" value="{{ $thanhTien }}" readonly></td>
+                                            <td class="text-center">
+                                                <button type="button" class="btn btn-danger btn-sm xoaDong">X</button>
+                                            </td>
+                                        </tr>
+                                    @endforeach
                                 </tbody>
                                 <tfoot>
                                     <tr>
@@ -88,7 +98,7 @@
                             <div class="form-group ">
                                 <label for="ThoiGianBanGiao">Thời Gian Bàn Giao</label>
                                 <input type="datetime-local" class="form-control" id="ThoiGianBanGiao"
-                                    name="ThoiGianBanGiao" required>
+                                    name="ThoiGianBanGiao"  value="{{ old('ThoiGianBanGiao') }}" required>
                             </div>
 
                             <div class="form-group ">
@@ -123,7 +133,8 @@
             </form>
         </div> <!-- end page-inner -->
     </div> <!-- end container -->
-
+@endsection
+@section('scripts')
     <script>
         // Tính tổng tiền
         function tinhTongTien() {
@@ -136,23 +147,22 @@
 
         // Thêm dòng mới
         function themDong() {
-            const row = `
-                                        <tr>
-                                            <td><input type="text" class="form-control" name="TenLinhKien[]" placeholder="Tên Linh Kiện" required></td>
-                                            <td><input type="text" class="form-control" name="DonViTinh[]" placeholder="Đơn Vị Tính" required></td>
-                                            <td><input type="number" class="form-control soLuong" name="SoLuong[]" placeholder="Số Lượng" min="1" required></td>
-                                            <td><input type="number" class="form-control GiaThanh" name="GiaThanh[]" placeholder="Giá Thành" min="1000" required></td>
-                                            <td class="text-center">
-                                                <input type="hidden" name="BaoHanh[]" value="0" class="hiddenBaoHanh">
-                                                <input class="form-check-input baoHanh" type="checkbox" style="transform: scale(1.5);">
-                                            </td>
-                                            <td><input type="number" class="form-control thanhTien" name="ThanhTien[]" readonly></td>
-                                            <td class="text-center">
-                                                 <button type="button" class="btn btn-danger btn-sm xoaDong">X</button>
-                                                </td>
-                                        </tr>`;
-            document.getElementById('linhkien-list').insertAdjacentHTML('beforeend', row);
-        }
+        const rowCount = document.querySelectorAll('#linhkien-list tr').length;
+        const row = `
+        <tr>
+            <td><input type="text" class="form-control" name="TenLinhKien[]" placeholder="Nhập tên linh kiện" required></td>
+            <td><input type="text" class="form-control" name="DonViTinh[]" placeholder="Nhập đơn vị tính" required></td>
+            <td><input type="number" class="form-control soLuong" name="SoLuong[]" min="1" placeholder="Nhập số lượng" required></td>
+            <td><input type="number" class="form-control GiaThanh" name="GiaThanh[]" min="1000" placeholder="Nhập giá thành" required></td>
+            <td class="text-center">
+                <input type="checkbox" class="form-check-input baoHanh" style="transform: scale(1.5);">
+                <input type="hidden" name="BaoHanh[${rowCount}]" value="0" class="hiddenBaoHanh">
+            </td>
+            <td><input type="number" class="form-control thanhTien" value="0" name="ThanhTien[]" readonly></td>
+            <td class="text-center"><button type="button" class="btn btn-danger btn-sm xoaDong">X</button></td>
+        </tr>`;
+        document.getElementById('linhkien-list').insertAdjacentHTML('beforeend', row);
+    }
 
         // Tự động tính Thành Tiền mỗi lần nhập
         document.addEventListener('input', function (e) {
@@ -168,24 +178,19 @@
         });
 
         // Nếu check Bảo hành -> Thành tiền = 0
-        document.addEventListener('change', function (e) {
-            if (e.target.classList.contains('baoHanh')) {
-                const baoHanhCheckbox = e.target;
-                const row = baoHanhCheckbox.closest('tr');
-                const hiddenBaoHanh = row.querySelector('.hiddenBaoHanh');
-                const soLuong = parseFloat(row.querySelector('.soLuong').value) || 0;
-                const giaThanh = parseFloat(row.querySelector('.GiaThanh').value) || 0;
-                const thanhTienInput = row.querySelector('.thanhTien');
+          document.addEventListener('change', function (e) {
+        if (e.target.classList.contains('baoHanh')) {
+            const row = e.target.closest('tr');
+            const hiddenInput = row.querySelector('.hiddenBaoHanh');
+            const soLuong = parseFloat(row.querySelector('.soLuong')?.value) || 0;
+            const giaThanh = parseFloat(row.querySelector('.GiaThanh')?.value) || 0;
+            const thanhTienInput = row.querySelector('.thanhTien');
 
-                // Update hidden input theo trạng thái checkbox
-                hiddenBaoHanh.value = baoHanhCheckbox.checked ? 1 : 0;
-
-                // Thành tiền
-                thanhTienInput.value = baoHanhCheckbox.checked ? 0 : soLuong * giaThanh;
-
-                tinhTongTien();
-            }
-        });
+            hiddenInput.value = e.target.checked ? 1 : 0;
+            thanhTienInput.value = e.target.checked ? 0 : soLuong * giaThanh;
+            tinhTongTien();
+        }
+    });
         document.addEventListener('click', function (e) {
             if (e.target.classList.contains('xoaDong')) {
                 const row = e.target.closest('tr');
@@ -193,7 +198,24 @@
                 tinhTongTien(); // Sau khi xóa phải tính lại tổng tiền
             }
         });
+        document.addEventListener('DOMContentLoaded', function () {
+        tinhTongTien();
+    });
 
-
+    </script>
+    <script>
+        @if (session('error'))
+            $.notify({
+                title: 'Lỗi',
+                message: '{{ session('error') }}',
+                icon: 'icon-bell'
+            }, {
+                type: 'danger',
+                animate: {
+                    enter: 'animated fadeInDown',
+                    exit: 'animated fadeOutUp'
+                },
+            });
+        @endif
     </script>
 @endsection

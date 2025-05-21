@@ -75,11 +75,12 @@ class LichVanHanhController extends Controller
 
 
     public function create()
-    {
-        $may = May::all();
-        $nhanvien = NhanVien::all();
-        return view('Vlich.createlichvanhanh', compact('may', 'nhanvien'));
-    }
+{
+    $may = May::all();
+    $nhanvien = NhanVien::where('MaBoPhan', 2)->get();
+
+    return view('Vlich.createlichvanhanh', compact('may', 'nhanvien'));
+}
 
     public function store(Request $request)
     {

@@ -104,42 +104,57 @@
 
 @section('scripts')
     <script>
-        document.getElementById('searchLinhKien').addEventListener('input', function () {
-            let query = this.value;
+    const searchInput = document.getElementById('searchLinhKien');
 
-            if (query.length > 2) { // Chỉ tìm kiếm khi có ít nhất 3 ký tự
-                fetch(`/linhkien/search1?query=${query}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        let results = document.getElementById('searchResults');
-                        results.innerHTML = '';
+    // Danh sách ký tự không cho nhập
+    const blockedChars = /[!@~`#$%^&*()+=\[\]{};:"\\|,.<>\/?]/;
 
-                        if (data.length > 0) {
-                            data.forEach(item => {
-                                let resultItem = document.createElement('a');
-                                resultItem.href = '#';
-                                resultItem.classList.add('list-group-item', 'list-group-item-action');
-                                resultItem.textContent = `${item.TenLinhKien} (${item.MaLinhKien})`;
-                                resultItem.dataset.id = item.MaLinhKien;
-                                resultItem.dataset.name = item.TenLinhKien;
-                                resultItem.dataset.unit = item.don_vi_tinh ? item.don_vi_tinh.TenDonViTinh : 'Không xác định';
+    // Chặn nhập ký tự đặc biệt
+    searchInput.addEventListener('keydown', function (e) {
+        const char = e.key;
+        if (blockedChars.test(char)) {
+            e.preventDefault(); // Ngăn không cho nhập
+        }
+    });
 
-                                // Thêm sự kiện click để chọn linh kiện
-                                resultItem.addEventListener('click', function (e) {
-                                    e.preventDefault();
-                                    addLinhKienToTable(this.dataset.id, this.dataset.name, this.dataset.unit);
-                                });
+    // Xử lý tìm kiếm
+    searchInput.addEventListener('input', function () {
+        let query = this.value;
 
-                                results.appendChild(resultItem);
+        if (query.length > 2) {
+            fetch(`/linhkien/search1?query=${query}`)
+                .then(response => response.json())
+                .then(data => {
+                    let results = document.getElementById('searchResults');
+                    results.innerHTML = '';
+
+                    if (data.length > 0) {
+                        data.forEach(item => {
+                            let resultItem = document.createElement('a');
+                            resultItem.href = '#';
+                            resultItem.classList.add('list-group-item', 'list-group-item-action');
+                            resultItem.textContent = `${item.TenLinhKien} (${item.MaLinhKien})`;
+                            resultItem.dataset.id = item.MaLinhKien;
+                            resultItem.dataset.name = item.TenLinhKien;
+                            resultItem.dataset.unit = item.don_vi_tinh ? item.don_vi_tinh.TenDonViTinh : 'Không xác định';
+
+                            // Sự kiện click
+                            resultItem.addEventListener('click', function (e) {
+                                e.preventDefault();
+                                addLinhKienToTable(this.dataset.id, this.dataset.name, this.dataset.unit);
                             });
-                        } else {
-                            results.innerHTML = '<div class="list-group-item">Không tìm thấy linh kiện</div>';
-                        }
-                    });
-            } else {
-                document.getElementById('searchResults').innerHTML = '';
-            }
-        });
+
+                            results.appendChild(resultItem);
+                        });
+                    } else {
+                        results.innerHTML = '<div class="list-group-item">Không tìm thấy linh kiện</div>';
+                    }
+                });
+        } else {
+            document.getElementById('searchResults').innerHTML = '';
+        }
+    });
+
 
         function addLinhKienToTable(maLinhKien, tenLinhKien, tenDonViTinh) {
             // Kiểm tra xem mã linh kiện đã tồn tại trong bảng chưa
