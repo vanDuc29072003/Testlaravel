@@ -86,31 +86,53 @@ class LichBaoTriController extends Controller
     {
         $query = LichBaoTri::query();
 
-        // Chỉ lấy lịch bảo trì có TrangThai = 1 (Đã hoàn thành)
+        // Chỉ lấy lịch bảo trì đã hoàn thành
         $query->where('TrangThai', 1);
 
-        // Lọc theo năm
-        if ($request->filled('nam')) {
-            $query->whereYear('NgayBaoTri', $request->input('nam'));
+        // Lọc theo máy
+        if ($request->filled('may')) {
+            $query->where('MaMay', $request->input('may'));
         }
 
-        // Lọc theo quý
-        if ($request->filled('quy')) {
-            $batdau = ($request->input('quy') - 1) * 3 + 1;
-            $ketthuc = $batdau + 2;
-            $query->whereMonth('NgayBaoTri', '>=', $batdau)
+        // Lọc theo nhà cung cấp
+        if ($request->filled('ncc')) {
+            $query->whereHas('may', function ($q) use ($request) {
+                $q->where('MaNhaCungCap', $request->input('ncc'));
+            });
+        }
+
+        // Lọc theo thời gian
+        $timeType = $request->input('time_type', 'month');
+        if ($timeType === 'month') {
+            $query->whereMonth('NgayBaoTri', now()->month)
+                ->whereYear('NgayBaoTri', now()->year);
+        } elseif ($timeType === 'quarter') {;
+            $ketthuc = now()->month;
+            $batdau = $ketthuc - 2;
+            $query->whereYear('NgayBaoTri', now()->year)
+                ->whereMonth('NgayBaoTri', '>=', $batdau)
                 ->whereMonth('NgayBaoTri', '<=', $ketthuc);
+        } elseif ($timeType === 'custom') {
+            if ($request->filled('from') && $request->filled('to')) {
+                $from = Carbon::parse($request->input('from'))->startOfDay();
+                $to = Carbon::parse($request->input('to'))->endOfDay();
+                $query->whereBetween('NgayBaoTri', [$from, $to]);
+            }
         }
 
         // Lấy danh sách lịch bảo trì
-        $lichbaotri = $query->with('may')->orderBy('NgayBaoTri', 'asc')->get();
+        $lichbaotri = $query->with('may.nhaCungCap')->orderBy('NgayBaoTri', 'asc')->get();
 
-        // Nhóm theo tháng (theo Y-m format)
+        // Nhóm theo tháng-năm
         $lichbaotriGrouped = $lichbaotri->groupBy(function ($item) {
             return Carbon::parse($item->NgayBaoTri)->format('Y-m');
         });
 
-        return view('vLichSu.lichsubaotri', compact('lichbaotriGrouped'));
+        // Dữ liệu cho combobox
+        $dsMay = May::all();
+        $dsNhaCungCap = NhaCungCap::all();
+
+        return view('vLichSu.lichsubaotri', compact('lichbaotriGrouped', 'dsMay', 'dsNhaCungCap'));
     }
 
 

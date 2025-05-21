@@ -8,7 +8,7 @@
     <div class="row">
 
       <!-- Phần lịch bảo trì -->
-      <div class="col-md-9">
+      <div class="col-lg-9">
         <div class="d-flex justify-content-between align-items-center mb-3">
           <h1 class="mb-0">Lịch bảo trì</h1>
           <a href="{{ route('lichbaotri.create') }}" class="btn btn-primary">
@@ -16,16 +16,16 @@
           </a>
         </div>
       </div>
-      <div class="col-md-9">
+      <div class="col-lg-9">
         @forelse ($lichbaotriGrouped as $monthYear => $lichs)
           <h5 class="mt-4 text-primary">Tháng: {{ \Carbon\Carbon::parse($monthYear . '-01')->format('m/Y') }}</h5>
-          <table class="table table-bordered">
+          <table class="table table-responsive table-bordered">
             <thead>
               <tr>
                 <th>STT</th>
                 <th>Ngày</th>
-                <th>Mô tả</th>
                 <th>Tên máy</th>
+                <th>Mô tả</th>
                 <th>Nhà cung cấp</th>
                 <th style="width: 200px;">Hành động</th>
               </tr>
@@ -35,8 +35,8 @@
                 <tr>
                   <td>{{ $loop->iteration }}</td>
                   <td>{{ \Carbon\Carbon::parse($lich->NgayBaoTri)->format('d/m/Y') }}</td>
-                  <td>{{ $lich->MoTa }}</td>
                   <td>{{ $lich->may->TenMay ?? 'Không xác định' }}</td>
+                  <td>{{ $lich->MoTa }}</td>
                   <td>{{ $lich->may->nhaCungCap->TenNhaCungCap ?? 'Không xác định' }}</td>
                   <td>
                     <div class="d-flex gap-2">
@@ -63,25 +63,27 @@
 
       <!-- Phần bộ lọc -->
     
-      <div class="col-3">
+      <div class="col-lg-3">
             <h5 class="mt-4">&nbsp;</h5>
             <form action="{{ route('lichbaotri') }}" method="GET" class="p-3 border rounded">
             <h5 class="mb-3">Bộ lọc</h5>
                 <div class="mb-3">
             <!-- Chọn máy -->
-                <select name="may_id" id="may_id" class="form-select">
-                    <option value="" {{ request()->filled('may_id') ? '' : 'selected' }}>-- Tất cả máy --</option>
-                    @foreach ($dsMay as $may)
-                        <option value="{{ $may->MaMay }}" {{ request('may_id') == $may->MaMay ? 'selected' : '' }}>
-                            {{ $may->TenMay }}
-                        </option>
-                    @endforeach
-                </select>
+                  <label for="may_id" class="form-label">Chọn máy</label>
+                  <select name="may_id" id="may_id" class="form-select">
+                      <option value="" {{ request()->filled('may_id') ? '' : 'selected' }}>-- Tất cả máy --</option>
+                      @foreach ($dsMay as $may)
+                          <option value="{{ $may->MaMay }}" {{ request('may_id') == $may->MaMay ? 'selected' : '' }}>
+                              {{ $may->TenMay }}
+                          </option>
+                      @endforeach
+                  </select>
                 </div>
                 <div class="mb-3">
 
                 <!-- Chọn nhà cung cấp -->
                <!-- Chọn nhà cung cấp -->
+              <label for="ncc_id" class="form-label">Chọn nhà cung cấp</label>
               <select name="ncc_id" id="ncc_id" class="form-select">
                   <option value="" {{ request()->filled('ncc_id') ? '' : 'selected' }}>-- Tất cả NCC --</option>
                   @foreach ($dsNhaCungCap as $ncc)
@@ -97,7 +99,7 @@
                     <div class="form-check">
                       <input class="form-check-input" type="radio" name="khoang_thoi_gian" id="radio_1thang" value="1"
                         {{ request('khoang_thoi_gian', '1') == '1' ? 'checked' : '' }}>
-                      <label class="form-check-label" for="radio_1thang">
+                      <label class="form-check-label m-0" for="radio_1thang">
                         1 tháng gần nhất
                       </label>
                     </div>
@@ -105,7 +107,7 @@
                   <div class="form-check">
                     <input class="form-check-input" type="radio" name="khoang_thoi_gian" id="radio_3thang" value="3"
                       {{ request('khoang_thoi_gian') == '3' ? 'checked' : '' }}>
-                    <label class="form-check-label" for="radio_3thang">
+                    <label class="form-check-label m-0" for="radio_3thang">
                       3 tháng gần nhất
                     </label>
                   </div>
@@ -114,7 +116,7 @@
                   <div class="form-check">
                     <input class="form-check-input" type="radio" name="khoang_thoi_gian" id="radio_5thang" value="5"
                       {{ request('khoang_thoi_gian') == '5' ? 'checked' : '' }}>
-                    <label class="form-check-label" for="radio_5thang">
+                    <label class="form-check-label m-0" for="radio_5thang">
                       5 tháng gần nhất
                     </label>
                   </div>
@@ -123,7 +125,7 @@
                   <div class="form-check">
                     <input class="form-check-input" type="radio" name="khoang_thoi_gian" id="radio_khac" value="khac"
                       {{ request('khoang_thoi_gian') == 'khac' || request('tu_ngay') || request('den_ngay') ? 'checked' : '' }}>
-                    <label class="form-check-label" for="radio_khac">
+                    <label class="form-check-label m-0" for="radio_khac">
                       Tùy chọn khác
                     </label>
                   </div>
@@ -141,7 +143,8 @@
                   </div>
                 </div>
 
-              <button type="submit" class="btn btn-primary w-100">Lọc</button>
+              <button type="submit" class="btn btn-primary w-100">
+                <i class="fa fa-filter"></i> Lọc</button>
             </form>
           </div>
         </div>

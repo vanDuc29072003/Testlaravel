@@ -20,6 +20,7 @@ use App\Http\Controllers\PhieuThanhLyController;
 use App\Http\Controllers\LoaiMayController;
 use App\Http\Controllers\BophanController;
 use App\Http\Controllers\NhatKiVanHanhController;
+use App\Http\Controllers\DonViTinhController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -272,4 +273,11 @@ Route::middleware('auth')->group(function () {
     Route::patch('/phieuthanhly/{MaPhieuThanhLy}/tuchoi', [PhieuThanhLyController::class, 'tuchoi'])->name('phieuthanhly.tuchoi');
     Route::get('/phieuthanhly/{MaPhieuThanhLy}/pdf', [PhieuThanhLyController::class, 'exportPDF'])->name('phieuthanhly.exportPDF');
     Route::get('/may/{MaMay}/thongtin', [PhieuThanhLyController::class, 'getThongTinMay'])->name('may.thongtin');
+
+
+    //Dơn vị tính
+    Route::get('/donvitinh', [DonViTinhController::class, 'index'])->name('donvitinh.index');
+    Route::get('/donvitinh/create', [DonViTinhController::class, 'create'])->name('donvitinh.create');
+    Route::post('/donvitinh/store', [DonViTinhController::class, 'store'])->name('donvitinh.store');
+    Route::delete('/donvitinh/{MaDonViTinh}', [DonViTinhController::class, 'destroy'])->name('donvitinh.destroy');
 });

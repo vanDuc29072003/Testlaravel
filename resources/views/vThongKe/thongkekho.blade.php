@@ -18,8 +18,7 @@
                     </div>
                 </div>
                 <div class="col-3">
-                    <a href="{{ route('canhbaonhaphang') }}" class="btn btn-black btn-border"
-                        style="color: black;">
+                    <a href="{{ route('canhbaonhaphang') }}" class="btn btn-black btn-border" style="color: black;">
                         <i class="fab fa-hotjar" style="color: red;"></i> Cảnh Báo Nhập Hàng
                     </a>
                 </div>
@@ -65,6 +64,23 @@
                     <form method="GET" action="{{ route('thongkekho') }}" class="p-3 border rounded">
                         <h5 class="mb-3">Bộ lọc</h5>
                         <div class="mb-3">
+                            <label for="ten_hang" class="form-label">Tên hàng</label>
+                            <input type="text" name="ten_hang" id="ten_hang" class="form-control"
+                                value="{{ request('ten_hang') }}" placeholder="Nhập tên hàng...">
+                        </div>
+                        <div class="mb-3">
+                            <label for="dvt" class="form-label">Đơn vị tính</label>
+                            <select name="dvt" id="dvt" class="form-select">
+                                <option value="">-- Tất cả --</option>
+                                @foreach($dsDonViTinh as $dvt)
+                                    <option value="{{ $dvt->MaDonViTinh }}" {{ request('dvt') == $dvt->MaDonViTinh ? 'selected' : '' }}>
+                                        {{ $dvt->TenDonViTinh }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label mb-3">Khoảng thời gian</label>
                             <div class="form-check p-0">
                                 <input class="form-check-input" type="radio" name="time_filter" id="today" value="today" {{ request('time_filter') == 'today' ? 'checked' : '' }}>
                                 <label class="form-check-label" for="today">Hôm nay</label>

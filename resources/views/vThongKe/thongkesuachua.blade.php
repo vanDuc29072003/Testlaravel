@@ -6,7 +6,7 @@
     <div class="container">
         <div class="page-inner">
             <div class="row">
-                <div class="col-9">
+                <div class="col-md-9">
                     <div>
                         <div class="d-flex justify-content-between align-items-center mb-0">
                             <h3 class="mb-0">Thống kê sửa chữa</h3>
@@ -19,31 +19,31 @@
 
                     </div>
                 </div>
-                <div class="col-3">
+                <div class="col-md-3">
                     <div class="card card-stats card-round">
-                            <div class="card-body">
-                                <div class="row align-items-center">
-                                    <div class="col-icon">
-                                        <div class="icon-big text-center icon-secondary bubble-shadow-small">
-                                            <i class="fas fa-tools"></i>
-                                        </div>
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col-icon">
+                                    <div class="icon-big text-center icon-secondary bubble-shadow-small">
+                                        <i class="fas fa-tools"></i>
                                     </div>
-                                    <div class="col col-stats ms-3 ms-sm-0">
-                                        <div class="numbers">
-                                            <strong>Tổng số yêu cầu sửa chữa</strong>
-                                            <h4 class="card-title">{{ $tongSoYeuCauSuaChua }}</h4>
-                                        </div>
+                                </div>
+                                <div class="col col-stats ms-3 ms-sm-0">
+                                    <div class="numbers">
+                                        <strong>Tổng số yêu cầu sửa chữa</strong>
+                                        <h4 class="card-title">{{ $tongSoYeuCauSuaChua }}</h4>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                    </div>
                 </div>
 
                 <!-- Bảng thống kê -->
-               <div class="col-9">
+               <div class="col-md-9">
                     @if ($thongKeSuaChua->isNotEmpty())
-                        <table class="table table-responsive table-bordered table-hover table-striped">
-                            <thead class="text-center bg-light">
+                        <table class="table table-responsive table-bordered table-hover">
+                            <thead class="text-center">
                                 <tr>
                                     <th>Mã máy</th>
                                     <th>Tên máy</th>
@@ -58,9 +58,9 @@
                                         'start_date' => request('start_date'),
                                         'end_date' => request('end_date')
                                     ]) }}'" style="cursor: pointer;">
-                                        <td>{{ $item['MaMay2'] }}</td>
+                                        <td class="text-center">{{ $item['MaMay2'] }}</td>
                                         <td>{{ $item['TenMay'] }}</td>
-                                        <td class="text-end">{{ $item['SoLanSuaChua'] }}</td>
+                                        <td class="text-center">{{ $item['SoLanSuaChua'] }}</td>
                                     </tr>
                                 @endforeach
                             </tbody>
@@ -75,7 +75,7 @@
             
 
             <!-- Form lọc thời gian -->
-                <div class="col-3">
+                <div class="col-md-3">
                     <form method="GET" action="{{ route('thongkesuachua') }}" class="p-3 border rounded">
                         <h5 class="mb-3">Bộ lọc</h5>
                         {{-- Lọc theo loại máy --}}
@@ -94,7 +94,7 @@
                         <div class="mb-3">
                             <label for="ten_may" class="form-label">Tên máy</label>
                             <input type="text" name="ten_may" id="ten_may" class="form-control"
-                                value="{{ request('ten_may') }}">
+                                value="{{ request('ten_may') }}" placeholder="Vui lòng nhập...">
                         </div>
 
                         {{-- Sắp xếp tăng/giảm --}}

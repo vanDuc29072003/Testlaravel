@@ -49,8 +49,24 @@ class ThongKeController extends Controller
                 break;
         }
 
-        // Lấy danh sách tất cả các linh kiện
-        $linhKien = LinhKien::with('donViTinh')->get();
+        // Lọc theo tên hàng và đơn vị tính
+        $tenHang = $request->input('ten_hang');
+        $dvt = $request->input('dvt');
+
+        // Lấy danh sách đơn vị tính cho filter
+        $dsDonViTinh = DonViTinh::all();
+
+        // Lấy danh sách linh kiện theo filter
+        $linhKienQuery = LinhKien::with('donViTinh');
+
+        if ($tenHang) {
+            $linhKienQuery->where('TenLinhKien', 'like', '%' . $tenHang . '%');
+        }
+        if ($dvt) {
+            $linhKienQuery->where('MaDonViTinh', '=', $dvt);
+        }
+
+        $linhKien = $linhKienQuery->get();
 
         // Tính toán thống kê cho từng linh kiện
         $thongKe = $linhKien->map(function ($item) use ($startDate, $endDate) {
@@ -80,8 +96,8 @@ class ThongKeController extends Controller
             ];
         });
 
-        // Trả về view với dữ liệu thống kê
-        return view('vThongKe.thongkekho', compact('thongKe', 'startDate', 'endDate'));
+        // Trả về view với dữ liệu thống kê và danh sách đơn vị tính cho filter
+        return view('vThongKe.thongkekho', compact('thongKe', 'startDate', 'endDate', 'dsDonViTinh'));
     }
 
     public function exportPDF(Request $request)
@@ -118,8 +134,24 @@ class ThongKeController extends Controller
                 break;
         }
 
-        // Lấy danh sách tất cả các linh kiện
-        $linhKien = LinhKien::with('donViTinh')->get();
+        // Lọc theo tên hàng và đơn vị tính
+        $tenHang = $request->input('ten_hang');
+        $dvt = $request->input('dvt');
+
+        // Lấy danh sách đơn vị tính cho filter
+        $dsDonViTinh = DonViTinh::all();
+
+        // Lấy danh sách linh kiện theo filter
+        $linhKienQuery = LinhKien::with('donViTinh');
+
+        if ($tenHang) {
+            $linhKienQuery->where('TenLinhKien', 'like', '%' . $tenHang . '%');
+        }
+        if ($dvt) {
+            $linhKienQuery->where('MaDonViTinh', '=', $dvt);
+        }
+
+        $linhKien = $linhKienQuery->get();
 
         // Tính toán thống kê cho từng linh kiện
         $thongKe = $linhKien->map(function ($item) use ($startDate, $endDate) {
@@ -250,6 +282,97 @@ class ThongKeController extends Controller
             'loaiMay',
             'tenMay'
         ));
+    }
+    public function exportPDF1(Request $request){
+        $dsLoaiMay = DB::table('loaimay')
+            ->select('MaLoai', 'TenLoai')
+            ->distinct()
+            ->get();
+
+        // Lọc theo thời gian
+        $timeFilter = $request->input('time_filter', 'today');
+        $startDate = now()->startOfDay();
+        $endDate = now()->endOfDay();
+
+        switch ($timeFilter) {
+            case 'today':
+                $startDate = now()->startOfDay();
+                $endDate = now()->endOfDay();
+                break;
+            case 'yesterday':
+                $startDate = now()->subDay()->startOfDay();
+                $endDate = now()->subDay()->endOfDay();
+                break;
+            case 'this_month':
+                $startDate = now()->startOfMonth();
+                $endDate = now()->endOfMonth();
+                break;
+            case 'custom':
+                $startDate = $request->input('start_date');
+                $endDate = $request->input('end_date');
+                break;
+        }
+
+        // Lọc theo loại máy và tên máy
+        $loaiMay = $request->input('loai_may');
+        $tenMay = $request->input('ten_may');
+
+        // Câu truy vấn chính
+        $query = DB::table('yeucausuachua')
+            ->join('may', 'yeucausuachua.mamay', '=', 'may.MaMay')
+            ->select('yeucausuachua.mamay', DB::raw('count(*) as SoLanSuaChua'))
+            ->whereBetween('yeucausuachua.thoigianyeucau', [$startDate, $endDate]);
+
+        if ($loaiMay) {
+            $query->where('may.MaLoai', $loaiMay);
+        }
+
+        if ($tenMay) {
+            $query->where('may.TenMay', 'like', "%{$tenMay}%");
+        }
+
+        $thongKeSuaChua = $query
+            ->groupBy('yeucausuachua.mamay')
+            ->get();
+
+        $tongSoYeuCauSuaChua = $thongKeSuaChua->sum('SoLanSuaChua');
+
+        // Lấy thông tin tên máy và mã máy 2
+        $danhSachMay = DB::table('may')->pluck('TenMay', 'MaMay');
+        $MaMay2 = DB::table('may')->pluck('MaMay2', 'MaMay');
+
+        // Gộp dữ liệu
+        $thongKeSuaChua = $thongKeSuaChua->map(function ($item) use ($danhSachMay, $MaMay2) {
+            return [
+                'MaMay' => $item->mamay,
+                'MaMay2' => $MaMay2[$item->mamay] ?? 'Không rõ',
+                'TenMay' => $danhSachMay[$item->mamay] ?? 'Không rõ',
+                'SoLanSuaChua' => $item->SoLanSuaChua,
+            ];
+        });
+
+        // Sắp xếp theo yêu cầu (tăng/giảm dần)
+        $sortOrder = $request->input('sort_order', 'desc'); // 'asc' hoặc 'desc'
+        $thongKeSuaChua = $thongKeSuaChua->sort(function ($a, $b) use ($sortOrder) {
+            if ($a['SoLanSuaChua'] !== $b['SoLanSuaChua']) {
+                return $sortOrder === 'asc'
+                    ? $a['SoLanSuaChua'] <=> $b['SoLanSuaChua']
+                    : $b['SoLanSuaChua'] <=> $a['SoLanSuaChua'];
+            }
+            return strcmp($a['MaMay2'], $b['MaMay2']);
+        })->values();
+
+        $ngayLap = now()->format('d/m/Y H:i');
+        $nguoiTao = Auth::user()->nhanvien->TenNhanVien;
+
+        $pdf = PDF::loadView('vThongKe.pdfthongkesuachua', compact(
+            'thongKeSuaChua',
+            'startDate',
+            'endDate',
+            'tongSoYeuCauSuaChua',
+            'ngayLap',
+            'nguoiTao'));
+        return $pdf->stream('thongkesuachua.pdf');
     }
 
 
@@ -413,11 +536,13 @@ class ThongKeController extends Controller
         }
 
         if ($maDonViTinh) {
-            $query->where('lk.MaDonViTinh', $maDonViTinh
+            $query->where(
+                'lk.MaDonViTinh',
+                $maDonViTinh
             );
         }
         // 4. Lấy dữ liệu
-        $thongKe = $query->get();   
+        $thongKe = $query->get();
         // 5. Sắp xếp số lượng
         if ($sortOrder === 'asc') {
             $thongKe = $thongKe->sortBy('TongXuat')->values();
