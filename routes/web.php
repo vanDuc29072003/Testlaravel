@@ -32,6 +32,15 @@ use App\Http\Controllers\NhatKiVanHanhController;
 */
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
+Route::get('/reset-password', [AuthController::class, 'showForgotPasswordForm'])->name('password.reset');
+Route::post('/reset-password/send-otp', [AuthController::class, 'sendOtpForResetPassword'])->name('password.sendOtp');
+// Xử lý đổi mật khẩu (bước 3)
+Route::post('/reset-password/update', [AuthController::class, 'resetPassword'])->name('password.update');
+
+#otp 
+Route::get('/otp', [AuthController::class, 'showOtpForm'])->name('otp.form');
+Route::post('/verify-otp', [AuthController::class, 'verifyOtp'])->name('otp.verify');
+Route::post('/resend-otp', [AuthController::class, 'resendOtp'])->name('otp.resend');
 
 // Route yêu cầu đăng nhập
 Route::middleware('auth')->group(function () {
@@ -46,6 +55,7 @@ Route::middleware('auth')->group(function () {
   })->name('main-header');
 
   Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+  
 
 
   Route::get('/dsphieunhap', [dsphieuNhapController::class, 'index'])->name('dsphieunhap');

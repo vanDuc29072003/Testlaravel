@@ -83,9 +83,10 @@
               <div class="form-group mb-3">
                 <label for="MatKhauChuaMaHoa">Mật khẩu</label>
                 <input type="text" class="form-control" id="MatKhauChuaMaHoa" name="MatKhauChuaMaHoa"
-                       placeholder="Nhập mật khẩu" value="{{ old('MatKhauChuaMaHoa') }}" required>
+                       placeholder="Nhập mật khẩu" value="{{ old('MatKhauChuaMaHoa', 'TKhoa12345@') }}" readonly>
               </div>
             </div>
+
           </div>
 
           {{-- Nút hành động --}}
@@ -107,7 +108,7 @@
 <script>
   const boPhanSelect = document.getElementById('MaBoPhan');
   const tenTaiKhoanInput = document.getElementById('TenTaiKhoan');
-
+  
   const tenRutGonMap = {
     @foreach ($bophans as $bp)
       '{{ $bp->MaBoPhan }}': '{{ $bp->TenRutGon }}',
