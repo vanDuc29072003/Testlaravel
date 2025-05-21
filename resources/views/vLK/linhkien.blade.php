@@ -9,7 +9,7 @@
                 <div class="col-xl-10 col-sm-12">
                     <div class="table-responsive">
                         <div class="d-flex justify-content-between align-items-center mb-3">
-                            <h3 class="mb-0">Danh sách Linh Kiện</h3>
+                            <h1 class="mb-0">Danh sách Linh Kiện</h1>
                             <a href="{{ route('linhkien.add') }}" class="btn btn-primary">
                                 <i class="fa fa-plus"></i> Thêm mới
                             </a>

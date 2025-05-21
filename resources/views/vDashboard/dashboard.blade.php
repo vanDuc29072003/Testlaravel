@@ -136,40 +136,42 @@
             <div class="row">
                 <div class="col-md-8">
                     @if($lichbaotri->count() > 0)
-                        <div class="card">
-                            <div class="card-header">
-                                <div class="card-head-row">
-                                    <i class="fas fa-exclamation-triangle me-2 text-warning"></i>
-                                    <div class="card-title">Máy sắp tới hạn bảo trì</div>
+                        <a href="{{ route('lichbaotri') }}">
+                            <div class="card">
+                                <div class="card-header">
+                                    <div class="card-head-row">
+                                        <i class="fas fa-exclamation-triangle me-2 text-warning"></i>
+                                        <div class="card-title">Máy sắp tới hạn bảo trì</div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="card-body p-0">
-                                <div class="table-responsive">
-                                    <!-- Projects table -->
-                                    <table class="table align-items-center mb-0">
-                                        <thead class="thead-light">
-                                            <tr>
-                                                <th scope="col">Ngày bảo trì</th>
-                                                <th scope="col">Mã máy</th>
-                                                <th scope="col">Tên máy</th>
-                                                <th scope="col">Nhà cung cấp</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach($lichbaotri as $lich)
-                                                <tr class="table-warning" onclick="window.location='{{ route('lichbaotri') }}'"
-                                                    style="cursor: pointer;">
-                                                    <td>{{ \Carbon\Carbon::parse($lich->NgayBaoTri)->format('d/m/Y') }}</td>
-                                                    <td>{{ $lich->may->MaMay2 ?? $lich->may->MaMay }}</td>
-                                                    <td>{{ $lich->may->TenMay }}</td>
-                                                    <td>{{ $lich->may->nhaCungCap->TenNhaCungCap ?? 'Không xác định' }}</td>
+                                <div class="card-body p-0">
+                                    <div class="table-responsive">
+                                        <!-- Projects table -->
+                                        <table class="table align-items-center mb-0">
+                                            <thead class="thead-light">
+                                                <tr>
+                                                    <th scope="col">Ngày bảo trì</th>
+                                                    <th scope="col">Mã máy</th>
+                                                    <th scope="col">Tên máy</th>
+                                                    <th scope="col">Nhà cung cấp</th>
                                                 </tr>
-                                            @endforeach
-                                        </tbody>
-                                    </table>
+                                            </thead>
+                                            <tbody>
+                                                @foreach($lichbaotri as $lich)
+                                                    <tr class="table-warning" onclick="window.location='{{ route('lichbaotri') }}'"
+                                                        style="cursor: pointer;">
+                                                        <td>{{ \Carbon\Carbon::parse($lich->NgayBaoTri)->format('d/m/Y') }}</td>
+                                                        <td>{{ $lich->may->MaMay2 ?? $lich->may->MaMay }}</td>
+                                                        <td>{{ $lich->may->TenMay }}</td>
+                                                        <td>{{ $lich->may->nhaCungCap->TenNhaCungCap ?? 'Không xác định' }}</td>
+                                                    </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        </a>
                     @endif
                     <!-- sơ đồ yêu cầu sửa chữa -->
                     <div class="card">
@@ -422,4 +424,16 @@
             document.getElementById('chiphi-last-month').classList.remove('active');
         });
     </script>
+    <script>
+        @if (session('success'))
+        $.notify({
+            title: 'Thành công',
+            message: '{{ session('success') }}',
+            icon: 'icon-bell'
+        }, {
+            type: 'success',
+            animate: { enter: 'animated fadeInDown', exit: 'animated fadeOutUp' },
+        });
+        @endif
+  </script>
 @endsection

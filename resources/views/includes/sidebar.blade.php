@@ -28,6 +28,12 @@
             <p>Dashboard</p>
           </a>
         </li>
+        <li class="nav-section">
+          <span class="sidebar-mini-icon">
+            <i class="fa fa-ellipsis-h"></i>
+          </span>
+          <h4 class="text-section">Chức năng</h4>
+        </li>
         <li class="nav-item ">
           <a data-bs-toggle="collapse" href="#phancong">
             <i class="fa-solid fa-calendar-days"></i>
@@ -91,40 +97,7 @@
             @endif
           </a>
         </li>
-        <li class="nav-item ">
-          <a data-bs-toggle="collapse" href="#may">
-            <i class="fa-solid fa-sliders"></i>
-            <p>Máy</p>
-            <span class="caret"></span>
-          </a>
-          <div class="collapse" id="may">
-            <ul class="nav nav-collapse">
-              <li>
-                <a href="{{route('may')}}">
-                  <span class="sub-item">Danh sách máy</span>
-                </a>
-              </li>
-              <li>
-                <a href="{{route('loaimay.index')}}">
-                  <span class="sub-item">Danh sách loại máy</span>
-                </a>
-              </li>
-              
-            </ul>
-          </div>
-        </li>
-        <li class="nav-item ">
-          <a href="{{ route('linhkien') }}">
-            <i class="fa-solid fa-gears"></i>
-            <p>Danh sách linh kiện</p>
-          </a>
-        </li>
-        <li class="nav-item ">
-          <a href="{{ route('nhacungcap') }}">
-            <i class="fas fa-shipping-fast"></i>
-            <p>Danh sách nhà cung cấp</p>
-          </a>
-        </li>
+        
         <li class="nav-item">
           <a data-bs-toggle="collapse" href="#submenu">
             <i class="fa-solid fa-clipboard-list"></i>
@@ -177,11 +150,6 @@
           <div class="collapse" id="baocao">
             <ul class="nav nav-collapse">
               <li>
-                <a href="{{ route('thongkekho') }}">
-                  <span class="sub-item">Báo cáo kiểm kho</span>
-                </a>
-              </li>
-              <li>
                 <a href="{{ route('nhatki.thongke') }}">
                   <span class="sub-item">Nhật kí vận hành</span>
                 </a>
@@ -196,10 +164,61 @@
                   <span class="sub-item">Thống kê linh kiện xuất kho</span>
                 </a>
               </li>
+              <li>
+                <a href="{{ route('thongkekho') }}">
+                  <span class="sub-item">Báo cáo kiểm kho</span>
+                </a>
+              </li>
             </ul>
               
             
           </div>
+        </li>
+
+        <li class="nav-section">
+          <span class="sidebar-mini-icon">
+            <i class="fa fa-ellipsis-h"></i>
+          </span>
+          <h4 class="text-section">Danh mục</h4>
+        </li>
+        <li class="nav-item ">
+          <a data-bs-toggle="collapse" href="#may">
+            <i class="fa-solid fa-sliders"></i>
+            <p>Danh mục máy</p>
+            <span class="caret"></span>
+          </a>
+          <div class="collapse" id="may">
+            <ul class="nav nav-collapse">
+              <li>
+                <a href="{{route('loaimay.index')}}">
+                  <span class="sub-item">Danh sách loại máy</span>
+                </a>
+              </li>
+              <li>
+                <a href="{{route('may')}}">
+                  <span class="sub-item">Danh sách máy</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </li>
+        <li class="nav-item">
+          <a href="{{ route('linhkien') }}">
+            <i class="fa-solid fa-gears"></i>
+            <p>Danh mục linh kiện</p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="{{ route('donvitinh.index') }}">
+            <i class="fas fa-superscript"></i>
+            <p>Danh mục đơn vị tính</p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="{{ route('nhacungcap') }}">
+            <i class="fas fa-shipping-fast"></i>
+            <p>Danh mục nhà cung cấp</p>
+          </a>
         </li>
         <li class="nav-item ">
           <a data-bs-toggle="collapse" href="#admin">
@@ -210,19 +229,24 @@
           <div class="collapse" id="admin">
             <ul class="nav nav-collapse">
               <li>
-                <a href="{{ route('taikhoan.index') }}">
-                  <span class="sub-item">Danh sách tài khoản</span>
+                <a href="{{ route('bophan.index') }}">
+                  <span class="sub-item">Danh sách bộ phận</span>
                 </a>
               </li>
               <li>
-                <a href="{{ route('bophan.index') }}">
-                  <span class="sub-item">Danh sách bộ phận</span>
+                <a href="{{ route('taikhoan.index') }}">
+                  <span class="sub-item">Danh sách tài khoản</span>
                 </a>
               </li>
             </ul>
           </div>
         </li>
-
+        <li class="nav-section">
+          <span class="sidebar-mini-icon">
+            <i class="fa fa-ellipsis-h"></i>
+          </span>
+          <h4 class="text-section">Đăng xuất</h4>
+        </li>
         <li class="nav-item" style="cursor: pointer;">
           <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
             @csrf

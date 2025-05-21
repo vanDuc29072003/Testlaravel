@@ -1,42 +1,41 @@
 @extends('layouts.main')
 
-@section('title', 'Danh Sách Bộ Phận')
+@section('title', 'Danh sách Đơn vị tính')
 
 @section('content')
     <div class="container">
         <div class="page-inner">
             <div class="row">
-                <!-- Cột trái: Danh sách bộ phận -->
                 <div class="col-md-9">
                     <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h1 class="mb-0">Danh Sách Bộ Phận</h1>
-                        <a href="{{ route('bophan.create') }}" class="btn btn-primary">
-                            <i class="fa fa-plus"></i> Thêm bộ phận
+                        <h1 class="mb-0">Danh sách Đơn vị tính</h1>
+                        <a href="{{ route('donvitinh.create') }}" class="btn btn-primary">
+                            <i class="fa fa-plus"></i> Thêm Đơn vị tính
                         </a>
                     </div>
 
                     <table class="table table-responsive table-bordered table-hover">
                         <thead>
                             <tr class="text-center">
-                                <th>Mã Bộ Phận</th>
-                                <th>Tên Bộ Phận</th>
-                                <th>Số lượng nhân viên</th>
+                                <th>Mã đơn vị tính</th>
+                                <th>Tên Đơn vị tính</th>
+                                <th>Số lượng linh kiện</th>
                                 <th>Hành Động</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse ($bophans as $index => $bophan)
+                            @forelse ($dsDonvitinh as $dvt)
                                 <tr class="text-center">
-                                    <td>{{ $bophan->MaBoPhan }}</td>
-                                    <td class="text-start">{{ $bophan->TenBoPhan }}</td>
-                                    <td>{{ $bophan->nhanviens_count ?? 0 }}</td>
+                                    <td>{{ $dvt->MaDonViTinh }}</td>
+                                    <td class="text-start">{{ $dvt->TenDonViTinh }}</td>
+                                    <td>{{ $dvt->linhKiens_count ?? 0 }}</td>
                                     <td>
-                                        <form action="{{ route('bophan.destroy', ['id' => $bophan->MaBoPhan]) }}" method="POST"
-                                              class="d-inline-block">
+                                        <form action="{{ route('donvitinh.destroy', ['MaDonViTinh' => $dvt->MaDonViTinh]) }}"
+                                            method="POST" class="d-inline-block">
                                             @csrf
                                             @method('DELETE')
                                             <button type="button" class="btn btn-danger btn-sm"
-                                                    onclick="event.stopPropagation(); confirmDelete(this)">
+                                                onclick="event.stopPropagation(); confirmDelete(this)">
                                                 <i class="fa fa-trash"></i> Xóa
                                             </button>
                                         </form>
@@ -44,7 +43,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="5" class="text-center text-muted">Không tìm thấy bộ phận nào.</td>
+                                    <td colspan="5" class="text-center text-muted">Không tìm thấy Đơn vị tính nào.</td>
                                 </tr>
                             @endforelse
                         </tbody>
@@ -56,10 +55,11 @@
                     <div class="p-3 border rounded fixed-search-form" style="margin-top: 60px;">
                         <div class="card-body">
                             <h5 class="mb-3">Tìm kiếm</h5>
-                            <form action="{{ route('bophan.index') }}" method="GET">
+                            <form action="{{ route('donvitinh.index') }}" method="GET">
                                 <div class="mb-3">
-                                    <label for="search" class="form-label">Tên bộ phận</label>
-                                    <input type="text" name="search" class="form-control" placeholder="Nhập tên..." value="{{ request('search') }}">
+                                    <label for="search" class="form-label">Tên Đơn vị tính</label>
+                                    <input type="text" name="search" class="form-control" placeholder="VUi lòng nhập..."
+                                        value="{{ request('search') }}">
                                 </div>
                                 <button class="btn btn-primary w-100" type="submit">
                                     <i class="fa fa-search"></i> Tìm kiếm
@@ -93,6 +93,18 @@
                 }
             });
         }
+    </script>
+    <script>
+        @if (session('success'))
+            $.notify({
+                title: 'Thành công',
+                message: '{{ session('success') }}',
+                icon: 'icon-bell'
+            }, {
+                type: 'success',
+                animate: { enter: 'animated fadeInDown', exit: 'animated fadeOutUp' },
+            });
+        @endif
     </script>
     <script>
         @if (session('error'))
