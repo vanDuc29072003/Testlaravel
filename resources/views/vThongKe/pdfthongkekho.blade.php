@@ -8,7 +8,7 @@
         body {
             font-family: 'DejaVu Sans', sans-serif;
             margin: 20px;
-            font-size: 14px;
+            font-size: 12px;
         }
         .header-table {
             width: 100%;

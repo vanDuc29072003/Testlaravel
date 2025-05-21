@@ -9,7 +9,7 @@
                 <!-- Cột trái: Danh sách loại máy -->
                 <div class="col-md-9 col-sm-12">
                     <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h1 class="mb-0">Danh Sách Loại Máy</h1>
+                        <h1 class="mb-0">Danh sách Loại máy</h1>
                         <a href="{{ route('loaimay.create') }}" class="btn btn-primary">
                             <i class="fa fa-plus"></i> Thêm loại máy
                         </a>

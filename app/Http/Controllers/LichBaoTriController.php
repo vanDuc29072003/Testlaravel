@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\NhanVien;
+use App\Models\NhaCungCap;
 use Illuminate\Http\Request;
 use App\Models\LichBaoTri;
 use App\Models\PhieuBanGiaoBaoTri;
@@ -15,74 +16,123 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 class LichBaoTriController extends Controller
 {
+
+
     public function index(Request $request)
     {
         $query = LichBaoTri::query();
 
-        // Chỉ lấy lịch bảo trì có TrangThai = 0 (chưa hoàn thành)
+        // Chỉ lấy lịch chưa hoàn thành
         $query->where('TrangThai', 0);
 
-        // Lọc theo năm
-        if ($request->filled('nam')) {
-            $query->whereYear('NgayBaoTri', '=', $request->input('nam'));
+        // 1. Nếu chọn khoảng thời gian tuỳ chỉnh (từ ngày - đến ngày)
+        if ($request->filled('tu_ngay') && $request->filled('den_ngay')) {
+            $query->whereBetween('NgayBaoTri', [
+                Carbon::parse($request->input('tu_ngay'))->startOfDay(),
+                Carbon::parse($request->input('den_ngay'))->endOfDay(),
+            ]);
         }
 
-        // Lọc theo quý
-        if ($request->filled('quy')) {
-            $batdau = ($request->input('quy') - 1) * 3 + 1;
-            $ketthuc = $batdau + 2;
-            $query->whereMonth('NgayBaoTri', '>=', $batdau)
-                ->whereMonth('NgayBaoTri', '<=', $ketthuc);
+        // 3. Nếu chọn "khoảng thời gian gần nhất"
+        elseif ($request->filled('khoang_thoi_gian')) {
+            $soThang = (int) $request->input('khoang_thoi_gian');
+            $query->whereBetween('NgayBaoTri', [
+                Carbon::today(),
+                Carbon::today()->addMonths($soThang),
+            ]);
+        }
+        // 4. Mặc định: 30 ngày từ hôm nay
+        else {
+            $query->whereBetween('NgayBaoTri', [
+                Carbon::today(),
+                Carbon::today()->addDays(31),
+            ]);
         }
 
-        // ✅ Lọc theo tên máy nếu có
-        if ($request->filled('ten_may')) {
-            $tenMay = $request->input('ten_may');
-            $query->whereHas('may', function ($q) use ($tenMay) {
-                $q->whereRaw('LOWER(TenMay) LIKE ?', ['%' . mb_strtolower($tenMay, 'UTF8') . '%']);
+        // Lọc theo máy
+        if ($request->filled('may_id')) {
+            $query->where('MaMay', $request->input('may_id'));
+        }
+
+        // Lọc theo nhà cung cấp
+        if ($request->filled('ncc_id')) {
+            $query->whereHas('may', function ($q) use ($request) {
+                $q->where('MaNhaCungCap', $request->input('ncc_id'));
             });
         }
 
-        // Lấy danh sách lịch bảo trì từ cơ sở dữ liệu
-        $lichbaotri = $query->with('may')->orderBy('NgayBaoTri', 'asc')->get();
+        // Lấy danh sách lịch
+        $lichbaotri = $query->with('may.nhacungcap')
+            ->orderBy('NgayBaoTri', 'asc')
+            ->get();
 
         // Nhóm theo tháng-năm
         $lichbaotriGrouped = $lichbaotri->groupBy(function ($item) {
             return Carbon::parse($item->NgayBaoTri)->format('Y-m');
         });
 
-        return view('vLich.lichbaotri', compact('lichbaotriGrouped'));
+        // Dữ liệu combobox
+        $dsMay = May::all();
+        $dsNhaCungCap = NhaCungCap::all();
+
+        return view('vLich.lichbaotri', compact('lichbaotriGrouped', 'dsMay', 'dsNhaCungCap'));
     }
+
+
+
+
 
     public function lichSuBaoTri(Request $request)
     {
         $query = LichBaoTri::query();
 
-        // Chỉ lấy lịch bảo trì có TrangThai = 1 (Đã hoàn thành)
+        // Chỉ lấy lịch bảo trì đã hoàn thành
         $query->where('TrangThai', 1);
 
-        // Lọc theo năm
-        if ($request->filled('nam')) {
-            $query->whereYear('NgayBaoTri', $request->input('nam'));
+        // Lọc theo máy
+        if ($request->filled('may')) {
+            $query->where('MaMay', $request->input('may'));
         }
 
-        // Lọc theo quý
-        if ($request->filled('quy')) {
-            $batdau = ($request->input('quy') - 1) * 3 + 1;
-            $ketthuc = $batdau + 2;
-            $query->whereMonth('NgayBaoTri', '>=', $batdau)
+        // Lọc theo nhà cung cấp
+        if ($request->filled('ncc')) {
+            $query->whereHas('may', function ($q) use ($request) {
+                $q->where('MaNhaCungCap', $request->input('ncc'));
+            });
+        }
+
+        // Lọc theo thời gian
+        $timeType = $request->input('time_type', 'month');
+        if ($timeType === 'month') {
+            $query->whereMonth('NgayBaoTri', now()->month)
+                ->whereYear('NgayBaoTri', now()->year);
+        } elseif ($timeType === 'quarter') {;
+            $ketthuc = now()->month;
+            $batdau = $ketthuc - 2;
+            $query->whereYear('NgayBaoTri', now()->year)
+                ->whereMonth('NgayBaoTri', '>=', $batdau)
                 ->whereMonth('NgayBaoTri', '<=', $ketthuc);
+        } elseif ($timeType === 'custom') {
+            if ($request->filled('from') && $request->filled('to')) {
+                $from = Carbon::parse($request->input('from'))->startOfDay();
+                $to = Carbon::parse($request->input('to'))->endOfDay();
+                $query->whereBetween('NgayBaoTri', [$from, $to]);
+            }
         }
 
         // Lấy danh sách lịch bảo trì
-        $lichbaotri = $query->with('may')->orderBy('NgayBaoTri', 'asc')->get();
+        $lichbaotri = $query->with('may.nhaCungCap')->orderBy('NgayBaoTri', 'asc')->get();
 
-        // Nhóm theo tháng (theo Y-m format)
+        // Nhóm theo tháng-năm
         $lichbaotriGrouped = $lichbaotri->groupBy(function ($item) {
             return Carbon::parse($item->NgayBaoTri)->format('Y-m');
         });
 
-        return view('vLichSu.lichsubaotri', compact('lichbaotriGrouped'));
+        // Dữ liệu cho combobox
+        $dsMay = May::all();
+        $dsNhaCungCap = NhaCungCap::all();
+
+        return view('vLichSu.lichsubaotri', compact('lichbaotriGrouped', 'dsMay', 'dsNhaCungCap'));
     }
 
 
@@ -93,6 +143,7 @@ class LichBaoTriController extends Controller
         $machines = May::all(); // Lấy danh sách máy để hiển thị trong form
         return view('vLich.createlichbaotri', compact('machines'));
     }
+
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -101,40 +152,75 @@ class LichBaoTriController extends Controller
             'MaMay' => 'required|exists:may,MaMay',
         ]);
 
-        // Kiểm tra chu kỳ bảo trì
-        $chuKy = DB::table('may')->where('MaMay', $validated['MaMay'])->value('ChuKyBaoTri');
-        if (!$chuKy) {
-            return redirect()->back()->with('error', 'Không tìm thấy chu kỳ bảo trì cho máy này!');
+        $isDotXuat = $request->boolean('is_dot_xuat');
+        $isDinhKy = $request->boolean('is_dinh_ky');
+        $ngayBaoTri = Carbon::parse($validated['NgayBaoTri'])->format('Y-m-d');
+
+        if ($isDinhKy) {
+            // Kiểm tra nếu máy đã có bất kỳ lịch bảo trì nào thì không cho thêm lịch định kỳ
+            $daCoLich = LichBaoTri::where('MaMay', $validated['MaMay'])->exists();
+
+            if ($daCoLich) {
+                return redirect()->route('lichbaotri.create')
+                    ->with('error', 'Máy đã có lịch bảo trì. Không thể tạo lịch bảo trì định kỳ.');
+            }
+
+            // Lấy thông tin chu kỳ và thời gian bảo hành
+            $may = DB::table('may')
+                ->where('MaMay', $validated['MaMay'])
+                ->select('ChuKyBaoTri', 'ThoiGianBaoHanh')
+                ->first();
+
+            if (!$may || !$may->ChuKyBaoTri || !$may->ThoiGianBaoHanh) {
+                return redirect()->back()->with('error', 'Không đủ thông tin chu kỳ hoặc thời gian bảo hành của máy.');
+            }
+
+            // Tính số lần lặp bảo trì
+            $soLanLap = floor($may->ThoiGianBaoHanh / $may->ChuKyBaoTri);
+            if ($soLanLap < 1) {
+                return redirect()->route('lichbaotri.create')
+                    ->withInput()
+                    ->with('error', 'Thời gian bảo hành không đủ để lên lịch bảo trì theo chu kỳ.');
+            }
+
+            $ngayLap = Carbon::parse($validated['NgayBaoTri']);
+
+            for ($i = 0; $i < $soLanLap; $i++) {
+                LichBaoTri::create([
+                    'MoTa' => $validated['MoTa'],
+                    'NgayBaoTri' => $ngayLap->format('Y-m-d'),
+                    'MaMay' => $validated['MaMay'],
+                    'TrangThai' => 0,
+                ]);
+
+                $ngayLap->addMonths($may->ChuKyBaoTri);
+            }
+
+            return redirect()->route('lichbaotri')->with('success', "Tạo lịch bảo trì định kỳ thành công ($soLanLap lần)!");
         }
 
-        $ngayBaoTri = Carbon::parse($validated['NgayBaoTri']);
+        if ($isDotXuat) {
+            // Kiểm tra trùng ngày với lịch đã có
+            $trungNgay = LichBaoTri::where('MaMay', $validated['MaMay'])
+                ->whereDate('NgayBaoTri', $ngayBaoTri)
+                ->exists();
 
-        // In dữ liệu ra để kiểm tra
-        Log::info('Chu kỳ: ' . $chuKy);
-        Log::info('Ngày bảo trì: ' . $ngayBaoTri);
+            if ($trungNgay) {
+                return redirect()->route('lichbaotri.create')
+                    ->with('error', 'Đã tồn tại lịch bảo trì cho máy này vào ngày đã chọn.');
+            }
 
-        // Lặp lại việc tạo lịch bảo trì cho 12 tháng
-        for ($i = 0; $i < 12; $i++) {
-            Log::info('Tạo lịch bảo trì: ', [
+            LichBaoTri::create([
                 'MoTa' => $validated['MoTa'],
-                'NgayBaoTri' => $ngayBaoTri->format('Y-m-d'),
+                'NgayBaoTri' => $ngayBaoTri,
                 'MaMay' => $validated['MaMay'],
                 'TrangThai' => 0,
             ]);
 
-            LichBaoTri::create([
-                'MoTa' => $validated['MoTa'],
-                'NgayBaoTri' => $ngayBaoTri->format('Y-m-d'),
-                'MaMay' => $validated['MaMay'],
-                'TrangThai' => 0, // Trạng thái 0 khi lưu
-            ]);
-
-            // Thêm chu kỳ vào ngày bảo trì tiếp theo
-            $ngayBaoTri->addMonths($chuKy);
+            return redirect()->route('lichbaotri')->with('success', 'Tạo lịch bảo trì đột xuất thành công!');
         }
-
-        return redirect()->route('lichbaotri')->with('success', 'Tạo lịch bảo trì thành công cho 12 tháng!');
     }
+
 
 
     function destroy($id)
@@ -165,14 +251,14 @@ class LichBaoTriController extends Controller
             'phieuBanGiaoBaoTri.chiTietPhieuBanGiaoBaoTri',
             'phieuBanGiaoBaoTri.nhanVien'
         ])->findOrFail($MaLichBaoTri);
-    
+
         // Kiểm tra xem phieuBanGiaoBaoTri và nhanVien có tồn tại không
         $nhaCungCap = $lichBaoTri->may->nhaCungCap;
         $nhanvien = $lichBaoTri->phieuBanGiaoBaoTri ? $lichBaoTri->phieuBanGiaoBaoTri->nhanVien : null;
-    
+
         return view('vPhieuBanGiao.detailpbgBT', compact('lichBaoTri', 'nhaCungCap', 'nhanvien'));
     }
-    
+
 
 
 }
