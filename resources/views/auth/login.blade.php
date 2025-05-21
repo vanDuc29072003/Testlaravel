@@ -60,17 +60,27 @@
                                 <form method="POST" action="{{ route('login') }}">
                                     @csrf <!-- Thêm CSRF token -->
                                     <div class="form-group">
-                                        <label for="MaNhanVien">Mã nhân viên</label>
+                                        <label for="MaNhanVien">Nhập tên tài khoản</label>
                                         <input type="text" name="TenTaiKhoan" id="TenTaiKhoan" class="form-control"
                                             placeholder="Nhập tên tài khoản" required>
                                     </div>
-                                    <div class="form-group">
+                                    <div class="form-group position-relative">
                                         <label for="MatKhau">Mật khẩu</label>
-                                        <input type="password" name="MatKhau" id="MatKhau" class="form-control"
-                                            placeholder="Nhập mật khẩu" required>
+                                        <div class="position-relative">
+                                            <input type="password" name="MatKhau" id="MatKhau" class="form-control pr-5"
+                                                placeholder="Nhập mật khẩu" required>
+                                            <span class="position-absolute"
+                                                style="top: 50%; right: 15px; transform: translateY(-50%); cursor: pointer;"
+                                                onclick="togglePassword()">
+                                                <i class="fa fa-eye" id="togglePasswordIcon"></i>
+                                            </span>
+                                        </div>
                                     </div>
                                     <div class="d-flex justify-content-center">
                                         <button type="submit" class="btn btn-primary mt-3">Đăng nhập</button>
+                                    </div>
+                                    <div class="d-flex justify-content-center mt-2">
+                                        <a href="{{ route('password.reset') }}">Đổi mật khẩu?</a>
                                     </div>
                                 </form>
                             </div>
@@ -115,7 +125,21 @@
             });
         @endif
     </script>
-
+    <script>
+        function togglePassword() {
+            const input = document.getElementById('MatKhau');
+            const icon = document.getElementById('togglePasswordIcon');
+            if (input.type === "password") {
+                input.type = "text";
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                input.type = "password";
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+    </script>
 </body>
 
 </html>

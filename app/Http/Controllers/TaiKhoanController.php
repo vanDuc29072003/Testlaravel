@@ -82,8 +82,9 @@ class TaiKhoanController extends Controller
         $bophan = BoPhan::find($validated['MaBoPhan']);
         $tenRutGon = $bophan->TenRutGon ?? 'XX';
 
-        // Tạo TenTaiKhoan tự động
+        // Tạo TenTaiKhoan, Mật khẩu tự động
         $tenTaiKhoan = $tenRutGon . $nhanvien->MaNhanVien;
+        $matkhauMacDinh = 'TKhoa12345@';
 
         // Kiểm tra xem TenTaiKhoan đã tồn tại chưa
         if (TaiKhoan::where('TenTaiKhoan', $tenTaiKhoan)->exists()) {
@@ -100,11 +101,11 @@ class TaiKhoanController extends Controller
         $taikhoan = new TaiKhoan();
         $taikhoan->MaNhanVien = $nhanvien->MaNhanVien;
         $taikhoan->TenTaiKhoan = $tenTaiKhoan;
-        $taikhoan->MatKhau = bcrypt($validated['MatKhauChuaMaHoa']);
-        $taikhoan->MatKhauChuaMaHoa = $validated['MatKhauChuaMaHoa'];
+        $taikhoan->MatKhau = bcrypt($matkhauMacDinh); // Mã hóa mật khẩu
+        $taikhoan->MatKhauChuaMaHoa = $matkhauMacDinh;
         $taikhoan->save();
 
-        return redirect()->route('taikhoan.index')->with('success', 'Thêm tài khoản thành công!');
+        return redirect()->route('taikhoan.index',compact('matkhauMacDinh'))->with('success', 'Thêm tài khoản thành công!');
     }
 
         public function edit($MaNhanVien)
