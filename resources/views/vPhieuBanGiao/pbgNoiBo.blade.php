@@ -10,7 +10,7 @@
                 @csrf
                 <div class="row">
                     <!-- Cột bên trái: Danh sách linh kiện -->
-                    <div class="col-9">
+                    <div class="col-9" id="linhKienSection">
                         <div class="d-flex flex-column mb-3">
                             <h3 class="mb-2">Tạo phiếu bàn giao nội bộ</h3>
                             <h4 class="fs-5 mb-2">Danh sách các linh kiện đã sửa chữa</h4>
@@ -67,7 +67,7 @@
                     <!-- Cột bên phải: Thông tin phiếu xuất -->
                     <div class="col-3">
                         <div class="border p-3 rounded ">
-                            <div class="form-group">
+                            <div style="display: none" class="form-group">
                                 <label for="MaLichSuaChua">Mã Lịch Sửa Chữa</label>
                                 <input type="text" class="form-control" id="MaLichSuaChua" name="MaLichSuaChua"
                                 value="{{ $lichSuaChua->MaLichSuaChua }}" readonly>
@@ -106,7 +106,14 @@
                             <div class="form-group">
                                 <label for="GhiChu">Ghi Chú</label>
                                 <textarea name="GhiChu" class="form-control" id="GhiChu" rows="2" placeholder="Nhập ghi chú"></textarea>
+                            </div>
+                            <!-- Checkbox Không thay thế linh kiện -->
+                           <div class="form-group form-check">
+                            <input type="checkbox" class="form-check-input" id="KhongThayLinhKien" required name="KhongThayLinhKien" value="1" style="transform: scale(1.5);">
+                            <label class="form-check-label" for="KhongThayLinhKien" style="margin-left: 5px; font-size: 30px;">Không thay thế linh kiện</label>
+                            </div>
                         </div>
+
     
                         <!-- Nút hành động -->
                         <div class="form-group d-flex justify-content-between">
@@ -127,66 +134,75 @@
 @endsection
 
 @section('scripts')
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            // Xử lý tìm kiếm linh kiện
-            document.getElementById('searchLinhKien').addEventListener('input', function () {
-                let query = this.value;
-                let results = document.getElementById('searchResults');
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const searchInput = document.getElementById('searchLinhKien');
+        const checkbox = document.getElementById('KhongThayLinhKien');
+        const checkboxContainer = checkbox.closest('.form-group');
+        const linhKienSection = document.getElementById('linhKienSection');
+        const productList = document.getElementById('product-list');
+        const form = document.querySelector('form');
 
-                if (query.length > 2) {
-                    fetch(`/linhkien/search1?query=${query}`)
-                        .then(response => response.json())
-                        .then(data => {
-                            results.innerHTML = '';
-                            if (data.length > 0) {
-                                data.forEach(item => {
-                                    let resultItem = document.createElement('a');
-                                    resultItem.href = '#';
-                                    resultItem.classList.add('list-group-item', 'list-group-item-action');
-                                    resultItem.textContent = `${item.TenLinhKien} (${item.MaLinhKien})`;
-                                    resultItem.dataset.id = item.MaLinhKien;
-                                    resultItem.dataset.name = item.TenLinhKien;
-                                    resultItem.dataset.unit = item.don_vi_tinh ? item.don_vi_tinh.TenDonViTinh : 'Không xác định';
+        const blockedChars = /[!@~`#$%^&*()+=\[\]{};:"\\|,.<>\/?]/;
 
-                                    resultItem.addEventListener('click', function (e) {
-                                        e.preventDefault();
-                                        addLinhKienToTable(this.dataset.id, this.dataset.name, this.dataset.unit);
-                                    });
-
-                                    results.appendChild(resultItem);
-                                });
-                            } else {
-                                results.innerHTML = '<div class="list-group-item">Không tìm thấy linh kiện</div>';
-                            }
-                        });
-                } else {
-                    results.innerHTML = '';
-                }
-            });
-
-            // Thêm sự kiện cho các dòng linh kiện cũ (old input) sau khi load trang
-            document.querySelectorAll('#product-list tr').forEach(row => {
-                let quantityInput = row.querySelector('.quantity');
-                let removeBtn = row.querySelector('.remove-product');
-
-                if (quantityInput) {
-                    quantityInput.addEventListener('input', updateTotals);
-                }
-
-                if (removeBtn) {
-                    removeBtn.addEventListener('click', function () {
-                        row.remove();
-                        updateTotals();
-                    });
-                }
-            });
-
-            // Khi trang load xong, luôn tính lại tổng số lượng
-            updateTotals();
+        // Ngăn nhập ký tự đặc biệt
+        searchInput.addEventListener('keydown', function (e) {
+            if (blockedChars.test(e.key)) {
+                e.preventDefault();
+            }
         });
 
-        // Hàm thêm linh kiện vào bảng
+        // Xử lý tìm kiếm linh kiện
+        searchInput.addEventListener('input', function () {
+            let query = this.value;
+
+            if (query.length > 2) {
+                fetch(`/linhkien/search1?query=${query}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        let results = document.getElementById('searchResults');
+                        results.innerHTML = '';
+
+                        if (data.length > 0) {
+                            data.forEach(item => {
+                                let resultItem = document.createElement('a');
+                                resultItem.href = '#';
+                                resultItem.classList.add('list-group-item', 'list-group-item-action');
+                                resultItem.textContent = `${item.TenLinhKien} (${item.MaLinhKien})`;
+                                resultItem.dataset.id = item.MaLinhKien;
+                                resultItem.dataset.name = item.TenLinhKien;
+                                resultItem.dataset.unit = item.don_vi_tinh ? item.don_vi_tinh.TenDonViTinh : 'Không xác định';
+
+                                resultItem.addEventListener('click', function (e) {
+                                    e.preventDefault();
+                                    addLinhKienToTable(this.dataset.id, this.dataset.name, this.dataset.unit);
+                                });
+
+                                results.appendChild(resultItem);
+                            });
+                        } else {
+                            results.innerHTML = '<div class="list-group-item">Không tìm thấy linh kiện</div>';
+                        }
+                    });
+            } else {
+                document.getElementById('searchResults').innerHTML = '';
+            }
+        });
+
+        // Sự kiện khi checkbox thay đổi
+        checkbox.addEventListener('change', function () {
+            updateCheckboxState();
+        });
+
+        // Khi submit: không cần xử lý gì đặc biệt nếu đã xoá
+        form.addEventListener('submit', function () {
+            // Dữ liệu linh kiện sẽ không được gửi nếu đã xoá
+        });
+
+        // Gán lại sự kiện cho các dòng cũ nếu có
+        document.querySelectorAll('#product-list tr').forEach(setupRowEvents);
+
+        // Thêm linh kiện vào bảng
         function addLinhKienToTable(maLinhKien, tenLinhKien, tenDonViTinh) {
             let existingRows = document.querySelectorAll('input[name="MaLinhKien[]"]');
             for (let row of existingRows) {
@@ -202,11 +218,9 @@
                             exit: 'animated fadeOutUp'
                         },
                     });
-
                     return;
                 }
             }
-
 
             let row = document.createElement('tr');
             row.innerHTML = `
@@ -220,31 +234,59 @@
                     </button>
                 </td>
             `;
-            document.getElementById('product-list').appendChild(row);
+            productList.appendChild(row);
+            setupRowEvents(row);
+            updateTotals();
+            updateCheckboxState();
+        }
 
-            // Bắt sự kiện xóa
+        // Gán sự kiện cho 1 dòng linh kiện
+        function setupRowEvents(row) {
             row.querySelector('.remove-product').addEventListener('click', function () {
                 row.remove();
                 updateTotals();
+                updateCheckboxState();
             });
 
-            // Bắt sự kiện thay đổi số lượng
-            row.querySelector('.quantity').addEventListener('input', updateTotals);
-
-            updateTotals();
+            let qtyInput = row.querySelector('.quantity');
+            if (qtyInput) {
+                qtyInput.addEventListener('input', updateTotals);
+            }
         }
 
-        // Hàm tính tổng số lượng linh kiện
+        // Cập nhật tổng số lượng
         function updateTotals() {
-            let totalQty = 0;
+            let total = 0;
             document.querySelectorAll('#product-list .quantity').forEach(input => {
-                let quantity = parseInt(input.value) || 0;
-                totalQty += quantity;
+                total += parseInt(input.value) || 0;
             });
-            document.getElementById('TongSoLuong').value = totalQty;
+
+            let totalInput = document.getElementById('TongSoLuong');
+            if (totalInput) {
+                totalInput.value = total;
+            }
         }
 
-        // Thông báo lỗi từ session nếu có
+        // Cập nhật trạng thái checkbox
+        function updateCheckboxState() {
+            const hasRows = productList.querySelectorAll('tr').length > 0;
+
+            if (hasRows) {
+                checkbox.disabled = true;
+                checkboxContainer.style.opacity = 0.5;
+                checkboxContainer.style.pointerEvents = 'none';
+            } else {
+                checkbox.disabled = false;
+                checkboxContainer.style.opacity = 1;
+                checkboxContainer.style.pointerEvents = 'auto';
+            }
+        }
+
+        // Gọi khi trang load
+        updateCheckboxState();
+        updateTotals();
+
+        // Hiển thị thông báo lỗi nếu có
         @if (session('error'))
             $.notify({
                 title: 'Lỗi',
@@ -257,9 +299,8 @@
                     exit: 'animated fadeOutUp'
                 },
             });
-
-            // Cập nhật tổng số lượng sau khi hiển thị lỗi
             updateTotals();
         @endif
-    </script>
+    });
+</script>
 @endsection

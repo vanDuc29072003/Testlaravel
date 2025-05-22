@@ -86,7 +86,9 @@ class LichSuaChuaController extends Controller
         if ($request->filled('MaNhanVienKyThuat')) {
             $query->where('lichsuachua.MaNhanVienKyThuat', $request->MaNhanVienKyThuat);
         }
-
+        if ($request->filled('TrangThai')) {
+        $query->where('lichsuachua.TrangThai', $request->TrangThai);
+        }
         $dsLSCDaHoanThanh = $query
             ->with(['yeuCauSuaChua', 'nhanVienKyThuat'])
             ->paginate(10, ['*'], 'da_hoan_thanh');

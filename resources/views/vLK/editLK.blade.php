@@ -40,7 +40,7 @@
                                 <div class="form-group">
                                     <label for="TenLinhKien">Tên Linh Kiện</label>
                                     <input type="text" class="form-control" id="TenLinhKien" name="TenLinhKien"
-                                        value="{{ $linhKien->TenLinhKien }}">
+                                       value="{{ old('TenLinhKien', $formData['TenLinhKien'] ?? $linhKien->TenLinhKien) }}">
                                 </div>
                                 <!-- Đơn Vị Tính -->
                                 <div class="form-group">
@@ -48,7 +48,7 @@
                                     <select class="form-control" id="MaDonViTinh" name="MaDonViTinh">
                                         @foreach ($donViTinhs as $donViTinh)
                                             <option value="{{ $donViTinh->MaDonViTinh }}"
-                                                {{ $linhKien->MaDonViTinh == $donViTinh->MaDonViTinh ? 'selected' : '' }}>
+                                                {{ (old('MaDonViTinh', $formData['MaDonViTinh'] ?? $linhKien->MaDonViTinh) == $donViTinh->MaDonViTinh) ? 'selected' : '' }}>
                                                 {{ $donViTinh->TenDonViTinh }}
                                             </option>
                                         @endforeach
@@ -63,10 +63,14 @@
                                 <div class="form-group">
                                     <div class="d-flex justify-content-between">
                                         <label>Tên Nhà Cung Cấp</label>
-                                        <a href="{{ route('nhacungcap.add') }}" class="btn btn-sm btn-outline-white">
-                                            <i class="fa fa-plus"></i> Thêm mới
-                                        </a>
-                                    </div>
+                                             <a href="{{ route('linhkien.saveFormData') }}" 
+                                            onclick="event.preventDefault(); document.getElementById('saveFormBeforeRedirect').submit();" 
+                                            class="btn btn-sm btn-outline-white">
+                                                <i class="fa fa-plus"></i> Thêm mới
+                                            </a>
+                                    
+                                            
+                                     </div>
                                     <div class="dropdown">
                                         <button 
                                             id="nhaCungCapButton"
@@ -86,7 +90,7 @@
                                                             type="checkbox"
                                                             name="MaNhaCungCap[]"
                                                             value="{{ $nhaCungCap->MaNhaCungCap }}"
-                                                            {{ in_array($nhaCungCap->MaNhaCungCap, old('MaNhaCungCap', $selectedNhaCungCaps ?? [])) ? 'checked' : '' }}>
+                                                                {{ in_array($nhaCungCap->MaNhaCungCap, old('MaNhaCungCap', $formData['MaNhaCungCap'] ?? $selectedNhaCungCaps ?? [])) ? 'checked' : '' }}>
                                                         <label class="form-check-label">
                                                             {{ $nhaCungCap->TenNhaCungCap }}
                                                         </label>
@@ -98,12 +102,21 @@
                                 </div>
                             </form>
                         </div>
-
+                        <form id="saveFormBeforeRedirect" action="{{ route('linhkien.saveFormData') }}" method="POST" style="display: none;">
+                                                @csrf
+                                                <input type="hidden" name="MaLinhKien" value="{{ old('MaLinhKien', $linhKien->MaLinhKien) }}">
+                                                <input type="hidden" name="TenLinhKien" value="{{ old('TenLinhKien', $linhKien->TenLinhKien) }}">
+                                                <input type="hidden" name="MaDonViTinh" value="{{ old('MaDonViTinh', $linhKien->MaDonViTinh) }}">
+                                                <input type="hidden" name="MoTa" value="{{ old('MoTa', $linhKien->MoTa) }}">
+                                                @foreach ($nhaCungCaps as $ncc)
+                                                    <input type="hidden" name="MaNhaCungCap[]" value="{{ $ncc->MaNhaCungCap }}">
+                                                @endforeach
+                            </form>
                         <div class="card-footer">
                             <div class="form-group d-flex justify-content-between">
                                 <a href="{{ route('linhkien') }}" class="btn btn-secondary" form="formLinhKien">
                                     <i class="fa fa-arrow-left"></i> Trở lại</a>
-                                <button type="submit" class="btn btn-primary">
+                                <button type="submit" class="btn btn-primary" form="formLinhKien">
                                     <i class="fa fa-save"></i> Lưu Thay Đổi
                                 </button>
                             </div>
@@ -142,6 +155,21 @@
             cb.addEventListener('change', updateButtonLabel);
         });
     });
+</script>
+<script>
+            @if (session('success'))
+                $.notify({
+                    title: 'Thành công',
+                    message: '{{ session('success') }}',
+                    icon: 'icon-bell'
+                }, {
+                    type: 'success',
+                    animate: {
+                        enter: 'animated fadeInDown',
+                        exit: 'animated fadeOutUp'
+                    },
+                });
+            @endif
 </script>
 
 @endsection

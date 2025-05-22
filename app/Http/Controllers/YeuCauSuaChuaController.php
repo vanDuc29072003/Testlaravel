@@ -35,7 +35,10 @@ class YeuCauSuaChuaController extends Controller
                 $queryDaXuLy->where($field, $operator, $value);
             }
         }
-
+        $queryDaXuLy->whereIn('TrangThai', ['1', '2']);
+            if ($request->filled('TrangThai')) {
+                $queryDaXuLy->where('TrangThai', $request->TrangThai);
+            }
         $dsYeuCauSuaChuaChoDuyet = $queryChoDuyet->where('TrangThai', '0')
             ->with(['may', 'nhanVien'])
             ->orderBy('ThoiGianYeuCau', 'desc')
