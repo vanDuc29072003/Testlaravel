@@ -60,18 +60,49 @@ class dsphieuNhapController extends Controller
             ->with('nhaCungCap', 'nhanVien')
             ->orderBy('MaHienThi', 'desc')
             ->paginate(10, ['*'], 'cho_duyet');
-        
+
         ThongBao::where('Icon', 'fas fa-pen')->update(['TrangThai' => 1]);
 
         return view('vPNhap.dsphieunhap', compact('dsPhieuNhapChoDuyet', 'dsPhieuNhapDaDuyet', 'dsNhaCungCap', 'dsNhanVien'));
     }
+    public function saveSession(Request $request)
+    {
+        $data = $request->all();
+
+        
+        $phieuNhapSession = [
+            'MaNhaCungCap' => $data['MaNhaCungCap'],
+            'NgayNhap' => $data['NgayNhap'],
+            'GhiChu' => $data['GhiChu'],
+            'TongSoLuong' => $data['TongSoLuong'],
+            'TongThanhTien' => $data['TongThanhTien'],
+            'LinhKienList' => $data['LinhKienList']
+        ];
+
+        session(['phieuNhapSession' => $phieuNhapSession]);
+
+        return response()->json(['status' => 'saved']);
+    }
 
     public function create()
     {
-        $nhaCungCaps = NhaCungCap::all(); // Lấy danh sách nhà cung cấp
-        $nhanViens = NhanVien::all(); // Lấy danh sách nhân viên
-        return view('vPNhap.addphieunhap', compact('nhaCungCaps', 'nhanViens'));
+     
+        session()->forget('phieuNhapSession');
+
+      
+        $nhaCungCaps = NhaCungCap::all();
+        $nhanViens = NhanVien::all();
+
+       
+        $phieuNhapSession = session()->get('phieuNhapSession', []);
+
+        return view('vPNhap.addphieunhap', compact('nhaCungCaps', 'nhanViens', 'phieuNhapSession'));
     }
+
+
+
+
+
 
     public function store(Request $request)
     {
