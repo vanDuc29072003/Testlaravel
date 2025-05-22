@@ -55,35 +55,89 @@ class LinhKienController extends Controller
         $nhaCungCaps = NhaCungCap::all();
         return view('vLK.addlk', compact('donViTinhs', 'nhaCungCaps'));
     }
-
+    public function create2()
+    {
+        $donViTinhs = DonViTinh::all();
+        $nhaCungCaps = NhaCungCap::all();
+        return view('vLK.addlk2', compact('donViTinhs', 'nhaCungCaps'));
+    }
 
     public function store(Request $request)
     {
+        try {
+            // Xác thực dữ liệu đầu vào
+            $request->validate(
+                [
+                    'TenLinhKien' => 'required|string|max:255|unique:linhkiensuachua,TenLinhKien',
+                    'MaNhaCungCap' => 'required|exists:nhacungcap,MaNhaCungCap', // Chỉ chọn một nhà cung cấp
+                    'MoTa' => 'nullable|string|max:255',
+                    'MaDonViTinh' => 'required',
 
-        // Xác thực dữ liệu đầu vào
+                ],
+                [
+                    'TenLinhKien.unique' => 'Tên linh kiện đã tồn tại trong hệ thống.',
+                ]
+            );
+
+            // Tạo mới linh kiện
+            $linhKien = LinhKien::create([
+                'TenLinhKien' => $request->TenLinhKien,
+                'SoLuong' => $request->SoLuong = 0,
+                'MoTa' => $request->MoTa,
+                'MaDonViTinh' => $request->MaDonViTinh,
+            ]);
+
+            // Lưu quan hệ với nhà cung cấp
+            $linhKien->nhaCungCaps()->attach($request->MaNhaCungCap, []);
+
+
+            return redirect()->route('linhkien')->with('success', 'Thêm linh kiện mới thành công 1!');
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return redirect()->back()
+                ->with('error', $e->validator->errors()->first()) // Lấy lỗi đầu tiên     
+                ->withInput();
+        }
+    }
+  public function store2(Request $request)
+{
+    try {
+        // Validate the incoming request
         $request->validate([
-            'TenLinhKien' => 'required|string|max:255',
-            'MaNhaCungCap' => 'required|exists:nhacungcap,MaNhaCungCap', // Chỉ chọn một nhà cung cấp
-            'SoLuong' => 'required|integer|min:1',
+            'TenLinhKien' => 'required|string|max:255|unique:linhkiensuachua,TenLinhKien',
+            'MaNhaCungCap' => 'required|exists:nhacungcap,MaNhaCungCap',
             'MoTa' => 'nullable|string|max:255',
             'MaDonViTinh' => 'required',
-
+        ], [
+            'TenLinhKien.unique' => 'Tên linh kiện đã tồn tại trong hệ thống.',
         ]);
 
-        // Tạo mới linh kiện
         $linhKien = LinhKien::create([
             'TenLinhKien' => $request->TenLinhKien,
-            'SoLuong' => $request->SoLuong,
+            'SoLuong' => 0,  // Default quantity, can be updated later
             'MoTa' => $request->MoTa,
             'MaDonViTinh' => $request->MaDonViTinh,
         ]);
+        $linhKien->nhaCungCaps()->attach($request->MaNhaCungCap);
+        
+        $sessionData = session()->get('phieuNhapSession', []);
 
-        // Lưu quan hệ với nhà cung cấp
-        $linhKien->nhaCungCaps()->attach($request->MaNhaCungCap, []);
+       
+        session(['phieuNhapSession' => $sessionData]);        
+        return redirect()->route('dsphieunhap.add')
+            ->with('success', 'Thêm linh kiện thành công!')
+            ->with('sessionData', $sessionData);  
 
-
-        return redirect()->route('linhkien')->with('success', 'Thêm linh kiện thành công!');
+    } catch (\Illuminate\Validation\ValidationException $e) {
+        
+        return redirect()->back()
+            ->with('error', $e->validator->errors()->first())
+            ->withInput();
     }
+}
+
+
+
+
 
     public function detail($MaLinhKien)
     {
@@ -96,18 +150,18 @@ class LinhKienController extends Controller
         $linhKien = LinhKien::with('nhaCungCaps')->findOrFail($MaLinhKien);
         $donViTinhs = DonViTinh::all();
         $nhaCungCaps = NhaCungCap::all();
-         $formData = session('formData'); // lấy từ flash session nếu có
+        $formData = session('formData'); // lấy từ flash session nếu có
         $selectedNhaCungCaps = $formData['MaNhaCungCap'] ?? $linhKien->nhaCungCaps->pluck('MaNhaCungCap')->toArray();
 
-         return view('vLK.editLK', compact('linhKien', 'donViTinhs', 'nhaCungCaps', 'formData', 'selectedNhaCungCaps'));
-            
+        return view('vLK.editLK', compact('linhKien', 'donViTinhs', 'nhaCungCaps', 'formData', 'selectedNhaCungCaps'));
+
     }
 
     public function update(Request $request, $MaLinhKien)
     {
         // Xác thực dữ liệu đầu vào
         $request->validate([
-           
+
             'MoTa' => 'nullable|string|max:255',
             'MaDonViTinh' => 'required|exists:donvitinh,MaDonViTinh', // Đảm bảo mã đơn vị tính tồn tại
             'TenLinhKien' => 'required|string|max:255',

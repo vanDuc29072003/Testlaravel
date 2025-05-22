@@ -63,6 +63,8 @@ Route::middleware('auth')->group(function () {
   Route::get('/dsphieunhap/add', [dsphieuNhapController::class, 'create'])
     ->middleware('kiemtraquyen:21')
     ->name('dsphieunhap.add');
+    Route::post('/phieunhap/saveSession', [dsphieuNhapController::class, 'saveSession'])->name('phieunhap.saveSession');
+
   Route::post('/dsphieunhap/store', [dsphieuNhapController::class, 'store'])->name('dsphieunhap.store');
   Route::get('/phieunhap/{MaPhieuNhap}', [dsphieuNhapController::class, 'show'])->name('phieunhap.show');
   Route::get('/dsphieunhap/{MaPhieuNhap}/edit', [dsphieuNhapController::class, 'edit'])
@@ -82,6 +84,7 @@ Route::middleware('auth')->group(function () {
   Route::get('/dsphieuxuat/add', [dsphieuXuatController::class, 'create'])
     ->middleware('kiemtraquyen:25')
     ->name('dsphieuxuat.add');
+    
   Route::post('/dsphieuxuat/store', [dsphieuXuatController::class, 'store'])->name('dsphieuxuat.store');
   Route::get('/phieuxuat/{MaPhieuXuat}', [dsphieuXuatController::class, 'show'])->name('phieuxuat.show');
   Route::get('/phieuxuat/{MaPhieuXuat}/export-pdf', action: [dsphieuXuatController::class, 'exportPDF'])->name('phieuxuat.exportPDF');
@@ -103,7 +106,11 @@ Route::middleware('auth')->group(function () {
   Route::get('/linhkien/add', [LinhKienController::class, 'create'])
     ->middleware('kiemtraquyen:15')
     ->name('linhkien.add');
+    Route::get('/linhkien/add2', [LinhKienController::class, 'create2'])
+    ->name('linhkien.add2');
   Route::post('/linhkien', [LinhKienController::class, 'store'])->name('linhkien.store');
+  Route::post('/linhkien/store2', [LinhKienController::class, 'store2'])->name('linhkien.store2');
+
   Route::get('/linhkien/{MaLinhKien}', [LinhKienController::class, 'detail'])->name('linhkien.detail');
   Route::get('/linhkien/{MaLinhKien}/edit', [LinhKienController::class, 'editForm'])
     ->middleware('kiemtraquyen:16')
@@ -138,7 +145,7 @@ Route::middleware('auth')->group(function () {
     ->middleware('kiemtraquyen:18')
     ->name('nhacungcap.add');
   Route::get('/nhacungcap/add2', [NhaCungCapController::class, 'addNhaCungCap2'])
-    ->middleware('kiemtraquyen:18')
+    
     ->name('nhacungcap.add2');
   Route::post('/nhacungcap/store', [NhaCungCapController::class, 'storeNhaCungCap'])->name('nhacungcap.store');
     Route::post('/nhacungcap/store2', [NhaCungCapController::class, 'storeNhaCungCap2'])->name('nhacungcap.store2');

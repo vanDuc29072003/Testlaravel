@@ -7,21 +7,21 @@ use App\Models\DonViTinh;
 
 class DonViTinhController extends Controller
 {
-    public function index(Request $request)
+        public function index(Request $request)
     {
         $search = $request->input('search');
 
-        $query = DonViTinh::withCount('linhKiens');
-
+        $query = DonViTinh::withSum('linhKiens', 'SoLuong'); // Tổng số lượng của linh kiện liên quan
 
         if ($search) {
             $query->where('TenDonViTinh', 'like', '%' . $search . '%');
         }
 
-        $dsDonvitinh = $query->get(); // hoặc ->paginate(10)
+        $dsDonvitinh = $query->get();
 
         return view('vDonViTinh.donvitinh', compact('dsDonvitinh'));
     }
+
 
     // Trả về view tạo mới
     public function create()

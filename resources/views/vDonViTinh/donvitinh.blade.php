@@ -28,7 +28,8 @@
                                 <tr class="text-center">
                                     <td>{{ $dvt->MaDonViTinh }}</td>
                                     <td class="text-start">{{ $dvt->TenDonViTinh }}</td>
-                                    <td>{{ $dvt->linhKiens_count ?? 0 }}</td>
+                                    <td>{{ $dvt->linh_kiens_sum_so_luong ?? 0 }}</td>
+
                                     <td>
                                         <form action="{{ route('donvitinh.destroy', ['MaDonViTinh' => $dvt->MaDonViTinh]) }}"
                                             method="POST" class="d-inline-block">
