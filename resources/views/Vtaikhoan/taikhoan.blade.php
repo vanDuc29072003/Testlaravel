@@ -34,9 +34,9 @@
           </a>
       </div>
 
-        <table class="table table-bordered table-striped">
-          <thead style="background-color: #ffc0cb; color: black;">
-            <tr>
+        <table class="table table-responsive table-bordered table-hover">
+          <thead>
+            <tr class="text-center">
               <th>STT</th>
               <th>Tên Nhân viên</th>
               <th>Tên Tài khoản</th>
@@ -46,7 +46,7 @@
           </thead>
           <tbody>
             @foreach ($taikhoans as $index => $taikhoan)
-              <tr>
+              <tr class="text-center">
                 <!-- Cột có sự kiện onclick toàn dòng trừ hành động -->
                 <td onclick="window.location='{{ route('taikhoan.show', $taikhoan->TenTaiKhoan) }}'" style="cursor:pointer;">
                   {{ $loop->iteration }}
@@ -57,20 +57,22 @@
                 <td onclick="window.location='{{ route('taikhoan.show', $taikhoan->TenTaiKhoan) }}'" style="cursor:pointer;">
                   {{ $taikhoan->TenTaiKhoan }}
                 </td>
-                <td onclick="window.location='{{ route('taikhoan.show', $taikhoan->TenTaiKhoan) }}'" style="cursor:pointer;">
+                <td>
                   <span class="password-mask" id="pw-{{ $loop->index }}">********</span>
                   <span class="password-real d-none" id="pw-real-{{ $loop->index }}">{{ $taikhoan->MatKhauChuaMaHoa }}</span>
                   <button type="button" class="btn btn-link btn-sm p-0" onclick="togglePassword({{ $loop->index }})">
-                    <i class="fa fa-eye" id="eye-{{ $loop->index }}"></i>
+                    <i class="fa fa-eye text-black" id="eye-{{ $loop->index }}"></i>
                   </button>
                 </td>
                 <td>
                   <div class="d-flex gap-2">
                     <a href="{{ route('taikhoan.edit', $taikhoan->MaNhanVien) }}" class="btn btn-warning btn-sm">Đổi mật khẩu</a>
-                    <form action="{{ route('taikhoan.destroy', $taikhoan->TenTaiKhoan) }}" method="POST" onsubmit="return confirm('Bạn có chắc chắn muốn xóa tài khoản này?')">
+                    <form action="{{ route('taikhoan.destroy', $taikhoan->TenTaiKhoan) }}" method="POST" class="d-inline-block">
                       @csrf
                       @method('DELETE')
-                      <button type="submit" class="btn btn-danger btn-sm">Xóa</button>
+                      <button type="button" class="btn btn-danger btn-sm"
+                          onclick="event.stopPropagation(); confirmDelete(this)">Xóa
+                      </button>
                     </form>
                   </div>
                 </td>
@@ -83,8 +85,8 @@
       <!-- Phần lọc -->
       <div class="col-md-3">
         <div style="margin-top: 50px">
-          <h5 class="mb-3">Bộ lọc</h5>
-          <form action="{{ route('taikhoan.index') }}" method="GET">
+          <form action="{{ route('taikhoan.index') }}" method="GET" class="p-3 border rounded">
+            <h5 class="mb-3">Bộ lọc</h5>
             <div class="mb-3">
               <label for="TenNhanVien" class="form-label">Tìm kiếm theo tên nhân viên</label>
               <input type="text" name="TenNhanVien" id="TenNhanVien" class="form-control" value="{{ request('TenNhanVien') }}" placeholder="Nhập tên nhân viên">
@@ -102,7 +104,8 @@
               </select>
             </div>
 
-            <button type="submit" class="btn btn-primary w-100">Lọc</button>
+            <button type="submit" class="btn btn-primary w-100">
+              <i class="fa fa-filter"></i> Lọc</button>
           </form>
         </div>
       </div>
@@ -156,5 +159,31 @@ function togglePassword(index) {
         eye.classList.add('fa-eye-slash');
     }
 }
+</script>
+<script>
+  function confirmDelete(button) {
+            swal({
+                title: 'Bạn có chắc chắn?',
+                text: "Hành động này không thể hoàn tác!",
+                icon: 'warning',
+                buttons: {
+                    confirm: {
+                        text: 'Xóa',
+                        className: 'btn btn-danger'
+                    },
+                    cancel: {
+                        text: 'Hủy',
+                        visible: true,
+                        className: 'btn btn-success'
+                    }
+                }
+            }).then((willDelete) => {
+                if (willDelete) {
+                    button.closest('form').submit(); // Gửi form
+                } else {
+                    swal.close(); // Đóng hộp thoại
+                }
+            });
+        }
 </script>
 @endsection
