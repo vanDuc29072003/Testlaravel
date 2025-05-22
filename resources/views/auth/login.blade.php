@@ -80,7 +80,7 @@
                                         <button type="submit" class="btn btn-primary mt-3">Đăng nhập</button>
                                     </div>
                                     <div class="d-flex justify-content-center mt-2">
-                                        <a href="{{ route('password.reset') }}">Đổi mật khẩu?</a>
+                                        <a href="{{ route('password.reset') }}">Quên mật khẩu?</a>
                                     </div>
                                 </form>
                             </div>
@@ -119,7 +119,7 @@
             }, {
                 type: 'danger',
                 animate: {
-                    enter: 'animated shake',
+                    enter: 'animated fadeInDown',
                     exit: 'animated fadeOutUp'
                 },
             });
