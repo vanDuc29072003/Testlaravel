@@ -106,7 +106,14 @@
                                     @endforeach
                                 </select>
                             </div>
-                            
+                            <div class="mb-3">
+                                <label for="TrangThai" class="form-label">Trạng thái</label>
+                                <select name="TrangThai" id="TrangThai" class="form-control">
+                                    <option value="">-- Chọn trạng thái --</option>
+                                    <option value="1" {{ request('TrangThai') == '1' ? 'selected' : '' }}>Đã hoàn thành</option>
+                                    <option value="2" {{ request('TrangThai') == '2' ? 'selected' : '' }}>Liên hệ NCC</option>
+                                </select>
+                            </div>
                             <button type="submit" class="btn btn-primary w-100">
                                 <i class="fa fa-filter"></i> Lọc
                             </button>

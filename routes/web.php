@@ -108,6 +108,9 @@ Route::middleware('auth')->group(function () {
   Route::get('/linhkien/{MaLinhKien}/edit', [LinhKienController::class, 'editForm'])
     ->middleware('kiemtraquyen:16')
     ->name('linhkien.edit');
+  // routes/web.php
+  Route::post('/linhkien/save-form-data', [LinhKienController::class, 'saveFormData'])->name('linhkien.saveFormData');
+
   Route::patch('/linhkien/{MaLinhKien}', [LinhKienController::class, 'update'])->name('linhkien.update');
   Route::delete('/linhkien/{MaLinhKien}', [LinhKienController::class, 'delete'])
     ->middleware('kiemtraquyen:17')
@@ -134,7 +137,12 @@ Route::middleware('auth')->group(function () {
   Route::get('/nhacungcap/add', [NhaCungCapController::class, 'addNhaCungCap'])
     ->middleware('kiemtraquyen:18')
     ->name('nhacungcap.add');
+  Route::get('/nhacungcap/add2', [NhaCungCapController::class, 'addNhaCungCap2'])
+    ->middleware('kiemtraquyen:18')
+    ->name('nhacungcap.add2');
   Route::post('/nhacungcap/store', [NhaCungCapController::class, 'storeNhaCungCap'])->name('nhacungcap.store');
+    Route::post('/nhacungcap/store2', [NhaCungCapController::class, 'storeNhaCungCap2'])->name('nhacungcap.store2');
+
   Route::delete('/nhacungcap/{MaNhaCungCap}', [NhaCungCapController::class, 'deleteNhaCungCap'])
     ->middleware('kiemtraquyen:20')
     ->name('nhacungcap.delete');

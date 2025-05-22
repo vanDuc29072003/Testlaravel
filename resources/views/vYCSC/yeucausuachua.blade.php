@@ -139,14 +139,23 @@
                             </select>
                         </div>
                         <div class="mb-3">
-                            <label for="MaNhanVien" class="form-label">Tên nhân viên yêu cầu</label>
-                            <select name="MaNhanVien" id="MaNhanVien" class="form-control">
+                            <label for="MaNhanVienYeuCau" class="form-label">Tên nhân viên yêu cầu</label>
+                            <select name="MaNhanVienYeuCau" id="MaNhanVienYeuCau" class="form-control">
                                 <option value="">-- Chọn nhân viên --</option>
                                 @foreach ($dsNhanVien as $nhanVien)
-                                    <option value="{{ $nhanVien->MaNhanVien }}" {{ request('MaNhanVien') == $nhanVien->MaNhanVien ? 'selected' : '' }}>
+                                    <option value="{{ $nhanVien->MaNhanVien }}" {{ request('MaNhanVienYeuCau') == $nhanVien->MaNhanVien ? 'selected' : '' }}>
                                         {{ $nhanVien->TenNhanVien }}
                                     </option>
                                 @endforeach
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="TrangThai" class="form-label">Trạng thái</label>
+                            <select name="TrangThai" id="TrangThai" class="form-control">
+                                <option value="">-- Chọn trạng thái --</option>
+                                <option value="1" {{ request('TrangThai') == '1' ? 'selected' : '' }}>Đã duyệt</option>
+                                <option value="2" {{ request('TrangThai') == '2' ? 'selected' : '' }}>Đã từ chối</option>
                             </select>
                         </div>
                         <div class="mb-3">

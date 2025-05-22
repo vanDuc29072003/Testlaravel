@@ -96,18 +96,21 @@ class LinhKienController extends Controller
         $linhKien = LinhKien::with('nhaCungCaps')->findOrFail($MaLinhKien);
         $donViTinhs = DonViTinh::all();
         $nhaCungCaps = NhaCungCap::all();
+         $formData = session('formData'); // lấy từ flash session nếu có
+        $selectedNhaCungCaps = $formData['MaNhaCungCap'] ?? $linhKien->nhaCungCaps->pluck('MaNhaCungCap')->toArray();
 
-        // Lấy danh sách ID nhà cung cấp đã liên kết sẵn
-        $selectedNhaCungCaps = $linhKien->nhaCungCaps->pluck('MaNhaCungCap')->toArray();
-
-        return view('vLK.editLK', compact('linhKien', 'donViTinhs', 'nhaCungCaps', 'selectedNhaCungCaps'));
+         return view('vLK.editLK', compact('linhKien', 'donViTinhs', 'nhaCungCaps', 'formData', 'selectedNhaCungCaps'));
+            
     }
 
     public function update(Request $request, $MaLinhKien)
     {
         // Xác thực dữ liệu đầu vào
         $request->validate([
-            'SoLuong' => 'required|integer|min:1',
+           
+            'MoTa' => 'nullable|string|max:255',
+            'MaDonViTinh' => 'required|exists:donvitinh,MaDonViTinh', // Đảm bảo mã đơn vị tính tồn tại
+            'TenLinhKien' => 'required|string|max:255',
             'MaNhaCungCap' => 'required|array|min:1', // Phải chọn ít nhất một nhà cung cấp
             'MaNhaCungCap.*' => 'exists:nhacungcap,MaNhaCungCap', // Đảm bảo nhà cung cấp tồn tại
         ]);
@@ -117,7 +120,9 @@ class LinhKienController extends Controller
 
         // Cập nhật thông tin linh kiện
         $linhKien->update([
-            'SoLuong' => $request->SoLuong,
+            'TenLinhKien' => $request->TenLinhKien,
+            'MoTa' => $request->MoTa,
+            'MaDonViTinh' => $request->MaDonViTinh,
         ]);
         \DB::table('nhacungcap_linhkien')
             ->where('MaLinhKien', $MaLinhKien)
@@ -137,7 +142,17 @@ class LinhKienController extends Controller
         \DB::table('nhacungcap_linhkien')->insert($dataInsert);
 
         return redirect()->route('linhkien.detail', $MaLinhKien)
-            ->with('success', 'Cập nhật linh kiện và nhà cung cấp thành công!');
+            ->with('success', 'Cập nhật linh kiện thành công!');
+    }
+    public function saveFormData(Request $request)
+    {
+        session([
+            'form_linhkien_data' => $request->all(),
+            'editing_linhkien_id' => $request->MaLinhKien // lưu lại mã linh kiện
+
+        ]);
+
+        return redirect()->route('nhacungcap.add2');
     }
 
     public function delete($MaLinhKien)
