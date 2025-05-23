@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\DB;
 use App\Events\eventPhieuNhap;
 use App\Models\ThongBao;
 
+
 class dsphieuNhapController extends Controller
 {
 
@@ -69,7 +70,6 @@ class dsphieuNhapController extends Controller
     {
         $data = $request->all();
 
-        
         $phieuNhapSession = [
             'MaNhaCungCap' => $data['MaNhaCungCap'],
             'NgayNhap' => $data['NgayNhap'],
@@ -84,16 +84,18 @@ class dsphieuNhapController extends Controller
         return response()->json(['status' => 'saved']);
     }
 
-    public function create()
-    {
-     
-        session()->forget('phieuNhapSession');
 
-      
+    public function create(Request $request)
+    {
+
+        if ($request->has('new')) {
+            session()->forget('phieuNhapSession');
+        }
+
         $nhaCungCaps = NhaCungCap::all();
         $nhanViens = NhanVien::all();
 
-       
+
         $phieuNhapSession = session()->get('phieuNhapSession', []);
 
         return view('vPNhap.addphieunhap', compact('nhaCungCaps', 'nhanViens', 'phieuNhapSession'));
@@ -175,19 +177,58 @@ class dsphieuNhapController extends Controller
         // Trả về view chi tiết phiếu nhập
         return view('vPNhap.detailphieunhap', compact('phieuNhap'));
     }
-    public function edit($MaPhieuNhap)
+
+
+    public function edit(Request $request, $MaPhieuNhap)
     {
-        // Lấy thông tin phiếu nhập cùng với chi tiết phiếu nhập
+        $isNew = $request->query('new');
+
+        // Nếu đang tạo mới lại thì xóa session cũ (nếu có)
+        if ($isNew === 'true') {
+            session()->forget('phieuNhapSession1');
+        }
+
+        // Lấy dữ liệu session nếu có và không phải đang tạo mới
+        $phieuNhapSession1 = session()->get('phieuNhapSession1');
+
+        if (!$isNew && $phieuNhapSession1 && isset($phieuNhapSession1['MaPhieuNhap']) && $phieuNhapSession1['MaPhieuNhap'] == $MaPhieuNhap) {
+            $nhaCungCaps = NhaCungCap::all();
+            $nhanViens = NhanVien::all();
+            $phieuNhap = (object) $phieuNhapSession1;
+
+            return view('vPNhap.editPhieunhap', compact('phieuNhap', 'nhaCungCaps', 'nhanViens', 'phieuNhapSession1', 'isNew'));
+        }
+
+        // Lấy dữ liệu từ DB
         $phieuNhap = PhieuNhap::with(['chiTietPhieuNhap.linhKien.donViTinh', 'nhaCungCap', 'nhanVien'])->findOrFail($MaPhieuNhap);
 
-        // Lấy danh sách nhà cung cấp và nhân viên để hiển thị trong form
         $nhaCungCaps = NhaCungCap::all();
         $nhanViens = NhanVien::all();
 
-        // Trả về view editPhieunhap với dữ liệu phiếu nhập
-        return view('vPNhap.editPhieunhap', compact('phieuNhap', 'nhaCungCaps', 'nhanViens'));
+        return view('vPNhap.editPhieunhap', compact('phieuNhap', 'nhaCungCaps', 'nhanViens', 'isNew'));
     }
 
+
+
+    public function saveSession1(Request $request)
+    {
+        $data = $request->all();
+
+        $phieuNhapSession1 = [
+            'MaPhieuNhap' => $data['MaPhieuNhap'],
+            'MaNhaCungCap' => $data['MaNhaCungCap'],
+            'MaNhanVien' => $data['MaNhanVien'],
+            'NgayNhap' => $data['NgayNhap'],
+            'GhiChu' => $data['GhiChu'],
+            'TongSoLuong' => $data['TongSoLuong'],
+            'TongThanhTien' => $data['TongThanhTien'],
+            'LinhKienList' => $data['LinhKienList']
+        ];
+
+        session(['phieuNhapSession1' => $phieuNhapSession1]);
+
+        return response()->json(['status' => 'saved']);
+    }
     public function update(Request $request, $MaPhieuNhap)
     {
         $validatedData = $request->validate([

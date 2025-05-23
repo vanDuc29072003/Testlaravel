@@ -1,6 +1,6 @@
 @extends('layouts.main')
 
-@section('title', 'Thêm Linh Kiện Mới')
+@section('title', 'Thêm Linh Kiện Mới Đang Test')
 
 @section('content')
     <div class="container">
@@ -12,7 +12,7 @@
                             <h1 class="m-3">Thêm Linh Kiện Mới</h1>
                         </div>
                         <div class="card-body">
-                            <form id="formLinhKien" action="{{ route('linhkien.store2') }}" method="POST">
+                            <form id="formLinhKien" action="{{ route('linhkien.store3') }}" method="POST">
                                 @csrf
                                 <div class="row">
                                     <div class="col-12">
@@ -62,7 +62,9 @@
                         </div>
                         <div class="card-footer">
                             <div class="form-group d-flex justify-content-between">
-                                <a href="{{ route('dsphieunhap.add') }}" class="btn btn-secondary">Trở lại</a>
+                               <a href="{{ route('dsphieunhap.edit', session('phieuNhapSession1.MaPhieuNhap')) }}" class="btn btn-secondary">
+                                    Trở lại
+                                </a>
 
                                 <button type="submit" class="btn btn-primary" form="formLinhKien">
                                     <i class="fa fa-save"></i> Tạo Mới

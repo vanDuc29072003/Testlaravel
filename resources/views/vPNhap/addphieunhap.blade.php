@@ -8,7 +8,7 @@
             <div class="page-inner">
                 <form action="{{ route('dsphieunhap.store') }}" method="POST">
                     @csrf
-
+                        
                     <div class="row">
                         <!-- Cột bên trái: Danh sách linh kiện -->
                         <div class="col-9">
@@ -18,8 +18,6 @@
                                <a href="#" id="btnAddLinhKien" class="btn btn-primary">
                                     <i class="fa fa-plus"></i> Thêm mới linh kiện
                                 </a>
-
-
 
                                 </div>
                             </div>
@@ -132,7 +130,7 @@
         </div>
     @endsection
 
-    @section('scripts')
+@section('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function () {
 
@@ -212,7 +210,7 @@ function saveFormDataToSession(event) {
     });
 
     fetch("{{ route('phieunhap.saveSession') }}", {
-    method: 'POST',
+    method: 'POST', 
     headers: {
         'Content-Type': 'application/json',
         'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')

@@ -61,8 +61,13 @@
                         </div>
                         <div class="card-footer">
                             <div class="form-group d-flex justify-content-between">
-                                <a href="{{ route('nhacungcap') }}" class="btn btn-secondary">
-                                    <i class="fa fa-arrow-left"></i> Trở lại</a>
+                                @php
+                                    $maLinhKien = session('editing_linhkien_id');
+                                @endphp
+
+                                <a href="{{ $maLinhKien ? route('linhkien.edit', $maLinhKien) : route('nhacungcap') }}" class="btn btn-secondary">
+                                    <i class="fa fa-arrow-left"></i> Trở lại
+                                </a>
                                 <button type="submit" class="btn btn-primary" form="formNhaCungCap">
                                     <i class="fa fa-save"></i> Tạo Mới
                                 </button>
