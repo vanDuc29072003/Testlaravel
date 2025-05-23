@@ -11,7 +11,7 @@
                     <div class="table-responsive">
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <h3 class="mb-0">Danh sách Phiếu Nhập Chờ Duyệt</h3>
-                            <a href="{{ route('dsphieunhap.add') }}" class="btn btn-primary">
+                            <a href="{{ route('dsphieunhap.add', ['new' => true]) }}) }}" class="btn btn-primary">
                                 <i class="fa fa-plus"></i> Thêm mới
                             </a>
                         </div>
@@ -42,10 +42,12 @@
                                         </td>
                                         <td>
                                             <div class="d-flex justify-content-center gap-2">
-                                                <a href="{{ route('dsphieunhap.edit', $phieuNhap->MaPhieuNhap) }}"
-                                                    class="btn btn-warning btn-sm text-black">
+                                             <a href="{{ route('dsphieunhap.edit', ['MaPhieuNhap' => $phieuNhap->MaPhieuNhap]) }}?new=true"
+                                                class="btn btn-warning btn-sm text-black">
                                                     <i class="fa fa-edit"></i> Sửa
                                                 </a>
+
+
                                                 <button href="" class="btn btn-primary btn-sm">
                                                     <i class="fas fa-info-circle"></i> Xem
                                                 </button>

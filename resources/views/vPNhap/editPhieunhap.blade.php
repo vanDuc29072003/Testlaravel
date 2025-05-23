@@ -1,3 +1,5 @@
+<meta name="csrf-token" content="{{ csrf_token() }}">
+
 @extends('layouts.main')
 
 @section('title', 'Chỉnh sửa Phiếu Nhập Hàng')
@@ -7,7 +9,9 @@
         <div class="page-inner">
             <form action="{{ route('dsphieunhap.update', $phieuNhap->MaPhieuNhap) }}" method="POST">
                 @csrf
+                
                 @method('PUT')
+            <input type="hidden" name="MaPhieuNhap" value="{{ session('phieuNhapSession1.MaPhieuNhap') }}">
 
                 <div class="row">
                     <!-- Cột bên trái: Danh sách linh kiện -->
@@ -15,9 +19,9 @@
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <h3>Chỉnh sửa Phiếu Nhập Hàng</h3>
                             <div>
-                                <a href="{{ route('linhkien.add') }}" class="btn btn-primary">
-                                    <i class="fa fa-plus"></i> Thêm linh kiện mới
-                                </a>
+                                 <button type="button" id="btnAddLinhKien" class="btn btn-primary">
+                                    <i class="fa fa-plus"></i> Thêm mới linh kiện
+                                 </button>
                             </div>
                         </div>
 
@@ -42,20 +46,19 @@
                                     </tr>
                                 </thead>
                                 <tbody id="product-list">
-                                    @foreach ($phieuNhap->chiTietPhieuNhap as $chiTiet)
+                                @php
+                                    $linhKienList = session('phieuNhapSession1')['LinhKienList'] ?? null;
+                                @endphp
+
+                                @if ($linhKienList)
+                                    @foreach ($linhKienList as $item)
                                         <tr>
-                                            <td><input type="text" class="form-control" name="MaLinhKien[]"
-                                                    value="{{ $chiTiet->MaLinhKien }}" readonly></td>
-                                            <td><input type="text" class="form-control" name="TenLinhKien[]"
-                                                    value="{{ $chiTiet->linhKien->TenLinhKien }}" readonly></td>
-                                            <td><input type="text" class="form-control" name="TenDonViTinh[]"
-                                                    value="{{ $chiTiet->linhKien->donViTinh->TenDonViTinh }}" readonly></td>
-                                            <td><input type="number" class="form-control quantity" name="SoLuong[]"
-                                                    value="{{ $chiTiet->SoLuong }}" required></td>
-                                            <td><input type="number" class="form-control price" name="GiaNhap[]"
-                                                    value="{{ $chiTiet->GiaNhap }}" required></td>
-                                            <td><input type="number" class="form-control total" name="TongCong[]"
-                                                    value="{{ $chiTiet->TongCong }}" readonly></td>
+                                            <td><input type="text" class="form-control" name="MaLinhKien[]" value="{{ $item['MaLinhKien'] }}" readonly></td>
+                                            <td><input type="text" class="form-control" name="TenLinhKien[]" value="{{ $item['TenLinhKien'] }}" readonly></td>
+                                            <td><input type="text" class="form-control" name="TenDonViTinh[]" value="{{ $item['TenDonViTinh'] }}" readonly></td>
+                                            <td><input type="number" class="form-control quantity" name="SoLuong[]" value="{{ $item['SoLuong'] }}" required></td>
+                                            <td><input type="number" class="form-control price" name="GiaNhap[]" value="{{ $item['GiaNhap'] }}" required></td>
+                                            <td><input type="number" class="form-control total" name="TongCong[]" value="{{ $item['TongCong'] }}" readonly></td>
                                             <td class="text-center">
                                                 <button type="button" class="btn btn-danger btn-sm remove-product">
                                                     <i class="fa fa-trash"></i> Xóa
@@ -63,7 +66,25 @@
                                             </td>
                                         </tr>
                                     @endforeach
-                                </tbody>
+                                @else
+                                    @foreach ($phieuNhap->chiTietPhieuNhap as $chiTiet)
+                                        <tr>
+                                            <td><input type="text" class="form-control" name="MaLinhKien[]" value="{{ $chiTiet->MaLinhKien }}" readonly></td>
+                                            <td><input type="text" class="form-control" name="TenLinhKien[]" value="{{ $chiTiet->linhKien->TenLinhKien }}" readonly></td>
+                                            <td><input type="text" class="form-control" name="TenDonViTinh[]" value="{{ $chiTiet->linhKien->donViTinh->TenDonViTinh }}" readonly></td>
+                                            <td><input type="number" class="form-control quantity" name="SoLuong[]" value="{{ $chiTiet->SoLuong }}" required></td>
+                                            <td><input type="number" class="form-control price" name="GiaNhap[]" value="{{ $chiTiet->GiaNhap }}" required></td>
+                                            <td><input type="number" class="form-control total" name="TongCong[]" value="{{ $chiTiet->TongCong }}" readonly></td>
+                                            <td class="text-center">
+                                                <button type="button" class="btn btn-danger btn-sm remove-product">
+                                                    <i class="fa fa-trash"></i> Xóa
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                @endif
+                            </tbody>
+
                             </table>
                         </div>
                     </div>
@@ -74,37 +95,44 @@
                             <div class="form-group">
                                 <label for="MaNhaCungCap">Nhà Cung Cấp</label>
                                 <select class="form-control" id="MaNhaCungCap" name="MaNhaCungCap" required>
+                                    @php
+                                        $selectedNCC = session('phieuNhapSession1.MaNhaCungCap') ?? $phieuNhap->MaNhaCungCap;
+                                    @endphp
                                     @foreach ($nhaCungCaps as $nhaCungCap)
-                                        <option value="{{ $nhaCungCap->MaNhaCungCap }}" {{ $phieuNhap->MaNhaCungCap == $nhaCungCap->MaNhaCungCap ? 'selected' : '' }}>
+                                        <option value="{{ $nhaCungCap->MaNhaCungCap }}" {{ $selectedNCC == $nhaCungCap->MaNhaCungCap ? 'selected' : '' }}>
                                             {{ $nhaCungCap->TenNhaCungCap }}
                                         </option>
                                     @endforeach
-                                </select>
+                                    </select>
+
                             </div>
                             <div class="form-group">
                                 <label for="TenNhanVien">Nhân Viên</label>
-                                <input type="text" class="form-control" id="TenNhanVien" name="TenNhanVien"
-                                    value="{{ $phieuNhap->nhanVien->TenNhanVien}}" readonly>
+                               <input type="text" class="form-control" id="TenNhanVien" name="TenNhanVien"
+                                value="{{ session('phieuNhapSession1.MaNhanVien') ?? $phieuNhap->nhanVien->TenNhanVien }}" readonly>
+                                <input type="hidden" id="MaNhanVien" name="MaNhanVien" value="{{ session('phieuNhapSession1.MaNhanVien') ?? $phieuNhap->MaNhanVien }}">
+
                             </div>
                             <div class="form-group">
                                 <label for="NgayNhap">Ngày Nhập</label>
-                                <input type="datetime-local" class="form-control" id="NgayNhap" name="NgayNhap"
-                                    value="{{ $phieuNhap->NgayNhap }}" required>
+                               <input type="datetime-local" class="form-control" id="NgayNhap" name="NgayNhap"
+                                value="{{ session('phieuNhapSession1.NgayNhap') ?? $phieuNhap->NgayNhap }}" required>
+
                             </div>
                             <div class="form-group">
                                 <label for="TongSoLuong">Tổng Số Lượng</label>
                                 <input type="number" class="form-control" id="TongSoLuong" name="TongSoLuong"
-                                    value="{{ $phieuNhap->TongSoLuong }}" readonly>
+                                  value="{{ session('phieuNhapSession1.TongSoLuong') ?? $phieuNhap->TongSoLuong }}" readonly>
                             </div>
                             <div class="form-group">
                                 <label for="TongThanhTien">Tổng Thành Tiền</label>
-                                <input type="number" class="form-control" id="TongThanhTien" name="TongTien"
-                                    value="{{ $phieuNhap->TongTien }}" readonly>
+                               <input type="number" class="form-control" id="TongThanhTien" name="TongTien"
+                                 value="{{ session('phieuNhapSession1.TongThanhTien') ?? $phieuNhap->TongTien }}" readonly>
                             </div>
                             <div class="form-group">
                                 <label for="GhiChu">Ghi Chú</label>
-                                <textarea class="form-control" id="GhiChu" name="GhiChu"
-                                    rows="3">{{ $phieuNhap->GhiChu }}</textarea>
+                                <textarea class="form-control" id="GhiChu" name="GhiChu" rows="3">{{ session('phieuNhapSession1.GhiChu') ?? $phieuNhap->GhiChu }}</textarea>
+
                             </div>
 
                             <div class="form-group mt-4 text-right">
@@ -121,11 +149,27 @@
     </div>
 @endsection
 @section('scripts')
-    <script>
-        document.getElementById('searchLinhKien').addEventListener('input', function () {
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    // Bắt sự kiện nút "Thêm mới linh kiện"
+    document.getElementById('btnAddLinhKien').addEventListener('click', saveFormDataToSession1);
+
+    // Xử lý tìm kiếm
+    const searchInput = document.getElementById('searchLinhKien');
+    const blockedChars = /[!@~`#$%^&*()+=\[\]{};:"\\|,.<>\/?]/;
+
+    if (searchInput) {
+        searchInput.addEventListener('keydown', function (e) {
+            if (blockedChars.test(e.key)) {
+                e.preventDefault();
+            }
+        });
+
+        searchInput.addEventListener('input', function () {
             let query = this.value;
 
-            if (query.length > 2) { // Chỉ tìm kiếm khi có ít nhất 3 ký tự
+            if (query.length > 2) {
                 fetch(`/linhkien/search1?query=${query}`)
                     .then(response => response.json())
                     .then(data => {
@@ -142,7 +186,6 @@
                                 resultItem.dataset.name = item.TenLinhKien;
                                 resultItem.dataset.unit = item.don_vi_tinh ? item.don_vi_tinh.TenDonViTinh : 'Không xác định';
 
-                                // Thêm sự kiện click để chọn linh kiện
                                 resultItem.addEventListener('click', function (e) {
                                     e.preventDefault();
                                     addLinhKienToTable(this.dataset.id, this.dataset.name, this.dataset.unit);
@@ -158,138 +201,129 @@
                 document.getElementById('searchResults').innerHTML = '';
             }
         });
+    }
+});
 
-        function addLinhKienToTable(maLinhKien, tenLinhKien, tenDonViTinh) {
-            // Kiểm tra xem mã linh kiện đã tồn tại trong bảng chưa
-            let existingRows = document.querySelectorAll('input[name="MaLinhKien[]"]');
-            for (let row of existingRows) {
-                if (row.value === maLinhKien) {
-                    $.notify({
-                        title: 'Lỗi',
-                        message: 'Linh kiện này đã được thêm!',
-                        icon: 'icon-bell'
-                    }, {
-                        type: 'danger',
-                        animate: {
-                            enter: 'animated fadeInDown',
-                            exit: 'animated fadeOutUp'
-                        },
-                    });
+// Hàm lưu dữ liệu vào session
+function saveFormDataToSession1(event) {
+    event.preventDefault();
+    const data = {
+        MaPhieuNhap: "{{ $phieuNhap->MaPhieuNhap }}",
+        MaNhaCungCap: document.getElementById('MaNhaCungCap').value,
+        NgayNhap: document.getElementById('NgayNhap').value,
+        GhiChu: document.getElementById('GhiChu').value,
+        MaNhanVien: document.getElementById('MaNhanVien').value, 
+        LinhKienList: [],
+        TongSoLuong: document.getElementById('TongSoLuong').value,
+        TongThanhTien: document.getElementById('TongThanhTien').value
+    };
 
-                    return;
-                }
-            }
-
-
-            // Nếu không trùng, thêm linh kiện vào bảng
-            let row = document.createElement('tr');
-            row.innerHTML = `
-                <td><input type="text" class="form-control" name="MaLinhKien[]" value="${maLinhKien}" readonly></td>
-                <td><input type="text" class="form-control" name="TenLinhKien[]" value="${tenLinhKien}" readonly></td>
-                <td><input type="text" class="form-control" name="TenDonViTinh[]" value="${tenDonViTinh}" readonly></td>
-                <td><input type="number" class="form-control quantity" name="SoLuong[]" placeholder="Số lượng" min="1" required></td>
-                <td><input type="number" class="form-control price" name="GiaNhap[]" placeholder="Giá nhập" min="1000" required></td>
-                <td><input type="number" class="form-control total" name="TongCong[]" readonly></td>
-                <td class="text-center">
-                    <button type="button" class="btn btn-danger btn-sm remove-product">
-                        <i class="fa fa-trash"></i> Xóa
-                    </button>
-                </td>
-            `;
-            document.getElementById('product-list').appendChild(row);
-
-            // Gọi hàm cập nhật tổng số lượng và tổng thành tiền
-            updateTotals();
-
-            // Thêm sự kiện xóa hàng
-            row.querySelector('.remove-product').addEventListener('click', function () {
-                row.remove();
-                updateTotals();
-            });
-
-            // Thêm sự kiện tính toán lại thành tiền khi thay đổi số lượng hoặc giá nhập
-            row.querySelector('.quantity').addEventListener('input', updateTotals);
-            row.querySelector('.price').addEventListener('input', updateTotals);
-        }
-        function updateTotals() {
-            let rows = document.querySelectorAll('#product-list tr');
-            let totalQty = 0;
-            let totalPriceValue = 0;
-
-            rows.forEach(row => {
-                let quantity = row.querySelector('.quantity').value || 0;
-                let price = row.querySelector('.price').value || 0;
-                let total = row.querySelector('.total');
-
-                // Tính toán thành tiền cho từng hàng
-                let rowTotal = parseInt(quantity) * parseFloat(price);
-                total.value = rowTotal.toFixed(4); // Hiển thị thành tiền với 2 chữ số thập phân
-
-                // Cộng dồn tổng số lượng và tổng thành tiền
-                totalQty += parseInt(quantity);
-                totalPriceValue += rowTotal;
-            });
-
-            // Cập nhật tổng số lượng và tổng thành tiền
-            document.getElementById('TongSoLuong').value = totalQty;
-            document.getElementById('TongThanhTien').value = totalPriceValue.toFixed(2); // Hiển thị tổng thành tiền với 2 chữ số thập phân
-        } function updateTotals() {
-            let rows = document.querySelectorAll('#product-list tr');
-            let totalQty = 0;
-            let totalPriceValue = 0;
-
-            rows.forEach(row => {
-                let quantity = parseInt(row.querySelector('.quantity').value) || 0;
-                let price = parseFloat(row.querySelector('.price').value) || 0;
-                let total = row.querySelector('.total');
-
-                // Tính toán thành tiền cho từng hàng
-                let rowTotal = quantity * price;
-                total.value = rowTotal.toFixed(2); // Hiển thị thành tiền với 2 chữ số thập phân
-
-                // Cộng dồn tổng số lượng và tổng thành tiền
-                totalQty += quantity;
-                totalPriceValue += rowTotal;
-            });
-
-            // Cập nhật tổng số lượng và tổng thành tiền
-            document.getElementById('TongSoLuong').value = totalQty;
-            document.getElementById('TongThanhTien').value = totalPriceValue.toFixed(2); // Hiển thị tổng thành tiền với 2 chữ số thập phân
-        }
-
-        // Gắn sự kiện cho tất cả các trường số lượng và giá nhập
-        function attachInputEvents() {
-            let quantityInputs = document.querySelectorAll('.quantity');
-            let priceInputs = document.querySelectorAll('.price');
-
-            quantityInputs.forEach(input => {
-                input.addEventListener('input', updateTotals);
-            });
-
-            priceInputs.forEach(input => {
-                input.addEventListener('input', updateTotals);
-            });
-        }
-        document.addEventListener('DOMContentLoaded', function () {
-            attachInputEvents();
+    document.querySelectorAll('#product-list tr').forEach(row => {
+        data.LinhKienList.push({
+            MaLinhKien: row.querySelector('input[name="MaLinhKien[]"]').value,
+            TenLinhKien: row.querySelector('input[name="TenLinhKien[]"]').value,
+            TenDonViTinh: row.querySelector('input[name="TenDonViTinh[]"]').value,
+            SoLuong: row.querySelector('input[name="SoLuong[]"]').value,
+            GiaNhap: row.querySelector('input[name="GiaNhap[]"]').value,
+            TongCong: row.querySelector('input[name="TongCong[]"]').value
         });
-        function attachRemoveEvents() {
-            let removeButtons = document.querySelectorAll('.remove-product');
+    });
 
-            removeButtons.forEach(button => {
-                button.addEventListener('click', function () {
-                    // Xóa hàng tương ứng
-                    this.closest('tr').remove();
-                    // Cập nhật tổng số lượng và tổng thành tiền
-                    updateTotals();
-                });
+    fetch("{{ route('phieunhap.saveSession1') }}", {
+    method: 'POST', 
+    headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+    },
+    body: JSON.stringify(data)
+
+    }).then(() => {
+        window.location.href = "{{ route('linhkien.add3') }}";
+    });
+}   
+
+// Hàm thêm linh kiện vào bảng
+function addLinhKienToTable(maLinhKien, tenLinhKien, tenDonViTinh) {
+    let existingRows = document.querySelectorAll('input[name="MaLinhKien[]"]');
+    for (let row of existingRows) {
+        if (row.value === maLinhKien) {
+            $.notify({
+                title: 'Lỗi',
+                message: 'Linh kiện này đã được thêm!',
+                icon: 'icon-bell'
+            }, {
+                type: 'danger',
+                animate: {
+                    enter: 'animated fadeInDown',
+                    exit: 'animated fadeOutUp'
+                },
             });
+            return;
         }
-        document.addEventListener('DOMContentLoaded', function () {
-            attachInputEvents(); // Gắn sự kiện cho các trường số lượng và giá nhập
-            attachRemoveEvents(); // Gắn sự kiện "Xóa" cho các hàng đã có sẵn
-            updateTotals(); // Tính toán tổng số lượng và tổng thành tiền ban đầu
-        });
-    </script>
+    }
 
+    let row = document.createElement('tr');
+    row.innerHTML = `
+        <td><input type="text" class="form-control" name="MaLinhKien[]" value="${maLinhKien}" readonly></td>
+        <td><input type="text" class="form-control" name="TenLinhKien[]" value="${tenLinhKien}" readonly></td>
+        <td><input type="text" class="form-control" name="TenDonViTinh[]" value="${tenDonViTinh}" readonly></td>
+        <td><input type="number" class="form-control quantity" name="SoLuong[]" placeholder="Số lượng" min="1" required></td>
+        <td><input type="number" class="form-control price" name="GiaNhap[]" placeholder="Giá nhập" min="1000" required></td>
+        <td><input type="number" class="form-control total" name="TongCong[]" readonly></td>
+        <td class="text-center">
+            <button type="button" class="btn btn-danger btn-sm remove-product">
+                <i class="fa fa-trash"></i> Xóa
+            </button>
+        </td>
+    `;
+    document.getElementById('product-list').appendChild(row);
+
+    updateTotals();
+
+    row.querySelector('.remove-product').addEventListener('click', function () {
+        row.remove();
+        updateTotals();
+    });
+
+    row.querySelector('.quantity').addEventListener('input', updateTotals);
+    row.querySelector('.price').addEventListener('input', updateTotals);
+}
+
+function updateTotals() {
+    let rows = document.querySelectorAll('#product-list tr');
+    let totalQty = 0;
+    let totalPriceValue = 0;
+
+    rows.forEach(row => {
+        let quantity = row.querySelector('.quantity').value || 0;
+        let price = row.querySelector('.price').value || 0;
+        let total = row.querySelector('.total');
+
+        let rowTotal = parseInt(quantity) * parseFloat(price);
+        total.value = rowTotal.toFixed(0);
+
+        totalQty += parseInt(quantity);
+        totalPriceValue += rowTotal;
+    });
+
+    document.getElementById('TongSoLuong').value = totalQty;
+    document.getElementById('TongThanhTien').value = totalPriceValue.toFixed(0);
+}
+</script>
+
+<script>
+@if (session('success'))
+    $.notify({
+        title: 'Thành công',
+        message: '{{ session('success') }}',
+        icon: 'icon-bell'
+    }, {
+        type: 'success',
+        animate: {
+            enter: 'animated fadeInDown',
+            exit: 'animated fadeOutUp'
+        },
+    });
+@endif
+</script>
 @endsection

@@ -13,9 +13,9 @@
                                 <h2 class="ps-3 mb-0">Thông Tin Phiếu Nhập</h2>
                                 <div class="d-flex justify-content-end">
                                     @if ($phieuNhap->TrangThai == 0)
-                                        <a href="{{ route('dsphieunhap.edit', $phieuNhap->MaPhieuNhap) }}"
-                                            class="btn btn-warning text-black">
-                                            <i class="fa fa-edit"></i> Sửa
+                                        <a href="{{ route('dsphieunhap.edit', ['MaPhieuNhap' => $phieuNhap->MaPhieuNhap, 'new' => true]) }}"
+                                                class="btn btn-warning btn-sm text-black">
+                                                    <i class="fa fa-edit"></i> Sửa
                                         </a>
                                     @else
                                         <a href="{{ route('phieunhap.exportPDF', $phieuNhap->MaPhieuNhap) }}"

@@ -70,6 +70,8 @@ Route::middleware('auth')->group(function () {
   Route::get('/dsphieunhap/{MaPhieuNhap}/edit', [dsphieuNhapController::class, 'edit'])
     ->middleware('kiemtraquyen:22')
     ->name('dsphieunhap.edit');
+  Route::post('/phieunhap/saveSession1', [dsphieuNhapController::class, 'saveSession1'])->name('phieunhap.saveSession1');
+
   Route::put('/dsphieunhap/{MaPhieuNhap}', [dsphieuNhapController::class, 'update'])->name('dsphieunhap.update');
   Route::delete('/dsphieunhap/{MaPhieuNhap}', [dsphieuNhapController::class, 'destroy'])
     ->middleware('kiemtraquyen:24')
@@ -108,9 +110,11 @@ Route::middleware('auth')->group(function () {
     ->name('linhkien.add');
     Route::get('/linhkien/add2', [LinhKienController::class, 'create2'])
     ->name('linhkien.add2');
+     Route::get('/linhkien/add3', [LinhKienController::class, 'create3'])
+    ->name('linhkien.add3');
   Route::post('/linhkien', [LinhKienController::class, 'store'])->name('linhkien.store');
   Route::post('/linhkien/store2', [LinhKienController::class, 'store2'])->name('linhkien.store2');
-
+  Route::post('/linhkien/store3', [LinhKienController::class, 'store3'])->name('linhkien.store3');
   Route::get('/linhkien/{MaLinhKien}', [LinhKienController::class, 'detail'])->name('linhkien.detail');
   Route::get('/linhkien/{MaLinhKien}/edit', [LinhKienController::class, 'editForm'])
     ->middleware('kiemtraquyen:16')
