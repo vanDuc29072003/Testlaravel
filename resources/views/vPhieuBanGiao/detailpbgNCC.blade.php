@@ -42,8 +42,8 @@
                                     <td>{{ $lichSuaChua->yeuCauSuaChua->may->SeriMay }}</td>
                                 </tr>
                                 <tr>
-                                    <th></th>
-                                    <td></td>
+                                    <th>Người lập phiếu</th>
+                                    <td>{{ $lichSuaChua->phieuBanGiaoSuaChuaNCC->nhanVienTao->TenNhanVien }}</td>
                                     <th>Ngày Nhập</th>
                                     <td>{{ \Carbon\Carbon::parse($lichSuaChua->yeuCauSuaChua->may->ThoiGianDuaVaoSuDung)->format('d/m/Y') }}</td>
                                 </tr>

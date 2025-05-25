@@ -21,6 +21,7 @@ class PhieuThanhLy extends Model
         'DanhGia',
         'GhiChu',
         'TrangThai',
+        'MaNhanVienDuyet',
         'MaHienThi',
     ];
     protected static function boot()
@@ -38,5 +39,9 @@ class PhieuThanhLy extends Model
     public function nhanVien()
     {
         return $this->belongsTo(NhanVien::class, 'MaNhanVien', 'MaNhanVien');
+    }
+    public function nhanVienDuyet()
+    {
+        return $this->belongsTo(NhanVien::class, 'MaNhanVienDuyet', 'MaNhanVien');
     }
 }

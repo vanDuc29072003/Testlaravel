@@ -30,19 +30,36 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label for="MaNhanVien">Nhân viên</label>
-                                        <input type="text" class="form-control" id="MaNhanVien" name="MaNhanVien"
-                                            value="{{ $phieuThanhLy->nhanVien->TenNhanVien }}" readonly>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
                                         <label for="NgayLapPhieu">Ngày lập phiếu</label>
                                         <input type="text" class="form-control" id="NgayLapPhieu" name="NgayLapPhieu"
                                             value="{{ \Carbon\Carbon::parse($phieuThanhLy->NgayLapPhieu)->format('d-m-Y') }}"
                                             readonly>
                                     </div>
                                 </div>
+                                @if ($phieuThanhLy->TrangThai == 1)
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="MaNhanVien">Nhân viên tạo</label>
+                                            <input type="text" class="form-control" id="MaNhanVien" name="MaNhanVien"
+                                                value="{{ $phieuThanhLy->nhanVien->TenNhanVien }}" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="MaNhanVienDuyet">Nhân viên duyệt</label>
+                                            <input type="text" class="form-control" id="MaNhanVienDuyet" name="MaNhanVienDuyet"
+                                                value="{{ $phieuThanhLy->nhanVienDuyet->TenNhanVien }}" readonly>
+                                        </div>
+                                    </div>
+                                @else
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="MaNhanVien">Nhân viên tạo</label>
+                                            <input type="text" class="form-control" id="MaNhanVien" name="MaNhanVien"
+                                                value="{{ $phieuThanhLy->nhanVien->TenNhanVien }}" readonly>
+                                        </div>
+                                    </div>
+                                @endif
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="MaMay">Máy</label>

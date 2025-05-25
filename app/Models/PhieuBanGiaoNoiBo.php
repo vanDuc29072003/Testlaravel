@@ -18,6 +18,7 @@ class PhieuBanGiaoNoiBo extends Model
         'ThoiGianBanGiao',
         'BienPhapXuLy',   
         'GhiChu',   
+        'MaNhanVienTao'
     ];
     public function chiTietPhieuBanGiaoNoiBo()
     {
@@ -28,5 +29,9 @@ class PhieuBanGiaoNoiBo extends Model
     public function lichSuaChua()
     {
         return $this->belongsTo(LichSuaChua::class, 'MaLichSuaChua', 'MaLichSuaChua');
+    }
+    public function nhanVienTao()
+    {
+        return $this->belongsTo(NhanVien::class, 'MaNhanVienTao', 'MaNhanVien');
     }
 }

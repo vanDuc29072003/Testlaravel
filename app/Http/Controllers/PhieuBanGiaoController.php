@@ -16,6 +16,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\PhieuBanGiaoBaoTri;
 use App\Models\ChiTietPhieuBanGiaoBaoTri;
 use App\Models\LichBaoTri;
+use Illuminate\Support\Facades\Auth;
 
 class PhieuBanGiaoController extends Controller
 {
@@ -48,6 +49,7 @@ class PhieuBanGiaoController extends Controller
         $phieuBanGiaoNoiBo->ThoiGianBanGiao = $request->ThoiGianBanGiao;
         $phieuBanGiaoNoiBo->BienPhapXuLy = $request->BienPhapXuLy;
         $phieuBanGiaoNoiBo->GhiChu = $request->GhiChu;
+        $phieuBanGiaoNoiBo->MaNhanVienTao = Auth::user()->MaNhanVien;
         $phieuBanGiaoNoiBo->save();
 
         // Nếu có linh kiện, lưu chi tiết phiếu bàn giao
@@ -103,6 +105,7 @@ class PhieuBanGiaoController extends Controller
             $phieuBanGiaoNCC->TongTien = $request->TongTien;
             $phieuBanGiaoNCC->BienPhapXuLy = $request->BienPhapXuLy;
             $phieuBanGiaoNCC->GhiChu = $request->GhiChu;
+            $phieuBanGiaoNCC->MaNhanVienTao = Auth::user()->MaNhanVien;
             $phieuBanGiaoNCC->save();
 
             // Lưu chi tiết phiếu bàn giao

@@ -50,8 +50,8 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th></th>
-                                    <td></td>
+                                    <th>Người lập phiếu</th>
+                                    <td>{{ $lichSuaChua->phieuBanGiaoNoiBo->nhanVienTao->TenNhanVien }}</td>
                                     <th>Thời Gian Bảo Hành</th>
                                     <td>{{ $lichSuaChua->yeuCauSuaChua->may->ThoiGianBaoHanh }} tháng</td>
                                 </tr>

@@ -18,9 +18,9 @@ class PhieuBanGiaoSuaChuaNCC extends Model
         'MaLichSuaChua',
         'ThoiGianBanGiao',
         'BienPhapXuLy',
-        'TongTien',
-        'ChiPhiKhac',   
-        'GhiChu',   
+        'TongTien',  
+        'GhiChu',
+        'MaNhanVienTao'
     ];
     public function nhaCungCap()
     {
@@ -41,5 +41,9 @@ class PhieuBanGiaoSuaChuaNCC extends Model
     public function chiTietPhieuBanGiaoSuaChuaNCC()
     {
         return $this->hasMany(ChiTietPhieuSuaNCC::class, 'MaPhieuBanGiaoSuaChua', 'MaPhieuBanGiaoSuaChua');
+    }
+    public function nhanVienTao()
+    {
+        return $this->belongsTo(NhanVien::class, 'MaNhanVienTao', 'MaNhanVien');
     }
 }

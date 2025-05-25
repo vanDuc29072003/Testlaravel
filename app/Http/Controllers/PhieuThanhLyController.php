@@ -62,7 +62,7 @@ class PhieuThanhLyController extends Controller
         return response()->json([
             'SeriMay' => $may->SeriMay,
             'ThoiGianDuaVaoSuDung' => $may->ThoiGianDuaVaoSuDung,
-            'ThoiGianKhauHao' => $may->ThoiGianBaoHanh, // Giả sử Thời Gian Khấu Hao là Thời Gian Bảo Hành
+            'ThoiGianKhauHao' => $may->ThoiGianBaoHanh,
             'NamSanXuat' => $may->NamSanXuat,
             'HangSanXuat' => $may->HangSanXuat,
             'GiaTriBanDau' => $may->GiaTriBanDau,
@@ -97,7 +97,7 @@ class PhieuThanhLyController extends Controller
     }
     public function detail($MaPhieuThanhLy)
     {
-        $phieuThanhLy = PhieuThanhLy::with(['nhanVien', 'may'])->findOrFail($MaPhieuThanhLy);
+        $phieuThanhLy = PhieuThanhLy::with(['nhanVien', 'may', 'nhanVienDuyet'])->findOrFail($MaPhieuThanhLy);
         return view('vPhieuThanhLy.detailphieuthanhly', compact('phieuThanhLy'));
     }
     public function edit($MaPhieuThanhLy)

@@ -54,6 +54,12 @@
                                         <th>Ghi Chú</th>
                                         <td>{{ $phieuNhap->GhiChu ?? 'Không có' }}</td>
                                     </tr>
+                                    @if ($phieuNhap->TrangThai == 1)
+                                        <tr>
+                                            <th>Người Duyệt</th>
+                                            <td>{{ $phieuNhap->nhanVienDuyet->TenNhanVien ?? 'Không xác định' }}</td>
+                                        </tr>
+                                    @endif
                                 </tbody>
                             </table>
 

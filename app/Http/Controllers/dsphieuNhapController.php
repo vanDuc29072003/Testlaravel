@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 use App\Events\eventPhieuNhap;
 use App\Models\ThongBao;
+use Auth;
 
 
 class dsphieuNhapController extends Controller
@@ -172,7 +173,7 @@ class dsphieuNhapController extends Controller
     public function show($MaPhieuNhap)
     {
         // Lấy thông tin phiếu nhập cùng với nhà cung cấp, nhân viên và danh sách chi tiết phiếu nhập
-        $phieuNhap = PhieuNhap::with(['chiTietPhieuNhap.linhKien.donViTinh', 'nhaCungCap', 'nhanVien'])->findOrFail($MaPhieuNhap);
+        $phieuNhap = PhieuNhap::with(['chiTietPhieuNhap.linhKien.donViTinh', 'nhaCungCap', 'nhanVien', 'nhanVienDuyet'])->findOrFail($MaPhieuNhap);
 
         // Trả về view chi tiết phiếu nhập
         return view('vPNhap.detailphieunhap', compact('phieuNhap'));
@@ -334,6 +335,7 @@ class dsphieuNhapController extends Controller
             // Cập nhật trạng thái phiếu nhập thành "Đã phê duyệt"
             $phieuNhap->update([
                 'TrangThai' => 1, // 1: Đã phê duyệt
+                'MaNhanVienDuyet' => Auth::user()->MaNhanVien
             ]);
 
             // Commit transaction

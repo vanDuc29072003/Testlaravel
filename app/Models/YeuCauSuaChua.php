@@ -17,7 +17,8 @@ class YeuCauSuaChua extends Model
         'MaNhanVienYeuCau',
         'ThoiGianYeuCau',
         'MoTa',
-        'TrangThai'
+        'TrangThai',
+        'MaNhanVienDuyet'
     ];
     public function may()
     {
@@ -26,6 +27,10 @@ class YeuCauSuaChua extends Model
     public function nhanVien()
     {
         return $this->belongsTo(NhanVien::class, 'MaNhanVienYeuCau', 'MaNhanVien');
+    }
+    public function nhanVienDuyet()
+    {
+        return $this->belongsTo(NhanVien::class, 'MaNhanVienDuyet', 'MaNhanVien');
     }
     public function lichSuaChua()
     {

@@ -174,7 +174,8 @@ class LichSuaChuaController extends Controller
             'yeuCauSuaChua.may',
             'yeuCauSuaChua.nhanVien',
             'nhanVienKyThuat',
-            'phieuBanGiaoNoiBo.chiTietPhieuBanGiaoNoiBo.LinhKienSuaChua.donViTinh'
+            'phieuBanGiaoNoiBo.chiTietPhieuBanGiaoNoiBo.LinhKienSuaChua.donViTinh',
+            'phieuBanGiaoNoiBo.nhanVienTao'
         ])->findOrFail($MaLichSuaChua);
 
         $phieuBanGiaoNoiBo = $lichSuaChua->phieuBanGiaoNoiBo;
@@ -191,6 +192,7 @@ class LichSuaChuaController extends Controller
             'yeuCauSuaChua.may.nhaCungCap',
             'phieuBanGiaoSuaChuaNCC',
             'phieuBanGiaoSuaChuaNCC.chiTietPhieuBanGiaoSuaChuaNCC',
+            'phieuBanGiaoSuaChuaNCC.nhanVienTao'
         ])->findOrFail($MaLichSuaChua);
 
         // Lấy luôn nhà cung cấp
