@@ -95,6 +95,10 @@
                             <label for="MaNhanVien">Mã Nhân Viên Tạo Phiếu</label>
                             <input type="text" class="form-control" name="MaNhanVien" value="{{ Auth::user()->MaNhanVien ?? '' }}" readonly>
                         </div>
+                         <div class="form-group">
+                            <label for="TenMay">Tên Máy Cần Bảo Trì</label>
+                            <input type="text" class="form-control" name="TenMay" value="{{ $lichbaotri->may->TenMay ?? 'Không xác định' }}" readonly>
+                        </div>
 
                         <div class="form-group">
                             <label for="ThoiGianBanGiao">Thời Gian Bàn Giao</label>

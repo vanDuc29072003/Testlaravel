@@ -28,10 +28,15 @@
                                 </div>
                             </div>
                             <div class="col col-stats ms-3 ms-sm-0">
+                                @php
+                                    $tongSoLuongXuat = $thongKe->sum('TongXuat');
+                                @endphp
+
                                 <div class="numbers">
-                                    <strong>Tổng loại linh kiện xuất</strong>
-                                    <h4 class="card-title">{{ $thongKe->count() }}</h4>
+                                    <strong>Tổng số linh kiện đã xuất</strong>
+                                    <h4 class="card-title">{{ $tongSoLuongXuat }}</h4>
                                 </div>
+
                             </div>
                         </div>
                     </div>

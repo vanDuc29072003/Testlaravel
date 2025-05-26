@@ -192,7 +192,7 @@ Route::middleware('auth')->group(function () {
 
   Route::get('/phieubangiao/{MaPhieuBanGiaoSuaChua}/export-pdf1', [PhieuBanGiaoController::class, 'exportPDF1'])->name('phieubangiao.exportPDF1');
   Route::post('/phieubangiao/store1', [PhieuBanGiaoController::class, 'store1'])->name('phieubangiao.store1');
-  Route::get('/lichsuachua/{MaLichSuaChua}', [LichSuaChuaController::class, 'show'])->name('lichsuachua.showpbg');
+  Route::get('/lichsuachua/{MaLichSuaChua}', [LichSuaChuaController::class, 'show'])->name('lichsuachua.showpbg');  
   Route::get('/lichsuachua-bg/{MaLichSuaChua}', [LichSuaChuaController::class, 'show1'])->name('lichsuachua.showpbg1');
   Route::post('/phieubangiao/storeBT', [PhieuBanGiaoController::class, 'storeBT'])->name('phieubangiao.storeBT');
 
@@ -282,7 +282,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/thongke/pdf', [ThongKeController::class, 'exportPDF'])->name('thongkekho.pdf');
     Route::get('/thongkesuachua', [ThongKeController::class, 'thongkesuachua'])->name('thongkesuachua');
     Route::get('/thongkesuachua/pdf', [ThongKeController::class, 'exportPDF1'])->name('thongkesuachua.pdf');
-    Route::get('/thongkesuachua/detail/{maMay}', [ThongKeController::class, 'detail'])->name('thongkesuachua.detail');
+    Route::get('/thongkesuachua/detailSC/{maMay}', [ThongKeController::class, 'detailSC'])->name('thongkesuachua.detailSC');
+    Route::get('/thongkesuachua/detailBT/{maMay}', [ThongKeController::class, 'detailBT'])->name('thongkesuachua.detailBT');
+
     Route::get('/thongkelinhkienxuat', [ThongKeController::class, 'thongkelinhkienxuat'])->name('thongkelinhkienxuat');
     Route::get('/thongkelinhkienxuat/pdf', [ThongKeController::class, 'exportPDF2'])->name('thongkelinhkienxuat.pdf');
     Route::get('/canhbaonhaphang', [ThongKeController::class, 'canhbaonhaphang'])->name('canhbaonhaphang');
