@@ -117,7 +117,7 @@
     </tr>
     <tr>
         <td class="label">Nhân Viên Yêu Cầu:</td>
-        <td>{{ $phieuBanGiaoNoiBo->lichSuaChua->yeuCauSuaChua->nhanVien->TenNhanVien }}</td>
+        <td>{{ $phieuBanGiaoNoiBo->lichSuaChua->yeuCauSuaChua->nhanVien->TenNhanVien ?? 'Không xác định' }}</td>
     </tr>
     <tr>
         <td class="label">Thời Gian Yêu Cầu:</td>

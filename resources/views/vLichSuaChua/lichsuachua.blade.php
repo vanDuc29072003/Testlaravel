@@ -35,7 +35,7 @@
                                                     <td>{{ \Carbon\Carbon::parse($cht->yeuCauSuaChua->ThoiGianYeuCau)->format('H:i') }}</td>
                                                     <td>{{ $cht->yeuCauSuaChua->may->TenMay }}</td>
                                                     <td>{{ $cht->yeuCauSuaChua->MoTa }}</td>
-                                                    <td>{{ $cht->yeuCauSuaChua->nhanVien->TenNhanVien }}</td>
+                                                    <td>{{ $cht->yeuCauSuaChua->nhanVien->TenNhanVien ?? 'Không xác định'}}</td>
                                                     <td>{{ $cht->nhanVienKyThuat->TenNhanVien }}</td>
                                                     <td><span class="badge bg-warning">Chưa hoàn thành</span></td>
                                                     <td>

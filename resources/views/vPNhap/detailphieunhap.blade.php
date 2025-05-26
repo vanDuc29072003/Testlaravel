@@ -38,7 +38,7 @@
                                     </tr>
                                     <tr>
                                         <th>Người Lập Phiếu:</th>
-                                        <td>{{ $phieuNhap->nhanVien->TenNhanVien }}</td>
+                                        <td>{{ $phieuNhap->nhanVien->TenNhanVien ?? 'Không xác định' }}</td>
                                         <th>Nhà Cung Cấp</th>
                                         <td>{{ $phieuNhap->nhaCungCap->TenNhaCungCap }}</td>
                                     </tr>

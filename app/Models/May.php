@@ -26,6 +26,7 @@ class May extends Model
         'MaNhaCungCap',
         'MaLoai',
         'TrangThai',
+        'ThoiGianKhauHao'
     ];
     public function nhaCungCap()
     {

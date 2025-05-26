@@ -55,7 +55,7 @@
                                 </tr>
                                 <tr>
                                     <th>Người Lập</th>
-                                    <td>{{ $lichBaoTri->phieuBanGiaoBaoTri->nhanVien->TenNhanVien }}</td>
+                                    <td>{{ $lichBaoTri->phieuBanGiaoBaoTri->nhanVien->TenNhanVien ?? 'Không xác định' }}</td>
                                     <th>Thời Gian Bảo Hành</th>
                                     <td>{{ $lichBaoTri->may->ThoiGianBaoHanh }} tháng</td>
                                 </tr>

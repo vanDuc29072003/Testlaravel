@@ -41,7 +41,7 @@
                                         <div class="form-group">
                                             <label for="MaNhanVien">Nhân viên tạo</label>
                                             <input type="text" class="form-control" id="MaNhanVien" name="MaNhanVien"
-                                                value="{{ $phieuThanhLy->nhanVien->TenNhanVien }}" readonly>
+                                                value="{{ $phieuThanhLy->nhanVien->TenNhanVien ?? 'Không xác định' }}" readonly>
                                         </div>
                                     </div>
                                     <div class="col-md-3">
@@ -56,7 +56,7 @@
                                         <div class="form-group">
                                             <label for="MaNhanVien">Nhân viên tạo</label>
                                             <input type="text" class="form-control" id="MaNhanVien" name="MaNhanVien"
-                                                value="{{ $phieuThanhLy->nhanVien->TenNhanVien }}" readonly>
+                                                value="{{ $phieuThanhLy->nhanVien->TenNhanVien ?? 'Không xác định' }}" readonly>
                                         </div>
                                     </div>
                                 @endif

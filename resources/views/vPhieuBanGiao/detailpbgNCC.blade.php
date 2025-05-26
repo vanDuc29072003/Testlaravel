@@ -25,7 +25,7 @@
                             <tbody>
                                 <tr>
                                     <th>Nhân Viên Yêu Cầu</th>
-                                    <td>{{ $lichSuaChua->yeuCauSuaChua->nhanVien->TenNhanVien }}</td>
+                                    <td>{{ $lichSuaChua->yeuCauSuaChua->nhanVien->TenNhanVien ?? 'Không xác định' }}</td>
                                     <th>Mã Máy</th>
                                     <td>{{ $lichSuaChua->yeuCauSuaChua->may->MaMay }}</td>
                                 </tr>

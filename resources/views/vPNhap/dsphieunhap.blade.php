@@ -90,7 +90,7 @@
                                         <td>{{ $phieuNhap->MaHienThi }}</td>
                                         <td>{{ \Carbon\Carbon::parse($phieuNhap->NgayNhap)->format('H:i - d/m/Y') }}</td>
                                         <td>{{ $phieuNhap->nhaCungCap->TenNhaCungCap }}</td>
-                                        <td>{{ $phieuNhap->nhanVien->TenNhanVien }}</td>
+                                        <td>{{ $phieuNhap->nhanVien->TenNhanVien ?? 'Không xác định' }}</td>
                                         <td>{{ number_format($phieuNhap->TongTien, 0, ',', '.') }} VND</td>
                                         <td>
                                             <span class="badge bg-success text-white">Đã duyệt</span>

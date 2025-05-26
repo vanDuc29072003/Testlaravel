@@ -29,7 +29,7 @@
                                         <td>{{ \Carbon\Carbon::parse($dth->yeuCauSuaChua->ThoiGianYeuCau)->format('d-m-Y H:i') }}</td>
                                         <td>{{ $dth->yeuCauSuaChua->may->TenMay }}</td>
                                         <td>{{ $dth->yeuCauSuaChua->MoTa }}</td>
-                                        <td>{{ $dth->yeuCauSuaChua->nhanVien->TenNhanVien }}</td>
+                                        <td>{{ $dth->yeuCauSuaChua->nhanVien->TenNhanVien ?? 'Không xác định' }}</td>
                                         <td>{{ $dth->nhanVienKyThuat->TenNhanVien }}</td>
                                         <td>
                                             @if ($dth->TrangThai == '1')

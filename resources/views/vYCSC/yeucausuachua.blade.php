@@ -35,7 +35,7 @@
                                                 <td>{{ \Carbon\Carbon::parse($ycsccd->ThoiGianYeuCau)->format('d-m-Y H:i') }}</td>
                                                 <td>{{ $ycsccd->may->TenMay }}</td>
                                                 <td>{{ $ycsccd->MoTa }}</td>
-                                                <td>{{ $ycsccd->nhanVien->TenNhanVien }}</td>
+                                                <td>{{ $ycsccd->nhanVien->TenNhanVien ?? 'Không xác định' }}</td>
                                                 <td><span class="badge bg-warning">Chờ duyệt</span></td>
                                                 <td>
                                                     <div class="d-flex justify-content-center gap-3">

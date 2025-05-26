@@ -26,9 +26,10 @@ class LoaiMayController extends Controller
     }
     public function store(Request $request)
     {
-        $request->validate([
+        try {
+            $request->validate([
             'TenLoai' => 'required|string|max:255',
-            'MoTa' => 'nullable|string|max:1000',
+            'MoTa' => 'required|string|max:10|unique:loaimay,MoTa',
         ]);
     
         LoaiMay::create([
@@ -37,6 +38,10 @@ class LoaiMayController extends Controller
         ]);
     
         return redirect()->route('loaimay.index')->with('success', 'Đã thêm loại máy thành công.');
+        }
+        catch (\Exception $e) {
+            return redirect()->back()->withInput()->with('error', 'Tên viết tắt đã được sử dụng hoặc dữ liệu không hợp lệ');
+        }
     }
     public function destroy($id)
     {

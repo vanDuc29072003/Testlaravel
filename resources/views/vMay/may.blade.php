@@ -41,10 +41,10 @@
                                     <th scope="col">Mã Máy</th>
                                     <th scope="col">Tên Máy</th>
                                     <th scope="col">Seri Máy</th>
-                                    <th scope="col">Chu Kì Bảo Trì (Tháng)</th>
                                     <th scope="col">Năm Sản Xuất</th>
                                     <th scope="col">Tên Nhà Cung Cấp</th>
                                     <th scope="col">Loại máy</th>
+                                    <th scope="col">Trạng Thái</th>
                                     <th scope="col">Cập Nhật</th>
                                 </tr>
                             </thead>
@@ -55,10 +55,16 @@
                                         <td>{{ $may->MaMay2 }}</td>
                                         <td>{{ $may->TenMay }}</td>
                                         <td>{{ $may->SeriMay }}</td>
-                                        <td>{{ $may->ChuKyBaoTri }}</td>
                                         <td>{{ $may->NamSanXuat }}</td>
                                         <td>{{ $may->nhaCungCap->TenNhaCungCap }}</td>
                                         <td>{{ $may->loaiMay->TenLoai ?? 'Chưa xác định' }}</td>
+                                        <td>
+                                            @if ($may->TrangThai == 1)
+                                                <span class="badge badge-danger">Đã thanh lý</span>
+                                            @else
+                                                <span class="badge badge-success">Đang sử dụng</span>
+                                            @endif
+                                        </td>
                                         <td>
                                             <div class="d-flex gap-2">
                                                 <a href="{{ route('may.edit', $may->MaMay) }}"
@@ -83,14 +89,24 @@
                 <div class="col-xl-2 col-sm-12 p-0">
                     <div>
                         <form method="GET" action="{{ route('may') }}" class="p-3 border rounded fixed-search-form">
-                            <input type="hidden" name="MaLoaiMay" value="{{ request('MaLoaiMay') }}">
                             <h5 class="mb-3">Tìm kiếm</h5>
                             <div class="mb-3">
-                                <label for="TenNhaCungCap" class="form-label">Tên nhà cung cấp</label>
-                                <select name="TenNhaCungCap" id="TenNhaCungCap" class="form-control">
+                                <label for="MaLoai" class="form-label">Loại máy</label>
+                                <select name="MaLoai" id="MaLoai" class="form-control">
+                                    <option value="">Chọn loại máy</option>
+                                    @foreach ($dsLoaiMay as $loai)
+                                        <option value="{{ $loai->MaLoai }}" {{ request('MaLoai') == $loai->MaLoai ? 'selected' : '' }}>
+                                            {{ $loai->TenLoai }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="MaNhaCungCap" class="form-label">Tên nhà cung cấp</label>
+                                <select name="MaNhaCungCap" id="MaNhaCungCap" class="form-control">
                                     <option value="">Chọn nhà cung cấp</option>
                                     @foreach ($dsNhaCungCap as $nhaCungCap)
-                                        <option value="{{ $nhaCungCap->MaNhaCungCap }}" {{ request('TenNhaCungCap') == $nhaCungCap->MaNhaCungCap ? 'selected' : '' }}>
+                                        <option value="{{ $nhaCungCap->MaNhaCungCap }}" {{ request('MaNhaCungCap') == $nhaCungCap->MaNhaCungCap ? 'selected' : '' }}>
                                             {{ $nhaCungCap->TenNhaCungCap }}
                                         </option>
                                     @endforeach
@@ -105,6 +121,22 @@
                                 <label for="SeriMay" class="form-label">Seri máy</label>
                                 <input type="text" name="SeriMay" id="SeriMay" class="form-control"
                                     placeholder="Nhập seri máy..." value="{{ request('SeriMay') }}">
+                            </div>
+                            <div class="mb-3">
+                                <label for="TrangThai" class="form-label">Tình trạng máy</label>
+                                <select name="TrangThai" id="TrangThai" class="form-control">
+                                    <option value="">Tất cả</option>
+                                    <option value="0" {{ request('TrangThai') === '0' ? 'selected' : '' }}>Đang sử dụng</option>
+                                    <option value="1" {{ request('TrangThai') === '1' ? 'selected' : '' }}>Đã thanh lý</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="KhauHao" class="form-label">Khấu hao</label>
+                                <select name="KhauHao" id="KhauHao" class="form-control">
+                                    <option value="">Tất cả</option>
+                                    <option value="0" {{ request('KhauHao') === '0' ? 'selected' : '' }}>Còn khấu hao</option>
+                                    <option value="1" {{ request('KhauHao') === '1' ? 'selected' : '' }}>Đã hết khấu hao</option>
+                                </select>
                             </div>
                             <div class="mb-3">
                                 <label for="ChuKyBaoTri" class="form-label">Chu kỳ bảo trì</label>
