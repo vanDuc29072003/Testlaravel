@@ -47,8 +47,8 @@
                                         <td>{{ $bt->phieuBanGiaoBaoTri?->nhanVien?->TenNhanVien ?? 'Không rõ' }}</td>
                                         <td>{{ number_format($bt->phieuBanGiaoBaoTri?->TongTien ?? 0, 0, ',', '.') }} đ</td>
                                         <td>
-                                                <a href="{{ route('lichbaotri.showpbg', $bt->MaLichBaoTri) }}" class="btn btn-sm btn-primary">
-                                                    Xem Chi Tiết
+                                                <a href="{{ route('lichbaotri.showpbg', $bt->MaLichBaoTri) }}" class="btn btn-info btn-sm">
+                                                    Chi Tiết
                                                 </a>
 
                                         </td>

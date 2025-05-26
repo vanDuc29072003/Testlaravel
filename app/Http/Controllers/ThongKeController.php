@@ -424,6 +424,7 @@ class ThongKeController extends Controller
                 'yeuCauSuaChua.may',
                 'yeuCauSuaChua.nhanVien',
                 'nhanVienKyThuat',
+                'phieuBanGiaoNoiBo.nhanVienTao',
                 'phieuBanGiaoSuaChuaNCC.nhaCungCap'
             ])
             ->orderBy('created_at', 'desc')

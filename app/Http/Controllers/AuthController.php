@@ -91,7 +91,7 @@ class AuthController extends Controller
         }
 
         // OTP đúng, đăng nhập
-        $user = TaiKhoan::where('TenTaiKhoan', $username)->first();
+        $user = TaiKhoan::with('nhanvien')->where('TenTaiKhoan', $username)->first();
 
         
         // Debug: Kiểm tra thông tin user trước khi đăng nhập
@@ -101,8 +101,21 @@ class AuthController extends Controller
 
         Auth::login($user);
         $request->session()->forget('pending_user');
+        $maBoPhan = $user->nhanvien->MaBoPhan ?? null;
 
-        return redirect()->route('dashboard.index')->with('success', 'Đăng nhập thành công!');
+       
+            switch ((int) $maBoPhan) {
+                case 1:
+                    return redirect()->route('dashboard.index')->with('success', 'Đăng nhập thành công!');
+                case 2:
+                    return redirect()->route('lichvanhanh')->with('success', 'Đăng nhập thành công!');
+                case 3:
+                    return redirect()->route('lichsuachua.index')->with('success', 'Đăng nhập thành công!');
+                case 4:
+                    return redirect()->route('linhkien')->with('success', 'Đăng nhập thành công!');
+                default:
+                    return redirect()->route('taikhoan.index')->with('success', 'Đăng nhập thành công!');
+            }
     }
 
 
