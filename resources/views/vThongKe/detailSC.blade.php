@@ -25,6 +25,7 @@
                                 <th rowspan="2">Thời gian sửa chữa</th>
                                 <th colspan="2">Cách thức bàn giao</th>
                                 <th rowspan="2">Đảm nhận sửa chữa</th>
+                                <th rowspan="2">Nhân viên bàn giao</th>
                                 <th rowspan="2">Chi phí (nếu có)</th>
                                 <th rowspan="2">Xem chi tiết</th>
                             </tr>
@@ -60,7 +61,12 @@
                                                 {{ $sc->phieuBanGiaoSuaChuaNCC?->nhaCungCap?->TenNhaCungCap ?? 'Không rõ' }}
                                             @endif
                                         </td>
-
+                                        <td>
+                                            @if($sc->TrangThai == 1)
+                                                {{ $sc->phieuBanGiaoNoiBo->nhanVienTao->TenNhanVien ?? 'Không rõ' }}
+                                            @elseif($sc->TrangThai == 2)
+                                                {{ $sc->phieuBanGiaoSuaChuaNCC?->nhanVienTao->TenNhanVien ?? 'Không rõ' }}
+                                            @endif
                                       
                                         <td>
                                             @if($sc->TrangThai == 1)
