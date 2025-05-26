@@ -121,7 +121,7 @@ class LichBaoTriController extends Controller
         }
 
         // Lấy danh sách lịch bảo trì
-        $lichbaotri = $query->with('may.nhaCungCap')->orderBy('NgayBaoTri', 'asc')->get();
+        $lichbaotri = $query->with('may.nhaCungCap')->orderBy('NgayBaoTri', 'desc')->get();
 
         // Nhóm theo tháng-năm
         $lichbaotriGrouped = $lichbaotri->groupBy(function ($item) {

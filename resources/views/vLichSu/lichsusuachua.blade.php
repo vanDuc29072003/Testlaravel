@@ -33,7 +33,7 @@
                                         <td>{{ $dth->nhanVienKyThuat->TenNhanVien }}</td>
                                         <td>
                                             @if ($dth->TrangThai == '1')
-                                                <span class="badge bg-success">Đã hoàn thành</span>
+                                                <span class="badge bg-success">Bàn giao NB</span>
                                             @elseif ($dth->TrangThai == '2')
                                                 <span class="badge bg-danger">Liên hệ NCC</span>
                                             @endif
@@ -110,7 +110,7 @@
                                 <label for="TrangThai" class="form-label">Trạng thái</label>
                                 <select name="TrangThai" id="TrangThai" class="form-control">
                                     <option value="">-- Chọn trạng thái --</option>
-                                    <option value="1" {{ request('TrangThai') == '1' ? 'selected' : '' }}>Đã hoàn thành</option>
+                                    <option value="1" {{ request('TrangThai') == '1' ? 'selected' : '' }}>Bàn giao NB</option>
                                     <option value="2" {{ request('TrangThai') == '2' ? 'selected' : '' }}>Liên hệ NCC</option>
                                 </select>
                             </div>
