@@ -31,7 +31,7 @@
                                         style="cursor: pointer;">
                                         <td>{{ $linhKien->MaLinhKien }}</td>
                                         <td>{{ $linhKien->TenLinhKien }}</td>
-                                        <td>{{ $linhKien->donViTinh->TenDonViTinh }}</td>
+                                        <td>{{ $linhKien->donViTinh->TenDonViTinh ?? 'Không xác định' }}</td>
                                         <td>{{ $linhKien->SoLuong }}</td>
                                         <td>
                                             <ul class="list-group list-group-flush">

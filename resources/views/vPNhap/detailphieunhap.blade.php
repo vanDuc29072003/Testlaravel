@@ -82,7 +82,7 @@
                                             <td>{{ $chiTiet->linhKien->MaLinhKien }}</td>
                                             <td>{{ $chiTiet->linhKien->TenLinhKien }}</td>
                                             <td>{{ $chiTiet->SoLuong }}</td>
-                                            <td>{{ $chiTiet->linhKien->donViTinh->TenDonViTinh }}</td>
+                                            <td>{{ $chiTiet->linhKien->donViTinh->TenDonViTinh ?? 'Không xác định' }}</td>
                                             <td>{{ number_format($chiTiet->GiaNhap, 0, ',', '.') }} VND</td>
                                             <td>{{ number_format($chiTiet->TongCong, 0, ',', '.') }} VND</td>
                                         </tr>

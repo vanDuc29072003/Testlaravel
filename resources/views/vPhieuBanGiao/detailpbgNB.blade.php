@@ -94,7 +94,7 @@
                                         <tr>
                                             <td>{{ $chiTiet->LinhKienSuaChua->MaLinhKien }}</td>
                                             <td>{{ $chiTiet->LinhKienSuaChua->TenLinhKien }}</td>
-                                            <td>{{ $chiTiet->LinhKienSuaChua->donViTinh->TenDonViTinh }}</td>
+                                            <td>{{ $chiTiet->LinhKienSuaChua->donViTinh->TenDonViTinh ?? 'Không xác định' }}</td>
                                             <td>{{ $chiTiet->SoLuong }}</td>
                                         </tr>
                                     @endforeach
