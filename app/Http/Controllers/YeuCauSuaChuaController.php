@@ -106,6 +106,7 @@ class YeuCauSuaChuaController extends Controller
     {
         $yeuCauSuaChua = YeuCauSuaChua::findOrFail($MaYeuCauSuaChua);
         $yeuCauSuaChua->TrangThai = '2';
+        $yeuCauSuaChua->MaNhanVienDuyet = Auth::user()->MaNhanVien;
         $yeuCauSuaChua->save();
 
         event(new eventUpdateTable());
@@ -128,6 +129,7 @@ class YeuCauSuaChuaController extends Controller
         
         $yeuCauSuaChua = YeuCauSuaChua::findOrFail($MaYeuCauSuaChua);
         $yeuCauSuaChua->TrangThai = '1';
+        $yeuCauSuaChua->MaNhanVienDuyet = Auth::user()->MaNhanVien;
         $yeuCauSuaChua->save();
 
         LichSuaChua::create([

@@ -38,7 +38,7 @@
                                     </tr>
                                     <tr>
                                         <th>Người Lập Phiếu:</th>
-                                        <td>{{ $phieuNhap->nhanVien->TenNhanVien }}</td>
+                                        <td>{{ $phieuNhap->nhanVien->TenNhanVien ?? 'Không xác định' }}</td>
                                         <th>Nhà Cung Cấp</th>
                                         <td>{{ $phieuNhap->nhaCungCap->TenNhaCungCap }}</td>
                                     </tr>
@@ -54,6 +54,12 @@
                                         <th>Ghi Chú</th>
                                         <td>{{ $phieuNhap->GhiChu ?? 'Không có' }}</td>
                                     </tr>
+                                    @if ($phieuNhap->TrangThai == 1)
+                                        <tr>
+                                            <th>Người Duyệt</th>
+                                            <td>{{ $phieuNhap->nhanVienDuyet->TenNhanVien ?? 'Không xác định' }}</td>
+                                        </tr>
+                                    @endif
                                 </tbody>
                             </table>
 
@@ -76,7 +82,7 @@
                                             <td>{{ $chiTiet->linhKien->MaLinhKien }}</td>
                                             <td>{{ $chiTiet->linhKien->TenLinhKien }}</td>
                                             <td>{{ $chiTiet->SoLuong }}</td>
-                                            <td>{{ $chiTiet->linhKien->donViTinh->TenDonViTinh }}</td>
+                                            <td>{{ $chiTiet->linhKien->donViTinh->TenDonViTinh ?? 'Không xác định' }}</td>
                                             <td>{{ number_format($chiTiet->GiaNhap, 0, ',', '.') }} VND</td>
                                             <td>{{ number_format($chiTiet->TongCong, 0, ',', '.') }} VND</td>
                                         </tr>

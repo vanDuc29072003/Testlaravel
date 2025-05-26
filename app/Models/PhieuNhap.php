@@ -22,6 +22,7 @@ class PhieuNhap extends Model
         'MaNhanVien',
         'MaNhaCungCap',
         'TrangThai',
+        'MaNhanVienDuyet',
         'MaHienThi',
     ];
     protected static function boot()
@@ -46,5 +47,9 @@ class PhieuNhap extends Model
     public function chiTietPhieuNhap()
     {
         return $this->hasMany(ChiTietPhieuNhap::class, 'MaPhieuNhap', 'MaPhieuNhap');
+    }
+    public function nhanVienDuyet()
+    {
+        return $this->belongsTo(NhanVien::class, 'MaNhanVienDuyet', 'MaNhanVien');
     }
 }

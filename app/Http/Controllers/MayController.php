@@ -8,32 +8,34 @@ use Illuminate\Http\Request;
 use App\Models\May;
 use App\Models\NhaCungCap;
 use App\Models\LoaiMay;
+use Carbon\Carbon;
 class MayController extends Controller
 {
-    // public function may() {
-    //     $dsMay = May::all(); // Lấy toàn bộ danh sách máy
-    //     return view('vMay.may', compact('dsMay'));
-    // }
-
-    // public function may() {
-    //     $dsMay = May::paginate(10); // Lấy 10 bản ghi mỗi trang
-    //     return view('vMay.may', compact('dsMay'));
-    // }
-
     public function may(Request $request)
     {
         $query = May::query();
 
-        if ($request->filled('MaLoai')) {
-            $query->where('MaLoai', $request->MaLoai);
+        if ($request->filled('TrangThai')) {
+            if ($request->TrangThai == '1') {
+                $query->where('TrangThai', 1);
+            } elseif ($request->TrangThai == '0') {
+                $query->where('TrangThai', '!=', 1);
+            }
         }
 
-        if ($request->filled('TenNhaCungCap')) {
-            $query->where('MaNhaCungCap', $request->TenNhaCungCap);
+        if ($request->filled('KhauHao')) {
+            if ($request->KhauHao == '1') {
+                // Đã hết khấu hao
+                $query->whereRaw("DATE_ADD(`ThoiGianDuaVaoSuDung`, INTERVAL `ThoiGianKhauHao` YEAR) <= CURDATE()");
+            } elseif ($request->KhauHao == '0') {
+                // Còn khấu hao
+                $query->whereRaw("DATE_ADD(`ThoiGianDuaVaoSuDung`, INTERVAL `ThoiGianKhauHao` YEAR) > CURDATE()");
+            }
         }
-
 
         $filters = [
+            'MaLoai' => '=',
+            'MaNhaCungCap' => '=',
             'TenMay' => 'like',
             'SeriMay' => 'like',
             'ChuKyBaoTri' => '=',
@@ -61,8 +63,12 @@ class MayController extends Controller
 
     public function detailMay($MaMay)
     {
-        $may = May::with('nhaCungCap')->findOrFail($MaMay); // Eager load nhà cung cấp
-        return view('vMay.detailmay', compact('may'));
+        $may = May::with('nhaCungCap', 'loaiMay')->findOrFail($MaMay); // Eager load nhà cung cấp
+        $ngayHetKhauHao = null;
+        if ($may->ThoiGianDuaVaoSuDung && $may->ThoiGianKhauHao) {
+            $ngayHetKhauHao = Carbon::parse($may->ThoiGianDuaVaoSuDung)->addYears($may->ThoiGianKhauHao);
+        }
+        return view('vMay.detailmay', compact('may', 'ngayHetKhauHao'));
     }
 
     public function form_editmay($MaMay)
@@ -75,24 +81,42 @@ class MayController extends Controller
 
     public function editmay(Request $request, $MaMay)
     {
-        $may = May::findOrFail($MaMay); // Tìm máy theo ID
-        $may->update($request->only('ChuKyBaoTri'));
+        try {
+            $may = May::findOrFail($MaMay);
 
-        event(new eventUpdateTable());
-        return redirect()->route('may.detail', ['MaMay' => $MaMay])->with('success', 'Cập nhật thành công!');
+            $request->validate([
+                'TenMay' => 'required|string|max:255',
+                'SeriMay' => 'required|string|max:255|unique:may,SeriMay,' . $MaMay . ',MaMay',
+                'ChuKyBaoTri' => 'required|integer|min:1',
+                'NamSanXuat' => 'required|integer|min:1900|max:' . date('Y'),
+                'ThoiGianDuaVaoSuDung' => 'required|date',
+                'ThoiGianBaoHanh' => 'required|integer|min:1',
+                'ChiTietLinhKien' => 'nullable|string|max:255',
+                'MaNhaCungCap' => 'required|exists:nhacungcap,MaNhaCungCap',
+                'MaLoai' => 'required|exists:loaimay,MaLoai',
+                'ThoiGianKhauHao' => 'nullable|numeric|min:0',
+                'GiaTriBanDau' => 'nullable|numeric|min:0',
+            ]);
+
+            $may->update($request->all());
+
+            event(new eventUpdateTable());
+            return redirect()->route('may.detail', ['MaMay' => $MaMay])->with('success', 'Cập nhật thành công!');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Cập nhật không thành công!');
+        }
     }
 
     public function addMay()
     {
-        
+
         $loaiMays = LoaiMay::all(); // Lấy danh sách loại máy
-      
+
         $nhaCungCaps = NhaCungCap::all(); // Lấy danh sách nhà cung cấp
         return view('vMay.addmay', compact('nhaCungCaps', 'loaiMays'));
     }
     public function storeMay(Request $request)
     {
-        
         try {
             $request->validate([
                 'TenMay' => 'required|string|max:255',
@@ -104,33 +128,26 @@ class MayController extends Controller
                 'ChiTietLinhKien' => 'nullable|string|max:255',
                 'MaNhaCungCap' => 'required|exists:nhacungcap,MaNhaCungCap',
                 'MaLoai' => 'required|exists:loaimay,MaLoai',
+                'ThoiGianKhauHao' => 'nullable|integer|min:1',
+                'GiaTriBanDau' => 'nullable|integer|min:1',
             ]);
-            $loaiMay = LoaiMay::where('MaLoai', $request->MaLoai)->first();
-            // Lấy tiền tố theo mã loại máy
-            $prefix = match ($request->MaLoai) {
-                '2' => 'MC',
-                '1' => 'MI',
-                '3' => 'MB',
-                '4' => 'ME',
-                '5' => 'MĐ',
-                '6' => 'MD',
-                '7' => 'MC',
-                '8' => 'MG',
-                '9' => 'MDG',
-                '10' => 'MCM',
-                default => 'MX',
-            };
 
-            // Tìm mã máy cuối cùng có cùng tiền tố
-            $lastMachine = May::where('MaMay2', 'like', $prefix . '%')
+            $loaiMay = LoaiMay::where('MaLoai', $request->MaLoai)->first();
+            $tiento = $loaiMay ? $loaiMay->MoTa : 'MAY';
+
+            //Tìm máy có cùng tiền tố mới nhất
+            $lastMay = May::where('MaLoai', $request->MaLoai)
                 ->orderBy('MaMay2', 'desc')
                 ->first();
 
-            $newNumber = $lastMachine
-                ? ((int) substr($lastMachine->MaMay2, strlen($prefix)) + 1)
-                : 1;
+            $newNumber = 1;
+            if ($lastMay) {
+                $lastNumber = substr($lastMay->MaMay2, 3);
+                $newNumber = $lastNumber + 1;
+            }
 
-            $newMaMay = $prefix . str_pad($newNumber, 2, '0', STR_PAD_LEFT);
+            // Ghép tiền tố với số thứ tự, có thể padding số 0 nếu muốn
+            $newMaMay = $tiento . str_pad($newNumber, 3, '0', STR_PAD_LEFT);
 
             May::create([
                 'MaMay2' => $newMaMay,
@@ -143,6 +160,8 @@ class MayController extends Controller
                 'ChiTietLinhKien' => $request->ChiTietLinhKien,
                 'MaNhaCungCap' => $request->MaNhaCungCap,
                 'MaLoai' => $request->MaLoai,
+                'ThoiGianKhauHao' => $request->ThoiGianKhauHao,
+                'GiaTriBanDau' => $request->GiaTriBanDau
             ]);
 
             event(new eventUpdateTable());

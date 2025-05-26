@@ -38,7 +38,7 @@
                                 <tbody>
                                     <tr>
                                         <th scope="row">Tên Nhân Viên</th>
-                                        <td>{{ $taikhoan->nhanvien->TenNhanVien }}</td>
+                                        <td>{{ $taikhoan->nhanvien->TenNhanVien ?? 'Không xác định' }}</td>
                                     </tr>
                                     <tr>
                                         <th scope="row">Giới Tính</th>

@@ -2,7 +2,7 @@
     body {
         font-family: 'DejaVu Sans', sans-serif;
         margin: 20px;
-        font-size: 14px;
+        font-size: 12px;
     }
 
     .header-table {
@@ -112,8 +112,12 @@
 
 <table class="info-table">
     <tr>
+        <td class="label">Người Lập Phiếu:</td>
+        <td>{{ $phieuBanGiaoNoiBo->nhanVienTao->TenNhanVien }}</td>
+    </tr>
+    <tr>
         <td class="label">Nhân Viên Yêu Cầu:</td>
-        <td>{{ $phieuBanGiaoNoiBo->lichSuaChua->yeuCauSuaChua->nhanVien->TenNhanVien }}</td>
+        <td>{{ $phieuBanGiaoNoiBo->lichSuaChua->yeuCauSuaChua->nhanVien->TenNhanVien ?? 'Không xác định' }}</td>
     </tr>
     <tr>
         <td class="label">Thời Gian Yêu Cầu:</td>
@@ -185,7 +189,7 @@
             <tr>
                 <td>{{ $chiTiet->LinhKienSuaChua->MaLinhKien }}</td>
                 <td>{{ $chiTiet->LinhKienSuaChua->TenLinhKien }}</td>
-                <td>{{ $chiTiet->LinhKienSuaChua->donViTinh->TenDonViTinh }}</td>
+                <td>{{ $chiTiet->LinhKienSuaChua->donViTinh->TenDonViTinh ?? 'Không xác định' }}</td>
                 <td>{{ $chiTiet->SoLuong }}</td>
             </tr>
         @endforeach
@@ -198,6 +202,7 @@
 
 <table class="signature-table">
     <tr>
+        <td>NGƯỜI LẬP PHIẾU</td>
         <td>NHÂN VIÊN YÊU CẦU</td>
         <td>NHÂN VIÊN KỸ THUẬT</td>
     </tr>

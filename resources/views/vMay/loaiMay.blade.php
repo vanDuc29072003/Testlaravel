@@ -20,6 +20,7 @@
                             <tr>
                                 <th>Mã Loại Máy</th>
                                 <th>Tên Loại Máy</th>
+                                <th>Viết tắt</th>
                                 <th>Tổng số lượng máy</th>
                                 <th>Hành Động</th>
                             </tr>
@@ -29,6 +30,7 @@
                                 <tr>
                                     <td>{{ $loai->MaLoai }}</td>
                                     <td class="text-start">{{ $loai->TenLoai }}</td>
+                                    <td>{{ $loai->MoTa }}</td>
                                     <td>{{ $loai->mays_count }}</td>
                                     <td>
                                         <form action="{{ route('loaimay.destroy', ['id' => $loai->MaLoai]) }}" method="POST"
@@ -52,7 +54,7 @@
                 </div>
 
                 <!-- Cột phải: Tìm kiếm -->
-                <div class="col-md-3 col-sm-12 p-0">
+                <div class="col-md-3 col-sm-12">
                     <div>
                         <form action="{{ route('loaimay.index') }}" method="GET"
                             class="p-3 border rounded fixed-search-form" style="margin-top: 60px;">
@@ -92,6 +94,21 @@
                 }
             });
         }
+    </script>
+    <script>
+        @if (session('success'))
+            $.notify({
+                title: 'Thành công',
+                message: '{{ session('success') }}',
+                icon: 'icon-bell'
+            }, {
+                type: 'success',
+                animate: {
+                    enter: 'animated fadeInDown'
+                    , exit: 'animated fadeOutUp'
+                },
+            });
+        @endif
     </script>
     <script>
         @if (session('error'))

@@ -17,12 +17,12 @@
 
                 <div class="form-group">
                   <label for="TenLoai">Tên Loại</label>
-                  <input type="text" name="TenLoai" class="form-control" placeholder="Vui lòng nhập..." required>
+                  <input type="text" name="TenLoai" class="form-control" placeholder="Vui lòng nhập..." value="{{ old('TenLoai') }}" required>
                 </div>
 
                 <div class="form-group">
-                  <label for="MoTa">Mô Tả</label>
-                  <textarea name="MoTa" class="form-control" rows="3" placeholder="Vui lòng nhập..."></textarea>
+                  <label for="MoTa">Tên Viết Tắt</label>
+                  <input type="text" name="MoTa" class="form-control" rows="3" placeholder="Vui lòng nhập..." value="{{ old('MoTa') }}" required></input>
                 </div>
               </form>
             </div>
@@ -40,4 +40,22 @@
       </div>
     </div>
   </div>
+@endsection
+@section('scripts')
+  <script>
+    @if (session('error'))
+        $.notify({
+            title: 'Lỗi',
+            message: '{{ session('error') }}',
+            icon: 'icon-bell'
+        }, {
+            type: 'danger',
+            animate: {
+                enter: 'animated fadeInDown'
+                , exit: 'animated fadeOutUp'
+            },
+        });
+    @endif
+  </script>
+
 @endsection

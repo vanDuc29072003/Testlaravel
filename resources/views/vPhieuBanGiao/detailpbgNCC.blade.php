@@ -25,7 +25,7 @@
                             <tbody>
                                 <tr>
                                     <th>Nhân Viên Yêu Cầu</th>
-                                    <td>{{ $lichSuaChua->yeuCauSuaChua->nhanVien->TenNhanVien }}</td>
+                                    <td>{{ $lichSuaChua->yeuCauSuaChua->nhanVien->TenNhanVien ?? 'Không xác định' }}</td>
                                     <th>Mã Máy</th>
                                     <td>{{ $lichSuaChua->yeuCauSuaChua->may->MaMay }}</td>
                                 </tr>
@@ -42,8 +42,8 @@
                                     <td>{{ $lichSuaChua->yeuCauSuaChua->may->SeriMay }}</td>
                                 </tr>
                                 <tr>
-                                    <th></th>
-                                    <td></td>
+                                    <th>Người lập phiếu</th>
+                                    <td>{{ $lichSuaChua->phieuBanGiaoSuaChuaNCC->nhanVienTao->TenNhanVien }}</td>
                                     <th>Ngày Nhập</th>
                                     <td>{{ \Carbon\Carbon::parse($lichSuaChua->yeuCauSuaChua->may->ThoiGianDuaVaoSuDung)->format('d/m/Y') }}</td>
                                 </tr>

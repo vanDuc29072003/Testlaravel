@@ -111,9 +111,13 @@
 <h4>I, Thông tin bàn giao</h4>
 
 <table class="info-table">
-        <tr>
+    <tr>
+        <td class="label">Người Lập Phiếu:</td>
+        <td>{{ $phieuBanGiao->nhanVienTao->TenNhanVien }}</td>
+    </tr>
+    <tr>
         <td class="label">Nhân Viên Yêu Cầu:</td>
-        <td>{{ $phieuBanGiao->lichSuaChua->yeuCauSuaChua->nhanVien->TenNhanVien }}</td>
+        <td>{{ $phieuBanGiao->lichSuaChua->yeuCauSuaChua->nhanVien->TenNhanVien ?? 'Không xác định' }}</td>
     </tr>
     <tr>
         <td class="label">Thời Gian Yêu Cầu:</td>
@@ -206,7 +210,7 @@
 
 <table class="signature-table">
     <tr>
-        <td>NGƯỜI BÀN GIAO</td>
+        <td>NGƯỜI LẬP PHIẾU</td>
         <td>ĐẠI DIỆN NHÀ CUNG CẤP</td>
     </tr>
 </table>

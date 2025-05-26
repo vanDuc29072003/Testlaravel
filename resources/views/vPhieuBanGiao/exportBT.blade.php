@@ -115,7 +115,7 @@
 <table class="info-table">
     <tr>
         <td class="label">Người Lập:</td>
-        <td>{{ $phieuBanGiao->nhanVien->TenNhanVien }}</td>
+        <td>{{ $phieuBanGiao->nhanVien->TenNhanVien  ?? 'Không xác định'}}</td>
     </tr>
     <tr>
         <td class="label">Ngày Bảo Trì:</td>

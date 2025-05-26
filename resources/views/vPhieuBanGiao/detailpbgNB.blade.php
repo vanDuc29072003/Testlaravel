@@ -24,7 +24,7 @@
                             <tbody>
                                 <tr>
                                     <th>Nhân Viên Yêu Cầu</th>
-                                    <td>{{ $lichSuaChua->yeuCauSuaChua->nhanVien->TenNhanVien }}</td>
+                                    <td>{{ $lichSuaChua->yeuCauSuaChua->nhanVien->TenNhanVien ?? 'Không xác định' }}</td>
                                     <th>Mã Máy</th>
                                     <td>{{ $lichSuaChua->yeuCauSuaChua->may->MaMay }}</td>
                                 </tr>
@@ -50,8 +50,8 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th></th>
-                                    <td></td>
+                                    <th>Người lập phiếu</th>
+                                    <td>{{ $lichSuaChua->phieuBanGiaoNoiBo->nhanVienTao->TenNhanVien }}</td>
                                     <th>Thời Gian Bảo Hành</th>
                                     <td>{{ $lichSuaChua->yeuCauSuaChua->may->ThoiGianBaoHanh }} tháng</td>
                                 </tr>
@@ -94,7 +94,7 @@
                                         <tr>
                                             <td>{{ $chiTiet->LinhKienSuaChua->MaLinhKien }}</td>
                                             <td>{{ $chiTiet->LinhKienSuaChua->TenLinhKien }}</td>
-                                            <td>{{ $chiTiet->LinhKienSuaChua->donViTinh->TenDonViTinh }}</td>
+                                            <td>{{ $chiTiet->LinhKienSuaChua->donViTinh->TenDonViTinh ?? 'Không xác định' }}</td>
                                             <td>{{ $chiTiet->SoLuong }}</td>
                                         </tr>
                                     @endforeach
