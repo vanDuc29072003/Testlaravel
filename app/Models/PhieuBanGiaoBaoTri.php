@@ -14,8 +14,7 @@ class PhieuBanGiaoBaoTri extends Model
     public $timestamps = false;
     protected $fillable = [
         'MaPhieuBanGiaoBaoTri',
-        'MaLichBaoTri',
-        
+        'MaLichBaoTri',     
         'ThoiGianBanGiao',
         'MaNhanVien',
         'TongTien',

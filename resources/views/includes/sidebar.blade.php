@@ -156,7 +156,7 @@
                </li>
                <li>
                 <a href="{{ route('thongkesuachua') }}">
-                  <span class="sub-item">Thống kê sửa chữa</span>
+                  <span class="sub-item">Sửa chữa & Bảo Trì</span>
                 </a>
               </li>
               <li>

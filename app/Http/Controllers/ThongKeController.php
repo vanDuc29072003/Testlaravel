@@ -3,11 +3,14 @@
 namespace App\Http\Controllers;
 use Illuminate\Support\Facades\DB;
 use App\Models\LinhKien;
+use App\Models\May;
 use App\Models\DonViTinh;
 use App\Models\ChiTietPhieuNhap;
 use App\Models\ChiTietPhieuXuat;
 use App\Models\ChiTietPhieuBanGiaoNoiBo;
 use App\Models\ChiTietPhieuTra;
+use App\Models\LichSuaChua;
+use App\Models\LichBaoTri;
 use App\Models\YeuCauSuaChua;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -193,21 +196,13 @@ class ThongKeController extends Controller
 
     public function thongkesuachua(Request $request)
     {
-        $dsLoaiMay = DB::table('loaimay')
-            ->select('MaLoai', 'TenLoai')
-            ->distinct()
-            ->get();
+        $dsLoaiMay = DB::table('loaimay')->select('MaLoai', 'TenLoai')->distinct()->get();
 
-        // Lọc theo thời gian
+        $filterType = $request->input('filter_type', 'all'); 
         $timeFilter = $request->input('time_filter', 'today');
         $startDate = now()->startOfDay();
         $endDate = now()->endOfDay();
-
         switch ($timeFilter) {
-            case 'today':
-                $startDate = now()->startOfDay();
-                $endDate = now()->endOfDay();
-                break;
             case 'yesterday':
                 $startDate = now()->subDay()->startOfDay();
                 $endDate = now()->subDay()->endOfDay();
@@ -222,15 +217,39 @@ class ThongKeController extends Controller
                 break;
         }
 
-        // Lọc theo loại máy và tên máy
         $loaiMay = $request->input('loai_may');
         $tenMay = $request->input('ten_may');
 
-        // Câu truy vấn chính
-        $query = DB::table('yeucausuachua')
-            ->join('may', 'yeucausuachua.mamay', '=', 'may.MaMay')
-            ->select('yeucausuachua.mamay', DB::raw('count(*) as SoLanSuaChua'))
-            ->whereBetween('yeucausuachua.thoigianyeucau', [$startDate, $endDate]); 
+        $query = DB::table('may')
+            ->leftJoin('yeucausuachua', 'may.MaMay', '=', 'yeucausuachua.MaMay')
+            ->leftJoin('lichsuachua', 'yeucausuachua.MaYeuCauSuaChua', '=', 'lichsuachua.MaYeuCauSuaChua')
+            ->leftJoin('phieubangiaosuachuanhacungcap', 'lichsuachua.MaLichSuaChua', '=', 'phieubangiaosuachuanhacungcap.MaLichSuaChua')
+            ->leftJoin('lichbaotri', 'may.MaMay', '=', 'lichbaotri.MaMay')
+            ->leftJoin('phieubangiaobaotri', 'lichbaotri.MaLichBaoTri', '=', 'phieubangiaobaotri.MaLichBaoTri')
+           ->where(function ($query) use ($startDate, $endDate, $filterType) {
+                if ($filterType === 'repair') {
+                    $query->whereBetween('lichsuachua.created_at', [$startDate, $endDate]);
+                } elseif ($filterType === 'maintenance') {
+                    $query->whereBetween('lichbaotri.NgayBaoTri', [$startDate, $endDate]);
+                } else {
+                    $query->where(function ($subQuery) use ($startDate, $endDate) {
+                        $subQuery->whereBetween('lichsuachua.created_at', [$startDate, $endDate])
+                                ->orWhereBetween('lichbaotri.NgayBaoTri', [$startDate, $endDate]);
+                    });
+                }
+            })
+
+            ->select(
+                'may.MaMay',
+                'may.MaMay2',
+                'may.TenMay',
+                DB::raw('COUNT(DISTINCT lichsuachua.MaLichSuaChua) AS SoLanSuaChua'),
+                DB::raw('COALESCE(SUM(DISTINCT CASE WHEN phieubangiaosuachuanhacungcap.MaPhieuBanGiaoSuaChua IS NOT NULL THEN phieubangiaosuachuanhacungcap.TongTien ELSE 0 END), 0) AS TongChiPhiSuaChua'),
+                DB::raw('COUNT(DISTINCT CASE WHEN lichbaotri.trangthai = 1 THEN lichbaotri.MaLichBaoTri END) AS SoLanBaoTri'),
+                DB::raw('COALESCE(SUM(DISTINCT CASE WHEN lichbaotri.trangthai = 1 THEN phieubangiaobaotri.TongTien END), 0) AS TongChiPhiBaoTri')
+            )
+            ->groupBy('may.MaMay', 'may.MaMay2', 'may.TenMay');
+
 
         if ($loaiMay) {
             $query->where('may.MaLoai', $loaiMay);
@@ -240,50 +259,31 @@ class ThongKeController extends Controller
             $query->where('may.TenMay', 'like', "%{$tenMay}%");
         }
 
-        $thongKeSuaChua = $query
-            ->groupBy('yeucausuachua.mamay')
-            ->get();
+        $thongKeMay = $query->get();
 
-        $tongSoYeuCauSuaChua = $thongKeSuaChua->sum('SoLanSuaChua');
-
-        // Lấy thông tin tên máy và mã máy 2
-        $danhSachMay = DB::table('may')->pluck('TenMay', 'MaMay');
-        $MaMay2 = DB::table('may')->pluck('MaMay2', 'MaMay');
-
-        // Gộp dữ liệu
-        $thongKeSuaChua = $thongKeSuaChua->map(function ($item) use ($danhSachMay, $MaMay2) {
-            return [
-                'MaMay' => $item->mamay,
-                'MaMay2' => $MaMay2[$item->mamay] ?? 'Không rõ',
-                'TenMay' => $danhSachMay[$item->mamay] ?? 'Không rõ',
-                'SoLanSuaChua' => $item->SoLanSuaChua,
-            ];
-        });
-
-        // Sắp xếp theo yêu cầu (tăng/giảm dần)
-        $sortOrder = $request->input('sort_order', 'desc'); // 'asc' hoặc 'desc'
-        $thongKeSuaChua = $thongKeSuaChua->sort(function ($a, $b) use ($sortOrder) {
-            if ($a['SoLanSuaChua'] !== $b['SoLanSuaChua']) {
-                return $sortOrder === 'asc'
-                    ? $a['SoLanSuaChua'] <=> $b['SoLanSuaChua']
-                    : $b['SoLanSuaChua'] <=> $a['SoLanSuaChua'];
-            }
-            return strcmp($a['MaMay2'], $b['MaMay2']);
-        })->values();
+        // Sắp xếp
+        $sortOrder = $request->input('sort_order', 'desc');
+        $thongKeMay = $thongKeMay->sortBy([
+            ['SoLanSuaChua', $sortOrder],
+            ['MaMay2', 'asc'],
+        ])->values();
 
         return view('vThongKe.thongkesuachua', compact(
-            'thongKeSuaChua',
-            'startDate',
-            'endDate',
-            'tongSoYeuCauSuaChua',
-            'timeFilter',
-            'sortOrder',
-            'dsLoaiMay',
-            'loaiMay',
-            'tenMay'
-        ));
+        'thongKeMay',
+        'startDate',
+        'endDate',
+        'timeFilter',
+        'sortOrder',
+        'dsLoaiMay',
+        'loaiMay',
+        'tenMay',
+        'filterType'
+    ));
+
     }
-    public function exportPDF1(Request $request){
+
+    public function exportPDF1(Request $request)
+    {
         $dsLoaiMay = DB::table('loaimay')
             ->select('MaLoai', 'TenLoai')
             ->distinct()
@@ -371,12 +371,13 @@ class ThongKeController extends Controller
             'endDate',
             'tongSoYeuCauSuaChua',
             'ngayLap',
-            'nguoiTao'));
+            'nguoiTao'
+        ));
         return $pdf->stream('thongkesuachua.pdf');
     }
 
 
-    public function detail(Request $request, $maMay)
+    public function detailSC(Request $request, $maMay)
     {
         $timeFilter = $request->input('time_filter', 'today');
 
@@ -414,15 +415,82 @@ class ThongKeController extends Controller
                 break;
         }
 
-        // Truy vấn theo mã máy và khoảng thời gian
-        $chiTietSuaChua = YeuCauSuaChua::where('MaMay', $maMay)
-            ->whereBetween('ThoiGianYeuCau', [$startDate, $endDate])
-            ->with('nhanVien', 'may')
-            ->orderBy('ThoiGianYeuCau', 'desc')
+        // Truy vấn chi tiết sửa chữa liên quan đến máy trong khoảng thời gian
+        $chiTietSuaChua = LichSuaChua::whereHas('yeuCauSuaChua', function ($query) use ($maMay, $startDate, $endDate) {
+            $query->where('MaMay', $maMay)
+                ->whereBetween('ThoiGianYeuCau', [$startDate, $endDate]);
+        })
+            ->with([
+                'yeuCauSuaChua.may',
+                'yeuCauSuaChua.nhanVien',
+                'nhanVienKyThuat',
+                'phieuBanGiaoSuaChuaNCC.nhaCungCap'
+            ])
+            ->orderBy('created_at', 'desc')
             ->get();
 
-        return view('vThongKe.detailSC', compact('chiTietSuaChua', 'maMay', 'startDate', 'endDate', 'timeFilter'));
+        return view('vThongKe.detailSC', compact(
+            'chiTietSuaChua',
+            'maMay',
+            'startDate',
+            'endDate',
+            'timeFilter'
+        ));
     }
+
+    public function detailBT(Request $request, $maMay)
+    {
+        $timeFilter = $request->input('time_filter', 'today');
+
+        $startDate = now()->startOfDay();
+        $endDate = now()->endOfDay();
+
+        switch ($timeFilter) {
+            case 'today':
+                $startDate = now()->startOfDay();
+                $endDate = now()->endOfDay();
+                break;
+            case 'yesterday':
+                $startDate = now()->subDay()->startOfDay();
+                $endDate = now()->subDay()->endOfDay();
+                break;
+            case 'last_7_days':
+                $startDate = now()->subDays(7)->startOfDay();
+                $endDate = now()->endOfDay();
+                break;
+            case 'this_month':
+                $startDate = now()->startOfMonth();
+                $endDate = now()->endOfMonth();
+                break;
+            case 'last_month':
+                $startDate = now()->subMonth()->startOfMonth();
+                $endDate = now()->subMonth()->endOfMonth();
+                break;
+            case 'this_quarter':
+                $startDate = now()->firstOfQuarter();
+                $endDate = now()->lastOfQuarter();
+                break;
+            case 'custom':
+                $startDate = $request->input('start_date') ?? now()->startOfDay();
+                $endDate = $request->input('end_date') ?? now()->endOfDay();
+                break;
+        }
+
+        $chiTietBaoTri = May::where('MaMay', $maMay)
+            ->with([
+                'nhaCungCap',
+                'lichBaoTri' => function ($query) use ($startDate, $endDate) {
+                    $query->whereBetween('NgayBaoTri', [$startDate, $endDate])
+                        ->orderBy('NgayBaoTri', 'desc');
+                },
+                'lichBaoTri.phieuBanGiaoBaoTri.nhanVien' // lấy tên nhân viên bàn giao
+            ])
+            ->first();
+
+        return view('vThongKe.detailBT', compact('chiTietBaoTri', 'maMay', 'startDate', 'endDate', 'timeFilter'));
+    }
+
+
     public function thongkelinhkienxuat(Request $request)
     {
         // 1. Xử lý khoảng thời gian
@@ -452,9 +520,10 @@ class ThongKeController extends Controller
 
         // 3. Truy vấn chính
         $query = DB::table('chitietphieuxuat as ctpx')
+            ->join('phieuxuat as px', 'ctpx.MaPhieuXuat', '=', 'px.MaPhieuXuat') // join thêm bảng phieuxuat
             ->join('linhkiensuachua as lk', 'ctpx.MaLinhKien', '=', 'lk.MaLinhKien')
             ->join('donvitinh as dvt', 'lk.MaDonViTinh', '=', 'dvt.MaDonViTinh')
-            ->whereBetween('ctpx.created_at', [$startDate, $endDate])
+            ->whereBetween('px.NgayXuat', [$startDate, $endDate]) // lọc theo thời gian của phieuxuat
             ->select(
                 'ctpx.MaLinhKien',
                 'lk.TenLinhKien',

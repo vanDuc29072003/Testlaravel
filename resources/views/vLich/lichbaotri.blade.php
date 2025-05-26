@@ -57,7 +57,9 @@
             </tbody>
           </table>
         @empty
-          <div class="alert alert-info mt-4">Không có lịch bảo trì phù hợp.</div>
+           <div class="alert alert-info text-center" role="alert">
+                    <p class="fst-italic m-0">Không có lịch bảo trì nào vào khoảng thời gian trên</p>
+                </div>
         @endforelse
       </div>
 

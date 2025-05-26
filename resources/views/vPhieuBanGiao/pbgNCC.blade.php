@@ -100,7 +100,12 @@
                                 <input type="datetime-local" class="form-control" id="ThoiGianBanGiao"
                                     name="ThoiGianBanGiao"  value="{{ old('ThoiGianBanGiao') }}" required>
                             </div>
+                            <div class="form-group">
+                                <label for="TenMay">Tên Máy Cần Sửa Chữa</label>
+                               <input type="text" class="form-control" id="TenMay" 
+                                 value="{{ $lichSuaChua->yeuCauSuaChua->may->TenMay ?? 'Không xác định' }}" readonly>
 
+                            </div>
                             <div class="form-group ">
                                 <label for="TongTien">Tổng Tiền</label>
                                 <input type="number" class="form-control" id="TongTien" name="TongTien" readonly>

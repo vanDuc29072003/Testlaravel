@@ -83,6 +83,12 @@
                                     value="{{ $lichSuaChua->nhanVienKyThuat->TenNhanVien }}" readonly>
                             </div>
                             <div class="form-group">
+                                <label for="TenMay">Tên Máy Cần Sửa Chữa</label>
+                               <input type="text" class="form-control" id="TenMay" 
+                                 value="{{ $lichSuaChua->yeuCauSuaChua->may->TenMay ?? 'Không xác định' }}" readonly>
+
+                            </div>
+                            <div class="form-group">
                                 <label for="ThoiGianYeuCau">Thời Gian Yêu Cầu</label>
                                 <input type="text" class="form-control" id="ThoiGianYeuCau" 
                                     value="{{ \Carbon\Carbon::parse($lichSuaChua->yeuCauSuaChua->ThoiGianYeuCau)->format('d/m/Y H:i') }}" readonly>
