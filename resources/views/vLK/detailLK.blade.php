@@ -6,7 +6,7 @@
     <div class="container">
         <div class="page-inner">
             <div class="row justify-content-center">
-                <div class="col-xl-8 col-md-12">
+                <div class="col-xl-6 col-md-12">
                     <div class="card mx-auto">
                         <div class="card-header">
                             <div class="d-flex justify-content-between align-items-center">
@@ -17,7 +17,7 @@
                             </div>
                         </div>
                         <div class="card-body px-5">
-                            <table class="table table-bordered table-striped">
+                            <table class="table">
                                 <tbody>
                                     <tr>
                                         <th scope="row">Mã Linh Kiện</th>
@@ -66,7 +66,7 @@
                         <div class="card-footer">
                             <!-- Nút quay lại -->
                             <div class="m-3">
-                                <a href="{{ route('linhkien') }}" class="btn btn-secondary">
+                                <a href="{{ url()->previous() }}" class="btn btn-secondary">
                                     <i class="fa fa-arrow-left"></i> Quay lại
                                 </a>
                             </div>

@@ -41,7 +41,7 @@
                                     <th scope="col">Mã Máy</th>
                                     <th scope="col">Tên Máy</th>
                                     <th scope="col">Seri Máy</th>
-                                    <th scope="col">Năm Sản Xuất</th>
+                                    <th scope="col">TG sử dụng</th>
                                     <th scope="col">Tên Nhà Cung Cấp</th>
                                     <th scope="col">Loại máy</th>
                                     <th scope="col">Trạng Thái</th>
@@ -55,7 +55,7 @@
                                         <td>{{ $may->MaMay2 }}</td>
                                         <td>{{ $may->TenMay }}</td>
                                         <td>{{ $may->SeriMay }}</td>
-                                        <td>{{ $may->NamSanXuat }}</td>
+                                        <td>{{ \Carbon\Carbon::parse($may->ThoiGianDuaVaoSuDung)->format('d/m/Y') }}</td>
                                         <td>{{ $may->nhaCungCap->TenNhaCungCap }}</td>
                                         <td>{{ $may->loaiMay->TenLoai ?? 'Chưa xác định' }}</td>
                                         <td>
@@ -131,11 +131,19 @@
                                 </select>
                             </div>
                             <div class="mb-3">
-                                <label for="KhauHao" class="form-label">Khấu hao</label>
+                                <label for="KhauHao" class="form-label">Tình trạng khấu hao</label>
                                 <select name="KhauHao" id="KhauHao" class="form-control">
                                     <option value="">Tất cả</option>
                                     <option value="0" {{ request('KhauHao') === '0' ? 'selected' : '' }}>Còn khấu hao</option>
                                     <option value="1" {{ request('KhauHao') === '1' ? 'selected' : '' }}>Đã hết khấu hao</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="BaoHanh" class="form-label">Tình trạng bảo hành</label>
+                                <select name="BaoHanh" id="BaoHanh" class="form-control">
+                                    <option value="">Tất cả</option>
+                                    <option value="0" {{ request('BaoHanh') === '0' ? 'selected' : '' }}>Còn bảo hành</option>
+                                    <option value="1" {{ request('BaoHanh') === '1' ? 'selected' : '' }}>Đã hết bảo hành</option>
                                 </select>
                             </div>
                             <div class="mb-3">

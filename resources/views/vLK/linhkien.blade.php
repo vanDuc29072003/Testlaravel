@@ -84,9 +84,16 @@
                                     placeholder="Vui lòng nhập" value="{{ request('TenLinhKien') }}">
                             </div>
                             <div class="mb-3">
-                                <label for="TenDonViTinh" class="form-label">Đơn Vị Tính</label>
-                                <input type="text" name="TenDonViTinh" id="TenDonViTinh" class="form-control"
-                                    placeholder="Vui lòng nhập" value="{{ request('TenDonViTinh') }}">
+                                <label for="MaDonViTinh" class="form-label">Đơn Vị Tính</label>
+                                <select name="MaDonViTinh" id="MaDonViTinh" class="form-select">
+                                    <option value="">-- Chọn đơn vị tính --</option>
+                                    @foreach ($dsDonViTinh as $donViTinh)
+                                        <option value="{{ $donViTinh->MaDonViTinh }}" {{ request('MaDonViTinh') == $donViTinh->MaDonViTinh ? 'selected' : '' }}>
+                                            {{ $donViTinh->TenDonViTinh }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                
                             </div>
                             <div class="mb-3">
                                 <label for="SoLuong" class="form-label">Số lượng</label>
@@ -94,9 +101,15 @@
                                     placeholder="Vui lòng nhập" value="{{ request('SoLuong') }}">
                             </div>
                             <div class="mb-3">
-                                <label for="TenNhaCungCap" class="form-label">Nhà cung cấp</label>
-                                <input type="text" name="TenNhaCungCap" id="TenNhaCungCap" class="form-control"
-                                    placeholder="Vui lòng nhập" value="{{ request('TenNhaCungCap') }}">
+                                <label for="MaNhaCungCap" class="form-label">Nhà cung cấp</label>
+                                <select name="MaNhaCungCap" id="MaNhaCungCap" class="form-select">
+                                    <option value="">-- Chọn nhà cung cấp --</option>
+                                    @foreach ($dsNhaCungCap as $nhaCungCap)
+                                        <option value="{{ $nhaCungCap->MaNhaCungCap }}" {{ request('MaNhaCungCap') == $nhaCungCap->MaNhaCungCap ? 'selected' : '' }}>
+                                            {{ $nhaCungCap->TenNhaCungCap }}
+                                        </option>
+                                    @endforeach
+                                </select>
                             </div>
                             <button type="submit" class="btn btn-primary w-100">
                                 <i class="fa fa-search"></i> Tìm kiếm

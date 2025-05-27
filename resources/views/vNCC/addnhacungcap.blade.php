@@ -61,7 +61,7 @@
                         </div>
                         <div class="card-footer">
                             <div class="form-group d-flex justify-content-between">
-                                <a href="{{ route('nhacungcap') }}" class="btn btn-secondary">
+                                <a href="{{ url()->previous() }}" class="btn btn-secondary">
                                     <i class="fa fa-arrow-left"></i> Trở lại</a>
                                 <button type="submit" class="btn btn-primary" form="formNhaCungCap">
                                     <i class="fa fa-save"></i> Tạo Mới

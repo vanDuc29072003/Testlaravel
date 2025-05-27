@@ -12,6 +12,7 @@ use App\Models\YeuCauSuaChua;
 use App\Models\LichBaoTri;
 use App\Models\LinhKien;
 use App\Models\PhieuThanhLy;
+use App\Models\May;
 use Carbon\Carbon;
 
 class DashboardController extends Controller
@@ -28,6 +29,14 @@ class DashboardController extends Controller
         $phieuthanhly = PhieuThanhLy::where('trangthai', '0')->get();
 
         $linhkienCanhBao = LinhKien::where('SoLuong', '<', 5)->orderBy('SoLuong', 'asc')->get();
+        $mayHetBaoHanh = May::whereRaw("
+            DATE_ADD(`ThoiGianDuaVaoSuDung`, INTERVAL `ThoiGianBaoHanh` MONTH) > CURDATE()
+            AND DATE_ADD(`ThoiGianDuaVaoSuDung`, INTERVAL `ThoiGianBaoHanh` MONTH) <= DATE_ADD(CURDATE(), INTERVAL 15 DAY)
+        ")->get();
+        $mayHetKhauHao = May::whereRaw("
+            DATE_ADD(`ThoiGianDuaVaoSuDung`, INTERVAL `ThoiGianKhauHao` YEAR) > CURDATE()
+            AND DATE_ADD(`ThoiGianDuaVaoSuDung`, INTERVAL `ThoiGianKhauHao` YEAR) <= DATE_ADD(CURDATE(), INTERVAL 15 DAY)
+        ")->get();
 
         $labels_ycsc_7ngay = [];
         $data_ycsc_7ngay = [];
@@ -133,6 +142,8 @@ class DashboardController extends Controller
             'yeucausuachua',
             'phieunhap',
             'phieuthanhly',
+            'mayHetBaoHanh',
+            'mayHetKhauHao',
             'linhkienCanhBao',
             'ycscData',
             'costData'

@@ -229,6 +229,83 @@
                             </div>
                         </div>
                     </div>
+                    <!-- Máy sắp hết hạn bảo hành -->
+                    @if ($mayHetBaoHanh->count() > 0)
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-head-row">
+                                    <i class="fas fa-exclamation-triangle me-2 text-warning"></i>
+                                    <div class="card-title">Máy sắp hết hạn bảo hành</div>
+                                </div>
+                            </div>
+                            <div class="card-body p-0">
+                                <div class="table-responsive">
+                                    <!-- Projects table -->
+                                    <table class="table align-items-center mb-0">
+                                        <thead class="thead-light">
+                                            <tr>
+                                                <th scope="col">Mã máy</th>
+                                                <th scope="col">Tên máy</th>
+                                                <th scope="col">Ngày đưa vào sử dụng</th>
+                                                <th scope="col">Thời gian bảo hành</th>
+                                                <th scope="col">Ngày hết bảo hành</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach($mayHetBaoHanh as $may)
+                                                <tr onclick="window.location='{{ route('may.detail', $may->MaMay) }}'"
+                                                    style="cursor: pointer;">
+                                                    <td>{{ $may->MaMay2 ?? $may->MaMay }}</td>
+                                                    <td>{{ $may->TenMay }}</td>
+                                                    <td>{{ \Carbon\Carbon::parse($may->ThoiGianDuaVaoSuDung)->format('d/m/Y') }}</td>
+                                                    <td>{{ $may->ThoiGianBaoHanh }} tháng</td>
+                                                    <td>{{ \Carbon\Carbon::parse($may->ThoiGianDuaVaoSuDung)->addMonths($may->ThoiGianBaoHanh)->format('d/m/Y') }}</td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
+                    @if ($mayHetKhauHao->count() > 0)
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-head-row">
+                                    <i class="fas fa-exclamation-triangle me-2 text-warning"></i>
+                                    <div class="card-title">Máy sắp hết hạn khấu hao</div>
+                                </div>
+                            </div>
+                            <div class="card-body p-0">
+                                <div class="table-responsive">
+                                    <!-- Projects table -->
+                                    <table class="table align-items-center mb-0">
+                                        <thead class="thead-light">
+                                            <tr>
+                                                <th scope="col">Mã máy</th>
+                                                <th scope="col">Tên máy</th>
+                                                <th scope="col">Ngày đưa vào sử dụng</th>
+                                                <th scope="col">Thời gian khấu hao</th>
+                                                <th scope="col">Ngày hết khấu hao</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach($mayHetKhauHao as $mhkh)
+                                                <tr onclick="window.location='{{ route('may.detail', $mhkh->MaMay) }}'"
+                                                    style="cursor: pointer;">
+                                                    <td>{{ $mhkh->MaMay2 ?? $may->MaMay }}</td>
+                                                    <td>{{ $mhkh->TenMay }}</td>
+                                                    <td>{{ \Carbon\Carbon::parse($mhkh->ThoiGianDuaVaoSuDung)->format('d/m/Y') }}</td>
+                                                    <td>{{ $mhkh->ThoiGianKhauHao }} năm</td>
+                                                    <td>{{ \Carbon\Carbon::parse($mhkh->ThoiGianDuaVaoSuDung)->addYears($may->ThoiGianKhauHao)->format('d/m/Y') }}</td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
                 </div>
                 <div class="col-md-4">
                     <div class="card">
