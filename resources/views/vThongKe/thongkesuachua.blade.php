@@ -80,7 +80,7 @@
                                     ]) }}" class="btn btn-sm btn-info">Chi Tiết</a>
                                 </td>
                             @endif
-                            @if($filterType != 'repair')
+                           @if($filterType != 'repair')
                                 <td class="text-center">{{ $item->SoLanBaoTri }}</td>
                                 <td class="text-end">{{ number_format($item->TongChiPhiBaoTri, 0, ',', '.') }} ₫</td>
                                 <td class="text-center">
@@ -92,6 +92,7 @@
                                     ]) }}" class="btn btn-sm btn-info">Chi Tiết</a>
                                 </td>
                             @endif
+
                         </tr>
                         @endforeach
                     </tbody>

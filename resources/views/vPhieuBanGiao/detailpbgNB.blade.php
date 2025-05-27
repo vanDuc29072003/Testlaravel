@@ -100,7 +100,7 @@
                                     @endforeach
                                 @else
                                     <tr>
-                                        <td colspan="5" class="text-center">Không có linh kiện nào được bàn giao.</td>
+                                        <td colspan="5" class="text-center">Lần sửa chữa này không thay thế linh kiện nào.</td>
                                     </tr>
                                 @endif
                             </tbody>

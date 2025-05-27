@@ -10,17 +10,19 @@
                     <h1 class="m-3">Chi Tiết Bảo Trì Máy</h1>
                     <h5 class="mx-3">
                         <strong>Mã Máy  :</strong> 
-                         <strong>{{ $chiTietBaoTri->lichBaoTri->first()?->may?->MaMay2 ?? 'Không rõ' }}</strong>
+                         <strong>{{ $chiTietBaoTri->lichBaoTri->first()?->may?->MaMay2   }}</strong>
                         </br>
                         <strong>Tên Máy :</strong> 
-                      <strong>{{ $chiTietBaoTri->lichBaoTri->first()?->may?->TenMay?? 'Không rõ' }}</strong>
+                      <strong>{{ $chiTietBaoTri->lichBaoTri->first()?->may?->TenMay }}</strong>
 
                     </h5>
                 </div>
                 <div class="card-body p-5">
                     @if($chiTietBaoTri === null || $chiTietBaoTri->lichBaoTri->isEmpty())
 
-                        <div class="alert alert-warning">Không có dữ liệu bảo trì cho máy này.</div>
+                       <div class="alert alert-info text-center" role="alert" style="width: 99%;">
+                                    <p class="fst-italic m-0">Không có dữ liệu lịch bảo trì nào cho máy này.</p>
+                        </div>
                     @else
                        <table class="table table-bordered table-striped">
                             <thead class="text-center bg-light">

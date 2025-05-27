@@ -43,7 +43,7 @@
                                                             <a href="{{ route('lichsuachua.taophieubangiaonoibo', $cht->MaLichSuaChua) }}" class="btn btn-sm btn-success">
                                                                 <i class="fa fa-check"></i> Bàn giao
                                                             </a>
-                                                            <form action="{{ route('lichsuachua.lienhencc', $cht->MaLichSuaChua) }}"
+                                                            <form 
                                                                 method="POST" class="d-inline-block">
                                                                 @csrf
                                                                 @method('POST')
