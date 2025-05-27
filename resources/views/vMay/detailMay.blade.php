@@ -33,21 +33,13 @@
                                     <tr>
                                         <th scope="row">Tên Máy</th>
                                         <td>{{ $may->TenMay }}</td>
-                                        <th scope="row">Thời Gian Bảo Hành</th>
-                                        <td>{{ $may->ThoiGianBaoHanh }} tháng</td>
+                                        <th scope="row">Đưa Vào Sử Dụng</th>
+                                        <td>{{ \Carbon\Carbon::parse($may->ThoiGianDuaVaoSuDung)->format('d/m/Y') }}</td>
                                     </tr>
 
                                     <tr>
                                         <th scope="row">Loại Máy</th>
                                         <td>{{ $may->loaiMay->TenLoai ?? '---' }}</td>
-                                        <th scope="row">Chu Kỳ Bảo Trì</th>
-                                        <td>{{ $may->ChuKyBaoTri }} tháng</td>
-                                        
-                                    </tr>
-
-                                    <tr>
-                                        <th scope="row">Seri Máy</th>
-                                        <td>{{ $may->SeriMay }}</td>
                                         <th scope="row">Thời Gian Khấu Hao</th>
                                         <td>
                                             {{ $may->ThoiGianKhauHao ?? '---' }} năm
@@ -56,12 +48,25 @@
                                             @endif
                                         </td>
                                         
+                                        
+                                    </tr>
+
+                                    <tr>
+                                        <th scope="row">Seri Máy</th>
+                                        <td>{{ $may->SeriMay }}</td>
+                                        <th scope="row">Thời Gian Bảo Hành</th>
+                                        <td>{{ $may->ThoiGianBaoHanh ?? '---' }} tháng
+                                            @if ($ngayHetBaoHanh && $ngayHetBaoHanh < \Carbon\Carbon::now())
+                                                <span class="badge badge-danger">Đã hết bảo hành</span>
+                                            @endif
+                                        </td>
+                                        
                                     </tr>
                                     <tr>
                                         <th scope="row">Năm Sản Xuất</th>
                                         <td>{{ $may->NamSanXuat }}</td>
-                                        <th scope="row">Đưa Vào Sử Dụng</th>
-                                        <td>{{ \Carbon\Carbon::parse($may->ThoiGianDuaVaoSuDung)->format('d/m/Y') }}</td>
+                                        <th scope="row">Chu Kỳ Bảo Trì</th>
+                                        <td>{{ $may->ChuKyBaoTri }} tháng</td>
                                     </tr>
                                     <tr>
                                         <th scope="row">Giá trị ban đầu</th>
@@ -87,12 +92,11 @@
                                 </tbody>
                             </table>
 
-
                         </div>
                         <div class="card-footer">
                             <!-- Nút quay lại -->
                             <div class="m-3">
-                                <a href="{{ route('may') }}" class="btn btn-secondary">
+                                <a href="{{ url()->previous() }}" class="btn btn-secondary">
                                     <i class="fa fa-arrow-left"></i> Quay lại
                                 </a>
                                 <a href="{{ route('may.edit', $may->MaMay) }}" class="btn btn-warning mx-3">

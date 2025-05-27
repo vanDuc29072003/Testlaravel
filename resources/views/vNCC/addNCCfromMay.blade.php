@@ -1,6 +1,6 @@
 @extends('layouts.main')
 
-@section('title', 'Chỉnh Sửa Nhà Cung Cấp')
+@section('title', 'Thêm Nhà Cung Cấp')
 
 @section('content')
     <div class="container">
@@ -9,54 +9,62 @@
                 <div class="col-xl-6 col-md-8 col-sm-12">
                     <div class="card mx-auto">
                         <div class="card-header">
-                            <h1 class="mx-3 mt-3">Chỉnh Sửa Nhà Cung Cấp</h1>
+                            <h1 class="m-3">Thêm Nhà Cung Cấp</h1>
                         </div>
                         <div class="card-body">
-                            <form id="formNhaCungCap" action="{{ route('nhacungcap.update', $nhaCungCap->MaNhaCungCap) }}" method="POST">
+                            @if ($errors->any())
+                                <div class="alert alert-danger">
+                                    <ul>
+                                        @foreach ($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endif
+                            <form id="formNhaCungCap" action="{{ route('nhacungcap.storeNCCfromMay') }}" method="POST">
                                 @csrf
-                                @method('POST')
                                 <!-- Tên Nhà Cung Cấp -->
                                 <div class="form-group">
                                     <label for="TenNhaCungCap">Tên Nhà Cung Cấp</label>
                                     <input type="text" class="form-control" id="TenNhaCungCap" name="TenNhaCungCap"
-                                        value="{{ $nhaCungCap->TenNhaCungCap }}" required readonly>
+                                        placeholder="Nhập tên nhà cung cấp" value="{{ old('TenNhaCungCap') }}" required>
                                 </div>
 
                                 <!-- Địa Chỉ -->
                                 <div class="form-group">
                                     <label for="DiaChi">Địa Chỉ</label>
                                     <input type="text" class="form-control" id="DiaChi" name="DiaChi"
-                                        value="{{ $nhaCungCap->DiaChi }}" required>
+                                        placeholder="Nhập địa chỉ" value="{{ old('DiaChi') }}" required>
                                 </div>
 
                                 <!-- Số Điện Thoại -->
                                 <div class="form-group">
                                     <label for="SDT">Số Điện Thoại</label>
                                     <input type="text" class="form-control" id="SDT" name="SDT"
-                                        value="{{ $nhaCungCap->SDT }}" required>
+                                        placeholder="Nhập số điện thoại" value="{{ old('SDT') }}" required>
                                 </div>
 
                                 <!-- Email -->
                                 <div class="form-group">
                                     <label for="Email">Email</label>
                                     <input type="email" class="form-control" id="Email" name="Email"
-                                        value="{{ $nhaCungCap->Email }}" required>
+                                        placeholder="Nhập email" value="{{ old('Email') }}" required>
                                 </div>
-
                                 <div class="form-group">
                                     <label for="MaSoThue">Mã Số Thuế</label>
                                     <input type="text" class="form-control" id="MaSoThue" name="MaSoThue"
-                                        value="{{ $nhaCungCap->MaSoThue }}" required>
+                                        placeholder="Nhập mã số thuế" value="{{ old('MaSoThue') }}" required>
                                 </div>
+                                <!-- Nút hành động -->
+
                             </form>
                         </div>
                         <div class="card-footer">
-                            <!-- Nút hành động -->
                             <div class="form-group d-flex justify-content-between">
-                                <a href="{{ url()->previous() }}" class="btn btn-secondary">
+                                <a href="{{ route('may.add') }}" class="btn btn-secondary">
                                     <i class="fa fa-arrow-left"></i> Trở lại</a>
                                 <button type="submit" class="btn btn-primary" form="formNhaCungCap">
-                                    <i class="fa fa-save"></i> Lưu Thay Đổi
+                                    <i class="fa fa-save"></i> Tạo Mới
                                 </button>
                             </div>
                         </div>
@@ -65,4 +73,21 @@
             </div>
         </div>
     </div>
+@endsection
+@section('scripts')
+    <script>
+        @if (session('error'))
+            $.notify({
+                title: 'Lỗi',
+                message: '{{ session('error') }}',
+                icon: 'icon-bell'
+            }, {
+                type: 'danger',
+                animate: {
+                    enter: 'animated fadeInDown',
+                    exit: 'animated fadeOutUp'
+                },
+            });
+        @endif
+    </script>
 @endsection

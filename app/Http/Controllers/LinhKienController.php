@@ -19,6 +19,7 @@ class LinhKienController extends Controller
             'MaLinhKien' => '=',
             'TenLinhKien' => 'like',
             'SoLuong' => '=',
+            'MaDonViTinh' => '=',
         ];
 
         // Áp dụng các điều kiện lọc trực tiếp
@@ -29,24 +30,19 @@ class LinhKienController extends Controller
             }
         }
 
-        // Tìm kiếm theo tên đơn vị tính
-        if ($request->filled('TenDonViTinh')) {
-            $query->whereHas('donViTinh', function ($q) use ($request) {
-                $q->where('TenDonViTinh', 'like', '%' . $request->TenDonViTinh . '%');
-            });
-        }
-
         // Tìm kiếm theo tên nhà cung cấp
-        if ($request->filled('TenNhaCungCap')) {
+        if ($request->filled('MaNhaCungCap')) {
             $query->whereHas('nhaCungCaps', function ($q) use ($request) {
-                $q->where('TenNhaCungCap', 'like', '%' . $request->TenNhaCungCap . '%');
+                $q->where('nhacungcap_linhkien.MaNhaCungCap', $request->MaNhaCungCap);
             });
         }
 
         // Lấy danh sách linh kiện với phân trang
         $dsLinhKien = $query->paginate(10);
+        $dsDonViTinh = DonViTinh::all();
+        $dsNhaCungCap = NhaCungCap::all();
 
-        return view('vLK.linhkien', compact('dsLinhKien'));
+        return view('vLK.linhkien', compact('dsLinhKien', 'dsDonViTinh', 'dsNhaCungCap'));
     }
 
     public function create()
@@ -123,9 +119,9 @@ class LinhKienController extends Controller
                 'MaDonViTinh' => $request->MaDonViTinh,
             ]);
 
-                return redirect()->route('dsphieunhap.add')
-                    ->with('success', 'Thêm linh kiện thành công, hãy tạo tiếp thông tin phiếu nhập!');
-            
+            return redirect()->route('dsphieunhap.add')
+                ->with('success', 'Thêm linh kiện thành công, hãy tạo tiếp thông tin phiếu nhập!');
+
 
         } catch (\Illuminate\Validation\ValidationException $e) {
             return redirect()->back()
@@ -134,43 +130,43 @@ class LinhKienController extends Controller
         }
     }
     public function store3(Request $request)
-{
-    try {
-        $request->validate([
-            
-            'TenLinhKien' => 'required|string|max:255|unique:linhkiensuachua,TenLinhKien',
-            'MaNhaCungCap' => 'required|exists:nhacungcap,MaNhaCungCap',
-            'MoTa' => 'nullable|string|max:255',
-            'MaDonViTinh' => 'required',
-           
-        ], [
-            'TenLinhKien.unique' => 'Tên linh kiện đã tồn tại trong hệ thống.',
-        ]);
+    {
+        try {
+            $request->validate([
 
-        $linhKien = LinhKien::create([
-            'TenLinhKien' => $request->TenLinhKien,
-            'SoLuong' => 0,
-            'MoTa' => $request->MoTa,
-            'MaDonViTinh' => $request->MaDonViTinh,
-        ]);
+                'TenLinhKien' => 'required|string|max:255|unique:linhkiensuachua,TenLinhKien',
+                'MaNhaCungCap' => 'required|exists:nhacungcap,MaNhaCungCap',
+                'MoTa' => 'nullable|string|max:255',
+                'MaDonViTinh' => 'required',
 
-        $phieuNhapSession1 = session('phieuNhapSession1');
+            ], [
+                'TenLinhKien.unique' => 'Tên linh kiện đã tồn tại trong hệ thống.',
+            ]);
 
-        if (!$phieuNhapSession1 || !isset($phieuNhapSession1['MaPhieuNhap'])) {
-            return redirect()->back()->with('error', 'Mã phiếu nhập không tồn tại trong session.');
+            $linhKien = LinhKien::create([
+                'TenLinhKien' => $request->TenLinhKien,
+                'SoLuong' => 0,
+                'MoTa' => $request->MoTa,
+                'MaDonViTinh' => $request->MaDonViTinh,
+            ]);
+
+            $phieuNhapSession1 = session('phieuNhapSession1');
+
+            if (!$phieuNhapSession1 || !isset($phieuNhapSession1['MaPhieuNhap'])) {
+                return redirect()->back()->with('error', 'Mã phiếu nhập không tồn tại trong session.');
+            }
+
+            $MaPhieuNhap = $phieuNhapSession1['MaPhieuNhap'];
+
+            return redirect()->route('dsphieunhap.edit', ['MaPhieuNhap' => $MaPhieuNhap])
+                ->with('success', 'Thêm linh kiện thành công, quay lại chỉnh sửa phiếu nhập!');
+
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return redirect()->back()
+                ->with('error', $e->validator->errors()->first())
+                ->withInput();
         }
-
-        $MaPhieuNhap = $phieuNhapSession1['MaPhieuNhap'];
-
-        return redirect()->route('dsphieunhap.edit', ['MaPhieuNhap' => $MaPhieuNhap])
-            ->with('success', 'Thêm linh kiện thành công, quay lại chỉnh sửa phiếu nhập!');
-
-    } catch (\Illuminate\Validation\ValidationException $e) {
-        return redirect()->back()
-            ->with('error', $e->validator->errors()->first())
-            ->withInput();
     }
-}
 
 
     public function detail($MaLinhKien)

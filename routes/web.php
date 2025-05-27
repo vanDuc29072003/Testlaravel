@@ -138,6 +138,7 @@ Route::middleware('auth')->group(function () {
     ->name('may.edit');
   Route::patch('/may/{MaMay}', [MayController::class, 'editmay'])->name('may.update');
   Route::delete('/may/{MaMay}', [MayController::class, 'deleteMay'])->name('may.delete');
+  Route::post('may/save-form-session', [MayController::class, 'saveFormSession'])->name('may.saveFormSession');
 
   Route::get('/nhacungcap', [NhaCungCapController::class, 'nhacungcap'])->name('nhacungcap');
   Route::get('/nhacungcap/detail/{MaNhaCungCap}', [NhaCungCapController::class, 'detailNhaCungCap'])->name('nhacungcap.detail');
@@ -157,6 +158,8 @@ Route::middleware('auth')->group(function () {
   Route::delete('/nhacungcap/{MaNhaCungCap}', [NhaCungCapController::class, 'deleteNhaCungCap'])
     ->middleware('kiemtraquyen:20')
     ->name('nhacungcap.delete');
+  Route::get('nhacungcap/create-from-may', [NhaCungCapController::class, 'createNCCfromMay'])->name('nhacungcap.createNCCfromMay');
+  Route::post('/nhacungcap/store-from-may', [NhaCungCapController::class, 'storeNCCfromMay'])->name('nhacungcap.storeNCCfromMay');
 
   Route::get('/detailuser', [DetailuserController::class, 'detailuser'])->name('detailuser');
 
@@ -264,6 +267,8 @@ Route::middleware('auth')->group(function () {
   Route::delete('/loaimay/{id}', [LoaiMayController::class, 'destroy'])
     ->middleware('kiemtraquyen:14')
     ->name('loaimay.destroy');
+  Route::get('/loaimay/create-from-may', [LoaiMayController::class, 'createLoaiMayfromMay'])->name('loaimay.createLoaiMayfromMay');
+  Route::post('/loaimay/store-from-may', [LoaiMayController::class, 'storeLoaiMayfromMay'])->name('loaimay.storeLoaiMayfromMay');
 
 
   Route::get('/bophan', [BophanController::class, 'index'])->name('bophan.index');

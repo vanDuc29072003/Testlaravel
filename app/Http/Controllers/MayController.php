@@ -33,6 +33,16 @@ class MayController extends Controller
             }
         }
 
+        if ($request->filled('BaoHanh')) {
+            if ($request->BaoHanh == '1') {
+                // Đã hết bao hành
+                $query->whereRaw("DATE_ADD(`ThoiGianDuaVaoSuDung`, INTERVAL `ThoiGianBaoHanh` MONTH) <= CURDATE()");
+            } elseif ($request->BaoHanh == '0') {
+                // Còn bao hành
+                $query->whereRaw("DATE_ADD(`ThoiGianDuaVaoSuDung`, INTERVAL `ThoiGianBaoHanh` MONTH) > CURDATE()");
+            }
+        }
+
         $filters = [
             'MaLoai' => '=',
             'MaNhaCungCap' => '=',
@@ -65,10 +75,13 @@ class MayController extends Controller
     {
         $may = May::with('nhaCungCap', 'loaiMay')->findOrFail($MaMay); // Eager load nhà cung cấp
         $ngayHetKhauHao = null;
+        $ngayHetBaoHanh = null;
         if ($may->ThoiGianDuaVaoSuDung && $may->ThoiGianKhauHao) {
             $ngayHetKhauHao = Carbon::parse($may->ThoiGianDuaVaoSuDung)->addYears($may->ThoiGianKhauHao);
+            $ngayHetBaoHanh = Carbon::parse($may->ThoiGianDuaVaoSuDung)->addMonths($may->ThoiGianBaoHanh);
         }
-        return view('vMay.detailmay', compact('may', 'ngayHetKhauHao'));
+
+        return view('vMay.detailmay', compact('may', 'ngayHetKhauHao', 'ngayHetBaoHanh'));
     }
 
     public function form_editmay($MaMay)
@@ -113,7 +126,10 @@ class MayController extends Controller
         $loaiMays = LoaiMay::all(); // Lấy danh sách loại máy
 
         $nhaCungCaps = NhaCungCap::all(); // Lấy danh sách nhà cung cấp
-        return view('vMay.addmay', compact('nhaCungCaps', 'loaiMays'));
+        $mayFormData = session('may_form_data', []);
+        session()->forget('may_form_data');
+
+        return view('vMay.addmay', compact('nhaCungCaps', 'loaiMays', 'mayFormData'));
     }
     public function storeMay(Request $request)
     {
@@ -165,7 +181,8 @@ class MayController extends Controller
             ]);
 
             event(new eventUpdateTable());
-
+            
+            session()->forget('may_form_data');
             return redirect()->route('may')->with('success', 'Thêm máy thành công!');
         } catch (\Illuminate\Validation\ValidationException $e) {
             // Lưu lỗi vào session
@@ -182,5 +199,10 @@ class MayController extends Controller
         event(new eventUpdateTable());
 
         return redirect()->route('may')->with('success', 'Xóa máy thành công!');
+    }
+    public function saveFormSession(Request $request)
+    {
+        session()->put('may_form_data', $request->all());
+        return response()->json(['status' => 'ok']);
     }
 }
