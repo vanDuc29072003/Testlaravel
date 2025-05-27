@@ -9,14 +9,16 @@
                 <div class="card-header">
                     <h1 class="m-3">Chi Tiết Sửa Chữa Máy</h1>
                     <h5 class="mx-3">
-                        <strong>Mã Máy  :</strong> <strong>{{ $chiTietSuaChua->first()?->yeuCauSuaChua?->may?->MaMay2 ?? 'Không rõ' }}</strong>
+                        <strong>Mã Máy  :</strong> <strong>{{ $chiTietSuaChua->first()?->yeuCauSuaChua?->may?->MaMay2  }}</strong>
                     </br>
                         <strong>Tên Máy :</strong> <strong>{{ $chiTietSuaChua->first()?->yeuCauSuaChua?->may?->TenMay }}</strong>
                     </h5>
                 </div>
                 <div class="card-body p-5">
                     @if($chiTietSuaChua->isEmpty())
-                        <div class="alert alert-warning">Không có dữ liệu sửa chữa cho máy này.</div>
+                         <div class="alert alert-info text-center" role="alert" style="width: 99%;">
+                                    <p class="fst-italic m-0">Không có dữ liệu lịch sửa chữa nào cho máy này.</p>
+                        </div>
                     @else
                         <table class="table table-bordered table-striped">
                             <thead class="text-center bg-light">

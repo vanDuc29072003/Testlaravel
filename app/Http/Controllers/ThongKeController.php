@@ -224,13 +224,17 @@ class ThongKeController extends Controller
             ->leftJoin('yeucausuachua', 'may.MaMay', '=', 'yeucausuachua.MaMay')
             ->leftJoin('lichsuachua', 'yeucausuachua.MaYeuCauSuaChua', '=', 'lichsuachua.MaYeuCauSuaChua')
             ->leftJoin('phieubangiaosuachuanhacungcap', 'lichsuachua.MaLichSuaChua', '=', 'phieubangiaosuachuanhacungcap.MaLichSuaChua')
-            ->leftJoin('lichbaotri', 'may.MaMay', '=', 'lichbaotri.MaMay')
+            ->leftJoin('lichbaotri', function ($join) {
+                    $join->on('may.MaMay', '=', 'lichbaotri.MaMay')
+                        ->where('lichbaotri.TrangThai', '!=', 0);
+                })
             ->leftJoin('phieubangiaobaotri', 'lichbaotri.MaLichBaoTri', '=', 'phieubangiaobaotri.MaLichBaoTri')
            ->where(function ($query) use ($startDate, $endDate, $filterType) {
                 if ($filterType === 'repair') {
                     $query->whereBetween('lichsuachua.created_at', [$startDate, $endDate]);
                 } elseif ($filterType === 'maintenance') {
-                    $query->whereBetween('lichbaotri.NgayBaoTri', [$startDate, $endDate]);
+                    $query->whereBetween('lichbaotri.NgayBaoTri', [$startDate, $endDate])
+                        ->where('lichbaotri.TrangThai', '!=', 0);
                 } else {
                     $query->where(function ($subQuery) use ($startDate, $endDate) {
                         $subQuery->whereBetween('lichsuachua.created_at', [$startDate, $endDate])
@@ -245,8 +249,14 @@ class ThongKeController extends Controller
                 'may.TenMay',
                 DB::raw('COUNT(DISTINCT lichsuachua.MaLichSuaChua) AS SoLanSuaChua'),
                 DB::raw('COALESCE(SUM(DISTINCT CASE WHEN phieubangiaosuachuanhacungcap.MaPhieuBanGiaoSuaChua IS NOT NULL THEN phieubangiaosuachuanhacungcap.TongTien ELSE 0 END), 0) AS TongChiPhiSuaChua'),
-                DB::raw('COUNT(DISTINCT CASE WHEN lichbaotri.trangthai = 1 THEN lichbaotri.MaLichBaoTri END) AS SoLanBaoTri'),
-                DB::raw('COALESCE(SUM(DISTINCT CASE WHEN lichbaotri.trangthai = 1 THEN phieubangiaobaotri.TongTien END), 0) AS TongChiPhiBaoTri')
+                DB::raw("COUNT(DISTINCT CASE 
+                    WHEN lichbaotri.TrangThai !=0 AND lichbaotri.NgayBaoTri BETWEEN '{$startDate}' AND '{$endDate}' 
+                    THEN lichbaotri.MaLichBaoTri END) AS SoLanBaoTri"),
+
+                DB::raw("COALESCE(SUM(DISTINCT CASE 
+                    WHEN lichbaotri.TrangThai !=0 AND lichbaotri.NgayBaoTri BETWEEN '{$startDate}' AND '{$endDate}' 
+                    THEN phieubangiaobaotri.TongTien END), 0) AS TongChiPhiBaoTri"),
+
             )
             ->groupBy('may.MaMay', 'may.MaMay2', 'may.TenMay');
 

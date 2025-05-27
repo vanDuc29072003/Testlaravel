@@ -127,7 +127,7 @@
     </tr>
     <tr>
         <td class="label">SĐT:</td>
-        <td>{{ $lichSuaChua->yeuCauSuaChua->may->nhaCungCap->SoDienThoai ?? 'Không có' }}</td>
+        <td>{{ $lichSuaChua->yeuCauSuaChua->may->nhaCungCap->SDT ?? 'Không có' }}</td>
     </tr>
     <tr>
         <td class="label">Email:</td>

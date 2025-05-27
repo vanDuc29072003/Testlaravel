@@ -242,7 +242,7 @@
             `;
             productList.appendChild(row);
             setupRowEvents(row);
-            updateTotals();
+            // updateTotals();  <-- Xóa dòng này
             updateCheckboxState();
         }
 
@@ -250,28 +250,18 @@
         function setupRowEvents(row) {
             row.querySelector('.remove-product').addEventListener('click', function () {
                 row.remove();
-                updateTotals();
+                // updateTotals();  <-- Xóa dòng này
                 updateCheckboxState();
             });
 
-            let qtyInput = row.querySelector('.quantity');
-            if (qtyInput) {
-                qtyInput.addEventListener('input', updateTotals);
-            }
+            // Bỏ luôn sự kiện input về số lượng
+            // let qtyInput = row.querySelector('.quantity');
+            // if (qtyInput) {
+            //     qtyInput.addEventListener('input', updateTotals);
+            // }
         }
 
-        // Cập nhật tổng số lượng
-        function updateTotals() {
-            let total = 0;
-            document.querySelectorAll('#product-list .quantity').forEach(input => {
-                total += parseInt(input.value) || 0;
-            });
-
-            let totalInput = document.getElementById('TongSoLuong');
-            if (totalInput) {
-                totalInput.value = total;
-            }
-        }
+        // Xóa hàm updateTotals hoàn toàn
 
         // Cập nhật trạng thái checkbox
         function updateCheckboxState() {
@@ -290,7 +280,7 @@
 
         // Gọi khi trang load
         updateCheckboxState();
-        updateTotals();
+        // Xóa updateTotals();
 
         // Hiển thị thông báo lỗi nếu có
         @if (session('error'))
@@ -305,7 +295,6 @@
                     exit: 'animated fadeOutUp'
                 },
             });
-            updateTotals();
         @endif
     });
 </script>
