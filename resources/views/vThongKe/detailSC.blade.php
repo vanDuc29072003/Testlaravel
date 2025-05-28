@@ -98,7 +98,7 @@
                 </div>
                 <div class="card-footer">
                     <div class="m-3">
-                        <a href="{{ route('thongkesuachua') }}" class="btn btn-secondary">
+                        <a href="{{ url()->previous() }}" class="btn btn-secondary">
                             <i class="fa fa-arrow-left"></i> Quay lại
                         </a>
                     </div>

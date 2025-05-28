@@ -135,7 +135,7 @@
 
             <div class="card-footer">
                 <div class="m-3 d-flex justify-content-between">
-                    <a href="{{ route('lichbaotri.dabangiao') }}" class="btn btn-secondary">
+                    <a href="{{ url()->previous() }}" class="btn btn-secondary">
                         <i class="fa fa-arrow-left"></i> Quay lại
                     </a>
                 </div>

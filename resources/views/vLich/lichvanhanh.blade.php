@@ -33,11 +33,9 @@
                                         <th>Hành Động</th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                               <tbody>
                                     @forelse ($lichs as $index => $lich)
-                                        <tr class="text-center"
-                                            onclick="window.location='{{ route('lichvanhanh.showNhatKi', $lich->MaLichVanHanh) }}'"
-                                            style="cursor: pointer;">
+                                        <tr class="text-center">
                                             <td>{{ $loop->iteration }}</td>
                                             <td>{{ $lich->may->MaMay2 }}</td>
                                             <td>{{ $lich->may->TenMay ?? 'Không xác định' }}</td>
@@ -51,31 +49,43 @@
                                             <td>{{ $lich->nhanVien->TenNhanVien ?? 'Không xác định' }}</td>
                                             <td>{{ $lich->MoTa ?? 'Không có mô tả' }}</td>
                                             <td>
-                                                <div class="d-flex gap-2 justify-content-center">
-                                                    <a href="{{ route('yeucausuachua.create', ['ma_lich' => $lich->MaLichVanHanh]) }}"
-                                                         class="btn btn-primary btn-sm text-white">
-                                                         <i class="fa fa-wrench"></i> YCSC
-                                                     </a>
-
-                                                     <a href="{{ route('lichvanhanh.edit', $lich->MaLichVanHanh) }}"
-                                                        class="btn btn-warning btn-sm text-black">
-                                                        <i class="fa fa-edit"></i> Sửa
-                                                    </a>
-                                                    <form action="{{ route('lichvanhanh.destroy', $lich->MaLichVanHanh) }}"
-                                                        method="POST" class="d-inline-block">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <!-- Giữ lại điều kiện lọc -->
-                                                        @foreach (['from_date', 'to_date', 'quy', 'nam', 'ca', 'may', 'nhanvien'] as $filter)
-                                                            <input type="hidden" name="{{ $filter }}"
-                                                                value="{{ request($filter) }}">
-                                                        @endforeach
-                                                        <button type="button" class="btn btn-danger btn-sm"
-                                                        onclick="event.stopPropagation(); confirmDelete(this)">
-                                                        <i class="fa fa-trash"></i> Xóa
-                                                    </button>
-                                                    </form>
+                                                <div class="d-flex justify-content-center">
+                                                    <div class="row g-1" style="max-width: 320px;">
+                                                        <div class="col-5">
+                                                            <a href="{{ route('lichvanhanh.showNhatKi', $lich->MaLichVanHanh) }}"
+                                                            class="btn btn-info btn-sm w-100 text-white">
+                                                                <i class="fa fa-book"></i> Nhật Kí
+                                                            </a>
+                                                        </div>
+                                                        <div class="col-5">
+                                                            <a href="{{ route('yeucausuachua.create', ['ma_lich' => $lich->MaLichVanHanh]) }}"
+                                                            class="btn btn-primary btn-sm w-100 text-white">
+                                                                <i class="fa fa-wrench"></i> YCSC
+                                                            </a>
+                                                        </div>
+                                                        <div class="col-5">
+                                                            <a href="{{ route('lichvanhanh.edit', $lich->MaLichVanHanh) }}"
+                                                            class="btn btn-warning btn-sm w-100 text-black">
+                                                                <i class="fa fa-edit"></i> Sửa
+                                                            </a>
+                                                        </div>
+                                                        <div class="col-5">
+                                                            <form action="{{ route('lichvanhanh.destroy', $lich->MaLichVanHanh) }}"
+                                                                method="POST" class="w-100">
+                                                                @csrf
+                                                                @method('DELETE')
+                                                                @foreach (['from_date', 'to_date', 'quy', 'nam', 'ca', 'may', 'nhanvien'] as $filter)
+                                                                    <input type="hidden" name="{{ $filter }}" value="{{ request($filter) }}">
+                                                                @endforeach
+                                                                <button type="button" class="btn btn-danger btn-sm w-100"
+                                                                        onclick="event.stopPropagation(); confirmDelete(this)">
+                                                                    <i class="fa fa-trash"></i> Xóa
+                                                                </button>
+                                                            </form>
+                                                        </div>
+                                                    </div>
                                                 </div>
+
                                             </td>
                                         </tr>
                                     @empty
@@ -96,24 +106,34 @@
                     <div>
                         <form method="GET" action="{{ route('lichvanhanh') }}" class="p-3 border rounded fixed-search-form">
                             <h5 class="mb-3">Bộ lọc</h5>    
-                            <div class="mb-3">
-                                <label for="nam" class="form-label">Chọn năm</label>
-                                <select name="nam" id="nam" class="form-control">
-                                    <option value="">-- Chọn năm --</option>
-                                    @for ($year = now()->year; $year >= 2000; $year--)
-                                        <option value="{{ $year }}" {{ request('nam') == $year ? 'selected' : '' }}>{{ $year }}</option>
-                                    @endfor
-                                </select>
+                              <div class="mb-3">
+                                <label class="form-label">Thời gian</label>
+                                @php
+                                    $time_filter = request('time_filter', 'today');
+                                @endphp
+                                @foreach ([
+                                    'yesterday' => 'Hôm qua',
+                                    'today' => 'Hôm nay',
+                                    'tomorrow' => 'Ngày mai',
+                                    'this_week' => 'Tuần này',
+                                    'custom' => 'Tùy chọn khác',
+                                ] as $key => $label)
+                                <div class="form-check p-0">
+                                    <input class="form-check-input" type="radio" name="time_filter" id="{{ $key }}"
+                                        value="{{ $key }}" {{ $time_filter == $key ? 'checked' : '' }}>
+                                    <label class="form-check-label" for="{{ $key }}">{{ $label }}</label>
+                                </div>
+                                @endforeach
                             </div>
 
-                            <div class="mb-3">
-                                <label for="quy" class="form-label">Chọn quý</label>
-                                <select name="quy" id="quy" class="form-control">
-                                    <option value="">-- Chọn quý --</option>
-                                    @foreach ([1, 2, 3, 4] as $q)
-                                        <option value="{{ $q }}" {{ request('quy') == $q ? 'selected' : '' }}>Quý {{ $q }}</option>
-                                    @endforeach
-                                </select>
+                            <!-- Ngày bắt đầu/kết thúc -->
+                            <div id="custom-date-range" class="mb-3" style="{{ $time_filter === 'custom' ? '' : 'display:none;' }}">
+                                <label for="start_date" class="form-label">Từ ngày</label>
+                                <input type="date" name="start_date" id="start_date" class="form-control"
+                                    value="{{ request('start_date') }}">
+                                <label for="end_date" class="form-label mt-2">Đến ngày</label>
+                                <input type="date" name="end_date" id="end_date" class="form-control"
+                                    value="{{ request('end_date') }}">
                             </div>
 
                             <div class="mb-3">
@@ -150,15 +170,7 @@
                                 </select>
                             </div>
 
-                            <div class="mb-3">
-                                <label for="from_date" class="form-label">Từ ngày</label>
-                                <input type="date" name="from_date" id="from_date" class="form-control" value="{{ request('from_date') }}">
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="to_date" class="form-label">Đến ngày</label>
-                                <input type="date" name="to_date" id="to_date" class="form-control" value="{{ request('to_date') }}">
-                            </div>
+                            
 
                             <button type="submit" class="btn btn-primary w-100">
                                 <i class="fa fa-filter"></i> Lọc
@@ -221,4 +233,29 @@
             });
         @endif
     </script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const radios = document.querySelectorAll('input[name="time_filter"]');
+        const customDateRange = document.getElementById('custom-date-range');
+
+        function toggleCustomDate() {
+            if (document.querySelector('input[name="time_filter"]:checked').value === 'custom') {
+                customDateRange.style.display = '';
+            } else {
+                customDateRange.style.display = 'none';
+                // Nếu muốn reset input ngày khi ẩn, uncomment:
+                // document.getElementById('start_date').value = '';
+                // document.getElementById('end_date').value = '';
+            }
+        }
+
+        radios.forEach(radio => {
+            radio.addEventListener('change', toggleCustomDate);
+        });
+
+        // Khởi tạo trạng thái khi trang load
+        toggleCustomDate();
+    });
+</script>
+
 @endsection

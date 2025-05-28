@@ -195,15 +195,7 @@
             }
         });
 
-        // Sự kiện khi checkbox thay đổi
-        checkbox.addEventListener('change', function () {
-            updateCheckboxState();
-        });
-
-        // Khi submit: không cần xử lý gì đặc biệt nếu đã xoá
-        form.addEventListener('submit', function () {
-            // Dữ liệu linh kiện sẽ không được gửi nếu đã xoá
-        });
+      
 
         // Gán lại sự kiện cho các dòng cũ nếu có
         document.querySelectorAll('#product-list tr').forEach(setupRowEvents);
@@ -217,17 +209,16 @@
                         title: 'Lỗi',
                         message: 'Linh kiện này đã được thêm!',
                         icon: 'icon-bell'
-                    }, {
+                    },{ 
                         type: 'danger',
                         animate: {
-                            enter: 'animated fadeInDown',
-                            exit: 'animated fadeOutUp'
-                        },
-                    });
-                    return;
-                }
+                        enter: 'animated fadeInDown',
+                        exit: 'animated fadeOutUp'
+                    }
+                });
+                return;
             }
-
+            }                
             let row = document.createElement('tr');
             row.innerHTML = `
                 <td><input type="text" class="form-control" name="MaLinhKien[]" value="${maLinhKien}" readonly></td>
@@ -242,7 +233,7 @@
             `;
             productList.appendChild(row);
             setupRowEvents(row);
-            // updateTotals();  <-- Xóa dòng này
+           
             updateCheckboxState();
         }
 
@@ -250,18 +241,12 @@
         function setupRowEvents(row) {
             row.querySelector('.remove-product').addEventListener('click', function () {
                 row.remove();
-                // updateTotals();  <-- Xóa dòng này
+               
                 updateCheckboxState();
             });
 
-            // Bỏ luôn sự kiện input về số lượng
-            // let qtyInput = row.querySelector('.quantity');
-            // if (qtyInput) {
-            //     qtyInput.addEventListener('input', updateTotals);
-            // }
+         
         }
-
-        // Xóa hàm updateTotals hoàn toàn
 
         // Cập nhật trạng thái checkbox
         function updateCheckboxState() {
@@ -280,7 +265,7 @@
 
         // Gọi khi trang load
         updateCheckboxState();
-        // Xóa updateTotals();
+     
 
         // Hiển thị thông báo lỗi nếu có
         @if (session('error'))

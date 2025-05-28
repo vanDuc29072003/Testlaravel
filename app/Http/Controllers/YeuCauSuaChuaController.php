@@ -55,22 +55,22 @@ class YeuCauSuaChuaController extends Controller
         ));
     }
 
-   public function create(Request $request)
-{
-    $maLich = $request->input('ma_lich');
-    $dsMay = May::all();
-    $nhanVien = Auth::user()->nhanvien;
+    public function create(Request $request)
+    {
+        $maLich = $request->input('ma_lich');
+        $dsMay = May::all();
+        $nhanVien = Auth::user()->nhanvien;
 
-    $lichVanHanh = null;
-    if ($maLich) {
-        $lichVanHanh = LichVanHanh::with(['may', 'nhanVien'])->find($maLich);
-        if (!$lichVanHanh) {
-            return redirect()->route('lichvanhanh.index')->with('error', 'Không tìm thấy lịch vận hành.');
-        }
-    }
+        $lichVanHanh = null;
+        if ($maLich) {
+            $lichVanHanh = LichVanHanh::with(['may', 'nhanVien'])->find($maLich);
+            if (!$lichVanHanh) {
+                return redirect()->route('lichvanhanh.index')->with('error', 'Không tìm thấy lịch vận hành.');
+            }
+        }   
 
-    return view('vYCSC.createyeucausuachua', compact('dsMay', 'nhanVien', 'lichVanHanh'));
-}   
+        return view('vYCSC.createyeucausuachua', compact('dsMay', 'nhanVien', 'lichVanHanh'));
+    }   
 
     public function store(Request $request)
     {
