@@ -165,8 +165,9 @@ Route::middleware('auth')->group(function () {
 
   Route::get('/yeucausuachua', [YeuCauSuaChuaController::class, 'index'])->name('yeucausuachua.index');
   Route::get('/yeucausuachua/create', [YeuCauSuaChuaController::class, 'create'])
-    ->middleware('kiemtraquyen:5')
-    ->name('yeucausuachua.create');
+      ->middleware(['kiemtraquyen:5', 'vietnhatki'])
+      ->name('yeucausuachua.create');
+
 
   Route::post('/yeucausuachua', [YeuCauSuaChuaController::class, 'store'])->name('yeucausuachua.store');
   Route::get('/yeucausuachua/{MaYeuCauSuaChua}/duyet', [YeuCauSuaChuaController::class, 'formduyet'])
@@ -181,7 +182,7 @@ Route::middleware('auth')->group(function () {
   Route::post('/lichsuachua/{MaLichSuaChua}/lienhencc', [LichSuaChuaController::class, 'lienhencc'])->name('lichsuachua.lienhencc');
   Route::get('/lichsuachua/dahoanthanh', [LichSuaChuaController::class, 'lichSuDaHoanThanh'])->name('lichsuachua.dahoanthanh');
   Route::get('/lichsuachua/{MaLichSuaChua}/taophieubangiaonoibo', [LichSuaChuaController::class, 'taoPhieuBanGiaoNoiBo'])
-    ->middleware('kiemtraquyen:8')
+    ->middleware('chinguoidamnhan')
     ->name('lichsuachua.taophieubangiaonoibo');
   Route::get('/lichsuachua/{MaLichSuaChua}/bangiaonhacungcap', [LichSuaChuaController::class, 'bangiaoNhaCungCap'])->name('lichsuachua.bangiaonhacungcap');
   Route::get('/lichsuachua/{MaLichSuaChua}/xem-ncc', [LichSuaChuaController::class, 'xemNCC'])
@@ -228,8 +229,10 @@ Route::middleware('auth')->group(function () {
   Route::get('/lichvanhanh/{id}/edit', [LichVanHanhController::class, 'edit'])->name('lichvanhanh.edit');
   Route::delete('lichvanhanh/{id}', [LichVanHanhController::class, 'destroy'])->name('lichvanhanh.destroy');
   Route::match(['put', 'patch'], '/lichvanhanh/{id}', [LichVanHanhController::class, 'update'])->name('lichvanhanh.update');
-  // Route hiển thị view nhật ký vận hành và trạng thái máy
-  Route::get('/lichvanhanh/{id}/nhatki', [LichVanHanhController::class, 'showNhatKi'])->name('lichvanhanh.showNhatKi');
+  
+  Route::get('/lichvanhanh/{id}/nhatki', [LichVanHanhController::class, 'showNhatKi'])
+  -> middleware('vietnhatki')
+  ->name('lichvanhanh.showNhatKi');
 
   Route::put('/lichvanhanh/{id}/nhatki', [LichVanHanhController::class, 'updateNhatKi'])->name('lichvanhanh.updateNhatKi');
   //Thống kê vận hành

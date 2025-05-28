@@ -13,74 +13,75 @@ use Illuminate\Support\Facades\DB;
 class LichVanHanhController extends Controller
 {
     
-    public function index(Request $request)
-    {
-        
-
-        $query = LichVanHanh::query();
-        $may = May::all();
-        $nhanvien = NhanVien::all();
   
-        // Sửa lại xử lý ngày từ form
-        if ($request->filled('from_date') && $request->filled('to_date')) {
-            try {
-                // Trình duyệt mặc định gửi ngày dạng yyyy-mm-dd, nên chỉ cần dùng Carbon::parse()
-                $fromDate = Carbon::parse($request->input('from_date'))->startOfDay();
-                $toDate = Carbon::parse($request->input('to_date'))->endOfDay();
 
-                $query->whereBetween('NgayVanHanh', [$fromDate, $toDate]);
-            } catch (\Exception $e) {
-                return redirect()->back()->withErrors(['error' => 'Định dạng ngày không hợp lệ!']);
+        public function index(Request $request)
+        {
+            $query = LichVanHanh::query();
+            $may = May::all();
+            $nhanvien = NhanVien::all();
+
+            // Lọc theo bộ lọc thời gian
+            $timeFilter = $request->input('time_filter', 'today');
+
+            switch ($timeFilter) {
+                case 'today':
+                    $query->whereDate('NgayVanHanh', Carbon::today());
+                    break;
+                case 'yesterday':
+                    $query->whereDate('NgayVanHanh', Carbon::yesterday());
+                    break;
+                case 'tomorrow':
+                    $query->whereDate('NgayVanHanh', Carbon::tomorrow());
+                    break;
+                case 'this_week':
+                    // Lọc từ thứ 2 đầu tuần đến chủ nhật cuối tuần (tùy thiết lập vùng, mặc định Carbon tuần bắt đầu từ thứ 2)
+                    $query->whereBetween('NgayVanHanh', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()]);
+                    break;
+                case 'custom':
+                    if ($request->filled('start_date') && $request->filled('end_date')) {
+                        try {
+                            $fromDate = Carbon::parse($request->input('start_date'))->startOfDay();
+                            $toDate = Carbon::parse($request->input('end_date'))->endOfDay();
+                            $query->whereBetween('NgayVanHanh', [$fromDate, $toDate]);
+                        } catch (\Exception $e) {
+                            return redirect()->back()->withErrors(['error' => 'Định dạng ngày không hợp lệ!']);
+                        }
+                    }
+                    break;
+                default:
+                    // Mặc định là hôm nay nếu time_filter không hợp lệ
+                    $query->whereDate('NgayVanHanh', Carbon::today());
             }
+
+            // Lọc ca làm việc
+            if ($request->filled('ca')) {
+                $query->where('CaLamViec', $request->input('ca'));
+            }
+            // Lọc máy
+            if ($request->filled('may')) {
+                $query->where('MaMay', $request->input('may'));
+            }
+            // Lọc nhân viên
+            if ($request->filled('nhanvien')) {
+                $query->where('MaNhanVien', $request->input('nhanvien'));
+            }
+
+            $lichvanhanh = $query->with(['may', 'nhanVien'])->orderBy('NgayVanHanh', 'asc')->get()->groupBy('NgayVanHanh');
+
+            return view('Vlich.lichvanhanh', compact('lichvanhanh', 'may', 'nhanvien'));
         }
 
-
-        // Lọc theo quý
-        if ($request->filled('quy')) {
-            $quy = $request->input('quy');
-            $startMonth = ($quy - 1) * 3 + 1;
-            $endMonth = $startMonth + 2;
-            $query->whereMonth('NgayVanHanh', '>=', $startMonth)
-                ->whereMonth('NgayVanHanh', '<=', $endMonth);
-        }
-
-        // Lọc theo năm
-        if ($request->filled('nam')) {
-            $query->whereYear('NgayVanHanh', $request->input('nam'));
-        }
-
-        // Lọc theo ca làm việc
-        if ($request->filled('ca')) {
-            $query->where('CaLamViec', $request->input('ca'));
-        }
-
-        // Nếu không có bộ lọc nào, hiển thị dữ liệu của ngày hôm nay
-        if (!$request->filled('from_date') && !$request->filled('to_date') && !$request->filled('quy') && !$request->filled('nam') && !$request->filled('ca')) {
-            $query->whereDate('NgayVanHanh', Carbon::today());
-        }
-        if ($request->filled('may')) {
-            $query->where('MaMay', $request->input('may'));
-        }
-        if ($request->filled('nhanvien')) {
-            $query->where('MaNhanVien', $request->input('nhanvien'));
-        }
-
-        
-
-        $lichvanhanh = $query->with(['may', 'nhanVien'])->orderBy('NgayVanHanh', 'asc')->get()->groupBy('NgayVanHanh');
-
-        return view('Vlich.lichvanhanh', compact('lichvanhanh','may','nhanvien'));
-    }
     
 
 
-    public function create()
-{
-    $may = May::all();
-    $nhanvien = NhanVien::where('MaBoPhan', 2)->get();
+        public function create()
+    {
+        $may = May::all();
+        $nhanvien = NhanVien::where('MaBoPhan', 2)->get();
 
-    return view('Vlich.createlichvanhanh', compact('may', 'nhanvien'));
-}
+        return view('Vlich.createlichvanhanh', compact('may', 'nhanvien'));
+    }
 
     public function store(Request $request)
     {
