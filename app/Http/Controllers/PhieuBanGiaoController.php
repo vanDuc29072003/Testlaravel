@@ -88,8 +88,8 @@ class PhieuBanGiaoController extends Controller
                 'TenLinhKien' => ['required', 'array'],
                 'TenLinhKien.*' => ['required', 'regex:/^[\pL\s]+$/u'],
 
-                'DonViTinh' => ['required', 'array'],
-                'DonViTinh.*' => ['required', 'regex:/^[\pL\s]+$/u'],
+                'DonViTinh' => ['nullable', 'array'],
+                'DonViTinh.*' => ['nullable', 'regex:/^[\pL\s]+$/u'],
                 'SoLuong' => 'required|array',
                 'GiaThanh' => 'required|array',
                 'ThanhTien' => 'required|array',
@@ -172,8 +172,8 @@ class PhieuBanGiaoController extends Controller
                 'TenLinhKien' => ['required', 'array'],
                 'TenLinhKien.*' => ['required', 'regex:/^[\pL\s]+$/u'],
 
-                'DonViTinh' => ['required', 'array'],
-                'DonViTinh.*' => ['required', 'regex:/^[\pL\s]+$/u'],
+                'DonViTinh' => ['nullable', 'array'],
+                'DonViTinh.*' => ['nullable', 'regex:/^[\pL\s]+$/u'],
 
                 'SoLuong' => ['required', 'array'],
 

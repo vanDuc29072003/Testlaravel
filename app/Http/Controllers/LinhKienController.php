@@ -247,7 +247,7 @@ class LinhKienController extends Controller
         $linhKien->delete(); // Xóa linh kiện
         return redirect()->route('linhkien')->with('success', 'Xóa linh kiện thành công!');
     } catch(\Illuminate\Database\QueryException $e){
-            return redirect()->route('linhkien')->with('error', 'Không thể xóa linh kiện này vì đang được sử dụng');
+            return redirect()->back()->with('error', 'Không thể xóa linh kiện này vì đang được sử dụng');
         }
     }
 

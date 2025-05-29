@@ -28,7 +28,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($dsPhieuNhapChoDuyet as $phieuNhap)
+                                @forelse ($dsPhieuNhapChoDuyet as $phieuNhap)
                                     <tr class="text-center"
                                         onclick="window.location='{{ route('phieunhap.show', $phieuNhap->MaPhieuNhap) }}'"
                                         style="cursor: pointer;">
@@ -42,20 +42,27 @@
                                         </td>
                                         <td>
                                             <div class="d-flex justify-content-center gap-2">
-                                             <a href="{{ route('dsphieunhap.edit', ['MaPhieuNhap' => $phieuNhap->MaPhieuNhap]) }}?new=true"
-                                                class="btn btn-warning btn-sm text-black">
+                                                <a href="{{ route('dsphieunhap.edit', ['MaPhieuNhap' => $phieuNhap->MaPhieuNhap]) }}?new=true"
+                                                    class="btn btn-warning btn-sm text-black">
                                                     <i class="fa fa-edit"></i> Sửa
                                                 </a>
-
-
-                                                <button href="" class="btn btn-primary btn-sm">
+                                                <button class="btn btn-primary btn-sm">
                                                     <i class="fas fa-info-circle"></i> Xem
                                                 </button>
                                             </div>
                                         </td>
                                     </tr>
-                                @endforeach
+                                @empty
+                                    <tr>
+                                        <td colspan="7">
+                                            <div class="text-center" role="alert" style="width: 99%;">
+                                                <p class="fst-italic m-0">Không có yêu cầu sửa chữa nào đang chờ duyệt.</p>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @endforelse
                             </tbody>
+
                             <tfoot>
                                 <!-- Pagination cho trạng thái chờ duyệt -->
                                 <nav aria-label="Page navigation example">

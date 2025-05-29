@@ -14,7 +14,7 @@
                                 <div class="d-flex justify-content-end">
                                     @if ($phieuNhap->TrangThai == 0)
                                         <a href="{{ route('dsphieunhap.edit', ['MaPhieuNhap' => $phieuNhap->MaPhieuNhap, 'new' => true]) }}"
-                                                class="btn btn-warning btn-sm text-black">
+                                                class="btn btn-warning  text-black">
                                                     <i class="fa fa-edit"></i> Sửa
                                         </a>
                                     @else
@@ -167,7 +167,7 @@
                 icon: 'warning',
                 buttons: {
                     confirm: {
-                        text: 'Xóa',
+                        text: 'Đồng ý',
                         className: 'btn btn-danger'
                     },
                     cancel: {
