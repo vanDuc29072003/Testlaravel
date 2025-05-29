@@ -46,9 +46,13 @@ class DonViTinhController extends Controller
     // Xóa bộ phận
     public function destroy($id)
     {
+        try{
         $dsDonvitinh = DonViTinh::findOrFail($id);
         $dsDonvitinh->delete();
 
         return redirect()->route('donvitinh.index')->with('success', 'Xóa đơn vị tính thành công.');
+    }catch(\Illuminate\Database\QueryException $e){
+            return redirect()->route('donvitinh.index')->with('error', 'Không thể xóa đơn vị tính này vì nó đang được sử dụng.');
+        }
     }
 }

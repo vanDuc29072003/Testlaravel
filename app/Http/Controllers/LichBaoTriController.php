@@ -72,7 +72,7 @@ class LichBaoTriController extends Controller
         });
 
         // Dữ liệu combobox
-        $dsMay = May::all();
+        $dsMay = May::where('TrangThai', '!=', 1)->get();
         $dsNhaCungCap = NhaCungCap::all();
 
         return view('vLich.lichbaotri', compact('lichbaotriGrouped', 'dsMay', 'dsNhaCungCap'));
@@ -129,7 +129,7 @@ class LichBaoTriController extends Controller
         });
 
         // Dữ liệu cho combobox
-        $dsMay = May::all();
+        $dsMay = May::where('TrangThai', '!=', 1)->get();
         $dsNhaCungCap = NhaCungCap::all();
 
         return view('vLichSu.lichsubaotri', compact('lichbaotriGrouped', 'dsMay', 'dsNhaCungCap'));
@@ -140,7 +140,7 @@ class LichBaoTriController extends Controller
     public function create()
     {
 
-        $machines = May::all(); // Lấy danh sách máy để hiển thị trong form
+        $machines = May::where('TrangThai', '!=', 1)->get(); // Lấy danh sách máy để hiển thị trong form
         return view('vLich.createlichbaotri', compact('machines'));
     }
 

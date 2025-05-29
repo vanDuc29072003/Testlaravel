@@ -18,7 +18,7 @@ class LichVanHanhController extends Controller
         public function index(Request $request)
         {
             $query = LichVanHanh::query();
-            $may = May::all();
+            $may = May::where('TrangThai', '!=', 1)->get();
             $nhanvien = NhanVien::all();
 
             // Lọc theo bộ lọc thời gian
@@ -77,7 +77,7 @@ class LichVanHanhController extends Controller
 
         public function create()
     {
-        $may = May::all();
+        $may = May::where('TrangThai', '!=', 1)->get();
         $nhanvien = NhanVien::where('MaBoPhan', 2)->get();
 
         return view('Vlich.createlichvanhanh', compact('may', 'nhanvien'));
@@ -151,7 +151,7 @@ class LichVanHanhController extends Controller
     public function edit($id)
     {
         $lich = LichVanHanh::findOrFail($id);
-        $may = May::all();
+        $may = May::where('TrangThai', '!=', 1)->get();
         $nhanvien = NhanVien::all();
         return view('Vlich.editlichvanhanh', compact('lich', 'may', 'nhanvien'));
     }

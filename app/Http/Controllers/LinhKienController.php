@@ -241,10 +241,14 @@ class LinhKienController extends Controller
 
     public function delete($MaLinhKien)
     {
+        try{
         $linhKien = LinhKien::findOrFail($MaLinhKien);
-        $linhKien->nhaCungCaps()->detach(); // Xóa quan hệ với nhà cung cấp
+       
         $linhKien->delete(); // Xóa linh kiện
         return redirect()->route('linhkien')->with('success', 'Xóa linh kiện thành công!');
+    } catch(\Illuminate\Database\QueryException $e){
+            return redirect()->route('linhkien')->with('error', 'Không thể xóa linh kiện này vì đang được sử dụng');
+        }
     }
 
     public function search(Request $request)

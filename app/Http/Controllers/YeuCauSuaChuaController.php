@@ -19,7 +19,7 @@ class YeuCauSuaChuaController extends Controller
     public function index(Request $request) {
         $queryChoDuyet = YeuCauSuaChua::query();
         $queryDaXuLy = YeuCauSuaChua::query();
-        $dsMay = May::all();
+        $dsMay = May::where('TrangThai', '!=', 1)->get();
         $dsNhanVien = NhanVien::all();
   
         $filters = [
@@ -58,7 +58,8 @@ class YeuCauSuaChuaController extends Controller
     public function create(Request $request)
     {
         $maLich = $request->input('ma_lich');
-        $dsMay = May::all();
+        $dsMay = May::where('TrangThai', '!=', 1)->get();
+
         $nhanVien = Auth::user()->nhanvien;
 
         $lichVanHanh = null;

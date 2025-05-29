@@ -50,7 +50,7 @@ class PhieuThanhLyController extends Controller
     }
     public function create(Request $request)
     {
-        $dsMay = May::all();
+        $dsMay = May::where('TrangThai', '!=', 1)->get();
         $selectedMaMay = $request->input('MaMay');
 
         return view('vPhieuThanhLy.addphieuthanhly', compact('dsMay', 'selectedMaMay'));
@@ -103,7 +103,7 @@ class PhieuThanhLyController extends Controller
     public function edit($MaPhieuThanhLy)
     {
         $phieuThanhLy = PhieuThanhLy::with(['nhanVien', 'may'])->findOrFail($MaPhieuThanhLy);
-        $dsMay = May::all();
+        $dsMay = May::where('TrangThai', '!=', 1)->get();
         return view('vPhieuThanhLy.editphieuthanhly', compact('phieuThanhLy', 'dsMay'));
     }
     public function update(Request $request, $MaPhieuThanhLy)
