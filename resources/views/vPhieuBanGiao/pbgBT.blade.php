@@ -76,14 +76,19 @@
                 <!-- Thông tin phiếu bàn giao -->
                 <div class="col-md-3">
                     <div class="border p-3 rounded">
-                        <div class="form-group">
+                        <div class="form-group" style="display: none;">
                             <label for="MaLichBaoTri">Mã Lịch Bảo Trì</label>
                             <input type="text" class="form-control" name="MaLichBaoTri" value="{{ $lichbaotri->MaLichBaoTri }}" readonly>
                         </div>
 
-                        <div class="form-group">
+                        <div class="form-group" style="display: none;">
                             <label for="MaNhaCungCap">Mã Nhà Cung Cấp</label>
                             <input type="text" class="form-control" name="MaNhaCungCap" value="{{ $nhaCungCap->MaNhaCungCap }}" readonly>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Người Lập Phiếu</label>
+                            <input type="text" class="form-control" value="{{ Auth::user()->nhanvien->TenNhanVien }}" readonly>
                         </div>
 
                         <div class="form-group">
@@ -91,12 +96,18 @@
                             <input type="text" class="form-control" value="{{ $nhaCungCap->TenNhaCungCap }}" readonly>
                         </div>
 
-                        <div class="form-group">
+                        <div class="form-group" style="display: none;"  >
                             <label for="MaNhanVien">Mã Nhân Viên Tạo Phiếu</label>
                             <input type="text" class="form-control" name="MaNhanVien" value="{{ Auth::user()->MaNhanVien ?? '' }}" readonly>
                         </div>
                          <div class="form-group">
-                            <label for="TenMay">Tên Máy Cần Bảo Trì</label>
+                            <label for="TenMay" class="d-flex justify-content-between">Tên Máy Cần Bảo Trì
+                                @if ($ngayHetBaoHanh && $ngayHetBaoHanh < \Carbon\Carbon::now())
+                                    <span class="badge badge-danger">Hết bảo hành</span>
+                                @elseif ($ngayHetBaoHanh)
+                                    <span class="badge badge-warning">Còn bảo hành</span>
+                                @endif
+                            </label>
                             <input type="text" class="form-control" name="TenMay" value="{{ $lichbaotri->may->TenMay ?? 'Không xác định' }}" readonly>
                         </div>
 

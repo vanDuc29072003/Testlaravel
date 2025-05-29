@@ -268,7 +268,7 @@
                             </div>
                         </div>
                     @endif
-                    @if ($mayHetKhauHao->count() > 0)
+                    @if ($maySapHetKhauHao->count() > 0)
                         <div class="card">
                             <div class="card-header">
                                 <div class="card-head-row">
@@ -290,14 +290,52 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @foreach($mayHetKhauHao as $mhkh)
-                                                <tr onclick="window.location='{{ route('may.detail', $mhkh->MaMay) }}'"
+                                            @foreach($maySapHetKhauHao as $mshkh)
+                                                <tr class="table-warning" onclick="window.location='{{ route('may.detail', $mshkh->MaMay) }}'"
                                                     style="cursor: pointer;">
-                                                    <td>{{ $mhkh->MaMay2 ?? $may->MaMay }}</td>
-                                                    <td>{{ $mhkh->TenMay }}</td>
-                                                    <td>{{ \Carbon\Carbon::parse($mhkh->ThoiGianDuaVaoSuDung)->format('d/m/Y') }}</td>
-                                                    <td>{{ $mhkh->ThoiGianKhauHao }} năm</td>
-                                                    <td>{{ \Carbon\Carbon::parse($mhkh->ThoiGianDuaVaoSuDung)->addYears($may->ThoiGianKhauHao)->format('d/m/Y') }}</td>
+                                                    <td>{{ $mshkh->MaMay2 }}</td>
+                                                    <td>{{ $mshkh->TenMay }}</td>
+                                                    <td>{{ \Carbon\Carbon::parse($mshkh->ThoiGianDuaVaoSuDung)->format('d/m/Y') }}</td>
+                                                    <td>{{ $mshkh->ThoiGianKhauHao }} năm</td>
+                                                    <td>{{ \Carbon\Carbon::parse($mshkh->ThoiGianDuaVaoSuDung)->addYears($mshkh->ThoiGianKhauHao)->format('d/m/Y') }}</td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
+                    @if ($mayDaHetKhauHao->count() > 0)
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-head-row">
+                                    <i class="fas fa-exclamation-triangle me-2 text-danger"></i>
+                                    <div class="card-title">Máy đã hết hạn khấu hao</div>
+                                </div>
+                            </div>
+                            <div class="card-body p-0">
+                                <div class="table-responsive">
+                                    <!-- Projects table -->
+                                    <table class="table align-items-center mb-0">
+                                        <thead class="thead-light">
+                                            <tr>
+                                                <th scope="col">Mã máy</th>
+                                                <th scope="col">Tên máy</th>
+                                                <th scope="col">Ngày đưa vào sử dụng</th>
+                                                <th scope="col">Thời gian khấu hao</th>
+                                                <th scope="col">Ngày hết khấu hao</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach($mayDaHetKhauHao as $mdhkh)
+                                                <tr class="table-danger" onclick="window.location='{{ route('may.detail', $mdhkh->MaMay) }}'"
+                                                    style="cursor: pointer;">
+                                                    <td>{{ $mdhkh->MaMay2 }}</td>
+                                                    <td>{{ $mdhkh->TenMay }}</td>
+                                                    <td>{{ \Carbon\Carbon::parse($mdhkh->ThoiGianDuaVaoSuDung)->format('d/m/Y') }}</td>
+                                                    <td>{{ $mdhkh->ThoiGianKhauHao }} năm</td>
+                                                    <td>{{ \Carbon\Carbon::parse($mdhkh->ThoiGianDuaVaoSuDung)->addYears($mdhkh->ThoiGianKhauHao)->format('d/m/Y') }}</td>
                                                 </tr>
                                             @endforeach
                                         </tbody>
