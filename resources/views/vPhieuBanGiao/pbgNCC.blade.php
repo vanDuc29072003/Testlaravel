@@ -1,6 +1,6 @@
 @extends('layouts.main')
 
-@section('title', 'Tạo Phiếu Bàn Giao Nhà Cung Cấp')
+@section('title', 'Tạo phiếu bàn giao sửa chữa Nhà cung cấp')
 
 @section('content')
     <div class="container">
@@ -11,7 +11,7 @@
                     <!-- Cột bên trái: Bảng danh sách linh kiện -->
                     <div class="col-md-9">
                         <div class="d-flex flex-column mb-3">
-                            <h3 class="mb-2">Phiếu Bàn Giao Nhà Cung Cấp</h3>
+                            <h3 class="mb-2">Phiếu bàn giao sửa chữa Nhà cung cấp</h3>
                             <h4 class="fs-5 mb-2">Danh sách linh kiện sửa chữa</h4>
                         </div>
 
@@ -77,16 +77,22 @@
                     <!-- Cột bên phải: Thông tin phiếu bàn giao -->
                     <div class="col-md-3">
                         <div class="border p-3 rounded">
-                            <div class="form-group ">
+                            <div class="form-group " style="display: none">
                                 <label for="MaLichSuaChua">Mã Lịch Sửa Chữa</label>
                                 <input type="text" class="form-control" id="MaLichSuaChua" name="MaLichSuaChua"
                                     value="{{ $lichSuaChua->MaLichSuaChua }}" readonly>
                             </div>
 
-                            <div class="form-group ">
+                            <div class="form-group " style="display: none">
                                 <label for="MaNhaCungCap">Mã Nhà Cung Cấp</label>
                                 <input type="text" class="form-control" id="MaNhaCungCap" name="MaNhaCungCap"
                                     value="{{ $nhaCungCap->MaNhaCungCap }}" readonly>
+                            </div>
+
+                            <div class="form-group ">
+                                <label>Người Lập Phiếu</label>
+                                <input type="text" class="form-control"
+                                    value="{{ Auth::user()->nhanvien->TenNhanVien }}" readonly>
                             </div>
 
                             <div class="form-group ">
@@ -95,17 +101,24 @@
                                     value="{{ $nhaCungCap->TenNhaCungCap }}" readonly>
                             </div>
 
+                            <div class="form-group">
+                                <label for="TenMay" class="d-flex justify-content-between">Tên Máy Cần Sửa Chữa
+                                    @if ($ngayHetBaoHanh && $ngayHetBaoHanh < \Carbon\Carbon::now())
+                                        <span class="badge badge-danger">Hết bảo hành</span>
+                                    @elseif ($ngayHetBaoHanh)
+                                        <span class="badge badge-warning">Còn bảo hành</span>
+                                    @endif
+                                </label>
+                                <input type="text" class="form-control" id="TenMay" 
+                                 value="{{ $lichSuaChua->yeuCauSuaChua->may->TenMay ?? 'Không xác định' }}" readonly>
+                            </div>
+
                             <div class="form-group ">
                                 <label for="ThoiGianBanGiao">Thời Gian Bàn Giao</label>
                                 <input type="datetime-local" class="form-control" id="ThoiGianBanGiao"
                                     name="ThoiGianBanGiao"  value="{{ old('ThoiGianBanGiao') }}" required>
                             </div>
-                            <div class="form-group">
-                                <label for="TenMay">Tên Máy Cần Sửa Chữa</label>
-                               <input type="text" class="form-control" id="TenMay" 
-                                 value="{{ $lichSuaChua->yeuCauSuaChua->may->TenMay ?? 'Không xác định' }}" readonly>
 
-                            </div>
                             <div class="form-group ">
                                 <label for="TongTien">Tổng Tiền</label>
                                 <input type="number" class="form-control" id="TongTien" name="TongTien" readonly>

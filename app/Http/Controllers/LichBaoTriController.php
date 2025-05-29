@@ -236,12 +236,17 @@ class LichBaoTriController extends Controller
         $may = May::findOrFail($lichbaotri->MaMay);
         $lichbaotri->load('may.nhaCungCap');
         $nhaCungCap = $may->nhaCungCap;
+
+        //Kiểm tra ngày hết hạn bảo hành
+        $ngayHetBaoHanh = null;
+        if ($may->ThoiGianDuaVaoSuDung && $may->ThoiGianBaoHanh) {
+            $ngayHetBaoHanh = Carbon::parse($may->ThoiGianDuaVaoSuDung)->addMonths($may->ThoiGianBaoHanh);
+        }
         if (!$nhaCungCap) {
             return redirect()->back()->with('error', 'Không tìm thấy thông tin nhà cung cấp.');
         }
-        $nhanvien = Auth::user(); // Thêm dòng này
-
-        return view('vPhieuBanGiao.pbgBT', compact('lichbaotri', 'may', 'nhaCungCap', 'nhanvien'));
+        $nhanvien = Auth::user(); 
+        return view('vPhieuBanGiao.pbgBT', compact('lichbaotri', 'may', 'nhaCungCap', 'nhanvien', 'ngayHetBaoHanh'));
     }
 
     public function show($MaLichBaoTri)

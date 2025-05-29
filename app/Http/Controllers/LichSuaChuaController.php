@@ -159,13 +159,19 @@ class LichSuaChuaController extends Controller
         // Lấy thông tin nhà cung cấp từ mã máy
         $nhaCungCap = $lichSuaChua->yeuCauSuaChua->may->nhaCungCap;
 
+        //Lấy ngày hết bảo hành của máy
+        $ngayHetBaoHanh = null;
+        if ($lichSuaChua->yeuCauSuaChua->may->ThoiGianDuaVaoSuDung && $lichSuaChua->yeuCauSuaChua->may->ThoiGianBaoHanh) {
+            $ngayHetBaoHanh = Carbon::parse($lichSuaChua->yeuCauSuaChua->may->ThoiGianDuaVaoSuDung)->addMonths($lichSuaChua->yeuCauSuaChua->may->ThoiGianBaoHanh);
+        }
+
         // Nếu không tìm thấy nhà cung cấp, trả về lỗi
         if (!$nhaCungCap) {
             return redirect()->back()->with('error', 'Không tìm thấy thông tin nhà cung cấp.');
         }
 
         // Trả về view tạo phiếu bàn giao nhà cung cấp
-        return view('vPhieuBanGiao.pbgNCC', compact('lichSuaChua', 'nhaCungCap'));
+        return view('vPhieuBanGiao.pbgNCC', compact('lichSuaChua', 'nhaCungCap', 'ngayHetBaoHanh'));
     }
     public function show($MaLichSuaChua)
     {
