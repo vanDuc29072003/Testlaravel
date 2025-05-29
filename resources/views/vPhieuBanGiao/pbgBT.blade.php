@@ -12,14 +12,14 @@
                 <div class="col-md-9">
                     <div class="d-flex flex-column mb-3">
                         <h3 class="mb-2">Phiếu Bàn Giao Sau Bảo Trì</h3>
-                        <h4 class="fs-5 mb-2">Danh sách linh kiện sửa chữa</h4>
+                        <h4 class="fs-5 mb-2">Danh sách công việc và linh kiện sửa chữa/thay mới</h4>
                     </div>
 
                     <div class="table-responsive">
                         <table class="table table-bordered table-hover">
                             <thead>
                                 <tr class="text-center">
-                                    <th scope="col">Tên Linh Kiện</th>
+                                    <th scope="col">Tên Linh Kiện & Công Việc</th>
                                     <th scope="col">Đơn Vị Tính</th>
                                     <th scope="col">Số Lượng</th>
                                     <th scope="col">Đơn Giá</th>
@@ -47,8 +47,8 @@
                                         $tongTien += $thanhTien;
                                     @endphp
                                     <tr>
-                                        <td><input type="text" class="form-control" name="TenLinhKien[]" value="{{ $tenLinhKien }}" placeholder="Nhập tên linh kiện" required></td>
-                                        <td><input type="text" class="form-control" name="DonViTinh[]" value="{{ $oldDonViTinh[$index] ?? '' }}" placeholder="Nhập đơn vị tính" required></td>
+                                        <td><input type="text" class="form-control" name="TenLinhKien[]" value="{{ $tenLinhKien }}" placeholder="Nhập tên linh kiện & công việc" required></td>
+                                        <td><input type="text" class="form-control" name="DonViTinh[]" value="{{ $oldDonViTinh[$index] ?? '' }}" placeholder="Nhập đơn vị tính" ></td>
                                         <td><input type="number" class="form-control soLuong" name="SoLuong[]" value="{{ $oldSoLuong[$index] ?? '' }}" min="1" placeholder="Nhập số lượng" required></td>
                                         <td><input type="number" class="form-control GiaThanh" name="GiaThanh[]" value="{{ $oldGiaThanh[$index] ?? '' }}" min="1000" placeholder="Nhập đơn giá" required></td>
                                         <td class="text-center">
@@ -156,8 +156,8 @@
         const rowCount = document.querySelectorAll('#linhkien-list tr').length;
         const row = `
         <tr>
-            <td><input type="text" class="form-control" name="TenLinhKien[]" placeholder="Nhập tên linh kiện" required></td>
-            <td><input type="text" class="form-control" name="DonViTinh[]" placeholder="Nhập đơn vị tính" required></td>
+            <td><input type="text" class="form-control" name="TenLinhKien[]" placeholder="Nhập tên linh kiện & công việc" required></td>
+            <td><input type="text" class="form-control" name="DonViTinh[]" placeholder="Nhập đơn vị tính" ></td>
             <td><input type="number" class="form-control soLuong" name="SoLuong[]" min="1" placeholder="Nhập số lượng" required></td>
             <td><input type="number" class="form-control GiaThanh" name="GiaThanh[]" min="1000" placeholder="Nhập giá thành" required></td>
             <td class="text-center">

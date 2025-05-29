@@ -151,6 +151,17 @@
 @section('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function () {
+     document.querySelectorAll('.remove-product').forEach(button => {
+        button.addEventListener('click', function () {
+            this.closest('tr').remove();
+            updateTotals();
+        });
+    });
+
+    // Gán sự kiện cập nhật tổng tiền cho các input hiện có
+    document.querySelectorAll('.quantity, .price').forEach(input => {
+        input.addEventListener('input', updateTotals);
+    });
 
     // Bắt sự kiện nút "Thêm mới linh kiện"
     document.getElementById('btnAddLinhKien').addEventListener('click', saveFormDataToSession1);
