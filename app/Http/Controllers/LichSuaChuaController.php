@@ -55,8 +55,7 @@ class LichSuaChuaController extends Controller
         // Lấy danh sách nhân viên theo bộ phận
         $dsNhanVienYeuCau = NhanVien::where('MaBoPhan', 2)->get(); // Bộ phận yêu cầu
         $dsNhanVienKyThuat = NhanVien::where('MaBoPhan', 3)->get(); // Bộ phận kỹ thuật
-        $dsMay = May::all();
-
+        $dsMay = May::where('TrangThai', '!=', 1)->get();
         $query = LichSuaChua::query()
             ->join('yeucausuachua', 'lichsuachua.MaYeuCauSuaChua', '=', 'yeucausuachua.MaYeuCauSuaChua')
             ->join('may', 'yeucausuachua.MaMay', '=', 'may.MaMay') // để lọc theo tên máy

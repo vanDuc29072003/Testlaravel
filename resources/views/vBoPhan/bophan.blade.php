@@ -29,7 +29,7 @@
                                 <tr class="text-center">
                                     <td>{{ $bophan->MaBoPhan }}</td>
                                     <td class="text-start">{{ $bophan->TenBoPhan }}</td>
-                                    <td>{{ $bophan->nhanviens_count ?? 0 }}</td>
+                                    <td>{{ $bophan->active_nhanvien_count  }}</td>
                                     <td>
                                         <form action="{{ route('bophan.destroy', ['id' => $bophan->MaBoPhan]) }}" method="POST"
                                               class="d-inline-block">

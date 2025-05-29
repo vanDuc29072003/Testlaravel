@@ -44,11 +44,17 @@ class LoaiMayController extends Controller
     }
     public function destroy($id)
     {
-        $loaimay = LoaiMay::findOrFail($id);
-        $loaimay->delete();
-        event(new eventUpdateTable());
-        return redirect()->route('loaimay.index')->with('success', 'Xóa loại máy thành công.');
+        try {
+            $loaimay = LoaiMay::findOrFail($id);
+            $loaimay->delete();
+            event(new eventUpdateTable());
+            return redirect()->route('loaimay.index')->with('success', 'Xóa loại máy thành công.');
+        } catch (\Illuminate\Database\QueryException $e) {
+            
+            return redirect()->route('loaimay.index')->with('error', 'Không thể xóa loại máy vì đang được sử dụng.');
+        }
     }
+
     public function createLoaiMayfromMay(Request $request)
     {
         return view('vMay.createLoaiMayfromMay');
