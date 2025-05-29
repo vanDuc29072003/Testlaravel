@@ -50,10 +50,11 @@
             width: 100%;
             border-collapse: collapse;
             margin-top: 10px;
+            font-size: 13px;
         }
         .suachua-table th, .suachua-table td {
             border: 1px solid #000;
-            padding: 8px;
+            padding: 6px;
             text-align: center;
         }
         .suachua-table th {
@@ -77,6 +78,7 @@
         .summary {
             margin-top: 10px;
             text-align: right;
+            font-weight: bold;
         }
     </style>
 </head>
@@ -95,11 +97,11 @@
     </table>
 
     <div class="title">
-        <h3>THỐNG KÊ SỬA CHỮA</h3>
+        <h3>THỐNG KÊ SỬA CHỮA VÀ BẢO TRÌ</h3>
         <em>Từ ngày {{ \Carbon\Carbon::parse($startDate)->format('d/m/Y') }} đến {{ \Carbon\Carbon::parse($endDate)->format('d/m/Y') }}</em>
     </div>
 
-    <h4>I, Thông tin chung</h4>
+    <h4>I. Thông tin chung</h4>
     <table class="info-table">
         <tr>
             <td class="label">Khoảng thời gian:</td>
@@ -115,37 +117,46 @@
         </tr>
     </table>
 
-    <h4>II, Danh sách máy sửa chữa</h4>
+    <h4>II. Danh sách máy sửa chữa và bảo trì</h4>
     <table class="suachua-table">
         <thead>
             <tr>
                 <th>STT</th>
                 <th>Mã máy</th>
                 <th>Tên máy</th>
-                <th>Số lần yêu cầu sửa chữa</th>
+                <th>Số lần sửa chữa</th>
+                <th>Tổng chi phí sửa chữa</th>
+                <th>Số lần bảo trì</th>
+                <th>Tổng chi phí bảo trì</th>
             </tr>
         </thead>
         <tbody>
-            @forelse ($thongKeSuaChua as $index => $item)
+            @forelse ($thongKeMay as $index => $item)
                 <tr>
                     <td>{{ $index + 1 }}</td>
-                    <td>{{ $item['MaMay2'] }}</td>
-                    <td>{{ $item['TenMay'] }}</td>
-                    <td>{{ $item['SoLanSuaChua'] }}</td>
+                    <td>{{ $item->MaMay2 ?? 'Không rõ' }}</td>
+                    <td>{{ $item->TenMay ?? 'Không rõ' }}</td>
+                    <td>{{ $item->SoLanSuaChua ?? 0 }}</td>
+                    <td>{{ number_format($item->TongChiPhiSuaChua ?? 0, 0, ',', '.') }} đ</td>
+                    <td>{{ $item->SoLanBaoTri ?? 0 }}</td>
+                    <td>{{ number_format($item->TongChiPhiBaoTri ?? 0, 0, ',', '.') }} đ</td>
                 </tr>
             @empty
                 <tr>
-                    <td colspan="4" style="text-align: center"><i>Không có yêu cầu sửa chữa nào trong khoảng thời gian này.</i></td>
+                    <td colspan="7" style="text-align: center"><i>Không có dữ liệu sửa chữa hoặc bảo trì trong khoảng thời gian này.</i></td>
                 </tr>
             @endforelse
         </tbody>
     </table>
 
     <div class="summary">
-        <strong>Tổng số yêu cầu sửa chữa:</strong> {{ $tongSoYeuCauSuaChua }}
+        Tổng số sửa chữa: {{ $tongSoYeuCauSuaChua }}
+    </div>
+      <div class="summary">
+        Tổng số bảo trì: {{ $tongSoBaoTri }}
     </div>
 
-    <h4>III, Ghi chú</h4>
+    <h4>III. Ghi chú</h4>
     <p class="note">
         Báo cáo này được lập dựa trên số liệu thực tế trong khoảng thời gian đã chọn.<br>
         Tôi xin cam đoan rằng các thông tin nêu trên là đầy đủ và chính xác, và chịu trách nhiệm về tính xác thực của nội dung trong báo cáo này.

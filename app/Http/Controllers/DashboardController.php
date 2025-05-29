@@ -28,7 +28,7 @@ class DashboardController extends Controller
         $phieunhap = PhieuNhap::where('trangthai', '0')->get();
         $phieuthanhly = PhieuThanhLy::where('trangthai', '0')->get();
 
-        $linhkienCanhBao = LinhKien::where('SoLuong', '<', 5)->orderBy('SoLuong', 'asc')->get();
+        $linhkienCanhBao = LinhKien::where('SoLuong', '<', 20)->orderBy('SoLuong', 'asc')->get();
         $mayHetBaoHanh = May::where('TrangThai', '!=', '1')
             ->whereRaw("
                 DATE_ADD(`ThoiGianDuaVaoSuDung`, INTERVAL `ThoiGianBaoHanh` MONTH) > CURDATE()
@@ -82,7 +82,7 @@ class DashboardController extends Controller
         $cost_suachua_this_month = [];
         for ($date = $startThisMonth->copy(); $date->lte($endThisMonth); $date->addDay()) {
             $labels_this_month[] = $date->format('d/m');
-            $cost_nhapkho_this_month[] = PhieuNhap::whereDate('NgayNhap', $date)->sum('TongTien');
+            $cost_nhapkho_this_month[] = PhieuNhap::whereDate('NgayNhap', $date)->where('TrangThai',1)->sum('TongTien');
             $cost_baotri_this_month[] = PhieuBanGiaoBaoTri::whereDate('ThoiGianBanGiao', $date)->sum('TongTien');
             $cost_suachua_this_month[] = PhieuBanGiaoSuaChuaNCC::whereDate('ThoiGianBanGiao', $date)->sum('TongTien');
         }
@@ -96,7 +96,7 @@ class DashboardController extends Controller
         $cost_suachua_last_month = [];
         for ($date = $startLastMonth->copy(); $date->lte($endLastMonth); $date->addDay()) {
             $labels_last_month[] = $date->format('d/m');
-            $cost_nhapkho_last_month[] = PhieuNhap::whereDate('NgayNhap', $date)->sum('TongTien');
+            $cost_nhapkho_last_month[] = PhieuNhap::whereDate('NgayNhap', $date)->where('TrangThai',1)->sum('TongTien');
             $cost_baotri_last_month[] = PhieuBanGiaoBaoTri::whereDate('ThoiGianBanGiao', $date)->sum('TongTien');
             $cost_suachua_last_month[] = PhieuBanGiaoSuaChuaNCC::whereDate('ThoiGianBanGiao', $date)->sum('TongTien');
         }
@@ -110,6 +110,7 @@ class DashboardController extends Controller
             $month = Carbon::now()->subMonths($i);
             $labels_six_months[] = $month->format('m/Y');
             $cost_nhapkho_six_month[] = PhieuNhap::whereYear('NgayNhap', $month->year)
+                ->where('TrangThai',1)
                 ->whereMonth('NgayNhap', $month->month)
                 ->sum('TongTien');
             $cost_baotri_six_month[] = PhieuBanGiaoBaoTri::whereYear('ThoiGianBanGiao', $month->year)

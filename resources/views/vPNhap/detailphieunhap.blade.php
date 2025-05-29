@@ -49,6 +49,9 @@
                                                 <span class="badge bg-warning text-dark">Chờ duyệt</span>
                                             @elseif ($phieuNhap->TrangThai == 1)
                                                 <span class="badge bg-success text-white">Đã nhập kho</span>
+                                            @elseif ($phieuNhap->TrangThai == 2)
+                                                <span class="badge bg-danger text-white">Bị từ chối</span>
+
                                             @endif
                                         </td>
                                         <th>Ghi Chú</th>

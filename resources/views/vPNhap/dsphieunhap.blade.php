@@ -100,8 +100,14 @@
                                         <td>{{ $phieuNhap->nhanVien->TenNhanVien ?? 'Không xác định' }}</td>
                                         <td>{{ number_format($phieuNhap->TongTien, 0, ',', '.') }} VND</td>
                                         <td>
-                                            <span class="badge bg-success text-white">Đã duyệt</span>
+                                            @if ($phieuNhap->TrangThai == 1)
+                                                <span class="badge bg-success text-white">Đã duyệt</span>
+                                            @elseif ($phieuNhap->TrangThai == 2)
+                                                <span class="badge bg-danger text-white">Bị từ chối</span>
+                                       
+                                            @endif
                                         </td>
+
                                     </tr>
                                 @endforeach
                             </tbody>
