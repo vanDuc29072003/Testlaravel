@@ -52,7 +52,7 @@ class dsphieuNhapController extends Controller
 
         // Lấy danh sách phiếu nhập đã duyệt
         $dsPhieuNhapDaDuyet = $query
-            ->where('TrangThai', '1') // Chỉ lấy phiếu nhập đã duyệt
+           ->where('TrangThai', '!=', 0)
             ->with('nhaCungCap', 'nhanVien')
             ->orderBy('MaHienThi', 'desc')
             ->paginate(10, ['*'], 'da_duyet');
@@ -288,19 +288,19 @@ class dsphieuNhapController extends Controller
     }
     public function destroy($MaPhieuNhap)
     {
-
         $phieuNhap = PhieuNhap::findOrFail($MaPhieuNhap);
 
         // Kiểm tra trạng thái phiếu nhập (chỉ cho phép xóa nếu trạng thái là "Chờ duyệt")
         if ($phieuNhap->TrangThai != 0) {
             return redirect()->route('dsphieunhap')->with('error', 'Chỉ có thể xóa phiếu nhập ở trạng thái "Chờ duyệt".');
         }
-        // Xóa phiếu nhập
-        $phieuNhap->delete();
-        // Trả về thông báo thành công
-        return redirect()->route('dsphieunhap')->with('success', 'Phiếu nhập đã được xóa thành công!');
+       
+        $phieuNhap->TrangThai = 2;
+        $phieuNhap->save();
 
+        return redirect()->route('dsphieunhap')->with('success', 'Phiếu nhập này đã bị từ chối nhập vào kho!');
     }
+
 
     public function approve($MaPhieuNhap)
     {
