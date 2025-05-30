@@ -76,6 +76,11 @@
           <div class="collapse" id="lichsu">
             <ul class="nav nav-collapse">
               <li>
+                <a href="{{ route('nhatki.thongke') }}">
+                  <span class="sub-item">Nhật kí vận hành</span>
+                </a>
+               </li>
+              <li>
                 <a href="{{ route('lichbaotri.dabangiao') }}">
                   <span class="sub-item">Lịch sử bảo trì</span>
                 </a>
@@ -149,11 +154,7 @@
           </a>
           <div class="collapse" id="baocao">
             <ul class="nav nav-collapse">
-              <li>
-                <a href="{{ route('nhatki.thongke') }}">
-                  <span class="sub-item">Nhật kí vận hành</span>
-                </a>
-               </li>
+              
                <li>
                 <a href="{{ route('thongkesuachua') }}">
                   <span class="sub-item">Sửa chữa & Bảo Trì</span>
