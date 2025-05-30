@@ -94,10 +94,11 @@ class ThongKeController extends Controller
                     ->whereBetween('created_at', [$startDate, $endDate])
                     ->sum('SoLuong'),
                 'TonKho' => $item->SoLuong,
-                'ChenhLech' => ChiTietPhieuBanGiaoNoiBo::where('MaLinhKien', $item->MaLinhKien)
-                    ->whereBetween('created_at', [$startDate, $endDate])
-                    ->sum('SoLuong') -
-                    ChiTietPhieuXuat::where('MaLinhKien', $item->MaLinhKien)
+                'ChenhLech' =>ChiTietPhieuXuat::where('MaLinhKien', $item->MaLinhKien)
+                        ->whereBetween('created_at', [$startDate, $endDate])
+                        ->sum('SoLuong')-ChiTietPhieuTra::where('MaLinhKien', $item->MaLinhKien)
+                        ->whereBetween('created_at', [$startDate, $endDate])
+                        ->sum('SoLuong')-ChiTietPhieuBanGiaoNoiBo::where('MaLinhKien', $item->MaLinhKien)
                         ->whereBetween('created_at', [$startDate, $endDate])
                         ->sum('SoLuong'),
             ];
@@ -182,10 +183,11 @@ class ThongKeController extends Controller
                     ->whereBetween('created_at', [$startDate, $endDate])
                     ->sum('SoLuong'),
                 'TonKho' => $item->SoLuong,
-                'ChenhLech' => ChiTietPhieuBanGiaoNoiBo::where('MaLinhKien', $item->MaLinhKien)
-                    ->whereBetween('created_at', [$startDate, $endDate])
-                    ->sum('SoLuong') -
-                    ChiTietPhieuXuat::where('MaLinhKien', $item->MaLinhKien)
+                'ChenhLech' => ChiTietPhieuXuat::where('MaLinhKien', $item->MaLinhKien)
+                        ->whereBetween('created_at', [$startDate, $endDate])
+                        ->sum('SoLuong')-ChiTietPhieuTra::where('MaLinhKien', $item->MaLinhKien)
+                        ->whereBetween('created_at', [$startDate, $endDate])
+                        ->sum('SoLuong')-ChiTietPhieuBanGiaoNoiBo::where('MaLinhKien', $item->MaLinhKien)
                         ->whereBetween('created_at', [$startDate, $endDate])
                         ->sum('SoLuong'),
             ];
