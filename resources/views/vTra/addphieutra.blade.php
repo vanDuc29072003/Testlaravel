@@ -26,11 +26,11 @@
                         <table class="table table-bordered table-hover">
                             <thead>
                                 <tr class="text-center">
-                                    <th scope="col">Mã Linh Kiện</th>
+                                    <th scope="col" style="width: 10%;">Mã</th>
                                     <th scope="col">Tên Linh Kiện</th>
-                                    <th scope="col">Đơn Vị Tính</th>
-                                    <th scope="col">Số Lượng</th>
-                                    <th scope="col">Cập Nhật</th>
+                                    <th scope="col" style="width: 15%;">Đơn Vị Tính</th>
+                                    <th scope="col" style="width: 15%;">Số Lượng</th>
+                                    <th scope="col" style="width: 10%;">Xoá</th>
                                 </tr>
                             </thead>
                             <tbody id="product-list">
@@ -46,7 +46,9 @@
                         <div class="form-group">
                             <label for="MaNhanVienTao">Nhân Viên Tạo</label>
                             <input type="text" class="form-control" id="MaNhanVienTao" name="MaNhanVienTao"
-                                value="{{ Auth::user()->nhanVien->MaNhanVien }}" readonly>
+                                value="{{ Auth::user()->nhanVien->MaNhanVien }}" readonly style="display: none;">
+                            <input type="text" class="form-control"
+                                value="{{ Auth::user()->nhanVien->TenNhanVien }}" readonly>
                         </div>
 
                         <div class="form-group">
@@ -72,7 +74,7 @@
 
                         <div class="form-group">
                             <label for="GhiChu">Ghi Chú</label>
-                            <textarea class="form-control" id="GhiChu" name="GhiChu" rows="3"></textarea>
+                            <textarea class="form-control" id="GhiChu" name="GhiChu" rows="3" placeholder="Nhập ghi chú"></textarea>
                         </div>
 
                         <div class="form-group mt-4 d-flex justify-content-between">

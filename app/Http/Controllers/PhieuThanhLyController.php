@@ -59,15 +59,27 @@ class PhieuThanhLyController extends Controller
     {
         $may = May::with(['nhaCungCap', 'loaiMay'])->findOrFail($MaMay);
 
+        $ngayDuaVao = \Carbon\Carbon::parse($may->ThoiGianDuaVaoSuDung);
+        $ngayHetBaoHanh = $ngayDuaVao->copy()->addMonths($may->ThoiGianBaoHanh);
+        $ngayHetKhauHao = $ngayDuaVao->copy()->addYears($may->ThoiGianKhauHao);
+        $now = \Carbon\Carbon::now();
+
+        $trangThaiBaoHanh = $now->lessThanOrEqualTo($ngayHetBaoHanh) ? 'Còn bảo hành' : 'Đã hết bảo hành';
+        $trangThaiKhauHao = $now->lessThanOrEqualTo($ngayHetKhauHao) ? 'Còn khấu hao' : 'Đã hết khấu hao';
+
+
         return response()->json([
             'SeriMay' => $may->SeriMay,
             'ThoiGianDuaVaoSuDung' => $may->ThoiGianDuaVaoSuDung,
             'ThoiGianKhauHao' => $may->ThoiGianBaoHanh,
             'NamSanXuat' => $may->NamSanXuat,
-            'HangSanXuat' => $may->HangSanXuat,
+            'ThoiGianBaoHanh' => $may->ThoiGianBaoHanh,
             'GiaTriBanDau' => $may->GiaTriBanDau,
             'TenNhaCungCap' => $may->nhaCungCap->TenNhaCungCap ?? 'Không xác định',
             'TenLoai' => $may->loaiMay->TenLoai ?? 'Không xác định',
+            // Trạng thái
+            'TrangThaiBaoHanh' => $trangThaiBaoHanh,
+            'TrangThaiKhauHao' => $trangThaiKhauHao
         ]);
     }
     public function store(Request $request)

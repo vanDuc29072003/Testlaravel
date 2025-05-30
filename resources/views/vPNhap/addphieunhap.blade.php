@@ -15,10 +15,9 @@
                             <div class="d-flex justify-content-between align-items-center mb-3">
                                 <h3 class="mb-4">Thêm mới Phiếu Nhập Hàng</h3>
                                 <div>
-                               <a href="#" id="btnAddLinhKien" class="btn btn-primary">
-                                    <i class="fa fa-plus"></i> Thêm mới linh kiện
-                                </a>
-
+                                    <a href="#" id="btnAddLinhKien" class="btn btn-primary">
+                                        <i class="fa fa-plus"></i> Thêm mới linh kiện
+                                    </a>
                                 </div>
                             </div>
 
@@ -34,37 +33,34 @@
                                 <table class="table table-bordered table-hover">
                                     <thead>
                                         <tr class="text-center">
-                                            <th scope="col">Mã Linh Kiện</th>
+                                            <th scope="col" style="width: 10%">Mã</th>
                                             <th scope="col">Tên Linh Kiện</th>
-                                            <th scope="col">Đơn Vị Tính</th>
+                                            <th scope="col" style="width: 10%;">ĐVT</th>
                                             <th scope="col">Số Lượng</th>
                                             <th scope="col">Giá Nhập</th>
                                             <th scope="col">Tổng Cộng</th>
                                             <th scope="col">Cập Nhật</th>
                                         </tr>
                                     </thead>
-                                        <tbody id="product-list">
-                                            @if (!empty(session('phieuNhapSession')['LinhKienList']))
-                                                @foreach (session('phieuNhapSession')['LinhKienList'] as $item)
-                                                    <tr>
-                                                        <td><input type="text" class="form-control" name="MaLinhKien[]" value="{{ $item['MaLinhKien'] }}" readonly></td>
-                                                        <td><input type="text" class="form-control" name="TenLinhKien[]" value="{{ $item['TenLinhKien'] }}" readonly></td>
-                                                        <td><input type="text" class="form-control" name="TenDonViTinh[]" value="{{ $item['TenDonViTinh'] }}" readonly></td>
-                                                        <td><input type="number" class="form-control quantity" name="SoLuong[]" value="{{ $item['SoLuong'] }}" required></td>
-                                                        <td><input type="number" class="form-control price" name="GiaNhap[]" value="{{ $item['GiaNhap'] }}" required></td>
-                                                        <td><input type="number" class="form-control total" name="TongCong[]" value="{{ $item['TongCong'] }}" readonly></td>
-                                                        <td class="text-center">
-                                                            <button type="button" class="btn btn-danger btn-sm remove-product">
-                                                                <i class="fa fa-trash"></i> Xóa
-                                                            </button>
-                                                        </td>
-                                                    </tr>
-                                                @endforeach
-                                            @endif
-                                        </tbody>
-
-
-
+                                    <tbody id="product-list">
+                                        @if (!empty(session('phieuNhapSession')['LinhKienList']))
+                                            @foreach (session('phieuNhapSession')['LinhKienList'] as $item)
+                                                <tr>
+                                                    <td><input type="text" class="form-control" name="MaLinhKien[]" value="{{ $item['MaLinhKien'] }}" readonly></td>
+                                                    <td><input type="text" class="form-control" name="TenLinhKien[]" value="{{ $item['TenLinhKien'] }}" readonly></td>
+                                                    <td><input type="text" class="form-control" name="TenDonViTinh[]" value="{{ $item['TenDonViTinh'] }}" readonly></td>
+                                                    <td><input type="number" class="form-control quantity" name="SoLuong[]" value="{{ $item['SoLuong'] }}" required></td>
+                                                    <td><input type="number" class="form-control price" name="GiaNhap[]" value="{{ $item['GiaNhap'] }}" required></td>
+                                                    <td><input type="number" class="form-control total" name="TongCong[]" value="{{ $item['TongCong'] }}" readonly></td>
+                                                    <td class="text-center">
+                                                        <button type="button" class="btn btn-danger btn-sm remove-product">
+                                                            <i class="fa fa-trash"></i> Xóa
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        @endif
+                                    </tbody>
                                 </table>
                             </div>
                         </div>
@@ -74,23 +70,25 @@
                         <div class="col-3">
                             <div class="border p-3 rounded">
                                 <div class="form-group">
-                                    <label for="MaNhaCungCap">Nhà Cung Cấp</label>
-                                   <select class="form-control" id="MaNhaCungCap" name="MaNhaCungCap" required>
-                                    <option value="">Chọn nhà cung cấp</option>
-                                    @foreach ($nhaCungCaps as $nhaCungCap)
-                                        <option value="{{ $nhaCungCap->MaNhaCungCap }}"
-                                            {{ (session('phieuNhapSession')['MaNhaCungCap'] ?? '') == $nhaCungCap->MaNhaCungCap ? 'selected' : '' }}>
-                                            {{ $nhaCungCap->TenNhaCungCap }}
-                                        </option>
-                                    @endforeach
-                                </select>
-
-                                </div>
-                                <div class="form-group">
                                     <label for="MaNhanVien">Nhân Viên</label>
                                     <input type="text" class="form-control" id="MaNhanVien" name="MaNhanVien"
-                                        value="{{ Auth::user()->nhanVien->MaNhanVien }}" readonly>
+                                        value="{{ Auth::user()->nhanVien->MaNhanVien }}" readonly style="display: none;">
+                                    <input type="text" class="form-control"
+                                        value="{{ Auth::user()->nhanVien->TenNhanVien }}" readonly>
                                 </div>
+                                <div class="form-group">
+                                    <label for="MaNhaCungCap">Nhà Cung Cấp</label>
+                                    <select class="form-control" id="MaNhaCungCap" name="MaNhaCungCap" required>
+                                        <option value="">Chọn nhà cung cấp</option>
+                                        @foreach ($nhaCungCaps as $nhaCungCap)
+                                            <option value="{{ $nhaCungCap->MaNhaCungCap }}"
+                                                {{ (session('phieuNhapSession')['MaNhaCungCap'] ?? '') == $nhaCungCap->MaNhaCungCap ? 'selected' : '' }}>
+                                                {{ $nhaCungCap->TenNhaCungCap }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                
                                 <div class="form-group">
                                     <label for="NgayNhap">Ngày Nhập</label>
                                 <input type="datetime-local" class="form-control" id="NgayNhap" name="NgayNhap"
@@ -101,16 +99,16 @@
                                 <div class="form-group">
                                     <label for="TongSoLuong">Tổng Số Lượng</label>
                                 <input type="number" class="form-control" id="TongSoLuong" name="TongSoLuong"
-                                    value="{{ session('phieuNhapSession')['TongSoLuong'] ?? '' }}" readonly>
+                                    value="{{ session('phieuNhapSession')['TongSoLuong'] ?? '' }}" placeholder="0" readonly>
                                 </div>
                                 <div class="form-group">
                                     <label for="TongThanhTien">Tổng Thành Tiền</label>
                                 <input type="number" class="form-control" id="TongThanhTien" name="TongTien"
-                                    value="{{ session('phieuNhapSession')['TongThanhTien'] ?? '' }}" readonly>
+                                    value="{{ session('phieuNhapSession')['TongThanhTien'] ?? '' }}" placeholder="0" readonly>
                                 </div>
                                 <div class="form-group">
                                     <label for="GhiChu">Ghi Chú</label>
-                                <textarea class="form-control" id="GhiChu" name="GhiChu">{{ session('phieuNhapSession')['GhiChu'] ?? '' }}</textarea>
+                                <textarea class="form-control" id="GhiChu" name="GhiChu" placeholder="Nhập ghi chú">{{ session('phieuNhapSession')['GhiChu'] ?? '' }}</textarea>
                                 </div>
 
                                 <!-- Nút nằm dưới form thông tin phiếu nhập -->
