@@ -57,7 +57,7 @@
                                         <th>Ghi Chú</th>
                                         <td>{{ $phieuNhap->GhiChu ?? 'Không có' }}</td>
                                     </tr>
-                                    @if ($phieuNhap->TrangThai == 1)
+                                    @if ($phieuNhap->TrangThai == 1 || $phieuNhap->TrangThai == 2)
                                         <tr>
                                             <th>Người Duyệt</th>
                                             <td>{{ $phieuNhap->nhanVienDuyet->TenNhanVien ?? 'Không xác định' }}</td>

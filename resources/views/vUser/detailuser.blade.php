@@ -69,7 +69,7 @@
                         </div>
                         <div class="card-footer">
                             <div class="d-flex justify-content-between align-items-center flex-wrap m-3">
-                                <a href="{{ route('taikhoan.index') }}" class="btn btn-secondary">
+                                <a href="{{ url()->previous() }}" class="btn btn-secondary">
                                     <i class="fa fa-arrow-left"></i> Quay lại
                                 </a>
                             </div>

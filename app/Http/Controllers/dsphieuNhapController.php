@@ -296,6 +296,7 @@ class dsphieuNhapController extends Controller
         }
        
         $phieuNhap->TrangThai = 2;
+        $phieuNhap->nhanVienDuyet = Auth::user()->MaNhanVien;
         $phieuNhap->save();
 
         return redirect()->route('dsphieunhap')->with('success', 'Phiếu nhập này đã bị từ chối nhập vào kho!');

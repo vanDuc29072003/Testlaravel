@@ -204,4 +204,46 @@ class NhaCungCapController extends Controller
             return redirect()->route('nhacungcap')->with('error', 'Không thể xóa nhà cung cấp vì đang được sử dụng');
         }
     }
+
+    public function createNCCfromLinhKien()
+    {
+        return view('vNCC.createNCCfromLinhKien');
+    }
+    public function storeNCCfromLinhKien(Request $request)
+    {
+                try {
+            $request->validate([
+                'TenNhaCungCap' => 'required|string|max:255|unique:nhacungcap,TenNhaCungCap',
+                'DiaChi' => 'required|string|max:255|unique:nhacungcap,DiaChi',
+                'SDT' => 'required|numeric|digits_between:10,12|unique:nhacungcap,SDT',
+                'Email' => 'required|email|max:255|unique:nhacungcap,Email',
+                'MaSoThue' => 'required|numeric|digits_between:10,15|unique:nhacungcap,MaSoThue',
+            ], [
+
+                'TenNhaCungCap.unique' => 'Nhà cung cấp đã tồn tại.',
+                'SDT.digits_between' => 'Số Điện Thoại phải có độ dài từ 10 đến 12 chữ số.',
+                'DiaChi.unique' => 'Địa chỉ này đã tồn tại ở công ty khác.',
+                'Email.email' => 'Email phải là một địa chỉ email hợp lệ.',
+                'Email.unique' => 'Email đã tồn tại.',
+
+                'MaSoThue.numeric' => 'Mã Số Thuế phải là số.',
+                'MaSoThue.digits_between' => 'Mã Số Thuế phải có độ dài từ 10 đến 15 chữ số.',
+                'MaSoThue.unique' => 'Mã Số Thuế đã tồn tại.',
+            ]);
+            // Tạo mới nhà cung cấp
+            NhaCungCap::create([
+                'TenNhaCungCap' => $request->TenNhaCungCap,
+                'DiaChi' => $request->DiaChi,
+                'SDT' => $request->SDT,
+                'Email' => $request->Email,
+                'MaSoThue' => $request->MaSoThue,
+            ]);
+
+            return redirect()->route('linhkien.add')->with('success', 'Thêm nhà cung cấp thành công!');
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return redirect()->back()
+                ->with('error', $e->validator->errors()->first()) // Lấy lỗi đầu tiên     
+                ->withInput();
+        }
+    }
 }

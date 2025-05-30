@@ -78,22 +78,22 @@
                         <table id="bang-da-xu-ly" class="table table-responsive table-bordered table-hover">
                             <thead>
                                 <tr class="text-center">
-                                    <th scope="col">Mã</th>
-                                    <th scope="col">Thời Gian</th>
+                                    <th scope="col" style="width: 11%">Thời Gian</th>
                                     <th scope="col">Máy</th>
                                     <th scope="col">Mô Tả</th>
                                     <th scope="col">NVYC</th>
-                                    <th scope="col">Trạng Thái</th>
+                                    <th scope="col">NV Duyệt</th>
+                                    <th scope="col" style="width: 7%">Trạng Thái</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach ($dsYeuCauSuaChuaDaXuLy as $ycscdxl)
                                     <tr class="text-center">
-                                        <td>{{ $ycscdxl->MaYeuCauSuaChua }}</td>
                                         <td>{{ \Carbon\Carbon::parse($ycscdxl->ThoiGianYeuCau)->format('d-m-Y H:i') }}</td>
-                                        <td>{{ $ycscdxl->may->TenMay }}</td>
-                                        <td>{{ $ycscdxl->MoTa }}</td>
+                                        <td class="text-start">{{ $ycscdxl->may->TenMay }}</td>
+                                        <td class="text-start">{{ $ycscdxl->MoTa }}</td>
                                         <td>{{ $ycscdxl->nhanVien->TenNhanVien }}</td>
+                                        <td>{{ $ycscdxl->nhanVienDuyet->TenNhanVien }}</td>
                                         <td>
                                             @if ($ycscdxl->TrangThai == '1')
                                                 <span class="badge bg-success">Đã duyệt</span>

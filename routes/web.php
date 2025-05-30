@@ -119,8 +119,10 @@ Route::middleware('auth')->group(function () {
   Route::get('/linhkien/{MaLinhKien}/edit', [LinhKienController::class, 'editForm'])
     ->middleware('kiemtraquyen:16')
     ->name('linhkien.edit');
-  // routes/web.php
+  // lưu dữ liệu trong form nhap
   Route::post('/linhkien/save-form-data', [LinhKienController::class, 'saveFormData'])->name('linhkien.saveFormData');
+  // lưu dữ liệu trong form linhkien
+  Route::post('/linhkien/save-form-session', [LinhKienController::class, 'saveFormSession'])->name('linhkien.saveFormSession');
 
   Route::patch('/linhkien/{MaLinhKien}', [LinhKienController::class, 'update'])->name('linhkien.update');
   Route::delete('/linhkien/{MaLinhKien}', [LinhKienController::class, 'delete'])
@@ -160,6 +162,8 @@ Route::middleware('auth')->group(function () {
     ->name('nhacungcap.delete');
   Route::get('nhacungcap/create-from-may', [NhaCungCapController::class, 'createNCCfromMay'])->name('nhacungcap.createNCCfromMay');
   Route::post('/nhacungcap/store-from-may', [NhaCungCapController::class, 'storeNCCfromMay'])->name('nhacungcap.storeNCCfromMay');
+  Route::get('/nhacungcap/create-from-linhkien', [NhaCungCapController::class, 'createNCCfromLinhKien'])->name('nhacungcap.createNCCfromLinhKien');
+  Route::post('/nhacungcap/store-from-linhkien', [NhaCungCapController::class, 'storeNCCfromLinhKien'])->name('nhacungcap.storeNCCfromLinhKien');
 
   Route::get('/detailuser', [DetailuserController::class, 'detailuser'])->name('detailuser');
 
@@ -319,4 +323,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/donvitinh/create', [DonViTinhController::class, 'create'])->name('donvitinh.create');
     Route::post('/donvitinh/store', [DonViTinhController::class, 'store'])->name('donvitinh.store');
     Route::delete('/donvitinh/{MaDonViTinh}', [DonViTinhController::class, 'destroy'])->name('donvitinh.destroy');
+    Route::get('/donvitinh/create-from-linhkien', [DonViTinhController::class, 'createDVTfromLinhKien'])->name('donvitinh.createDVTfromLinhKien');
+    Route::post('/donvitinh/store-from-linhkien', [DonViTinhController::class, 'storeDVTfromLinhKien'])->name('donvitinh.storeDVTfromLinhKien');
 });
