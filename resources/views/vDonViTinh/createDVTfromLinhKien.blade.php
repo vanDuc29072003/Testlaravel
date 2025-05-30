@@ -12,7 +12,7 @@
                             <h1 class="mt-3 mx-3">Thêm Đơn vị tính</h1>
                         </div>
                         <div class="card-body">
-                            <form id="formDonViTinh" action="{{ route('donvitinh.store') }}" method="POST">
+                            <form id="formDonViTinh" action="{{ route('donvitinh.storeDVTfromLinhKien') }}" method="POST">
                                 @csrf
                                 <div class="form-group">
                                     <label for="TenDonViTinh" class="form-label">Tên Đơn vị tính</label>
@@ -27,7 +27,7 @@
                         </div>
                         <div class="card-footer">
                             <div class="form-group d-flex justify-content-between">
-                                <a href="{{ route('donvitinh.index') }}" class="btn btn-secondary">
+                                <a href="{{ route('linhkien.add') }}" class="btn btn-secondary">
                                     <i class="fa fa-arrow-left"></i> Quay lại</a>
                                 <button type="submit" class="btn btn-primary" form="formDonViTinh">
                                     <i class="fa fa-save"></i> Lưu
@@ -39,4 +39,21 @@
             </div>
         </div>
     </div>
+@endsection
+@section('scripts')
+    <script>
+        @if (session('error'))
+            $.notify({
+                title: 'Lỗi',
+                message: '{{ session('error') }}',
+                icon: 'icon-bell'
+            }, {
+                type: 'danger',
+                animate: {
+                    enter: 'animated fadeInDown'
+                    , exit: 'animated fadeOutUp'
+                },
+            });
+        @endif
+    </script>
 @endsection

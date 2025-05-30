@@ -69,18 +69,33 @@
                                 <div class="col-md-6">
                                     <h5 class="fst-italic ms-3">Thông tin tài khoản</h5>
 
-                                    <div class="form-group">
-                                        <label for="MaBoPhan">Bộ phận</label>
-                                        <select class="form-control" id="MaBoPhan" name="MaBoPhan" required>
-                                            <option value="">Chọn bộ phận</option>
-                                            @foreach ($boPhans as $bp)
-                                                <option value="{{ $bp->MaBoPhan }}"
-                                                    {{ old('MaBoPhan', optional($taikhoan->nhanvien)->MaBoPhan) == $bp->MaBoPhan ? 'selected' : '' }}>
-                                                    {{ $bp->TenBoPhan }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                    </div>
+                                    @if (Auth::user()->nhanvien->MaBoPhan == '5')
+                                        <div class="form-group">
+                                            <label for="MaBoPhan">Bộ phận</label>
+                                            <select class="form-control" id="MaBoPhan" name="MaBoPhan" required>
+                                                <option value="">Chọn bộ phận</option>
+                                                @foreach ($boPhans as $bp)
+                                                    <option value="{{ $bp->MaBoPhan }}"
+                                                        {{ old('MaBoPhan', optional($taikhoan->nhanvien)->MaBoPhan) == $bp->MaBoPhan ? 'selected' : '' }}>
+                                                        {{ $bp->TenBoPhan }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    @else
+                                        <div class="form-group">
+                                            <label for="MaBoPhan">Bộ phận</label>
+                                            <select class="form-control" id="MaBoPhan" name="MaBoPhan" required disabled>
+                                                <option value="">Chọn bộ phận</option>
+                                                @foreach ($boPhans as $bp)
+                                                    <option value="{{ $bp->MaBoPhan }}"
+                                                        {{ old('MaBoPhan', optional($taikhoan->nhanvien)->MaBoPhan) == $bp->MaBoPhan ? 'selected' : '' }}>
+                                                        {{ $bp->TenBoPhan }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    @endif
                                     <div class="form-group">
                                         <label for="TenTaiKhoan">Tên Tài khoản</label>
                                         <input type="text" class="form-control" id="TenTaiKhoan" name="TenTaiKhoan"

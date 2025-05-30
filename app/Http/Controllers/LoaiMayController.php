@@ -55,7 +55,7 @@ class LoaiMayController extends Controller
         }
     }
 
-    public function createLoaiMayfromMay(Request $request)
+    public function createLoaiMayfromMay()
     {
         return view('vMay.createLoaiMayfromMay');
     }

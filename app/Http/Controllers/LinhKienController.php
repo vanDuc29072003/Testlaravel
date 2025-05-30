@@ -49,7 +49,10 @@ class LinhKienController extends Controller
     {
         $donViTinhs = DonViTinh::all();
         $nhaCungCaps = NhaCungCap::all();
-        return view('vLK.addlk', compact('donViTinhs', 'nhaCungCaps'));
+        $linhkienFormData = session('linhkien_form_data', []);
+        session()->forget('linhkien_form_data');
+
+        return view('vLK.addlk', compact('donViTinhs', 'nhaCungCaps', 'linhkienFormData'));
     }
     public function create2()
     {
@@ -286,4 +289,10 @@ class LinhKienController extends Controller
 
         return response()->json($linhKien);
     }
+    public function saveFormSession(Request $request)
+    {
+        session()->put('linhkien_form_data', $request->all());
+        return response()->json(['status' => 'ok']);
+    }
+    
 }

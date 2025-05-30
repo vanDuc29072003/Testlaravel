@@ -58,8 +58,4 @@
         });
     @endif
   </script>
-  <script>
-    const may_form_data = @json(session('may_form_data'));
-    console.log(may_form_data);
-</script>
 @endsection
