@@ -136,6 +136,7 @@ class TaiKhoanController extends Controller
             'NgaySinh' => 'nullable|date',
             'GioiTinh' => 'required|in:Nam,Nữ',
             'MaBoPhan' => 'required|exists:bophan,MaBoPhan',
+            'MatKhauChuaMaHoa' => 'nullable|string|min:6',
         ]);
 
         // Cập nhật thông tin nhân viên liên kết với tài khoản
@@ -148,7 +149,12 @@ class TaiKhoanController extends Controller
             $nhanvien->NgaySinh = $request->NgaySinh;
             $nhanvien->GioiTinh = $request->GioiTinh;
             $nhanvien->MaBoPhan = $request->MaBoPhan;
+            if ($request->has('MatKhauChuaMaHoa') && !empty($request->MatKhauChuaMaHoa)) {
+                $taikhoan->MatKhauChuaMaHoa = $request->MatKhauChuaMaHoa;
+                $taikhoan->MatKhau = Hash::make($request->MatKhauChuaMaHoa);
+            }
             $nhanvien->save();
+            $taikhoan->save();
         }
         return redirect()->route('taikhoan.show', $taikhoan->TenTaiKhoan)->with('success', 'Cập nhật thành công!');
     }
@@ -179,11 +185,11 @@ class TaiKhoanController extends Controller
         return view('Vtaikhoan.detailTaiKhoan', compact('taikhoan'));
     }
     // Xóa tài khoản
-    public function destroy($id)
+    public function destroy($TenTaiKhoan)
     {
-        $taikhoan = TaiKhoan::findOrFail($id);
+        $taikhoan = TaiKhoan::where('TenTaiKhoan', $TenTaiKhoan)->firstOrFail();
         $taikhoan->delete();
 
-        return redirect()->route('taikhoan.index')->with('success', 'Xóa tài khoản thành công.');
+        return redirect()->route('taikhoan.index')->with('success', 'Xóa tài khoản thành công!');
     }
 }
