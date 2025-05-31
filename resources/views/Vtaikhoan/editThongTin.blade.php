@@ -85,7 +85,7 @@
                                     @else
                                         <div class="form-group">
                                             <label for="MaBoPhan">Bộ phận</label>
-                                            <select class="form-control" id="MaBoPhan" name="MaBoPhan" required disabled>
+                                            <select class="form-control" id="MaBoPhan" name="MaBoPhan" required readonly>
                                                 <option value="">Chọn bộ phận</option>
                                                 @foreach ($boPhans as $bp)
                                                     <option value="{{ $bp->MaBoPhan }}"
@@ -104,7 +104,7 @@
                                     <div class="form-group">
                                         <label for="MatKhauChuaMaHoa">Mật khẩu</label>
                                         <input type="text" class="form-control" id="MatKhauChuaMaHoa" name="MatKhauChuaMaHoa"
-                                            value="{{ $taikhoan->MatKhauChuaMaHoa }}" readonly>
+                                            value="{{ $taikhoan->MatKhauChuaMaHoa }}">
                                     </div>
                                 </div>
                             </div>

@@ -7,7 +7,6 @@
   <div class="page-inner">
     <div class="row">
 
-      <!-- Phần bảng -->
       <div class="col-md-9">
         <div class="d-flex flex-wrap justify-content-between align-items-center mb-3">
           <div class="dropdown me-2">
