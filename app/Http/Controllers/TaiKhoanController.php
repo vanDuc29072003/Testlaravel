@@ -32,8 +32,8 @@ class TaiKhoanController extends Controller
         $taikhoans = $taikhoans->get();
     
         // Dữ liệu cho dropdown lọc
-        $nhanviens = NhanVien::all(); // nếu cần dùng tên nhân viên cho ô tìm kiếm
-        $bophans = BoPhan::all();     // danh sách bộ phận cho dropdown lọc
+        $nhanviens = NhanVien::all(); 
+        $bophans = BoPhan::all();     
     
         return view('Vtaikhoan.taikhoan', compact('taikhoans', 'nhanviens', 'bophans'));
     }
