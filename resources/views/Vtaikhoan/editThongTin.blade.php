@@ -104,7 +104,7 @@
                                     <div class="form-group">
                                         <label for="MatKhauChuaMaHoa">Mật khẩu</label>
                                         <input type="text" class="form-control" id="MatKhauChuaMaHoa" name="MatKhauChuaMaHoa"
-                                            value="{{ $taikhoan->MatKhauChuaMaHoa }}">
+                                            value="{{ $taikhoan->MatKhauChuaMaHoa }}" placeholder="Nhập mật khẩu từ 6 ký tự" minlength="6" required>
                                     </div>
                                 </div>
                             </div>
@@ -125,4 +125,22 @@
         </div>
     </div>
 </div>
+@endsection
+
+@section('scripts')
+<script>
+    @if (session('success'))
+        $.notify({ title: 'Thành công', message: '{{ session('success') }}', icon: 'icon-bell' }, {
+            type: 'success',
+            animate: { enter: 'animated fadeInDown', exit: 'animated fadeOutUp' }
+        });
+    @endif
+
+    @if (session('error'))
+        $.notify({ title: 'Lỗi', message: '{{ session('error') }}', icon: 'icon-bell' }, {
+            type: 'danger',
+            animate: { enter: 'animated fadeInDown', exit: 'animated fadeOutUp' }
+        });
+    @endif
+</script>
 @endsection
