@@ -539,16 +539,5 @@
             document.getElementById('chiphi-last-month').classList.remove('active');
         });
     </script>
-    <script>
-        @if (session('success'))
-        $.notify({
-            title: 'Thành công',
-            message: '{{ session('success') }}',
-            icon: 'icon-bell'
-        }, {
-            type: 'success',
-            animate: { enter: 'animated fadeInDown', exit: 'animated fadeOutUp' },
-        });
-        @endif
-  </script>
+    
 @endsection

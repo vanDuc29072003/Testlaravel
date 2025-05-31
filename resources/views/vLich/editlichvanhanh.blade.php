@@ -88,20 +88,5 @@
         </div>
     </div>
 @endsection
-@section('scripts')
-    <script>
-        @if (session('error'))
-            $.notify({
-                title: 'Lỗi',
-                message: '{{ session('error') }}',
-            }, {
-                type: 'danger',
-                delay: 5000,
-                placement: {
-                    from: "top",
-                    align: "right"
-                }
-            });
-        @endif
-    </script>
+
 @endsection

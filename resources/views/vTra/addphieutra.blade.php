@@ -224,20 +224,6 @@
     }
 
     // Thông báo lỗi từ session nếu có
-    @if (session('error'))
-        $.notify({
-            title: 'Lỗi',
-            message: '{!! session('error') !!}',
-            icon: 'icon-bell'
-        }, {
-            type: 'danger',
-            animate: {
-                enter: 'animated fadeInDown',
-                exit: 'animated fadeOutUp'
-            },
-        });
-
-        updateTotals();
-    @endif
+   
 </script>
 @endsection

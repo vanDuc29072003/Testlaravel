@@ -83,20 +83,4 @@
         </div>
     </div>
 @endsection
-@section('scripts')
-    <script>
-        @if (session('success'))
-            $.notify({
-                title: 'Thành công',
-                message: '{{ session('success') }}',
-            }, {
-                type: 'success',
-                delay: 5000,
-                placement: {
-                    from: "top",
-                    align: "right"
-                }
-            });
-        @endif
-    </script>
-@endsection
+

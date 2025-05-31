@@ -94,11 +94,11 @@ class ThongKeController extends Controller
                     ->whereBetween('created_at', [$startDate, $endDate])
                     ->sum('SoLuong'),
                 'TonKho' => $item->SoLuong,
-                'ChenhLech' =>ChiTietPhieuXuat::where('MaLinhKien', $item->MaLinhKien)
+                'ChenhLech' => ChiTietPhieuXuat::where('MaLinhKien', $item->MaLinhKien)
+                    ->whereBetween('created_at', [$startDate, $endDate])
+                    ->sum('SoLuong') - ChiTietPhieuTra::where('MaLinhKien', $item->MaLinhKien)
                         ->whereBetween('created_at', [$startDate, $endDate])
-                        ->sum('SoLuong')-ChiTietPhieuTra::where('MaLinhKien', $item->MaLinhKien)
-                        ->whereBetween('created_at', [$startDate, $endDate])
-                        ->sum('SoLuong')-ChiTietPhieuBanGiaoNoiBo::where('MaLinhKien', $item->MaLinhKien)
+                        ->sum('SoLuong') - ChiTietPhieuBanGiaoNoiBo::where('MaLinhKien', $item->MaLinhKien)
                         ->whereBetween('created_at', [$startDate, $endDate])
                         ->sum('SoLuong'),
             ];
@@ -184,10 +184,10 @@ class ThongKeController extends Controller
                     ->sum('SoLuong'),
                 'TonKho' => $item->SoLuong,
                 'ChenhLech' => ChiTietPhieuXuat::where('MaLinhKien', $item->MaLinhKien)
+                    ->whereBetween('created_at', [$startDate, $endDate])
+                    ->sum('SoLuong') - ChiTietPhieuTra::where('MaLinhKien', $item->MaLinhKien)
                         ->whereBetween('created_at', [$startDate, $endDate])
-                        ->sum('SoLuong')-ChiTietPhieuTra::where('MaLinhKien', $item->MaLinhKien)
-                        ->whereBetween('created_at', [$startDate, $endDate])
-                        ->sum('SoLuong')-ChiTietPhieuBanGiaoNoiBo::where('MaLinhKien', $item->MaLinhKien)
+                        ->sum('SoLuong') - ChiTietPhieuBanGiaoNoiBo::where('MaLinhKien', $item->MaLinhKien)
                         ->whereBetween('created_at', [$startDate, $endDate])
                         ->sum('SoLuong'),
             ];
@@ -276,7 +276,12 @@ class ThongKeController extends Controller
             $query->where('may.TenMay', 'like', "%{$tenMay}%");
         }
 
-        $thongKeMay = $query->get()->filter(function ($item) {
+        $thongKeMay = $query->get()->filter(function ($item) use ($filterType) {
+            if ($filterType === 'repair') {
+                return $item->SoLanSuaChua > 0;
+            } elseif ($filterType === 'maintenance') {
+                return $item->SoLanBaoTri > 0;
+            }
             return $item->SoLanSuaChua > 0 || $item->SoLanBaoTri > 0;
         })->values();
 
@@ -391,7 +396,7 @@ class ThongKeController extends Controller
 
         // Tính tổng số lần sửa chữa
         $tongSoYeuCauSuaChua = $thongKeMay->sum('SoLanSuaChua');
-        $tongSoBaoTri = $thongKeMay -> sum('SoLanBaoTri');
+        $tongSoBaoTri = $thongKeMay->sum('SoLanBaoTri');
         // Sắp xếp dữ liệu theo số lần sửa chữa và mã máy 2
         $sortOrder = $request->input('sort_order', 'desc');
         $thongKeMay = $thongKeMay->sortBy([
@@ -601,6 +606,55 @@ class ThongKeController extends Controller
             'danhSachDonViTinh'
         ));
     }
+    public function chitietphieuxuat(Request $request)
+    {
+
+        $timeFilter = $request->input('time_filter', 'today');
+        $startDate = now()->startOfDay();
+        $endDate = now()->endOfDay();
+
+        switch ($timeFilter) {
+            case 'yesterday':
+                $startDate = now()->subDay()->startOfDay();
+                $endDate = now()->subDay()->endOfDay();
+                break;
+            case 'this_month':
+                $startDate = now()->startOfMonth();
+                $endDate = now()->endOfMonth();
+                break;
+            case 'custom':
+                $startDate = $request->input('start_date');
+                $endDate = $request->input('end_date');
+                break;
+        }
+
+        $maLinhKien = $request->input('ma_linh_kien');
+
+        $query = DB::table('chitietphieuxuat as ctpx')
+            ->join('phieuxuat as px', 'ctpx.MaPhieuXuat', '=', 'px.MaPhieuXuat')
+            ->join('linhkiensuachua as lk', 'ctpx.MaLinhKien', '=', 'lk.MaLinhKien')
+            ->leftJoin('nhanvien as nv', 'px.MaNhanVienTao', '=', 'nv.MaNhanVien')
+            ->select(
+                'px.MaPhieuXuat',
+                'px.NgayXuat',
+                'px.MaNhanVienTao',
+                'nv.TenNhanVien',
+                'lk.MaLinhKien',
+                'lk.TenLinhKien',
+                'ctpx.SoLuong'
+            )
+            ->whereBetween('px.NgayXuat', [$startDate, $endDate])
+            ->when($maLinhKien, function ($q) use ($maLinhKien) {
+                return $q->where('ctpx.MaLinhKien', $maLinhKien);
+            })
+            ->orderBy('px.NgayXuat', 'desc');
+
+        $chiTiet = $query->get();
+
+
+        return view('vThongKe.detailxuat', compact('chiTiet', 'startDate', 'endDate'));
+    }
+
     public function exportPDF2(Request $request)
     {
         // 1. Xử lý khoảng thời gian

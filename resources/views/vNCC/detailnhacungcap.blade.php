@@ -62,20 +62,3 @@
     </div>
 @endsection
 
-@section('scripts')
-<script>
-    @if (session('success'))
-        $.notify({
-            title: 'Thành công',
-            message: '{{ session('success') }}',
-            icon: 'icon-bell'
-        }, {
-            type: 'success',
-            animate: {
-                enter: 'animated fadeInDown',
-                exit: 'animated fadeOutUp'
-            },
-        });
-    @endif
-</script>
-@endsection
