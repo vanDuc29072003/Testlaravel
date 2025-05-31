@@ -53,6 +53,7 @@
                                 <th>Tên linh kiện</th>
                                 <th>Đơn vị tính</th>
                                 <th>Số lượng xuất</th>
+                                <th>Chi Tiết</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -62,6 +63,12 @@
                                     <td>{{ $item->TenLinhKien }}</td>
                                     <td>{{ $item->TenDonViTinh }}</td>
                                     <td class="text-end">{{ $item->TongXuat }}</td>
+                                    <td>
+                                       <a href="{{ route('thongke.chitietxuat', array_merge(request()->all(), ['ma_linh_kien' => $item->MaLinhKien])) }}" 
+                                            class="btn btn-sm btn-info"> Chi Tiết
+                                        </a>
+
+                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>
@@ -138,18 +145,7 @@
 @endsection
 
 @section('scripts')
-<script>
-    @if (session('success'))
-        $.notify({
-            title: 'Thành công',
-            message: '{{ session('success') }}',
-            icon: 'icon-bell'
-        }, {
-            type: 'success',
-            animate: { enter: 'animated fadeInDown', exit: 'animated fadeOutUp' },
-        });
-    @endif
-</script>
+
 <script>
     // Hiển thị/ẩn ô chọn ngày khi chọn "Lựa chọn khác"
     document.addEventListener("DOMContentLoaded", function () {

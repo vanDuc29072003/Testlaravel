@@ -179,31 +179,7 @@
 @endsection
 
 @section('scripts')
-    <script>
-        @if (session('success'))
-            $.notify({
-                title: 'Thành công',
-                message: '{{ session('success') }}',
-                icon: 'icon-bell'
-            }, {
-                type: 'success',
-                animate: { enter: 'animated fadeInDown', exit: 'animated fadeOutUp' },
-            });
-        @endif
-    </script>
-
-    <script>
-        @if (session('error'))
-            $.notify({
-                title: 'Lỗi',
-                message: '{{ session('error') }}',
-                icon: 'icon-bell'
-            }, {
-                type: 'danger',
-                animate: { enter: 'animated fadeInDown', exit: 'animated fadeOutUp' },
-            });
-        @endif
-    </script>
+    
     
     <script>
         pusher.subscribe('channel-all').bind('eventUpdateTable', function (data) {

@@ -36,7 +36,7 @@ class dsphieuXuatController extends Controller
                 $q->where('TenNhanVien', 'LIKE', '%' . $request->TenNhanVienNhan . '%');
             });
         }
-
+        $query->orderBy('NgayXuat', 'desc');
 
         // Phân trang kết quả
         $dsPhieuXuat = $query->paginate(10);
