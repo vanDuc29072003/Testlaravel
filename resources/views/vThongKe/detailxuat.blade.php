@@ -9,11 +9,12 @@
             <div class="card-header">
                 <h1 class="m-3">Chi Tiết Xuất Kho</h1>
                  <h5 class="mx-3">
-                @foreach($chiTiet as $item)
+               @foreach($chiTiet->unique('MaLinhKien') as $item)
                     <strong>Mã linh kiện  :</strong> <strong>{{ $item->MaLinhKien }}</strong><br>
                     <strong>Tên linh kiện :</strong> <strong>{{ $item->TenLinhKien }}</strong>
                     <hr>
                 @endforeach
+
 
                 </h5>
             </div>

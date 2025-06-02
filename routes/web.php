@@ -213,7 +213,7 @@ Route::middleware(['kiemtraquyen:43'])->group(function () {
     Route::delete('/lichbaotri/{id}', [LichBaoTriController::class, 'destroy'])
       ->middleware('kiemtraquyen:4')
       ->name('lichbaotri.destroy');
-
+    Route::get('/lichbaotri/ExportTruocBaoTri/{MaLichBaoTri}', [LichBaoTriController::class, 'exporttscBT'])->name('lichbaotri.exporttscBT');
     Route::get('/lichbaotri/{MaLichBaoTri}/taophieubangiao', [LichBaoTriController::class, 'taophieubangiao'])
       ->middleware('kiemtraquyen:3')
       ->name('lichbaotri.taophieubangiao');

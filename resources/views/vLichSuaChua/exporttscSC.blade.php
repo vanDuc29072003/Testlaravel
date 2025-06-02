@@ -147,7 +147,7 @@
         <td>{{ $lichSuaChua->yeuCauSuaChua->may->SeriMay }}</td>
     </tr>
     <tr>
-        <td class="label">Ngày Nhập:</td>
+        <td class="label">Ngày Đưa Vào Sử Dụng:</td>
         <td>{{ \Carbon\Carbon::parse($lichSuaChua->yeuCauSuaChua->may->ThoiGianDuaVaoSuDung)->format('d/m/Y') }}</td>
     </tr>
     <tr>

@@ -17,29 +17,6 @@
                 <p class="fst-italic">Từ ngày {{ $startDate }} - Đến ngày {{ $endDate }}</p>
             </div>
 
-            <!-- Tổng số yêu cầu sửa chữa (nếu có biến này từ controller) -->
-            @isset($tongSoYeuCauSuaChua)
-            <div class="col-md-3">
-                <div class="card card-stats card-round">
-                    <div class="card-body">
-                        <div class="row align-items-center">
-                            <div class="col-icon">
-                                <div class="icon-big text-center icon-secondary bubble-shadow-small">
-                                    <i class="fas fa-tools"></i>
-                                </div>
-                            </div>
-                            <div class="col col-stats ms-3 ms-sm-0">
-                                <div class="numbers">
-                                    <strong>Tổng số yêu cầu sửa chữa</strong>
-                                    <h4 class="card-title">{{ $tongSoYeuCauSuaChua }}</h4>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            @endisset
-
             <!-- Bảng thống kê -->
             <div class="col-md-9 mt-4">
                 @if ($thongKeMay->isNotEmpty())
