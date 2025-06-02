@@ -149,9 +149,9 @@
                     <td>{{ $item['SoLuong'] }}</td>
                     <td>
                         @if($item['MucDo'] === 'danger')
-                            x
+                            Cần nhập gấp
                         @elseif($item['MucDo'] === 'warning')
-                            -
+                            Cần có kế hoạch nhập 
                         @else
                             <!-- Không cảnh báo -->
                         @endif

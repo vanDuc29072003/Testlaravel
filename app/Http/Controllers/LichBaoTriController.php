@@ -106,7 +106,8 @@ class LichBaoTriController extends Controller
         if ($timeType === 'month') {
             $query->whereMonth('NgayBaoTri', now()->month)
                 ->whereYear('NgayBaoTri', now()->year);
-        } elseif ($timeType === 'quarter') {;
+        } elseif ($timeType === 'quarter') {
+            ;
             $ketthuc = now()->month;
             $batdau = $ketthuc - 2;
             $query->whereYear('NgayBaoTri', now()->year)
@@ -230,6 +231,19 @@ class LichBaoTriController extends Controller
         return redirect()->route('lichbaotri')->with('success', 'Xóa lịch bảo trì thành công!');
     }
 
+    public function exporttscBT($MaLichBaoTri)
+    {
+        // Lấy dữ liệu lịch bảo trì
+        $lich = LichBaoTri::with(['may'])->where('MaLichBaoTri', $MaLichBaoTri)->firstOrFail();
+
+        // Tạo PDF từ view
+        $pdf = PDF::loadView('vLich.exporttscBT', compact('lich'));
+
+        // Stream PDF (hiển thị trực tiếp trên trình duyệt)
+        return $pdf->stream('LichBaoTri_' . $MaLichBaoTri . '.pdf');
+    }
+
+
     public function taophieubangiao($lichbaotri)
     {
         $lichbaotri = LichBaoTri::findOrFail($lichbaotri);
@@ -245,7 +259,7 @@ class LichBaoTriController extends Controller
         if (!$nhaCungCap) {
             return redirect()->back()->with('error', 'Không tìm thấy thông tin nhà cung cấp.');
         }
-        $nhanvien = Auth::user(); 
+        $nhanvien = Auth::user();
         return view('vPhieuBanGiao.pbgBT', compact('lichbaotri', 'may', 'nhaCungCap', 'nhanvien', 'ngayHetBaoHanh'));
     }
 

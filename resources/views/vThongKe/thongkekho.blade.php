@@ -19,15 +19,15 @@
                 </div>
                 <div class="col-3">
                     <a href="{{ route('canhbaonhaphang') }}" class="btn btn-black btn-border" style="color: black;">
-                        <i class="fab fa-hotjar" style="color: red;"></i> Cảnh Báo Nhập Hàng
+                        <i class="fab fa-hotjar" style="color: red;"></i> Cảnh Báo Nhập Linh Kiện
                     </a>
                 </div>
                 <div class="col-9">
                     <table class="table table-responsive table-bordered table-striped">
                         <thead class="text-center bg-light">
                             <tr>
-                                <th rowspan="2">Mã hàng</th>
-                                <th rowspan="2">Tên hàng</th>
+                                <th rowspan="2">Mã Linh Kiện</th>
+                                <th rowspan="2">Tên Linh Kiện</th>
                                 <th rowspan="2">ĐVT</th>
                                 <th rowspan="2">Nhập</th>
                                 <th colspan="2">Xuất</th>
@@ -64,9 +64,9 @@
                     <form method="GET" action="{{ route('thongkekho') }}" class="p-3 border rounded">
                         <h5 class="mb-3">Bộ lọc</h5>
                         <div class="mb-3">
-                            <label for="ten_hang" class="form-label">Tên hàng</label>
+                            <label for="ten_hang" class="form-label">Tên linh kiện</label>
                             <input type="text" name="ten_hang" id="ten_hang" class="form-control"
-                                value="{{ request('ten_hang') }}" placeholder="Nhập tên hàng...">
+                                value="{{ request('ten_hang') }}" placeholder="Nhập tên linh kiện...">
                         </div>
                         <div class="mb-3">
                             <label for="dvt" class="form-label">Đơn vị tính</label>

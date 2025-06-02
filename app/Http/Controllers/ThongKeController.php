@@ -217,6 +217,7 @@ class ThongKeController extends Controller
                 $startDate = now()->subDay()->startOfDay();
                 $endDate = now()->subDay()->endOfDay();
                 break;
+            
             case 'this_month':
                 $startDate = now()->startOfMonth();
                 $endDate = now()->endOfMonth();

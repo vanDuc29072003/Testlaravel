@@ -1,7 +1,16 @@
+
 @extends('layouts.main')
 
 @section('title', 'Lịch Bảo Trì')
-
+<style>
+.square-btn {
+    width: 90px;             /* Điều chỉnh cho nút gọn hơn */
+    text-align: center;
+    white-space: nowrap;     /* Không xuống dòng */
+    font-size: 20px;         /* Chữ to hơn mặc định */
+    padding: 6px 8px;        /* Giữ nút không bị quá cao */
+}
+</style>
 @section('content')
 <div class="container">
   <div class="page-inner">
@@ -39,14 +48,17 @@
                   <td>{{ $lich->MoTa }}</td>
                   <td>{{ $lich->may->nhaCungCap->TenNhaCungCap ?? 'Không xác định' }}</td>
                   <td>
-                    <div class="d-flex gap-2">
-                      <a href="{{ route('lichbaotri.taophieubangiao', $lich->MaLichBaoTri) }}" class="btn btn-sm btn-success">
+                      <div class="d-flex gap-2">
+                      <a href="{{ route('lichbaotri.exporttscBT', $lich->MaLichBaoTri) }}" class="btn btn-sm btn-primary square-btn" target="_blank">
+                        <i class="fa fa-print"></i> In
+                      </a>
+                      <a href="{{ route('lichbaotri.taophieubangiao', $lich->MaLichBaoTri) }}" class="btn btn-sm btn-success square-btn">
                         <i class="fa fa-check"></i> Bàn giao
                       </a>
-                      <form action="{{ route('lichbaotri.destroy', $lich->MaLichBaoTri) }}" method="POST">
+                      <form action="{{ route('lichbaotri.destroy', $lich->MaLichBaoTri) }}" method="POST" class="m-0 p-0">
                         @csrf
                         @method('DELETE')
-                        <button type="button" class="btn btn-danger btn-sm" onclick="event.stopPropagation(); confirmDelete(this)">
+                        <button type="button" class="btn btn-danger btn-sm square-btn" onclick="event.stopPropagation(); confirmDelete(this)">
                           <i class="fa fa-trash"></i> Xóa
                         </button>
                       </form>
@@ -93,7 +105,7 @@
                           {{ $ncc->TenNhaCungCap }}
                       </option>
                   @endforeach
-              </select> 
+              </select>   
                 </div>
               <!-- Khoảng thời gian -->
                 <div class="mb-3">
