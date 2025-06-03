@@ -251,6 +251,6 @@ class LichVanHanhController extends Controller
         $filters = $request->only(['from_date', 'to_date', 'quy', 'nam', 'ca']);
 
     // Chuyển hướng lại với các tham số lọc
-        return redirect()->route('lichvanhanh', $filters)->with('success', 'Xóa thành công!');
+        return redirect()->route('lichvanhanh', $filters)->with('success', 'Xóa lịch vận hành thành công!');
     }
 }

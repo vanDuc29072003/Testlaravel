@@ -269,7 +269,9 @@ class dsphieuNhapController extends Controller
                 ]);
             }
 
-            return redirect()->route('dsphieunhap')->with('success', 'Phiếu nhập đã được cập nhật thành công!');
+          return redirect()->route('phieunhap.show', ['MaPhieuNhap' => $phieuNhap->MaPhieuNhap])
+                 ->with('success', 'Phiếu nhập đã được cập nhật thành công!');
+
         } catch (\Exception $e) {
             Log::error('Lỗi khi cập nhật phiếu nhập: ' . $e->getMessage());
             return redirect()->back()->withInput()->with('error', 'Đã xảy ra lỗi khi cập nhật phiếu nhập.');
