@@ -225,6 +225,7 @@ class dsphieuNhapController extends Controller
             'MaPhieuNhap' => $data['MaPhieuNhap'],
             'MaNhaCungCap' => $data['MaNhaCungCap'],
             'MaNhanVien' => $data['MaNhanVien'],
+            'TenNhanVien' => $data['TenNhanVien'],
             'NgayNhap' => $data['NgayNhap'],
             'GhiChu' => $data['GhiChu'],
             'TongSoLuong' => $data['TongSoLuong'],
