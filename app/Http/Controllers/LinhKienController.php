@@ -7,6 +7,7 @@ use App\Models\LinhKien;
 use App\Models\DonViTinh;
 use App\Models\NhaCungCap;
 use App\Models\LienKetLKNCC;
+use Illuminate\Support\Facades\DB;
 
 class LinhKienController extends Controller
 {
@@ -87,7 +88,7 @@ class LinhKienController extends Controller
             // Tạo mới linh kiện
             $linhKien = LinhKien::create([
                 'TenLinhKien' => $request->TenLinhKien,
-                'SoLuong' => $request->SoLuong = 0,
+                'SoLuong' => 0,
                 'MoTa' => $request->MoTa,
                 'MaDonViTinh' => $request->MaDonViTinh,
             ]);
@@ -96,7 +97,7 @@ class LinhKienController extends Controller
             $linhKien->nhaCungCaps()->attach($request->MaNhaCungCap, []);
 
 
-            return redirect()->route('linhkien')->with('success', 'Thêm linh kiện mới thành công 1!');
+            return redirect()->route('linhkien')->with('success', 'Thêm linh kiện mới thành công !');
         } catch (\Illuminate\Validation\ValidationException $e) {
             return redirect()->back()
                 ->with('error', $e->validator->errors()->first()) // Lấy lỗi đầu tiên     

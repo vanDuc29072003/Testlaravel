@@ -232,12 +232,7 @@ class LichVanHanhController extends Controller
         $lich->trangthai = $trangThai; // Cập nhật trạng thái
         $lich->save();
 
-        // Cập nhật trạng thái máy
-        $may = May::where('MaMay', $lich->MaMay)->first();
-        if ($may) {
-            $may->TrangThai = $trangThai;
-            $may->save();
-        }
+        
 
         return redirect()->route('lichvanhanh')->with('success', 'Đã lưu nhật ký và cập nhật trạng thái máy thành công!');
     }

@@ -14,6 +14,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+
 class LichBaoTriController extends Controller
 {
 
@@ -175,7 +176,7 @@ class LichBaoTriController extends Controller
                 return redirect()->back()->with('error', 'Không đủ thông tin chu kỳ hoặc thời gian bảo hành của máy.');
             }
 
-            $soLanLap = floor($may->ThoiGianBaoHanh / $may->ChuKyBaoTri);
+            $soLanLap = floor(12 / $may->ChuKyBaoTri);
             if ($soLanLap < 1) {
                 return redirect()->route('lichbaotri.create')
                     ->withInput()

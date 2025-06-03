@@ -68,7 +68,7 @@
                                         <label for="MatKhau">Mật khẩu</label>
                                         <div class="position-relative">
                                             <input type="password" name="MatKhau" id="MatKhau" class="form-control pr-5"
-                                                placeholder="Nhập mật khẩu" required>
+                                                placeholder="Nhập mật khẩu" ' required>
                                             <span class="position-absolute"
                                                 style="top: 50%; right: 15px; transform: translateY(-50%); cursor: pointer;"
                                                 onclick="togglePassword()">
@@ -131,11 +131,9 @@
             const icon = document.getElementById('togglePasswordIcon');
             if (input.type === "password") {
                 input.type = "text";
-                icon.classList.remove('fa-eye');
                 icon.classList.add('fa-eye-slash');
             } else {
                 input.type = "password";
-                icon.classList.remove('fa-eye-slash');
                 icon.classList.add('fa-eye');
             }
         }
