@@ -50,7 +50,7 @@
                                 <div class="form-group">
                                     <label for="NhatKi">Nhật ký <span class="text-danger">*</span></label>
                                     <textarea name="NhatKi" id="NhatKi" class="form-control" rows="4"
-                                        placeholder="Nhập nhật ký vận hành...">{{ old('NhatKi', $lich->NhatKi) }}</textarea>
+                                        placeholder="Nhập nhật ký vận hành..." required>{{ old('NhatKi', $lich->NhatKi) }} </textarea>
                                     <small id="nhatKiError" class="text-danger d-none">Vui lòng nhập nội dung nhật ký trước
                                         khi lưu.</small>
                                 </div>
@@ -74,7 +74,7 @@
                                 <div class="form-group" id="moTaSuCoGroup" style="display: none;">
                                     <label for="MoTaSuCo">Mô tả sự cố <span class="text-danger">*</span></label>
                                     <textarea name="MoTaSuCo" id="MoTaSuCo" class="form-control" rows="3"
-                                        placeholder="Nhập mô tả sự cố nếu có...">{{ old('MoTaSuCo') }}</textarea>
+                                        placeholder="Nhập mô tả sự cố nếu có..." required>{{ old('MoTaSuCo') }}</textarea>
                                 </div>
 
                             </form>

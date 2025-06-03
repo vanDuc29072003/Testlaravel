@@ -175,8 +175,8 @@ class LichBaoTriController extends Controller
             if (!$may || !$may->ChuKyBaoTri || !$may->ThoiGianBaoHanh) {
                 return redirect()->back()->with('error', 'Không đủ thông tin chu kỳ hoặc thời gian bảo hành của máy.');
             }
-
-            $soLanLap = floor(12 / $may->ChuKyBaoTri);
+            $thangHienTai= Carbon::now()->month;
+            $soLanLap = floor(13 - $thangHienTai / $may->ChuKyBaoTri);
             if ($soLanLap < 1) {
                 return redirect()->route('lichbaotri.create')
                     ->withInput()

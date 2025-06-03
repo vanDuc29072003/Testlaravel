@@ -203,16 +203,16 @@ class LichVanHanhController extends Controller
         return redirect()->route('lichvanhanh')->with('success', 'Cập nhật thành công!');
     }
         public function showNhatKi($id)
-    {
-        // Tìm lịch vận hành theo ID
-        $lich = LichVanHanh::with(['may', 'nhanVien'])->findOrFail($id);
+        {
+            // Tìm lịch vận hành theo ID
+            $lich = LichVanHanh::with(['may', 'nhanVien'])->findOrFail($id);
 
-        // Trả về view và truyền dữ liệu cho view
-        return view('vLich.nhatkivanhanh', compact('lich'));
-    }
+            // Trả về view và truyền dữ liệu cho view
+            return view('vLich.nhatkivanhanh', compact('lich'));
+        }
    public function updateNhatKi(Request $request, $id)
     {
-        // Nếu checkbox gửi lên dưới dạng mảng (nhiều checkbox cùng name="TrangThai")
+        
         $trangThai = is_array($request->TrangThai)
             ? (int) $request->TrangThai[0]  // Lấy giá trị đầu tiên được chọn
             : (int) $request->TrangThai;
@@ -223,16 +223,19 @@ class LichVanHanhController extends Controller
         }
 
         $request->validate([
-            'NhatKi' => 'nullable|string',
+            'NhatKi' => 'required|string',
+            'TrangThai' => 'required|in:0,2',
+            'MoTaSuCo' => 'required|string',
+
         ]);
 
         // Cập nhật nhật ký
         $lich = LichVanHanh::findOrFail($id);
         $lich->NhatKi = $request->NhatKi;
         $lich->trangthai = $trangThai; // Cập nhật trạng thái
+        $lich->MoTaSuCo = $request->MoTaSuCo;
         $lich->save();
 
-        
 
         return redirect()->route('lichvanhanh')->with('success', 'Đã lưu nhật ký và cập nhật trạng thái máy thành công!');
     }
