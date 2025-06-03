@@ -52,9 +52,9 @@
                                                     <td><input type="text" class="form-control" name="MaLinhKien[]" value="{{ $item['MaLinhKien'] }}" readonly></td>
                                                     <td><input type="text" class="form-control" name="TenLinhKien[]" value="{{ $item['TenLinhKien'] }}" readonly></td>
                                                     <td><input type="text" class="form-control" name="TenDonViTinh[]" value="{{ $item['TenDonViTinh'] }}" readonly></td>
-                                                    <td><input type="number" class="form-control quantity" name="SoLuong[]" value="{{ $item['SoLuong'] }}" required></td>
-                                                    <td><input type="number" class="form-control price" name="GiaNhap[]" value="{{ $item['GiaNhap'] }}" required></td>
-                                                    <td><input type="number" class="form-control total" name="TongCong[]" value="{{ $item['TongCong'] }}" readonly></td>
+                                                    <td><input type="text" class="form-control quantity" name="SoLuong[]" value="{{ $item['SoLuong'] }}" required></td>
+                                                    <td><input type="text" class="form-control price" name="GiaNhap[]" value="{{ $item['GiaNhap'] }}" required></td>
+                                                    <td><input type="text" class="form-control total" name="TongCong[]" value="{{ $item['TongCong'] }}" readonly></td>
                                                     <td class="text-center">
                                                         <button type="button" class="btn btn-danger btn-sm remove-product">
                                                             <i class="fa fa-trash"></i> Xóa
@@ -106,12 +106,12 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="TongSoLuong">Tổng Số Lượng</label>
-                                <input type="number" class="form-control" id="TongSoLuong" name="TongSoLuong"
+                                <input type="text" class="form-control" id="TongSoLuong" name="TongSoLuong"
                                     value="{{ session('phieuNhapSession')['TongSoLuong'] ?? '' }}" placeholder="0" readonly>
                                 </div>
                                 <div class="form-group">
                                     <label for="TongThanhTien">Tổng Thành Tiền</label>
-                                <input type="number" class="form-control" id="TongThanhTien" name="TongTien"
+                                <input type="text" class="form-control" id="TongThanhTien" name="TongTien"
                                     value="{{ session('phieuNhapSession')['TongThanhTien'] ?? '' }}" placeholder="0" readonly>
                                 </div>
                                 <div class="form-group">
@@ -192,7 +192,14 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 });
+function formatNumber(value) {
+    const number = Number(value);
+    return isNaN(number) ? '0' : number.toLocaleString('vi-VN');
+}
 
+function unformat(value) {
+    return value.replace(/\./g, '').replace(/[^0-9]/g, '');
+}
 // Hàm lưu dữ liệu vào session
 function saveFormDataToSession(event) {
     event.preventDefault();
@@ -289,9 +296,9 @@ function addLinhKienToTable(maLinhKien, tenLinhKien, tenDonViTinh) {
         <td><input type="text" class="form-control" name="MaLinhKien[]" value="${maLinhKien}" readonly></td>
         <td><input type="text" class="form-control" name="TenLinhKien[]" value="${tenLinhKien}" readonly></td>
         <td><input type="text" class="form-control" name="TenDonViTinh[]" value="${tenDonViTinh}" readonly></td>
-        <td><input type="number" class="form-control quantity" name="SoLuong[]" placeholder="Số lượng" min="1" required></td>
-        <td><input type="number" class="form-control price" name="GiaNhap[]" placeholder="Giá nhập" min="1000" required></td>
-        <td><input type="number" class="form-control total" name="TongCong[]" readonly></td>
+        <td><input type="text" class="form-control quantity" name="SoLuong[]" placeholder="Số lượng" min="1" required></td>
+        <td><input type="text" class="form-control price" name="GiaNhap[]" placeholder="Giá nhập" min="1000" required></td>
+        <td><input type="text" class="form-control total" name="TongCong[]" readonly></td>
         <td class="text-center">
             <button type="button" class="btn btn-danger btn-sm remove-product">
                 <i class="fa fa-trash"></i> Xóa
@@ -317,20 +324,31 @@ function updateTotals() {
     let totalPriceValue = 0;
 
     rows.forEach(row => {
-        let quantity = row.querySelector('.quantity').value || 0;
-        let price = row.querySelector('.price').value || 0;
-        let total = row.querySelector('.total');
+        let quantityInput = row.querySelector('.quantity');
+        let priceInput = row.querySelector('.price');
+        let totalInput = row.querySelector('.total');
 
-        let rowTotal = parseInt(quantity) * parseFloat(price);
-        total.value = rowTotal.toFixed(0);
+        let quantity = parseInt(unformat(quantityInput.value)) || 0;
+        let price = parseFloat(unformat(priceInput.value)) || 0;
+        let rowTotal = quantity * price;
 
-        totalQty += parseInt(quantity);
+        totalInput.value = formatNumber(rowTotal);
+        quantityInput.value = formatNumber(quantity);
+        priceInput.value = formatNumber(price);
+
+        totalQty += quantity;
         totalPriceValue += rowTotal;
     });
 
-    document.getElementById('TongSoLuong').value = totalQty;
-    document.getElementById('TongThanhTien').value = totalPriceValue.toFixed(0);
+    document.getElementById('TongSoLuong').value = formatNumber(totalQty);
+    document.getElementById('TongThanhTien').value = formatNumber(totalPriceValue);
 }
+document.querySelector('form').addEventListener('submit', function () {
+    document.querySelectorAll('.quantity, .price, .total, #TongSoLuong, #TongThanhTien').forEach(input => {
+        input.value = unformat(input.value);
+    });
+});
+
 </script>
 
 

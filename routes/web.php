@@ -219,8 +219,9 @@ Route::middleware('auth')->group(function () {
       ->name('lichbaotri.destroy');
     Route::get('/lichbaotri/ExportTruocBaoTri/{MaLichBaoTri}', [LichBaoTriController::class, 'exporttscBT'])->name('lichbaotri.exporttscBT');
     Route::get('/lichbaotri/{MaLichBaoTri}/taophieubangiao', [LichBaoTriController::class, 'taophieubangiao'])
-      ->middleware('kiemtraquyen:3')
-      ->name('lichbaotri.taophieubangiao');
+    ->middleware(['kiemtraquyen:3', 'chuadenngay'])
+    ->name('lichbaotri.taophieubangiao');
+
   });
 
 

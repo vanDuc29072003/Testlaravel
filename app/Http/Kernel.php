@@ -69,5 +69,6 @@ class Kernel extends HttpKernel
         'kiemtraquyen' => \App\Http\Middleware\KiemTraQuyenMiddleware::class,
         'chinguoidamnhan' => \App\Http\Middleware\ChiNguoiDamNhanDuocBanGiao::class,
         'vietnhatki'=> \App\Http\Middleware\VietNhatKi::class,
+        'chuadenngay'=>\App\Http\Middleware\ChuaDenNgayBanGiao::class,
     ];
 }
