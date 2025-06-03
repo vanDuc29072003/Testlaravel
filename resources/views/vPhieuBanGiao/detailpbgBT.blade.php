@@ -90,11 +90,11 @@
                             </tbody>
                         </table>
 
-                        <h5 class="fst-italic ms-3">IV. Danh sách linh kiện</h5>
+                        <h5 class="fst-italic ms-3">IV. Danh sách công việc và linh kiện sửa chữa</h5>
                         <table class="table table-bordered">
                             <thead>
                                 <tr>
-                                    <th>Tên Linh Kiện</th>
+                                    <th>Tên Công Việc & Linh Kiện Sửa Chữa</th>
                                     <th>Đơn Vị Tính</th>
                                     <th>Số Lượng</th>
                                     <th>Bảo Hành</th>

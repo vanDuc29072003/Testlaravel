@@ -160,12 +160,12 @@
     </tr>
 </table>
 
-<h4>III, Linh kiện bàn giao</h4>
+<h4>III, Công việc và Linh kiện thay thế</h4>
 
 <table class="linhkien-table">
     <thead>
         <tr>
-            <th>Tên Linh Kiện</th>
+            <th>Tên Công Việc và Linh kiện thay thế</th>
             <th>Đơn Vị Tính</th>
             <th>Số Lượng</th>
             <th>Bảo Hành</th>
