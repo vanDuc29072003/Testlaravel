@@ -160,7 +160,6 @@ class LichBaoTriController extends Controller
         if ($isDinhKy) {
             // Kiểm tra nếu máy đã có bất kỳ lịch bảo trì nào thì không cho thêm lịch định kỳ
             $daCoLich = LichBaoTri::where('MaMay', $validated['MaMay'])->exists();
-
             if ($daCoLich) {
                 return redirect()->route('lichbaotri.create')
                     ->with('error', 'Máy đã có lịch bảo trì. Không thể tạo lịch bảo trì định kỳ.');
@@ -176,7 +175,6 @@ class LichBaoTriController extends Controller
                 return redirect()->back()->with('error', 'Không đủ thông tin chu kỳ hoặc thời gian bảo hành của máy.');
             }
 
-            // Tính số lần lặp bảo trì
             $soLanLap = floor($may->ThoiGianBaoHanh / $may->ChuKyBaoTri);
             if ($soLanLap < 1) {
                 return redirect()->route('lichbaotri.create')
@@ -185,30 +183,69 @@ class LichBaoTriController extends Controller
             }
 
             $ngayLap = Carbon::parse($validated['NgayBaoTri']);
+            $soLanLapThanhCong = 0;
+            $loiTrungLichVanHanh = [];
 
             for ($i = 0; $i < $soLanLap; $i++) {
+                $ngayLapFormatted = $ngayLap->format('Y-m-d');
+
+                // Kiểm tra trùng lịch vận hành
+                $trungVoiVanHanh = DB::table('lichvanhanh')
+                    ->where('MaMay', $validated['MaMay'])
+                    ->whereDate('NgayVanHanh', $ngayLapFormatted)
+                    ->exists();
+
+                if ($trungVoiVanHanh) {
+                    $loiTrungLichVanHanh[] = $ngayLap->format('d/m/Y');
+                    $ngayLap->addMonths($may->ChuKyBaoTri);
+                    continue;
+                }
+
                 LichBaoTri::create([
                     'MoTa' => $validated['MoTa'],
-                    'NgayBaoTri' => $ngayLap->format('Y-m-d'),
+                    'NgayBaoTri' => $ngayLapFormatted,
                     'MaMay' => $validated['MaMay'],
                     'TrangThai' => 0,
                 ]);
 
+                $soLanLapThanhCong++;
                 $ngayLap->addMonths($may->ChuKyBaoTri);
             }
 
-            return redirect()->route('lichbaotri')->with('success', "Tạo lịch bảo trì định kỳ thành công ($soLanLap lần)!");
+            if ($soLanLapThanhCong === 0) {
+                return redirect()->route('lichbaotri.create')
+                    ->with('error', 'Tất cả các ngày định kỳ đều trùng với lịch vận hành. Không tạo được lịch bảo trì nào.');
+            }
+
+            if (!empty($loiTrungLichVanHanh)) {
+                return redirect()->route('lichbaotri')
+                    ->with('warning', 'Tạo được ' . $soLanLapThanhCong . ' lịch bảo trì định kỳ. Một số ngày trùng với lịch vận hành:<br>' . implode('<br>', $loiTrungLichVanHanh));
+            }
+
+            return redirect()->route('lichbaotri')
+                ->with('success', "Tạo lịch bảo trì định kỳ thành công ($soLanLapThanhCong lần)!");
         }
 
         if ($isDotXuat) {
-            // Kiểm tra trùng ngày với lịch đã có
+            // Kiểm tra trùng với lịch bảo trì
             $trungNgay = LichBaoTri::where('MaMay', $validated['MaMay'])
                 ->whereDate('NgayBaoTri', $ngayBaoTri)
+                ->exists();
+
+            // Kiểm tra trùng với lịch vận hành
+            $trungVoiVanHanh = DB::table('lichvanhanh')
+                ->where('MaMay', $validated['MaMay'])
+                ->whereDate('NgayVanHanh', $ngayBaoTri)
                 ->exists();
 
             if ($trungNgay) {
                 return redirect()->route('lichbaotri.create')
                     ->with('error', 'Đã tồn tại lịch bảo trì cho máy này vào ngày đã chọn.');
+            }
+
+            if ($trungVoiVanHanh) {
+                return redirect()->route('lichbaotri.create')
+                    ->with('error', 'Máy này đang có lịch vận hành vào ngày đã chọn. Không thể tạo lịch bảo trì.');
             }
 
             LichBaoTri::create([
@@ -220,7 +257,10 @@ class LichBaoTriController extends Controller
 
             return redirect()->route('lichbaotri')->with('success', 'Tạo lịch bảo trì đột xuất thành công!');
         }
+
+        return redirect()->back()->with('error', 'Vui lòng chọn loại lịch bảo trì hợp lệ.');
     }
+
 
 
 

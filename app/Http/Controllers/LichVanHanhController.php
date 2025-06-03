@@ -12,9 +12,6 @@ use Illuminate\Support\Facades\DB;
 
 class LichVanHanhController extends Controller
 {
-    
-  
-
         public function index(Request $request)
         {
             $query = LichVanHanh::query();
@@ -75,7 +72,7 @@ class LichVanHanhController extends Controller
     
 
 
-        public function create()
+    public function create()
     {
         $may = May::where('TrangThai', '!=', 1)->get();
         $nhanvien = NhanVien::where('MaBoPhan', 2)->get();
@@ -87,7 +84,7 @@ class LichVanHanhController extends Controller
     {
         $kieuLich = $request->kieuLich;
 
-        // Validate cơ bản
+        // Validate chung
         $request->validate([
             'kieuLich' => 'required|in:tuan,ngay',
             'entries' => 'required|array|min:1',
@@ -98,6 +95,7 @@ class LichVanHanhController extends Controller
 
         $daysInWeek = collect();
 
+        // Lấy danh sách ngày
         if ($kieuLich === 'tuan') {
             $thang = $request->thang;
             $nam = $request->nam;
@@ -113,8 +111,7 @@ class LichVanHanhController extends Controller
             for ($i = 0; $i < 7; $i++) {
                 $daysInWeek->push($startOfWeek->copy()->addDays($i));
             }
-        } 
-        else if ($kieuLich === 'ngay') {
+        } elseif ($kieuLich === 'ngay') {
             $request->validate([
                 'ngayDotXuat' => 'required|date',
             ]);
@@ -122,30 +119,65 @@ class LichVanHanhController extends Controller
             $daysInWeek->push($ngayDotXuat);
         }
 
-        foreach ($request->entries as $entry) {
-        foreach ($daysInWeek as $day) {
-            $exists = DB::table('lichvanhanh')->whereDate('NgayVanHanh', $day->format('Y-m-d'))
-                ->where('MaMay', $entry['MaMay'])
-                ->where('CaLamViec', $entry['CaLamViec'])
-                ->exists();
+        $loiTrungLich = [];
+        $soLuongLichDuocThem = 0;
 
-            if (!$exists) {
+        foreach ($request->entries as $entry) {
+            foreach ($daysInWeek as $day) {
+                $ngay = $day->format('Y-m-d');
+
+                // Kiểm tra lịch vận hành
+                $lichVanHanhExists = DB::table('lichvanhanh')
+                    ->whereDate('NgayVanHanh', $ngay)
+                    ->where('MaMay', $entry['MaMay'])
+                    ->where('CaLamViec', $entry['CaLamViec'])
+                    ->exists();
+
+                // Kiểm tra lịch bảo trì
+                $lichBaoTriExists = DB::table('lichbaotri')
+                    ->whereDate('NgayBaoTri', $ngay)
+                    ->where('MaMay', $entry['MaMay'])
+                    ->exists();
+
+                if ($lichVanHanhExists || $lichBaoTriExists) {
+                    $tenMay = DB::table('may')->where('MaMay', $entry['MaMay'])->value('TenMay');
+                    $loiTrungLich[] = 'Ngày ' . $day->format('d/m/Y') . ' - Máy: ' . ($tenMay ?? $entry['MaMay']);
+                    continue;
+                }
+
+                // Thêm lịch
                 DB::table('lichvanhanh')->insert([
-                    'NgayVanHanh' => $day->format('Y-m-d'),
+                    'NgayVanHanh' => $ngay,
                     'MaMay' => $entry['MaMay'],
                     'MaNhanVien' => $entry['MaNhanVien'],
                     'CaLamViec' => $entry['CaLamViec'],
                     'MoTa' => $entry['MoTa'] ?? null,
                 ]);
-            } else {
-                // Nếu cần hiển thị lỗi cụ thể:
-                return back()->withErrors(['error' => 'Lịch trùng: ' . $day->format('d/m/Y') . ' - Máy: ' . $entry['MaMay'] . ' - Ca: ' . $entry['CaLamViec']]);
+
+                $soLuongLichDuocThem++;
             }
+        }
+
+        // Xử lý thông báo và chuyển trang
+        if (!empty($loiTrungLich)) {
+    if ($soLuongLichDuocThem > 0) {
+        return redirect()->route('lichvanhanh')->with('notify_messages', [
+            ['type' => 'success', 'message' => 'Đã thêm ' . $soLuongLichDuocThem . ' lịch thành công.'],
+            ['type' => 'warning', 'message' => 'Một số lịch bị trùng:<br>' . implode('<br>', $loiTrungLich)]
+        ]);
+        } else {
+            return redirect()->back()->withInput()->with('notify_messages', [
+                ['type' => 'warning', 'message' => 'Tất cả lịch đều bị trùng. Không có lịch nào được thêm.<br>' . implode('<br>', $loiTrungLich)]
+            ]);
         }
     }
 
-        return redirect()->route('lichvanhanh')->with('success', 'Thêm lịch thành công!');
+    return redirect()->route('lichvanhanh')->with('notify_messages', [
+        ['type' => 'success', 'message' => 'Thêm tất cả lịch thành công!']
+    ]);
     }
+
+
 
 
     public function edit($id)
