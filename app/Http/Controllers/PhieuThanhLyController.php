@@ -145,16 +145,18 @@ class PhieuThanhLyController extends Controller
             $may->TrangThai = '1';
             $may->save();
 
-            $lichBaoTri = $may->lichBaoTri();
-            if ($lichBaoTri) {
-                $lichBaoTri->delete();
+           foreach ($may->lichBaoTri as $lich) {
+            if ($lich->TrangThai == '0') {
+                $lich->delete();
             }
+            }
+
             $yeuCauSuaChua = $may->yeuCauSuaChua()->where('TrangThai', '0');
             if ($yeuCauSuaChua) {
                 $yeuCauSuaChua->update(['TrangThai' => '2']);
 
-                foreach ($yeuCauSuaChua->get() as $item) {
-                    if ($item->lichSuaChua) {
+              foreach ($yeuCauSuaChua->get() as $item) {
+                    if ($item->lichSuaChua && $item->lichSuaChua->TrangThai == 0) {
                         $item->lichSuaChua->delete();
                     }
                 }
@@ -173,7 +175,7 @@ class PhieuThanhLyController extends Controller
 
         event(new eventUpdateTable());
 
-        return redirect()->route('phieuthanhly.index')->with('success', 'Phiếu thanh lý đã được tu choi!');
+        return redirect()->route('phieuthanhly.index')->with('success', 'Phiếu thanh lý đã được từ chối');
     }
     public function exportPDF($MaPhieuThanhLy)
     {

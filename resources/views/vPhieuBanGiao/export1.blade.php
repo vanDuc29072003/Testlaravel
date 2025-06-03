@@ -175,12 +175,12 @@
 
 <p class="danhgia"><strong>Biện pháp xử lý:</strong> {{ $phieuBanGiao->BienPhapXuLy ?? 'Không có' }}</p>
 
-<h4>IV, Linh kiện bàn giao</h4>
+<h4>IV, Công việc và linh kiện thay thế</h4>
 
 <table class="linhkien-table">
     <thead>
         <tr>
-            <th>Tên Linh Kiện</th>
+            <th>Tên Công Việc & Linh Kiện Thay Thế</th>
             <th>Đơn Vị Tính</th>
             <th>Số Lượng</th>
             <th>Bảo Hành</th>
