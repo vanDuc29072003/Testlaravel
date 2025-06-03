@@ -128,34 +128,41 @@
     </div>
 @endsection
 @section('scripts')
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const checkboxes = document.querySelectorAll('.nha-cung-cap-checkbox');
-        const button = document.getElementById('nhaCungCapButton');
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const checkboxes = document.querySelectorAll('.nha-cung-cap-checkbox');
+            const button = document.getElementById('nhaCungCapButton');
 
-        function updateButtonLabel() {
-            const selected = [];
-            checkboxes.forEach(cb => {
-                if (cb.checked) {
-                    selected.push(cb.parentElement.querySelector('label').innerText);
+            function updateButtonLabel() {
+                const selected = [];
+                checkboxes.forEach(cb => {
+                    if (cb.checked) {
+                        selected.push(cb.parentElement.querySelector('label').innerText);
+                    }
+                });
+
+                if (selected.length > 0) {
+                    // nối từng tên với dấu xuống dòng
+                    button.innerHTML = selected.join('<br>');
+                } else {
+                    button.textContent = "Chọn nhà cung cấp";
                 }
-            });
-
-            if (selected.length > 0) {
-                // nối từng tên với dấu xuống dòng
-                button.innerHTML = selected.join('<br>');
-            } else {
-                button.textContent = "Chọn nhà cung cấp";
             }
-        }
 
-        updateButtonLabel(); // load sẵn nếu có dữ liệu cũ
+            updateButtonLabel(); // load sẵn nếu có dữ liệu cũ
 
-        checkboxes.forEach(cb => {
-            cb.addEventListener('change', updateButtonLabel);
+            checkboxes.forEach(cb => {
+                cb.addEventListener('change', updateButtonLabel);
+            });
         });
-    });
-</script>
-
-
+    </script>
+    <script>
+        document.getElementById('TenLinhKien').addEventListener('input', function(e) {
+            // Chỉ cho phép chữ cái, số, khoảng trắng, gạch ngang, gạch dưới
+            this.value = this.value.replace(/[^\p{L}0-9 _-]/gu, '');
+        });
+        document.getElementById('MoTa').addEventListener('input', function(e) {
+            this.value = this.value.replace(/[^\p{L}0-9]/gu, '');
+        });
+    </script>
 @endsection

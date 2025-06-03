@@ -68,7 +68,7 @@
                                 <div class="form-group col-md-6">
                                     <label for="NamSanXuat">Năm Sản Xuất</label>
                                     <input type="number" class="form-control" id="NamSanXuat" name="NamSanXuat" placeholder="Nhập năm sản xuất"
-                                        value="{{ old('NamSanXuat', $may->NamSanXuat) }}" min="1980" required>
+                                        value="{{ old('NamSanXuat', $may->NamSanXuat) }}" min="1980" max="{{ date('Y') }}" required>
                                 </div>
 
                                 {{-- Hàng 4 --}}
@@ -101,7 +101,7 @@
                                 <div class="form-group col-md-6">
                                     <label for="GiaTriBanDau">Giá Trị Ban Đầu</label>
                                     <div class="input-group">
-                                        <input type="number" class="form-control" id="GiaTriBanDau" name="GiaTriBanDau"
+                                        <input type="text" class="form-control" id="GiaTriBanDau" name="GiaTriBanDau"
                                             placeholder="Nhập giá trị ban đầu" value="{{ old('GiaTriBanDau', $may->GiaTriBanDau) }}" min="0" step="1000" required>
                                         <span class="input-group-text">VND</span>
                                     </div>
@@ -130,4 +130,47 @@
         </div>
     </div>
 </div>
+@endsection
+
+@section('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const GiaTriBanDau = document.getElementById('GiaTriBanDau');
+            // Format ngay khi load nếu có giá trị
+            if (GiaTriBanDau.value) {
+                let raw = GiaTriBanDau.value;
+                GiaTriBanDau.value = raw ? Number(raw).toLocaleString('vi-VN') : '';
+            }
+        });
+    </script>
+    <script>
+        document.getElementById('TenMay').addEventListener('input', function(e) {
+            // Chỉ cho phép chữ cái, số, khoảng trắng, gạch ngang, gạch dưới
+            this.value = this.value.replace(/[^\p{L}0-9 _-]/gu, '');
+        });
+        document.getElementById('SeriMay').addEventListener('input', function(e) {
+            this.value = this.value.replace(/[^A-Za-z0-9]/g, '');
+        });
+    </script>
+    <script>
+        const GiaTriBanDau = document.getElementById('GiaTriBanDau');
+        GiaTriBanDau.addEventListener('input', function(e) {
+            // Lưu vị trí con trỏ
+            let cursor = this.selectionStart;
+            // Loại bỏ ký tự không phải số
+            let raw = this.value.replace(/[^0-9]/g, '');
+            // Format lại
+            this.value = raw ? Number(raw).toLocaleString('vi-VN') : '';
+            // Đặt lại vị trí con trỏ
+            this.setSelectionRange(cursor, cursor);
+        });
+    </script>
+    <script>
+        document.getElementById('formMay').addEventListener('submit', function(e) {
+            const GiaTriBanDauInput = document.getElementById('GiaTriBanDau');
+            if (GiaTriBanDauInput) {
+                GiaTriBanDauInput.value = GiaTriBanDauInput.value.replace(/[.]/g, '').replace(',', '.');
+            }
+        })
+    </script>
 @endsection
