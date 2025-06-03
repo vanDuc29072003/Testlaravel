@@ -79,5 +79,16 @@
 @endsection
 
 @section('scripts')
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const tenLinhKienInput = document.getElementById('TenLinhKien');
 
+        tenLinhKienInput.addEventListener('input', function () {
+            let value = this.value;
+
+            // Cho phép chữ cái có dấu, số, khoảng trắng và dấu gạch ngang
+            this.value = value.replace(/[^0-9\s\-a-zA-ZÀ-ỹà-ỹĐđ]/g, '');
+        });
+    });
+</script>
 @endsection

@@ -14,15 +14,18 @@
                         <div class="col-9">
                             <div class="d-flex justify-content-between align-items-center mb-3">
                                 <h3 class="mb-4">Thêm mới Phiếu Nhập Hàng</h3>
-                                <div>
-                                    <a href="#" id="btnAddLinhKien" class="btn btn-primary">
-                                        <i class="fa fa-plus"></i> Thêm mới linh kiện
-                                    </a>
-                                </div>
+                               
+    
+                               
                             </div>
 
                             <div class="form-group">
+                               <div class="d-flex justify-content-between">
                                 <label for="searchLinhKien">Tìm kiếm linh kiện</label>
+                                <a href="#" id="btnAddLinhKien" class="btn btn-sm btn-outline-white">
+                                        <i class="fa fa-plus"></i> Thêm mới linh kiện
+                                    </a>
+                               </div>
                                 <input type="text" class="form-control" id="searchLinhKien" placeholder="Nhập tên linh kiện">
                                 <div id="searchResults" class="list-group mt-2" style="max-height: 200px; overflow-y: auto;">
                                     <!-- Kết quả tìm kiếm sẽ được hiển thị ở đây -->
@@ -77,7 +80,12 @@
                                         value="{{ Auth::user()->nhanVien->TenNhanVien }}" readonly>
                                 </div>
                                 <div class="form-group">
-                                    <label for="MaNhaCungCap">Nhà Cung Cấp</label>
+                                    <div class="d-flex justify-content-between">
+                                         <label for="MaNhaCungCap">Nhà Cung Cấp</label>
+                                          <a id="btn-them-ncc" href="#" class="btn btn-sm btn-outline-white">
+                                                <i class="fa fa-plus"></i> Thêm mới
+                                            </a>
+                                    </div>
                                     <select class="form-control" id="MaNhaCungCap" name="MaNhaCungCap" required>
                                         <option value="">Chọn nhà cung cấp</option>
                                         @foreach ($nhaCungCaps as $nhaCungCap)
@@ -129,6 +137,7 @@
     @endsection
 
 @section('scripts')
+
 <script>
 document.addEventListener('DOMContentLoaded', function () {
 
@@ -218,7 +227,42 @@ function saveFormDataToSession(event) {
     }).then(() => {
         window.location.href = "{{ route('linhkien.add2') }}";
     });
-}   
+}  
+document.getElementById('btn-them-ncc').addEventListener('click', function (event) {
+    event.preventDefault();
+    const data = {
+        MaNhaCungCap: document.getElementById('MaNhaCungCap').value,
+        NgayNhap: document.getElementById('NgayNhap').value,
+        GhiChu: document.getElementById('GhiChu').value,
+        LinhKienList: [],
+        TongSoLuong: document.getElementById('TongSoLuong').value,
+        TongThanhTien: document.getElementById('TongThanhTien').value
+    };
+
+    document.querySelectorAll('#product-list tr').forEach(row => {
+        data.LinhKienList.push({
+            MaLinhKien: row.querySelector('input[name="MaLinhKien[]"]').value,
+            TenLinhKien: row.querySelector('input[name="TenLinhKien[]"]').value,
+            TenDonViTinh: row.querySelector('input[name="TenDonViTinh[]"]').value,
+            SoLuong: row.querySelector('input[name="SoLuong[]"]').value,
+            GiaNhap: row.querySelector('input[name="GiaNhap[]"]').value,
+            TongCong: row.querySelector('input[name="TongCong[]"]').value
+        });
+    });
+
+    fetch("{{ route('phieunhap.saveSession') }}", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        },
+        body: JSON.stringify(data)
+    }).then(() => {
+       
+        window.location.href = "{{ route('nhacungcap.createNCCfromPN') }}";
+    });
+});
+
 
 // Hàm thêm linh kiện vào bảng
 function addLinhKienToTable(maLinhKien, tenLinhKien, tenDonViTinh) {

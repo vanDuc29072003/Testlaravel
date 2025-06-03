@@ -163,6 +163,9 @@ Route::middleware('auth')->group(function () {
   Route::post('/nhacungcap/store-from-may', [NhaCungCapController::class, 'storeNCCfromMay'])->name('nhacungcap.storeNCCfromMay');
   Route::get('/nhacungcap/create-from-linhkien', [NhaCungCapController::class, 'createNCCfromLinhKien'])->name('nhacungcap.createNCCfromLinhKien');
   Route::post('/nhacungcap/store-from-linhkien', [NhaCungCapController::class, 'storeNCCfromLinhKien'])->name('nhacungcap.storeNCCfromLinhKien');
+  Route::get('nhacungcap/create-from-PN', [NhaCungCapController::class, 'createNCCfromPN'])->name('nhacungcap.createNCCfromPN');
+  Route::post('/nhacungcap/store-from-PN', [NhaCungCapController::class, 'storeNCCfromPN'])->name('nhacungcap.storeNCCfromPN');
+
   Route::get('/detailuser', [DetailuserController::class, 'detailuser'])->name('detailuser');
 
 
