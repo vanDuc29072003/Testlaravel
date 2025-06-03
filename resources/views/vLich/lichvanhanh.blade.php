@@ -181,8 +181,13 @@
             </div>
         </div>
     </div>
+   
 @endsection
 @section('scripts')
+<script src="https://cdnjs.cloudflare.com/ajax/libs/remarkable-bootstrap-notify/3.1.3/bootstrap-notify.min.js"></script>
+
+<!-- Animate.css (nếu dùng hiệu ứng animated) -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
   <script>
     function confirmDelete(button) {
             swal({
@@ -234,5 +239,22 @@
         toggleCustomDate();
     });
 </script>
+  <script>
+        @if (session('notify_messages'))
+            @foreach (session('notify_messages') as $notify)
+                $.notify({
+                    title: '@if ($notify["type"] == "success") Thành công @elseif($notify["type"] == "warning") Cảnh báo @else Thông báo @endif',
+                    message: {!! json_encode($notify['message']) !!},
+                    icon: 'icon-bell'
+                }, {
+                    type: '{{ $notify["type"] }}',
+                    animate: {
+                        enter: 'animated fadeInDown',
+                        exit: 'animated fadeOutUp'
+                    },
+                });
+            @endforeach
+        @endif
+    </script>
 
 @endsection
