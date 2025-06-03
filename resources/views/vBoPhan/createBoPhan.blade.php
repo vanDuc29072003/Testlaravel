@@ -22,6 +22,13 @@
                   <small class="text-danger">{{ $message }}</small>
                 @enderror
               </div>
+              <div class="form-group">
+                <label for="TenRutGon" class="form-label">Tên Rút Gọn</label>
+                <input type="text" name="TenRutGon" class="form-control" value="{{ old('TenRutGon') }}" required>
+                @error('TenRutGon')
+                  <small class="text-danger">{{ $message }}</small>
+                @enderror
+              </div>
             </form>
           </div>
           <div class="card-footer">

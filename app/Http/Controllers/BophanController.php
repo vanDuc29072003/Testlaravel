@@ -35,18 +35,38 @@ class BoPhanController extends Controller
     }
 
     // Xử lý lưu dữ liệu mới
+    
     public function store(Request $request)
     {
-        $request->validate([
-            'TenBoPhan' => 'required|string|max:255',
+        $validated = $request->validate([
+            'TenBoPhan' => 'required|string|max:255|unique:bophan,TenBoPhan|regex:/^[\p{L}0-9\s]+$/u',
+            'TenRutGon' => 'required|string|min:2|max:50|unique:bophan,TenRutGon|regex:/^[\p{L}0-9\s]+$/u',
+        ], [
+            'TenBoPhan.required' => 'Tên bộ phận không được để trống.',
+            'TenBoPhan.max' => 'Tên bộ phận không được vượt quá 255 ký tự.',
+            'TenBoPhan.unique' => 'Tên bộ phận đã tồn tại.',
+            'TenBoPhan.regex' => 'Tên bộ phận chỉ được chứa chữ cái, số và khoảng trắng.',
+
+            'TenRutGon.required' => 'Tên rút gọn không được để trống.',
+            'TenRutGon.min' => 'Tên rút gọn phải có ít nhất 2 ký tự.',
+            'TenRutGon.max' => 'Tên rút gọn không được vượt quá 50 ký tự.',
+            'TenRutGon.unique' => 'Tên rút gọn đã tồn tại.',
+            'TenRutGon.regex' => 'Tên rút gọn chỉ được chứa chữ cái, số và khoảng trắng.',
         ]);
 
-        BoPhan::create([
-            'TenBoPhan' => $request->TenBoPhan,
-        ]);
+        try {
+            BoPhan::create([
+                'TenBoPhan' => $validated['TenBoPhan'],
+                'TenRutGon' => $validated['TenRutGon'],
+            ]);
 
-        return redirect()->route('bophan.index')->with('success', 'Đã thêm bộ phận thành công.');
+            return redirect()->route('bophan.index')->with('success', 'Đã thêm bộ phận thành công.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Đã xảy ra lỗi: ' . $e->getMessage())->withInput();
+        }
     }
+
+
 
     // Xóa bộ phận
     public function destroy($id)
