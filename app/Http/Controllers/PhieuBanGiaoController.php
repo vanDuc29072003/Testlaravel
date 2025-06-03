@@ -78,7 +78,6 @@ class PhieuBanGiaoController extends Controller
     {
         try {
             // Validate input
-            // Validate input
             $request->validate([
                 'MaLichSuaChua' => 'required|exists:lichsuachua,MaLichSuaChua',
                 'MaNhaCungCap' => 'required|exists:nhacungcap,MaNhaCungCap',
@@ -93,16 +92,22 @@ class PhieuBanGiaoController extends Controller
                 'SoLuong' => 'required|array',
                 'GiaThanh' => 'required|array',
                 'ThanhTien' => 'required|array',
-                'BaoHanh' => 'nullable|array', // BaoHanh có thể không tồn tại nếu không có checkbox nào được chọn
+                'BaoHanh' => 'nullable|array',
             ]);
+
+            // Làm sạch dấu "." trong các số
+            $soLuongList = array_map(fn($v) => str_replace('.', '', $v), $request->SoLuong);
+            $giaThanhList = array_map(fn($v) => str_replace('.', '', $v), $request->GiaThanh);
+            $thanhTienList = array_map(fn($v) => str_replace('.', '', $v), $request->ThanhTien);
+            $tongTien = str_replace('.', '', $request->TongTien);
 
             // Tạo phiếu bàn giao nhà cung cấp
             $phieuBanGiaoNCC = new PhieuBanGiaoSuaChuaNCC();
-            $phieuBanGiaoNCC->MaPhieuBanGiaoSuaChua = $request->MaLichSuaChua; // Gán MaPhieuBanGiaoNCC bằng MaLichSuaChua
+            $phieuBanGiaoNCC->MaPhieuBanGiaoSuaChua = $request->MaLichSuaChua;
             $phieuBanGiaoNCC->MaLichSuaChua = $request->MaLichSuaChua;
             $phieuBanGiaoNCC->MaNhaCungCap = $request->MaNhaCungCap;
             $phieuBanGiaoNCC->ThoiGianBanGiao = $request->ThoiGianBanGiao;
-            $phieuBanGiaoNCC->TongTien = $request->TongTien;
+            $phieuBanGiaoNCC->TongTien = $tongTien;
             $phieuBanGiaoNCC->BienPhapXuLy = $request->BienPhapXuLy;
             $phieuBanGiaoNCC->GhiChu = $request->GhiChu;
             $phieuBanGiaoNCC->MaNhanVienTao = Auth::user()->MaNhanVien;
@@ -113,28 +118,28 @@ class PhieuBanGiaoController extends Controller
                 ChiTietPhieuSuaNCC::create([
                     'MaPhieuBanGiaoSuaChua' => $phieuBanGiaoNCC->MaLichSuaChua,
                     'TenLinhKien' => $tenLinhKien,
-                    'DonViTinh' => $request->DonViTinh[$index],
-                    'SoLuong' => $request->SoLuong[$index],
-                    'GiaThanh' => $request->GiaThanh[$index],
-                    'ThanhTien' => $request->ThanhTien[$index],
-                    'BaoHanh' => $request->BaoHanh[$index] == '1' ? 1 : 0,// Kiểm tra nếu checkbox được chọn
+                    'DonViTinh' => $request->DonViTinh[$index] ?? null,
+                    'SoLuong' => $soLuongList[$index],
+                    'GiaThanh' => $giaThanhList[$index],
+                    'ThanhTien' => $thanhTienList[$index],
+                    'BaoHanh' => isset($request->BaoHanh[$index]) && $request->BaoHanh[$index] == '1' ? 1 : 0,
                 ]);
             }
 
             // Cập nhật trạng thái của lịch sửa chữa
             $lichSuaChua = LichSuaChua::findOrFail($request->MaLichSuaChua);
-            $lichSuaChua->TrangThai = 2; // Cập nhật trạng thái
+            $lichSuaChua->TrangThai = 2;
             $lichSuaChua->save();
 
             return redirect()->route('lichsuachua.dahoanthanh')->with('success', 'Phiếu bàn giao nhà cung cấp đã được tạo thành công!');
-
         } catch (\Illuminate\Validation\ValidationException $e) {
             return redirect()->back()
-                ->withErrors($e->validator) // <== THÊM DÒNG NÀY để gửi lỗi validation
+                ->withErrors($e->validator)
                 ->withInput()
                 ->with('error', 'Tên linh kiện và đơn vị tính không được nhập kí tự đặc biệt và số!');
         }
     }
+
     public function exportPDF($MaPhieuBanGiaoNoiBo)
     {
         // Lấy phiếu bàn giao
@@ -166,9 +171,10 @@ class PhieuBanGiaoController extends Controller
             $request->validate([
                 'MaLichBaoTri' => 'required|exists:lichbaotri,MaLichBaoTri',
                 'MaNhanVien' => 'required|exists:nhanvien,MaNhanVien',
-                'TongTien' => 'required|numeric|min:0',
+                'TongTien' => 'required|string',
                 'ThoiGianBanGiao' => 'required|date',
                 'LuuY' => 'nullable|string|max:255',
+
                 'TenLinhKien' => ['required', 'array'],
                 'TenLinhKien.*' => ['required', 'regex:/^[\pL\s]+$/u'],
 
@@ -176,47 +182,49 @@ class PhieuBanGiaoController extends Controller
                 'DonViTinh.*' => ['nullable', 'regex:/^[\pL\s]+$/u'],
 
                 'SoLuong' => ['required', 'array'],
-
-
                 'GiaThanh' => ['required', 'array'],
-
-                'BaoHanh' => 'nullable|array', // BaoHanh có thể không tồn tại nếu không có checkbox nào được chọn
+                'BaoHanh' => 'nullable|array',
             ]);
 
+            // Làm sạch dấu "." trong các số để chuẩn bị lưu vào DB
+            $soLuongList = array_map(fn($v) => str_replace('.', '', $v), $request->SoLuong);
+            $giaThanhList = array_map(fn($v) => str_replace('.', '', $v), $request->GiaThanh);
+            $tongTien = str_replace('.', '', $request->TongTien);
 
             // Tạo phiếu bàn giao bảo trì
             $phieuBanGiaoBaoTri = new PhieuBanGiaoBaoTri();
-            $phieuBanGiaoBaoTri->MaPhieuBanGiaoBaoTri = $request->MaLichBaoTri; // Gán MaPhieuBanGiaoBaoTri bằng MaLichBaoTri
+            $phieuBanGiaoBaoTri->MaPhieuBanGiaoBaoTri = $request->MaLichBaoTri;
             $phieuBanGiaoBaoTri->MaNhanVien = $request->MaNhanVien;
             $phieuBanGiaoBaoTri->MaLichBaoTri = $request->MaLichBaoTri;
             $phieuBanGiaoBaoTri->ThoiGianBanGiao = $request->ThoiGianBanGiao;
-            $phieuBanGiaoBaoTri->TongTien = $request->TongTien;
+            $phieuBanGiaoBaoTri->TongTien = $tongTien;
             $phieuBanGiaoBaoTri->LuuY = $request->LuuY;
             $phieuBanGiaoBaoTri->save();
 
-            // Lưu chi tiết phiếu bàn giao
             foreach ($request->TenLinhKien as $index => $tenLinhKien) {
                 ChiTietPhieuBanGiaoBaoTri::create([
                     'MaPhieuBanGiaoBaoTri' => $phieuBanGiaoBaoTri->MaLichBaoTri,
                     'TenLinhKien' => $tenLinhKien,
-                    'DonViTinh' => $request->DonViTinh[$index],
-                    'SoLuong' => $request->SoLuong[$index],
-                    'GiaThanh' => $request->GiaThanh[$index],
-                    'BaoHanh' => $request->BaoHanh[$index] == '1' ? 1 : 0, // Kiểm tra nếu checkbox được chọn
+                    'DonViTinh' => $request->DonViTinh[$index] ?? null,
+                    'SoLuong' => $soLuongList[$index],
+                    'GiaThanh' => $giaThanhList[$index],
+                    'BaoHanh' => isset($request->BaoHanh[$index]) && $request->BaoHanh[$index] == '1' ? 1 : 0,
                 ]);
             }
+
             $lichBaoTri = LichBaoTri::findOrFail($request->MaLichBaoTri);
-            $lichBaoTri->TrangThai = 1; // Cập nhật trạng thái
+            $lichBaoTri->TrangThai = 1;
             $lichBaoTri->save();
 
             return redirect()->route('lichbaotri.dabangiao')->with('success', 'Phiếu bàn giao bảo trì được tạo thành công!');
         } catch (\Illuminate\Validation\ValidationException $e) {
             return redirect()->back()
-                ->withErrors($e->validator) // <== THÊM DÒNG NÀY để gửi lỗi validation
+                ->withErrors($e->validator)
                 ->withInput()
                 ->with('error', 'Tên linh kiện và đơn vị tính không được nhập kí tự đặc biệt và số!');
         }
     }
+
     public function exportPDF2($MaPhieuBanGiaoBaoTri)
     {
         $phieuBanGiao = PhieuBanGiaoBaoTri::with(['lichBaoTri', 'nhanVien', 'chiTietPhieuBanGiaoBaoTri'])
