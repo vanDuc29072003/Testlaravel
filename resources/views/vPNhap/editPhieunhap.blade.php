@@ -18,15 +18,16 @@
                     <div class="col-9">
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <h3>Chỉnh sửa Phiếu Nhập Hàng</h3>
-                            <div>
-                                 <button type="button" id="btnAddLinhKien" class="btn btn-primary">
-                                    <i class="fa fa-plus"></i> Thêm mới linh kiện
-                                 </button>
-                            </div>
+                           
                         </div>
 
                         <div class="form-group">
-                            <label for="searchLinhKien">Tìm kiếm linh kiện</label>
+                           <div class="d-flex justify-content-between">
+                                <label for="searchLinhKien">Tìm kiếm linh kiện</label>
+                                <a href="#" id="btnAddLinhKien" class="btn btn-sm btn-outline-white">
+                                        <i class="fa fa-plus"></i> Thêm mới linh kiện
+                                    </a>
+                               </div>
                             <input type="text" class="form-control" id="searchLinhKien" placeholder="Nhập tên linh kiện">
                             <div id="searchResults" class="list-group mt-2" style="max-height: 200px; overflow-y: auto;">
                                 <!-- Kết quả tìm kiếm sẽ được hiển thị ở đây -->
@@ -93,6 +94,13 @@
                     <div class="col-3">
                         <div class="border p-3 rounded">
                             <div class="form-group">
+                                <label for="TenNhanVien">Nhân Viên</label>
+                               <input type="text" class="form-control" id="TenNhanVien" name="TenNhanVien"
+                                value="{{ session('phieuNhapSession1.MaNhanVien') ?? $phieuNhap->nhanVien->TenNhanVien }}" readonly>
+                                <input type="hidden" id="MaNhanVien" name="MaNhanVien" value="{{ session('phieuNhapSession1.MaNhanVien') ?? $phieuNhap->MaNhanVien }}">
+
+                            </div>
+                            <div class="form-group">
                                 <label for="MaNhaCungCap">Nhà Cung Cấp</label>
                                 <select class="form-control" id="MaNhaCungCap" name="MaNhaCungCap" required>
                                     @php
@@ -106,13 +114,7 @@
                                     </select>
 
                             </div>
-                            <div class="form-group">
-                                <label for="TenNhanVien">Nhân Viên</label>
-                               <input type="text" class="form-control" id="TenNhanVien" name="TenNhanVien"
-                                value="{{ session('phieuNhapSession1.MaNhanVien') ?? $phieuNhap->nhanVien->TenNhanVien }}" readonly>
-                                <input type="hidden" id="MaNhanVien" name="MaNhanVien" value="{{ session('phieuNhapSession1.MaNhanVien') ?? $phieuNhap->MaNhanVien }}">
-
-                            </div>
+                           
                             <div class="form-group">
                                 <label for="NgayNhap">Ngày Nhập</label>
                                <input type="datetime-local" class="form-control" id="NgayNhap" name="NgayNhap"
@@ -315,6 +317,7 @@ function updateTotals() {
 
         totalQty += parseInt(quantity);
         totalPriceValue += rowTotal;
+        
     });
 
     document.getElementById('TongSoLuong').value = totalQty;
