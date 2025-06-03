@@ -61,7 +61,7 @@ class TaiKhoanController extends Controller
             'Email' => 'required|email|unique:nhanvien,Email',
             'GioiTinh' => 'required|in:Nam,Nữ',
             'NgaySinh' => 'required|date',
-            'SDT' => 'required|string|max:15',
+            'SDT' => 'required|int|between:10,12|unique:nhanvien,SDT',
             'DiaChi' => 'required|string|max:255',
             'MaBoPhan' => 'required|exists:bophan,MaBoPhan',
             'MatKhauChuaMaHoa' => 'required|string|min:6',
