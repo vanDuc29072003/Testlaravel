@@ -57,9 +57,9 @@
                                             <td><input type="text" class="form-control" name="MaLinhKien[]" value="{{ $item['MaLinhKien'] }}" readonly></td>
                                             <td><input type="text" class="form-control" name="TenLinhKien[]" value="{{ $item['TenLinhKien'] }}" readonly></td>
                                             <td><input type="text" class="form-control" name="TenDonViTinh[]" value="{{ $item['TenDonViTinh'] }}" readonly></td>
-                                            <td><input type="number" class="form-control quantity" name="SoLuong[]" value="{{ $item['SoLuong'] }}" required></td>
-                                            <td><input type="number" class="form-control price" name="GiaNhap[]" value="{{ $item['GiaNhap'] }}" required></td>
-                                            <td><input type="number" class="form-control total" name="TongCong[]" value="{{ $item['TongCong'] }}" readonly></td>
+                                            <td><input type="text" class="form-control quantity" name="SoLuong[]" value="{{ number_format($item['SoLuong'],0,',','.') }}" required></td>
+                                            <td><input type="text" class="form-control price" name="GiaNhap[]" value="{{number_format($item['GiaNhap'],0,',','.') }}" required></td>
+                                            <td><input type="text" class="form-control total" name="TongCong[]" value="{{number_format($item['TongCong'],0,',','.') }}" readonly></td>
                                             <td class="text-center">
                                                 <button type="button" class="btn btn-danger btn-sm remove-product">
                                                     <i class="fa fa-trash"></i> Xóa
@@ -73,9 +73,9 @@
                                             <td><input type="text" class="form-control" name="MaLinhKien[]" value="{{ $chiTiet->MaLinhKien }}" readonly></td>
                                             <td><input type="text" class="form-control" name="TenLinhKien[]" value="{{ $chiTiet->linhKien->TenLinhKien }}" readonly></td>
                                             <td><input type="text" class="form-control" name="TenDonViTinh[]" value="{{ $chiTiet->linhKien->donViTinh->TenDonViTinh }}" readonly></td>
-                                            <td><input type="number" class="form-control quantity" name="SoLuong[]" value="{{ $chiTiet->SoLuong }}" required></td>
-                                            <td><input type="number" class="form-control price" name="GiaNhap[]" value="{{ $chiTiet->GiaNhap }}" required></td>
-                                            <td><input type="number" class="form-control total" name="TongCong[]" value="{{ $chiTiet->TongCong }}" readonly></td>
+                                            <td><input type="text" class="form-control quantity" name="SoLuong[]" value="{{number_format($chiTiet->SoLuong,0,',','.') }}" required></td>
+                                            <td><input type="text" class="form-control price" name="GiaNhap[]" value="{{number_format($chiTiet->GiaNhap,0,',','.') }}" required></td>
+                                            <td><input type="text" class="form-control total" name="TongCong[]" value="{{number_format($chiTiet->TongCong,0,',','.') }}" readonly></td>
                                             <td class="text-center">
                                                 <button type="button" class="btn btn-danger btn-sm remove-product">
                                                     <i class="fa fa-trash"></i> Xóa
@@ -96,7 +96,7 @@
                             <div class="form-group">
                                 <label for="TenNhanVien">Nhân Viên</label>
                                <input type="text" class="form-control" id="TenNhanVien" name="TenNhanVien"
-                                value="{{ session('phieuNhapSession1.MaNhanVien') ?? $phieuNhap->nhanVien->TenNhanVien }}" readonly>
+                                value="{{ session('phieuNhapSession1.TenNhanVien') ?? $phieuNhap->nhanVien->TenNhanVien }}" readonly>
                                 <input type="hidden" id="MaNhanVien" name="MaNhanVien" value="{{ session('phieuNhapSession1.MaNhanVien') ?? $phieuNhap->MaNhanVien }}">
 
                             </div>
@@ -123,13 +123,13 @@
                             </div>
                             <div class="form-group">
                                 <label for="TongSoLuong">Tổng Số Lượng</label>
-                                <input type="number" class="form-control" id="TongSoLuong" name="TongSoLuong"
-                                  value="{{ session('phieuNhapSession1.TongSoLuong') ?? $phieuNhap->TongSoLuong }}" readonly>
+                                 <input type="text" class="form-control" id="TongSoLuong" name="TongSoLuong"
+                                value="{{ number_format(session('phieuNhapSession1.TongSoLuong') ?? $phieuNhap->TongSoLuong, 0, ',', '.') }}" readonly>
                             </div>
                             <div class="form-group">
                                 <label for="TongThanhTien">Tổng Thành Tiền</label>
-                               <input type="number" class="form-control" id="TongThanhTien" name="TongTien"
-                                 value="{{ session('phieuNhapSession1.TongThanhTien') ?? $phieuNhap->TongTien }}" readonly>
+                               <input type="text" class="form-control" id="TongThanhTien" name="TongTien"
+                                value="{{ number_format(session('phieuNhapSession1.TongThanhTien') ?? $phieuNhap->TongTien, 0, ',', '.') }}" readonly>
                             </div>
                             <div class="form-group">
                                 <label for="GhiChu">Ghi Chú</label>
@@ -226,9 +226,10 @@ function saveFormDataToSession1(event) {
         NgayNhap: document.getElementById('NgayNhap').value,
         GhiChu: document.getElementById('GhiChu').value,
         MaNhanVien: document.getElementById('MaNhanVien').value, 
+        TenNhanVien: document.getElementById('TenNhanVien').value,
         LinhKienList: [],
-        TongSoLuong: document.getElementById('TongSoLuong').value,
-        TongThanhTien: document.getElementById('TongThanhTien').value
+        TongSoLuong: unformat(document.getElementById('TongSoLuong').value),
+        TongThanhTien: unformat(document.getElementById('TongThanhTien').value),
     };
 
     document.querySelectorAll('#product-list tr').forEach(row => {
@@ -236,9 +237,10 @@ function saveFormDataToSession1(event) {
             MaLinhKien: row.querySelector('input[name="MaLinhKien[]"]').value,
             TenLinhKien: row.querySelector('input[name="TenLinhKien[]"]').value,
             TenDonViTinh: row.querySelector('input[name="TenDonViTinh[]"]').value,
-            SoLuong: row.querySelector('input[name="SoLuong[]"]').value,
-            GiaNhap: row.querySelector('input[name="GiaNhap[]"]').value,
-            TongCong: row.querySelector('input[name="TongCong[]"]').value
+            SoLuong: unformat(row.querySelector('input[name="SoLuong[]"]').value),
+            GiaNhap: unformat(row.querySelector('input[name="GiaNhap[]"]').value),
+            TongCong: unformat(row.querySelector('input[name="TongCong[]"]').value)
+
         });
     });
 
@@ -254,7 +256,15 @@ function saveFormDataToSession1(event) {
         window.location.href = "{{ route('linhkien.add3') }}";
     });
 }   
+function formatNumber(value) {
+    const number = Number(value);
+    return isNaN(number) ? '0' : number.toLocaleString('vi-VN');
+}
 
+// Bỏ định dạng (loại bỏ dấu chấm ngăn cách)
+function unformat(value) {
+    return value.toString().replace(/\./g, '').replace(/[^0-9]/g, '');
+}
 // Hàm thêm linh kiện vào bảng
 function addLinhKienToTable(maLinhKien, tenLinhKien, tenDonViTinh) {
     let existingRows = document.querySelectorAll('input[name="MaLinhKien[]"]');
@@ -280,9 +290,9 @@ function addLinhKienToTable(maLinhKien, tenLinhKien, tenDonViTinh) {
         <td><input type="text" class="form-control" name="MaLinhKien[]" value="${maLinhKien}" readonly></td>
         <td><input type="text" class="form-control" name="TenLinhKien[]" value="${tenLinhKien}" readonly></td>
         <td><input type="text" class="form-control" name="TenDonViTinh[]" value="${tenDonViTinh}" readonly></td>
-        <td><input type="number" class="form-control quantity" name="SoLuong[]" placeholder="Số lượng" min="1" required></td>
-        <td><input type="number" class="form-control price" name="GiaNhap[]" placeholder="Giá nhập" min="1000" required></td>
-        <td><input type="number" class="form-control total" name="TongCong[]" readonly></td>
+        <td><input type="text" class="form-control quantity" name="SoLuong[]" placeholder="Số lượng" min="1" required></td>
+        <td><input type="text" class="form-control price" name="GiaNhap[]" placeholder="Giá nhập" min="1000" required></td>
+        <td><input type="text" class="form-control total" name="TongCong[]" readonly></td>
         <td class="text-center">
             <button type="button" class="btn btn-danger btn-sm remove-product">
                 <i class="fa fa-trash"></i> Xóa
@@ -308,21 +318,31 @@ function updateTotals() {
     let totalPriceValue = 0;
 
     rows.forEach(row => {
-        let quantity = row.querySelector('.quantity').value || 0;
-        let price = row.querySelector('.price').value || 0;
-        let total = row.querySelector('.total');
+        let quantityInput = row.querySelector('.quantity');
+        let priceInput = row.querySelector('.price');
+        let totalInput = row.querySelector('.total');
 
-        let rowTotal = parseInt(quantity) * parseFloat(price);
-        total.value = rowTotal.toFixed(0);
+        let quantity = parseInt(unformat(quantityInput.value)) || 0;
+        let price = parseFloat(unformat(priceInput.value)) || 0;
+        let rowTotal = quantity * price;
 
-        totalQty += parseInt(quantity);
+        // Cập nhật lại từng trường đã định dạng
+        quantityInput.value = formatNumber(quantity);
+        priceInput.value = formatNumber(price);
+        totalInput.value = formatNumber(rowTotal);
+
+        totalQty += quantity;
         totalPriceValue += rowTotal;
-        
     });
 
-    document.getElementById('TongSoLuong').value = totalQty;
-    document.getElementById('TongThanhTien').value = totalPriceValue.toFixed(0);
+    document.getElementById('TongSoLuong').value = formatNumber(totalQty);
+    document.getElementById('TongThanhTien').value = formatNumber(totalPriceValue);
 }
+document.querySelector('form').addEventListener('submit', function () {
+    document.querySelectorAll('.quantity, .price, .total, #TongSoLuong, #TongThanhTien').forEach(input => {
+        input.value = unformat(input.value);
+    });
+});
 </script>
 
 
