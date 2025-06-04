@@ -68,7 +68,7 @@ class AuthController extends Controller
             return redirect()->route('login')->with('error', 'Phiên đăng nhập hết hạn.');
         }
 
-        // Debug: Kiểm tra giá trị username và OTP nhập vào
+        
         // dd([
         //     'username' => $username,
         //     'entered_otp' => $request->otp_code,
@@ -81,7 +81,7 @@ class AuthController extends Controller
             ->orderBy('created_at', 'desc') // Đảm bảo lấy OTP mới nhất
             ->first();
 
-        // Debug: Kiểm tra kết quả truy vấn OTP
+       
         // dd([
         //     'queried_otp' => $otp,
         // ]);
