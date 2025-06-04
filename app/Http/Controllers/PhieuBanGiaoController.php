@@ -88,8 +88,7 @@ class PhieuBanGiaoController extends Controller
                 'BienPhapXuLy' => 'nullable|string|max:255',
                 'GhiChu' => 'nullable|string|max:255',
                 'TenLinhKien' => ['required', 'array'],
-                'TenLinhKien.*' => ['required', 'regex:/^[\pL\s]+$/u'],
-
+                'TenLinhKien.*' => ['required', 'regex:/^[\pL\pN\s\-_.]+$/u'],
                 'DonViTinh' => ['nullable', 'array'],
                 'DonViTinh.*' => ['nullable', 'regex:/^[\pL\s]+$/u'],
                 'SoLuong' => 'required|array',
@@ -142,7 +141,7 @@ class PhieuBanGiaoController extends Controller
             return redirect()->back()
                 ->withErrors($e->validator)
                 ->withInput()
-                ->with('error', 'Tên linh kiện và đơn vị tính không được nhập kí tự đặc biệt và số!');
+                ->with('error', 'Tên linh kiện và đơn vị tính không được nhập kí tự đặc biệt');
         }
     }
 
@@ -182,8 +181,7 @@ class PhieuBanGiaoController extends Controller
                 'LuuY' => 'nullable|string|max:255',
 
                 'TenLinhKien' => ['required', 'array'],
-                'TenLinhKien.*' => ['required', 'regex:/^[\pL\s]+$/u'],
-
+               'TenLinhKien.*' => ['required', 'regex:/^[\pL\pN\s\-_.]+$/u'],
                 'DonViTinh' => ['nullable', 'array'],
                 'DonViTinh.*' => ['nullable', 'regex:/^[\pL\s]+$/u'],
 
@@ -229,7 +227,7 @@ class PhieuBanGiaoController extends Controller
             return redirect()->back()
                 ->withErrors($e->validator)
                 ->withInput()
-                ->with('error', 'Tên linh kiện và đơn vị tính không được nhập kí tự đặc biệt và số!');
+                ->with('error', 'Tên linh kiện và đơn vị tính không được nhập kí tự đặc biệt!');
         }
     }
 
