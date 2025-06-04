@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\LichVanHanh;
 use App\Models\May;
 use App\Models\NhanVien;
+use App\Events\eventUpdateTable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 
@@ -12,64 +13,64 @@ use Illuminate\Support\Facades\DB;
 
 class LichVanHanhController extends Controller
 {
-        public function index(Request $request)
-        {
-            $query = LichVanHanh::query();
-            $may = May::where('TrangThai', '!=', 1)->get();
-            $nhanvien = NhanVien::all();
+    public function index(Request $request)
+    {
+        $query = LichVanHanh::query();
+        $may = May::where('TrangThai', '!=', 1)->get();
+        $nhanvien = NhanVien::all();
 
-            // Lọc theo bộ lọc thời gian
-            $timeFilter = $request->input('time_filter', 'today');
+        // Lọc theo bộ lọc thời gian
+        $timeFilter = $request->input('time_filter', 'today');
 
-            switch ($timeFilter) {
-                case 'today':
-                    $query->whereDate('NgayVanHanh', Carbon::today());
-                    break;
-                case 'yesterday':
-                    $query->whereDate('NgayVanHanh', Carbon::yesterday());
-                    break;
-                case 'tomorrow':
-                    $query->whereDate('NgayVanHanh', Carbon::tomorrow());
-                    break;
-                case 'this_week':
-                    // Lọc từ thứ 2 đầu tuần đến chủ nhật cuối tuần (tùy thiết lập vùng, mặc định Carbon tuần bắt đầu từ thứ 2)
-                    $query->whereBetween('NgayVanHanh', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()]);
-                    break;
-                case 'custom':
-                    if ($request->filled('start_date') && $request->filled('end_date')) {
-                        try {
-                            $fromDate = Carbon::parse($request->input('start_date'))->startOfDay();
-                            $toDate = Carbon::parse($request->input('end_date'))->endOfDay();
-                            $query->whereBetween('NgayVanHanh', [$fromDate, $toDate]);
-                        } catch (\Exception $e) {
-                            return redirect()->back()->withErrors(['error' => 'Định dạng ngày không hợp lệ!']);
-                        }
+        switch ($timeFilter) {
+            case 'today':
+                $query->whereDate('NgayVanHanh', Carbon::today());
+                break;
+            case 'yesterday':
+                $query->whereDate('NgayVanHanh', Carbon::yesterday());
+                break;
+            case 'tomorrow':
+                $query->whereDate('NgayVanHanh', Carbon::tomorrow());
+                break;
+            case 'this_week':
+                // Lọc từ thứ 2 đầu tuần đến chủ nhật cuối tuần (tùy thiết lập vùng, mặc định Carbon tuần bắt đầu từ thứ 2)
+                $query->whereBetween('NgayVanHanh', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()]);
+                break;
+            case 'custom':
+                if ($request->filled('start_date') && $request->filled('end_date')) {
+                    try {
+                        $fromDate = Carbon::parse($request->input('start_date'))->startOfDay();
+                        $toDate = Carbon::parse($request->input('end_date'))->endOfDay();
+                        $query->whereBetween('NgayVanHanh', [$fromDate, $toDate]);
+                    } catch (\Exception $e) {
+                        return redirect()->back()->withErrors(['error' => 'Định dạng ngày không hợp lệ!']);
                     }
-                    break;
-                default:
-                    // Mặc định là hôm nay nếu time_filter không hợp lệ
-                    $query->whereDate('NgayVanHanh', Carbon::today());
-            }
-
-            // Lọc ca làm việc
-            if ($request->filled('ca')) {
-                $query->where('CaLamViec', $request->input('ca'));
-            }
-            // Lọc máy
-            if ($request->filled('may')) {
-                $query->where('MaMay', $request->input('may'));
-            }
-            // Lọc nhân viên
-            if ($request->filled('nhanvien')) {
-                $query->where('MaNhanVien', $request->input('nhanvien'));
-            }
-
-            $lichvanhanh = $query->with(['may', 'nhanVien'])->orderBy('NgayVanHanh', 'asc')->get()->groupBy('NgayVanHanh');
-
-            return view('Vlich.lichvanhanh', compact('lichvanhanh', 'may', 'nhanvien'));
+                }
+                break;
+            default:
+                // Mặc định là hôm nay nếu time_filter không hợp lệ
+                $query->whereDate('NgayVanHanh', Carbon::today());
         }
 
-    
+        // Lọc ca làm việc
+        if ($request->filled('ca')) {
+            $query->where('CaLamViec', $request->input('ca'));
+        }
+        // Lọc máy
+        if ($request->filled('may')) {
+            $query->where('MaMay', $request->input('may'));
+        }
+        // Lọc nhân viên
+        if ($request->filled('nhanvien')) {
+            $query->where('MaNhanVien', $request->input('nhanvien'));
+        }
+
+        $lichvanhanh = $query->with(['may', 'nhanVien'])->orderBy('NgayVanHanh', 'asc')->get()->groupBy('NgayVanHanh');
+
+        return view('Vlich.lichvanhanh', compact('lichvanhanh', 'may', 'nhanvien'));
+    }
+
+
 
 
     public function create()
@@ -160,21 +161,23 @@ class LichVanHanhController extends Controller
 
         // Xử lý thông báo và chuyển trang
         if (!empty($loiTrungLich)) {
-    if ($soLuongLichDuocThem > 0) {
-        return redirect()->route('lichvanhanh')->with('notify_messages', [
-            ['type' => 'success', 'message' => 'Đã thêm ' . $soLuongLichDuocThem . ' lịch thành công.'],
-            ['type' => 'warning', 'message' => 'Một số lịch bị trùng:<br>' . implode('<br>', $loiTrungLich)]
-        ]);
-        } else {
-            return redirect()->back()->withInput()->with('notify_messages', [
-                ['type' => 'warning', 'message' => 'Tất cả lịch đều bị trùng. Không có lịch nào được thêm.<br>' . implode('<br>', $loiTrungLich)]
-            ]);
+            if ($soLuongLichDuocThem > 0) {
+                return redirect()->route('lichvanhanh')->with('notify_messages', [
+                    ['type' => 'success', 'message' => 'Đã thêm ' . $soLuongLichDuocThem . ' lịch thành công.'],
+                    ['type' => 'warning', 'message' => 'Một số lịch bị trùng:<br>' . implode('<br>', $loiTrungLich)]
+                ]);
+            } else {
+                return redirect()->back()->withInput()->with('notify_messages', [
+                    ['type' => 'warning', 'message' => 'Tất cả lịch đều bị trùng. Không có lịch nào được thêm.<br>' . implode('<br>', $loiTrungLich)]
+                ]);
+            }
         }
-    }
 
-    return redirect()->route('lichvanhanh')->with('notify_messages', [
-        ['type' => 'success', 'message' => 'Thêm tất cả lịch thành công!']
-    ]);
+        event(new eventUpdateTable());
+
+        return redirect()->route('lichvanhanh')->with('notify_messages', [
+            ['type' => 'success', 'message' => 'Thêm tất cả lịch thành công!']
+        ]);
     }
 
 
@@ -200,19 +203,21 @@ class LichVanHanhController extends Controller
         $lich = LichVanHanh::findOrFail($id);
         $lich->update($request->all());
 
+        event(new eventUpdateTable());
+
         return redirect()->route('lichvanhanh')->with('success', 'Cập nhật thành công!');
     }
-        public function showNhatKi($id)
-        {
-            // Tìm lịch vận hành theo ID
-            $lich = LichVanHanh::with(['may', 'nhanVien'])->findOrFail($id);
-
-            // Trả về view và truyền dữ liệu cho view
-            return view('vLich.nhatkivanhanh', compact('lich'));
-        }
-   public function updateNhatKi(Request $request, $id)
+    public function showNhatKi($id)
     {
-        
+        // Tìm lịch vận hành theo ID
+        $lich = LichVanHanh::with(['may', 'nhanVien'])->findOrFail($id);
+
+        // Trả về view và truyền dữ liệu cho view
+        return view('vLich.nhatkivanhanh', compact('lich'));
+    }
+    public function updateNhatKi(Request $request, $id)
+    {
+
         $trangThai = is_array($request->TrangThai)
             ? (int) $request->TrangThai[0]  // Lấy giá trị đầu tiên được chọn
             : (int) $request->TrangThai;
@@ -240,20 +245,22 @@ class LichVanHanhController extends Controller
         return redirect()->route('lichvanhanh')->with('success', 'Đã lưu nhật ký và cập nhật trạng thái máy thành công!');
     }
 
-    
 
 
 
-    public function destroy(Request $request,$id)
+
+    public function destroy(Request $request, $id)
     {
-        
+
         $lich = LichVanHanh::findOrFail($id);
         $lich->delete();
 
         // Lấy lại các tham số lọc từ request
         $filters = $request->only(['from_date', 'to_date', 'quy', 'nam', 'ca']);
 
-    // Chuyển hướng lại với các tham số lọc
+        event(new eventUpdateTable());
+
+        // Chuyển hướng lại với các tham số lọc
         return redirect()->route('lichvanhanh', $filters)->with('success', 'Xóa lịch vận hành thành công!');
     }
 }

@@ -21,7 +21,7 @@
 
                         @forelse ($lichvanhanh as $ngay => $lichs)
                             <h5 class="mt-4 fw-bold">Ngày: {{ \Carbon\Carbon::parse($ngay)->format('d/m/Y') }}</h5>
-                                <table class="table table-responsive table-bordered table-hover">
+                                <table id="tableLichVanHanh" class="table table-responsive table-bordered table-hover">
                                 <thead>                                 
                                     <tr class="text-center">
                                         <th>STT</th>
@@ -188,58 +188,58 @@
 
 <!-- Animate.css (nếu dùng hiệu ứng animated) -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
-  <script>
-    function confirmDelete(button) {
-            swal({
-                title: 'Bạn có chắc chắn?',
-                text: "Hành động này không thể hoàn tác!",
-                icon: 'warning',
-                buttons: {
-                    confirm: {
-                        text: 'Xóa',
-                        className: 'btn btn-danger'
-                    },
-                    cancel: {
-                        text: 'Hủy',
-                        visible: true,
-                        className: 'btn btn-success'
+    <script>
+        function confirmDelete(button) {
+                swal({
+                    title: 'Bạn có chắc chắn?',
+                    text: "Hành động này không thể hoàn tác!",
+                    icon: 'warning',
+                    buttons: {
+                        confirm: {
+                            text: 'Xóa',
+                            className: 'btn btn-danger'
+                        },
+                        cancel: {
+                            text: 'Hủy',
+                            visible: true,
+                            className: 'btn btn-success'
+                        }
                     }
-                }
-            }).then((willDelete) => {
-                if (willDelete) {
-                    button.closest('form').submit(); // Gửi form
-                } else {
-                    swal.close(); // Đóng hộp thoại
-                }
-            });
-        }
-  </script>
+                }).then((willDelete) => {
+                    if (willDelete) {
+                        button.closest('form').submit(); // Gửi form
+                    } else {
+                        swal.close(); // Đóng hộp thoại
+                    }
+                });
+            }
+    </script>
  
     <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const radios = document.querySelectorAll('input[name="time_filter"]');
-        const customDateRange = document.getElementById('custom-date-range');
+        document.addEventListener('DOMContentLoaded', function () {
+            const radios = document.querySelectorAll('input[name="time_filter"]');
+            const customDateRange = document.getElementById('custom-date-range');
 
-        function toggleCustomDate() {
-            if (document.querySelector('input[name="time_filter"]:checked').value === 'custom') {
-                customDateRange.style.display = '';
-            } else {
-                customDateRange.style.display = 'none';
-                // Nếu muốn reset input ngày khi ẩn, uncomment:
-                // document.getElementById('start_date').value = '';
-                // document.getElementById('end_date').value = '';
+            function toggleCustomDate() {
+                if (document.querySelector('input[name="time_filter"]:checked').value === 'custom') {
+                    customDateRange.style.display = '';
+                } else {
+                    customDateRange.style.display = 'none';
+                    // Nếu muốn reset input ngày khi ẩn, uncomment:
+                    // document.getElementById('start_date').value = '';
+                    // document.getElementById('end_date').value = '';
+                }
             }
-        }
 
-        radios.forEach(radio => {
-            radio.addEventListener('change', toggleCustomDate);
+            radios.forEach(radio => {
+                radio.addEventListener('change', toggleCustomDate);
+            });
+
+            // Khởi tạo trạng thái khi trang load
+            toggleCustomDate();
         });
-
-        // Khởi tạo trạng thái khi trang load
-        toggleCustomDate();
-    });
-</script>
-  <script>
+    </script>
+    <script>
         @if (session('notify_messages'))
             @foreach (session('notify_messages') as $notify)
                 $.notify({
@@ -256,5 +256,23 @@
             @endforeach
         @endif
     </script>
+    <!-- script đồng bộ dữ liệu khi có thay đổi mới -->
+    <script>
+        pusher.subscribe('channel-all').bind('eventUpdateTable', function (data) {
+            if (data.reload) {
+                $.ajax({
+                    url: window.location.href,
+                    type: 'GET',
+                    success: function (response) {
+                        const newData = $(response).find('#tableLichVanHanh').html();
 
+                        $('#tableLichVanHanh').html(newData);
+                    },
+                    error: function () {
+                        console.error('Lỗi khi load lại bảng!');
+                    }
+                })
+            }
+        })
+    </script>
 @endsection
