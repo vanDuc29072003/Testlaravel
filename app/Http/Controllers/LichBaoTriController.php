@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\eventUpdateTable;
 use App\Models\NhanVien;
 use App\Models\NhaCungCap;
 use Illuminate\Http\Request;
@@ -229,6 +230,8 @@ class LichBaoTriController extends Controller
                     ->with('warning', 'Tạo được ' . $soLanLapThanhCong . ' lịch bảo trì định kỳ. Một số ngày trùng với lịch vận hành:<br>' . implode('<br>', $loiTrungLichVanHanh));
             }
 
+            event(new eventUpdateTable());
+
             return redirect()->route('lichbaotri')
                 ->with('success', "Tạo lịch bảo trì định kỳ thành công ($soLanLapThanhCong lần)!");
         }
@@ -262,6 +265,8 @@ class LichBaoTriController extends Controller
                 'TrangThai' => 0,
             ]);
 
+            event(new eventUpdateTable());
+
             return redirect()->route('lichbaotri')->with('success', 'Tạo lịch bảo trì đột xuất thành công!');
         }
 
@@ -275,6 +280,9 @@ class LichBaoTriController extends Controller
     {
         $lichbaotri = LichBaoTri::findOrFail($id);
         $lichbaotri->delete();
+
+        event(new eventUpdateTable());
+
         return redirect()->route('lichbaotri')->with('success', 'Xóa lịch bảo trì thành công!');
     }
 
@@ -339,6 +347,8 @@ class LichBaoTriController extends Controller
         $lich = LichBaoTri::findOrFail($id);
         $lich->NgayBaoTri = $request->NgayBaoTri;
         $lich->save();
+
+        event(new eventUpdateTable());
 
         return redirect()->route('lichbaotri')->with('success', 'Cập nhật lịch bảo trì thành công.');
     }

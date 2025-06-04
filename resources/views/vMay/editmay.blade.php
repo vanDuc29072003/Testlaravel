@@ -146,7 +146,7 @@
     <script>
         document.getElementById('TenMay').addEventListener('input', function(e) {
             // Chỉ cho phép chữ cái, số, khoảng trắng, gạch ngang, gạch dưới
-            this.value = this.value.replace(/[^\p{L}0-9 _-,.()]/gu, '');
+            this.value = this.value.replace(/[^\p{L}0-9 _\-,.()]/gu, '');
         });
         document.getElementById('SeriMay').addEventListener('input', function(e) {
             this.value = this.value.replace(/[^A-Za-z0-9]/g, '');
