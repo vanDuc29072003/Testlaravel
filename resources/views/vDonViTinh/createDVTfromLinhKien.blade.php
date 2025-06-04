@@ -16,7 +16,7 @@
                                 @csrf
                                 <div class="form-group">
                                     <label for="TenDonViTinh" class="form-label">Tên Đơn vị tính</label>
-                                    <input type="text" name="TenDonViTinh" class="form-control"
+                                    <input type="text" id="TenDonViTinh" name="TenDonViTinh" class="form-control"
                                         value="{{ old('TenDonViTinh') }}" placeholder="Nhập tên đơn vị tính" required>
                                     @error('TenDonViTinh')
                                         <small class="text-danger">{{ $message }}</small>
@@ -39,4 +39,12 @@
             </div>
         </div>
     </div>
+@endsection
+@section('scripts')
+    <script>
+        document.getElementById('TenDonViTinh').addEventListener('input', function(e) {
+            // Chỉ cho phép chữ cái, số, khoảng trắng, gạch ngang, gạch dưới
+            this.value = this.value.replace(/[^\p{L}0-9 _-]/gu, '');
+        });
+    </script>
 @endsection

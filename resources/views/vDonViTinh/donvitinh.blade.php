@@ -59,7 +59,7 @@
                             <form action="{{ route('donvitinh.index') }}" method="GET">
                                 <div class="mb-3">
                                     <label for="search" class="form-label">Tên Đơn vị tính</label>
-                                    <input type="text" name="search" class="form-control" placeholder="VUi lòng nhập..."
+                                    <input type="text" name="search" class="form-control" placeholder="Vui lòng nhập..."
                                         value="{{ request('search') }}">
                                 </div>
                                 <button class="btn btn-primary w-100" type="submit">

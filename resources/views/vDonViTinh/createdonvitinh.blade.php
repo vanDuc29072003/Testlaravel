@@ -16,13 +16,9 @@
                                 @csrf
                                 <div class="form-group">
                                     <label for="TenDonViTinh" class="form-label">Tên Đơn vị tính</label>
-                                    <input type="text" name="TenDonViTinh" class="form-control"
+                                    <input type="text" id="TenDonViTinh" name="TenDonViTinh" class="form-control"
                                         value="{{ old('TenDonViTinh') }}" placeholder="Nhập tên đơn vị tính" required>
-                                    @error('TenDonViTinh')
-                                        <small class="text-danger">{{ $message }}</small>
-                                    @enderror
                                 </div>
-
                             </form>
                         </div>
                         <div class="card-footer">
@@ -39,4 +35,12 @@
             </div>
         </div>
     </div>
+@endsection
+@section('scripts')
+  <script>
+        document.getElementById('TenDonViTinh').addEventListener('input', function(e) {
+            // \p{L}: Cho phép mọi ký tự chữ cái Unicode (cả tiếng Việt, tiếng Anh, tiếng Nhật, v.v.)
+            this.value = this.value.replace(/[^\p{L}0-9 _-]/gu, '');
+        });
+    </script>
 @endsection

@@ -148,6 +148,5 @@
                 }
             });
         }
-        
-  
+    </script>
 @endsection

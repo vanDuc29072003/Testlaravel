@@ -38,8 +38,8 @@
           <a data-bs-toggle="collapse" href="#phancong">
             <i class="fa-solid fa-calendar-days"></i>
             <p>Phân công</p>
-            @if ($count_lichsc > 0)
-              <span class="badge">{{ $count_lichsc }}</span>
+            @if ($count_lichsc + $count_lichbt > 0)
+              <span class="badge">{{ $count_lichsc + $count_lichbt }}</span>
             @else
               <span class="caret"></span>
             @endif
@@ -49,11 +49,15 @@
               <li>
                 <a href="{{ route('lichvanhanh') }}">
                   <span class="sub-item">Lịch vận hành</span>
+                  
                 </a>
               </li>
               <li>
                 <a href="{{ route('lichbaotri') }}">
                   <span class="sub-item">Lịch bảo trì</span>
+                  @if ($count_lichbt > 0)
+                    <span class="badge">{{ $count_lichbt }}</span>
+                  @endif
                 </a>
               </li>
               <li>

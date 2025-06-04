@@ -77,19 +77,13 @@
 @endsection
 
 @section('scripts')
-
-
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const tenLinhKienInput = document.getElementById('TenLinhKien');
-
-        tenLinhKienInput.addEventListener('input', function () {
-            let value = this.value;
-
-            // Cho phép chữ cái có dấu, số, khoảng trắng và dấu gạch ngang
-            this.value = value.replace(/[^0-9\s\-a-zA-ZÀ-ỹà-ỹĐđ]/g, '');
+    <script>
+        document.getElementById('TenLinhKien').addEventListener('input', function(e) {
+            // Chỉ cho phép chữ cái, số, khoảng trắng, gạch ngang, gạch dưới
+            this.value = this.value.replace(/[^\p{L}0-9 _-]/gu, '');
         });
-    });
-</script>
-
+        document.getElementById('MoTa').addEventListener('input', function(e) {
+            this.value = this.value.replace(/[^\p{L}0-9 _-]/gu, '');
+        });
+    </script>s
 @endsection
