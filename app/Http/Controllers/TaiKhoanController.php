@@ -55,58 +55,64 @@ class TaiKhoanController extends Controller
     // Lưu tài khoản mới
     public function store(Request $request)
     {
-        // Validate dữ liệu (bỏ validate TenTaiKhoan vì sẽ sinh tự động)
-        $validated = $request->validate([
-            'TenNhanVien' => 'required|string|max:100',
-            'Email' => 'required|email|unique:nhanvien,Email',
-            'GioiTinh' => 'required|in:Nam,Nữ',
-            'NgaySinh' => 'required|date',
-            'SDT' => 'required|int|between:10,12|unique:nhanvien,SDT',
-            'DiaChi' => 'required|string|max:255',
-            'MaBoPhan' => 'required|exists:bophan,MaBoPhan',
-            'MatKhauChuaMaHoa' => 'required|string|min:6',
-        ]);
+        try {
+            // Validate dữ liệu
+            $validated = $request->validate([
+                'TenNhanVien' => 'required|string|max:100',
+                'Email' => 'required|email|unique:nhanvien,Email',
+                'GioiTinh' => 'required|in:Nam,Nữ',
+                'NgaySinh' => 'required|date',
+                'SDT' => 'required|digits:10|unique:nhanvien,SDT',
+                'DiaChi' => 'required|string|max:255',
+                'MaBoPhan' => 'required|exists:bophan,MaBoPhan',
+                'MatKhauChuaMaHoa' => 'required|string|min:6',
+            ],[
+                'TenNhanVien.required' => 'Tên nhân viên là bắt buộc.',
+                'Email.unique' => 'Email đã tồn tại.',
+                'SDT.digits' => 'Số điện thoại phải có 10 chữ số.',
+                'SDT.unique' => 'Số điện thoại đã tồn tại.',
+            ]
+        );
 
-        // Tạo mới nhân viên
-        $nhanvien = new NhanVien();
-        $nhanvien->TenNhanVien = $validated['TenNhanVien'];
-        $nhanvien->Email = $validated['Email'];
-        $nhanvien->GioiTinh = $validated['GioiTinh'];
-        $nhanvien->NgaySinh = $validated['NgaySinh'];
-        $nhanvien->SDT = $validated['SDT'];
-        $nhanvien->DiaChi = $validated['DiaChi'];
-        $nhanvien->MaBoPhan = $validated['MaBoPhan'];
-        $nhanvien->save(); // 
+            // Tạo nhân viên
+            $nhanvien = new NhanVien();
+            $nhanvien->TenNhanVien = $validated['TenNhanVien'];
+            $nhanvien->Email = $validated['Email'];
+            $nhanvien->GioiTinh = $validated['GioiTinh'];
+            $nhanvien->NgaySinh = $validated['NgaySinh'];
+            $nhanvien->SDT = $validated['SDT'];
+            $nhanvien->DiaChi = $validated['DiaChi'];
+            $nhanvien->MaBoPhan = $validated['MaBoPhan'];
+            $nhanvien->save(); // ;
 
-        // Lấy TenRutGon từ bảng bophan
-        $bophan = BoPhan::find($validated['MaBoPhan']);
-        $tenRutGon = $bophan->TenRutGon ?? 'XX';
+            // Lấy TenRutGon
+            $tenRutGon = BoPhan::find($validated['MaBoPhan'])->TenRutGon ?? 'XX';
+            $tenTaiKhoan = $tenRutGon . $nhanvien->MaNhanVien;
 
-        // Tạo TenTaiKhoan, Mật khẩu tự động
-        $tenTaiKhoan = $tenRutGon . $nhanvien->MaNhanVien;
-        $matkhauMacDinh = 'TKhoa12345@';
-
-        // Kiểm tra xem TenTaiKhoan đã tồn tại chưa
-        if (TaiKhoan::where('TenTaiKhoan', $tenTaiKhoan)->exists()) {
-            // Nếu trùng thì thêm hậu tố số tăng dần (QL101_1, QL101_2, ...)
-            $suffix = 1;
+            // Kiểm tra trùng tài khoản
             $base = $tenTaiKhoan;
-            while (TaiKhoan::where('TenTaiKhoan', $base . '_' . $suffix)->exists()) {
-                $suffix++;
+            $suffix = 1;
+            while (TaiKhoan::where('TenTaiKhoan', $tenTaiKhoan)->exists()) {
+                $tenTaiKhoan = $base . '_' . $suffix++;
             }
-            $tenTaiKhoan = $base . '_' . $suffix;
+
+            // Tạo tài khoản
+            $matkhauMacDinh = 'TKhoa12345@';
+            TaiKhoan::create([
+                'MaNhanVien' => $nhanvien->MaNhanVien,
+                'TenTaiKhoan' => $tenTaiKhoan,
+                'MatKhau' => bcrypt($matkhauMacDinh),
+                'MatKhauChuaMaHoa' => $matkhauMacDinh,
+            ]);
+
+            return redirect()->route('taikhoan.index')
+                            ->with('success', 'Thêm tài khoản thành công!');
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return back()->withInput()
+                        ->with('error', 'Đã xảy ra lỗi: ' . $e->validator->errors()->first());
         }
-
-        // Tạo tài khoản
-        $taikhoan = new TaiKhoan();
-        $taikhoan->MaNhanVien = $nhanvien->MaNhanVien;
-        $taikhoan->TenTaiKhoan = $tenTaiKhoan;
-        $taikhoan->MatKhau = bcrypt($matkhauMacDinh); // Mã hóa mật khẩu
-        $taikhoan->MatKhauChuaMaHoa = $matkhauMacDinh;
-        $taikhoan->save();
-
-        return redirect()->route('taikhoan.index',compact('matkhauMacDinh'))->with('success', 'Thêm tài khoản thành công!');
     }
+
 
         public function edit($MaNhanVien)
     {

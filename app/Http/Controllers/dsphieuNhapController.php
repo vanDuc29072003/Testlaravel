@@ -52,7 +52,7 @@ class dsphieuNhapController extends Controller
 
         // Lấy danh sách phiếu nhập đã duyệt
         $dsPhieuNhapDaDuyet = $query
-           ->where('TrangThai', '!=', 0)
+            ->where('TrangThai', '!=', 0)
             ->with('nhaCungCap', 'nhanVien')
             ->orderBy('MaHienThi', 'desc')
             ->paginate(10, ['*'], 'da_duyet');
@@ -115,25 +115,31 @@ class dsphieuNhapController extends Controller
             'NgayNhap' => 'required|date',
             'MaNhaCungCap' => 'required|exists:nhacungcap,MaNhaCungCap',
             'MaNhanVien' => 'required|exists:nhanvien,MaNhanVien',
-            'TongSoLuong' => 'required|integer|min:1',
-            'TongTien' => 'required|numeric|min:0',
+            'TongSoLuong' => 'required|string', // Tạm để string để xử lý dấu chấm
+            'TongTien' => 'required|string',
             'GhiChu' => 'nullable|string|max:255',
             'MaLinhKien' => 'required|array|min:1',
             'MaLinhKien.*' => 'required|string|exists:linhkiensuachua,MaLinhKien',
             'SoLuong' => 'required|array|min:1',
-            'SoLuong.*' => 'required|integer|min:1',
+            'SoLuong.*' => 'required|string', // Tạm để string để xử lý dấu chấm
             'GiaNhap' => 'required|array|min:1',
-            'GiaNhap.*' => 'required|numeric|min:0',
+            'GiaNhap.*' => 'required|string', // Tạm để string để xử lý dấu chấm
         ]);
 
         try {
+           
+            $tongSoLuong = (int) str_replace('.', '', $validatedData['TongSoLuong']);
+            $tongTien = (float) str_replace('.', '', $validatedData['TongTien']);
+            $soLuongList = array_map(fn($v) => (int) str_replace('.', '', $v), $validatedData['SoLuong']);
+            $giaNhapList = array_map(fn($v) => (float) str_replace('.', '', $v), $validatedData['GiaNhap']);
+
             // Lưu phiếu nhập
             $phieuNhap = PhieuNhap::create([
                 'NgayNhap' => $validatedData['NgayNhap'],
                 'MaNhaCungCap' => $validatedData['MaNhaCungCap'],
                 'MaNhanVien' => $validatedData['MaNhanVien'],
-                'TongTien' => $validatedData['TongTien'],
-                'TongSoLuong' => $validatedData['TongSoLuong'],
+                'TongTien' => $tongTien,
+                'TongSoLuong' => $tongSoLuong,
                 'GhiChu' => $validatedData['GhiChu'],
                 'TrangThai' => 0, // Mặc định trạng thái là chờ duyệt
             ]);
@@ -143,9 +149,9 @@ class dsphieuNhapController extends Controller
                 ChiTietPhieuNhap::create([
                     'MaPhieuNhap' => $phieuNhap->MaPhieuNhap,
                     'MaLinhKien' => $maLinhKien,
-                    'SoLuong' => $validatedData['SoLuong'][$index],
-                    'GiaNhap' => $validatedData['GiaNhap'][$index],
-                    'TongCong' => $validatedData['SoLuong'][$index] * $validatedData['GiaNhap'][$index],
+                    'SoLuong' => $soLuongList[$index],
+                    'GiaNhap' => $giaNhapList[$index],
+                    'TongCong' => $soLuongList[$index] * $giaNhapList[$index],
                 ]);
             }
 
@@ -162,13 +168,13 @@ class dsphieuNhapController extends Controller
 
             return redirect()->route('dsphieunhap')->with('success', 'Phiếu nhập mới đã được thêm vào danh sách chờ duyệt!');
         } catch (\Exception $e) {
-
             // Ghi log lỗi để kiểm tra
             Log::error('Lỗi khi lưu phiếu nhập: ' . $e->getMessage());
 
             return redirect()->back()->withInput()->with('error', 'Đã xảy ra lỗi khi lưu phiếu nhập. Vui lòng thử lại!');
         }
     }
+
 
     public function show($MaPhieuNhap)
     {
@@ -219,6 +225,7 @@ class dsphieuNhapController extends Controller
             'MaPhieuNhap' => $data['MaPhieuNhap'],
             'MaNhaCungCap' => $data['MaNhaCungCap'],
             'MaNhanVien' => $data['MaNhanVien'],
+            'TenNhanVien' => $data['TenNhanVien'],
             'NgayNhap' => $data['NgayNhap'],
             'GhiChu' => $data['GhiChu'],
             'TongSoLuong' => $data['TongSoLuong'],
@@ -235,25 +242,31 @@ class dsphieuNhapController extends Controller
         $validatedData = $request->validate([
             'NgayNhap' => 'required|date',
             'MaNhaCungCap' => 'required|exists:nhacungcap,MaNhaCungCap',
-            'TongSoLuong' => 'required|integer|min:1',
-            'TongTien' => 'required|numeric|min:0',
+            'TongSoLuong' => 'required|string', // để xử lý dấu chấm
+            'TongTien' => 'required|string',
             'GhiChu' => 'nullable|string|max:255',
             'MaLinhKien' => 'required|array|min:1',
             'MaLinhKien.*' => 'required|string|exists:linhkiensuachua,MaLinhKien',
             'SoLuong' => 'required|array|min:1',
-            'SoLuong.*' => 'required|integer|min:1',
+            'SoLuong.*' => 'required|string',
             'GiaNhap' => 'required|array|min:1',
-            'GiaNhap.*' => 'required|numeric|min:0',
+            'GiaNhap.*' => 'required|string',
         ]);
 
         try {
+         
+            $tongSoLuong = (int) str_replace('.', '', $validatedData['TongSoLuong']);
+            $tongTien = (float) str_replace('.', '', $validatedData['TongTien']);
+            $soLuongList = array_map(fn($v) => (int) str_replace('.', '', $v), $validatedData['SoLuong']);
+            $giaNhapList = array_map(fn($v) => (float) str_replace('.', '', $v), $validatedData['GiaNhap']);
+
             // Cập nhật phiếu nhập
             $phieuNhap = PhieuNhap::findOrFail($MaPhieuNhap);
             $phieuNhap->update([
                 'NgayNhap' => $validatedData['NgayNhap'],
                 'MaNhaCungCap' => $validatedData['MaNhaCungCap'],
-                'TongTien' => $validatedData['TongTien'],
-                'TongSoLuong' => $validatedData['TongSoLuong'],
+                'TongTien' => $tongTien,
+                'TongSoLuong' => $tongSoLuong,
                 'GhiChu' => $validatedData['GhiChu'],
             ]);
 
@@ -263,18 +276,21 @@ class dsphieuNhapController extends Controller
                 ChiTietPhieuNhap::create([
                     'MaPhieuNhap' => $phieuNhap->MaPhieuNhap,
                     'MaLinhKien' => $maLinhKien,
-                    'SoLuong' => $validatedData['SoLuong'][$index],
-                    'GiaNhap' => $validatedData['GiaNhap'][$index],
-                    'TongCong' => $validatedData['SoLuong'][$index] * $validatedData['GiaNhap'][$index],
+                    'SoLuong' => $soLuongList[$index],
+                    'GiaNhap' => $giaNhapList[$index],
+                    'TongCong' => $soLuongList[$index] * $giaNhapList[$index],
                 ]);
             }
 
-            return redirect()->route('dsphieunhap')->with('success', 'Phiếu nhập đã được cập nhật thành công!');
+            return redirect()->route('phieunhap.show', ['MaPhieuNhap' => $phieuNhap->MaPhieuNhap])
+                ->with('success', 'Phiếu nhập đã được cập nhật thành công!');
+
         } catch (\Exception $e) {
             Log::error('Lỗi khi cập nhật phiếu nhập: ' . $e->getMessage());
             return redirect()->back()->withInput()->with('error', 'Đã xảy ra lỗi khi cập nhật phiếu nhập.');
         }
     }
+
     public function exportPDF($MaPhieuNhap)
     {
         // Lấy thông tin phiếu nhập cùng với nhà cung cấp, nhân viên và danh sách chi tiết phiếu nhập
@@ -294,7 +310,7 @@ class dsphieuNhapController extends Controller
         if ($phieuNhap->TrangThai != 0) {
             return redirect()->route('dsphieunhap')->with('error', 'Chỉ có thể xóa phiếu nhập ở trạng thái "Chờ duyệt".');
         }
-       
+
         $phieuNhap->TrangThai = 2;
         $phieuNhap->MaNhanVienDuyet = Auth::user()->MaNhanVien;
         $phieuNhap->save();

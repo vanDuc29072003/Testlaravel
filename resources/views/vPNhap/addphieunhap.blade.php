@@ -14,15 +14,18 @@
                         <div class="col-9">
                             <div class="d-flex justify-content-between align-items-center mb-3">
                                 <h3 class="mb-4">Thêm mới Phiếu Nhập Hàng</h3>
-                                <div>
-                                    <a href="#" id="btnAddLinhKien" class="btn btn-primary">
-                                        <i class="fa fa-plus"></i> Thêm mới linh kiện
-                                    </a>
-                                </div>
+                               
+    
+                               
                             </div>
 
                             <div class="form-group">
+                               <div class="d-flex justify-content-between">
                                 <label for="searchLinhKien">Tìm kiếm linh kiện</label>
+                                <a href="#" id="btnAddLinhKien" class="btn btn-sm btn-outline-white">
+                                        <i class="fa fa-plus"></i> Thêm mới linh kiện
+                                    </a>
+                               </div>
                                 <input type="text" class="form-control" id="searchLinhKien" placeholder="Nhập tên linh kiện">
                                 <div id="searchResults" class="list-group mt-2" style="max-height: 200px; overflow-y: auto;">
                                     <!-- Kết quả tìm kiếm sẽ được hiển thị ở đây -->
@@ -49,9 +52,9 @@
                                                     <td><input type="text" class="form-control" name="MaLinhKien[]" value="{{ $item['MaLinhKien'] }}" readonly></td>
                                                     <td><input type="text" class="form-control" name="TenLinhKien[]" value="{{ $item['TenLinhKien'] }}" readonly></td>
                                                     <td><input type="text" class="form-control" name="TenDonViTinh[]" value="{{ $item['TenDonViTinh'] }}" readonly></td>
-                                                    <td><input type="number" class="form-control quantity" name="SoLuong[]" value="{{ $item['SoLuong'] }}" required></td>
-                                                    <td><input type="number" class="form-control price" name="GiaNhap[]" value="{{ $item['GiaNhap'] }}" required></td>
-                                                    <td><input type="number" class="form-control total" name="TongCong[]" value="{{ $item['TongCong'] }}" readonly></td>
+                                                    <td><input type="text" class="form-control quantity" name="SoLuong[]" value="{{ $item['SoLuong'] }}" required></td>
+                                                    <td><input type="text" class="form-control price" name="GiaNhap[]" value="{{ $item['GiaNhap'] }}" required></td>
+                                                    <td><input type="text" class="form-control total" name="TongCong[]" value="{{ $item['TongCong'] }}" readonly></td>
                                                     <td class="text-center">
                                                         <button type="button" class="btn btn-danger btn-sm remove-product">
                                                             <i class="fa fa-trash"></i> Xóa
@@ -77,7 +80,12 @@
                                         value="{{ Auth::user()->nhanVien->TenNhanVien }}" readonly>
                                 </div>
                                 <div class="form-group">
-                                    <label for="MaNhaCungCap">Nhà Cung Cấp</label>
+                                    <div class="d-flex justify-content-between">
+                                         <label for="MaNhaCungCap">Nhà Cung Cấp</label>
+                                          <a id="btn-them-ncc" href="#" class="btn btn-sm btn-outline-white">
+                                                <i class="fa fa-plus"></i> Thêm mới
+                                            </a>
+                                    </div>
                                     <select class="form-control" id="MaNhaCungCap" name="MaNhaCungCap" required>
                                         <option value="">Chọn nhà cung cấp</option>
                                         @foreach ($nhaCungCaps as $nhaCungCap)
@@ -98,12 +106,12 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="TongSoLuong">Tổng Số Lượng</label>
-                                <input type="number" class="form-control" id="TongSoLuong" name="TongSoLuong"
+                                <input type="text" class="form-control" id="TongSoLuong" name="TongSoLuong"
                                     value="{{ session('phieuNhapSession')['TongSoLuong'] ?? '' }}" placeholder="0" readonly>
                                 </div>
                                 <div class="form-group">
                                     <label for="TongThanhTien">Tổng Thành Tiền</label>
-                                <input type="number" class="form-control" id="TongThanhTien" name="TongTien"
+                                <input type="text" class="form-control" id="TongThanhTien" name="TongTien"
                                     value="{{ session('phieuNhapSession')['TongThanhTien'] ?? '' }}" placeholder="0" readonly>
                                 </div>
                                 <div class="form-group">
@@ -129,6 +137,7 @@
     @endsection
 
 @section('scripts')
+
 <script>
 document.addEventListener('DOMContentLoaded', function () {
 
@@ -183,7 +192,14 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 });
+function formatNumber(value) {
+    const number = Number(value);
+    return isNaN(number) ? '0' : number.toLocaleString('vi-VN');
+}
 
+function unformat(value) {
+    return value.replace(/\./g, '').replace(/[^0-9]/g, '');
+}
 // Hàm lưu dữ liệu vào session
 function saveFormDataToSession(event) {
     event.preventDefault();
@@ -218,7 +234,42 @@ function saveFormDataToSession(event) {
     }).then(() => {
         window.location.href = "{{ route('linhkien.add2') }}";
     });
-}   
+}  
+document.getElementById('btn-them-ncc').addEventListener('click', function (event) {
+    event.preventDefault();
+    const data = {
+        MaNhaCungCap: document.getElementById('MaNhaCungCap').value,
+        NgayNhap: document.getElementById('NgayNhap').value,
+        GhiChu: document.getElementById('GhiChu').value,
+        LinhKienList: [],
+        TongSoLuong: document.getElementById('TongSoLuong').value,
+        TongThanhTien: document.getElementById('TongThanhTien').value
+    };
+
+    document.querySelectorAll('#product-list tr').forEach(row => {
+        data.LinhKienList.push({
+            MaLinhKien: row.querySelector('input[name="MaLinhKien[]"]').value,
+            TenLinhKien: row.querySelector('input[name="TenLinhKien[]"]').value,
+            TenDonViTinh: row.querySelector('input[name="TenDonViTinh[]"]').value,
+            SoLuong: row.querySelector('input[name="SoLuong[]"]').value,
+            GiaNhap: row.querySelector('input[name="GiaNhap[]"]').value,
+            TongCong: row.querySelector('input[name="TongCong[]"]').value
+        });
+    });
+
+    fetch("{{ route('phieunhap.saveSession') }}", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        },
+        body: JSON.stringify(data)
+    }).then(() => {
+       
+        window.location.href = "{{ route('nhacungcap.createNCCfromPN') }}";
+    });
+});
+
 
 // Hàm thêm linh kiện vào bảng
 function addLinhKienToTable(maLinhKien, tenLinhKien, tenDonViTinh) {
@@ -245,9 +296,9 @@ function addLinhKienToTable(maLinhKien, tenLinhKien, tenDonViTinh) {
         <td><input type="text" class="form-control" name="MaLinhKien[]" value="${maLinhKien}" readonly></td>
         <td><input type="text" class="form-control" name="TenLinhKien[]" value="${tenLinhKien}" readonly></td>
         <td><input type="text" class="form-control" name="TenDonViTinh[]" value="${tenDonViTinh}" readonly></td>
-        <td><input type="number" class="form-control quantity" name="SoLuong[]" placeholder="Số lượng" min="1" required></td>
-        <td><input type="number" class="form-control price" name="GiaNhap[]" placeholder="Giá nhập" min="1000" required></td>
-        <td><input type="number" class="form-control total" name="TongCong[]" readonly></td>
+        <td><input type="text" class="form-control quantity" name="SoLuong[]" placeholder="Số lượng" min="1" required></td>
+        <td><input type="text" class="form-control price" name="GiaNhap[]" placeholder="Giá nhập" min="1000" required></td>
+        <td><input type="text" class="form-control total" name="TongCong[]" readonly></td>
         <td class="text-center">
             <button type="button" class="btn btn-danger btn-sm remove-product">
                 <i class="fa fa-trash"></i> Xóa
@@ -273,20 +324,31 @@ function updateTotals() {
     let totalPriceValue = 0;
 
     rows.forEach(row => {
-        let quantity = row.querySelector('.quantity').value || 0;
-        let price = row.querySelector('.price').value || 0;
-        let total = row.querySelector('.total');
+        let quantityInput = row.querySelector('.quantity');
+        let priceInput = row.querySelector('.price');
+        let totalInput = row.querySelector('.total');
 
-        let rowTotal = parseInt(quantity) * parseFloat(price);
-        total.value = rowTotal.toFixed(0);
+        let quantity = parseInt(unformat(quantityInput.value)) || 0;
+        let price = parseFloat(unformat(priceInput.value)) || 0;
+        let rowTotal = quantity * price;
 
-        totalQty += parseInt(quantity);
+        totalInput.value = formatNumber(rowTotal);
+        quantityInput.value = formatNumber(quantity);
+        priceInput.value = formatNumber(price);
+
+        totalQty += quantity;
         totalPriceValue += rowTotal;
     });
 
-    document.getElementById('TongSoLuong').value = totalQty;
-    document.getElementById('TongThanhTien').value = totalPriceValue.toFixed(0);
+    document.getElementById('TongSoLuong').value = formatNumber(totalQty);
+    document.getElementById('TongThanhTien').value = formatNumber(totalPriceValue);
 }
+document.querySelector('form').addEventListener('submit', function () {
+    document.querySelectorAll('.quantity, .price, .total, #TongSoLuong, #TongThanhTien').forEach(input => {
+        input.value = unformat(input.value);
+    });
+});
+
 </script>
 
 
