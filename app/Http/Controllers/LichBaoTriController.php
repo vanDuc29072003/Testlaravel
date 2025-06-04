@@ -28,6 +28,7 @@ class LichBaoTriController extends Controller
         $query->where('TrangThai', 0);
 
         // 1. Nếu chọn khoảng thời gian tuỳ chỉnh (từ ngày - đến ngày)
+        
         if ($request->filled('tu_ngay') && $request->filled('den_ngay')) {
             $query->whereBetween('NgayBaoTri', [
                 Carbon::parse($request->input('tu_ngay'))->startOfDay(),
@@ -35,31 +36,32 @@ class LichBaoTriController extends Controller
             ]);
         }
 
-        // 3. Nếu chọn "khoảng thời gian gần nhất"
+        // 2. Nếu chọn các khoảng thời gian định sẵn (7 ngày, 1 tháng, 3 tháng, ...)
         elseif ($request->filled('khoang_thoi_gian')) {
             $khoang = $request->input('khoang_thoi_gian');
-            if ($khoang == '7days') {
+
+            if ($khoang === '7days') {
                 $query->whereBetween('NgayBaoTri', [
                     Carbon::today(),
                     Carbon::today()->addDays(7),
                 ]);
-            }else{
-                $soThang = (int) $request->input('khoang_thoi_gian');
+            } else {
+                $soThang = (int) $khoang;
                 $query->whereBetween('NgayBaoTri', [
                     Carbon::today(),
                     Carbon::today()->addMonths($soThang),
                 ]);
             }
-
-           
         }
-        // 4. Mặc định: 30 ngày từ hôm nay
+
+        // 3. Mặc định: lọc trong 7 ngày gần nhất
         else {
             $query->whereBetween('NgayBaoTri', [
                 Carbon::today(),
-                Carbon::today()->addDays(31),
+                Carbon::today()->addDays(7),
             ]);
         }
+
 
         // Lọc theo máy
         if ($request->filled('may_id')) {
@@ -182,7 +184,7 @@ class LichBaoTriController extends Controller
             if (!$may || !$may->ChuKyBaoTri || !$may->ThoiGianBaoHanh) {
                 return redirect()->back()->with('error', 'Không đủ thông tin chu kỳ hoặc thời gian bảo hành của máy.');
             }
-            $thangHienTai= Carbon::now()->month;
+            $thangHienTai = Carbon::now()->month;
             $soLanLap = floor(13 - $thangHienTai / $may->ChuKyBaoTri);
             if ($soLanLap < 1) {
                 return redirect()->route('lichbaotri.create')

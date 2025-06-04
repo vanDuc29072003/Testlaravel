@@ -97,7 +97,7 @@
         const searchInput = document.getElementById('searchLinhKien');
 
     // Danh sách ký tự không cho nhập
-    const blockedChars = /[!@~`#$%^&*()+=\[\]{};:"\\|,.<>\/?]/;
+    const blockedChars = /[!@~`#$%^&*()+=\[\]{};:"\\|<>\/?]/;
 
     // Chặn nhập ký tự đặc biệt
     searchInput.addEventListener('keydown', function (e) {

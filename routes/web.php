@@ -210,7 +210,9 @@ Route::middleware('auth')->group(function () {
 
   Route::middleware(['kiemtraquyen:41'])->group(function () {
     Route::get('/lichbaotri', [LichBaoTriController::class, 'index'])->name('lichbaotri');
-    Route::get('lichbaotri/{id}/edit', [LichBaoTriController::class, 'edit'])->name('lichbaotri.edit');
+    Route::get('lichbaotri/{id}/edit', [LichBaoTriController::class, 'edit'])
+    ->middleware('kiemtraquyen:4')
+    ->name('lichbaotri.edit');
     Route::match(['put', 'patch'], 'lichbaotri/{id}', [LichBaoTriController::class, 'update'])->name('lichbaotri.update');
 
     Route::get('/lichbaotri/create', [LichBaoTriController::class, 'create'])
@@ -221,7 +223,7 @@ Route::middleware('auth')->group(function () {
       ->middleware('kiemtraquyen:4')
       ->name('lichbaotri.destroy');
     Route::get('/lichbaotri/ExportTruocBaoTri/{MaLichBaoTri}', [LichBaoTriController::class, 'exporttscBT'])
-    ->middleware('kiemtraquyen:4')
+    ->middleware('kiemtraquyen:4','chuadenngay')
     ->name('lichbaotri.exporttscBT');
     Route::get('/lichbaotri/{MaLichBaoTri}/taophieubangiao', [LichBaoTriController::class, 'taophieubangiao'])
     ->middleware(['kiemtraquyen:3', 'chuadenngay'])

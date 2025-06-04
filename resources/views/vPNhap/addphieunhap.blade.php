@@ -146,7 +146,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Xử lý tìm kiếm
     const searchInput = document.getElementById('searchLinhKien');
-    const blockedChars = /[!@~`#$%^&*()+=\[\]{};:"\\|,.<>\/?]/;
+    const blockedChars = /[!@~`#$%^&*()+=\[\]{};:"\\|<>\/?]/;
 
     if (searchInput) {
         searchInput.addEventListener('keydown', function (e) {
