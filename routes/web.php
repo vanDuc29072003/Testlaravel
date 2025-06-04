@@ -217,7 +217,9 @@ Route::middleware('auth')->group(function () {
     Route::delete('/lichbaotri/{id}', [LichBaoTriController::class, 'destroy'])
       ->middleware('kiemtraquyen:4')
       ->name('lichbaotri.destroy');
-    Route::get('/lichbaotri/ExportTruocBaoTri/{MaLichBaoTri}', [LichBaoTriController::class, 'exporttscBT'])->name('lichbaotri.exporttscBT');
+    Route::get('/lichbaotri/ExportTruocBaoTri/{MaLichBaoTri}', [LichBaoTriController::class, 'exporttscBT'])
+    ->middleware('kiemtraquyen:4')
+    ->name('lichbaotri.exporttscBT');
     Route::get('/lichbaotri/{MaLichBaoTri}/taophieubangiao', [LichBaoTriController::class, 'taophieubangiao'])
     ->middleware(['kiemtraquyen:3', 'chuadenngay'])
     ->name('lichbaotri.taophieubangiao');
@@ -300,18 +302,21 @@ Route::middleware('auth')->group(function () {
     Route::get('/thongke', [ThongKeController::class, 'thongkekho'])->name('thongkekho');
     Route::get('/thongke/pdf', [ThongKeController::class, 'exportPDF'])->withoutMiddleware([\App\Http\Middleware\VerifyCsrfToken::class])->name('thongkekho.pdf');
     Route::get('/thongke/pdf', [ThongKeController::class, 'exportPDF'])->name('thongkekho.pdf');
-    Route::get('/thongkesuachua', [ThongKeController::class, 'thongkesuachua'])->name('thongkesuachua');
-    Route::get('/thongkesuachua/pdf', [ThongKeController::class, 'exportPDF1'])->name('thongkesuachua.pdf');
-    Route::get('/thongkesuachua/detailSC/{maMay}', [ThongKeController::class, 'detailSC'])->name('thongkesuachua.detailSC');
-    Route::get('/thongkesuachua/detailBT/{maMay}', [ThongKeController::class, 'detailBT'])->name('thongkesuachua.detailBT');
     Route::get('/thongkelinhkienxuat', [ThongKeController::class, 'thongkelinhkienxuat'])->name('thongkelinhkienxuat');
     Route::get('/thongkelinhkienxuat/pdf', [ThongKeController::class, 'exportPDF2'])->name('thongkelinhkienxuat.pdf');
     Route::get('/thongke/chitietxuat', [ThongKeController::class, 'chitietphieuxuat'])->name('thongke.chitietxuat');
     Route::get('/canhbaonhaphang', [ThongKeController::class, 'canhbaonhaphang'])->name('canhbaonhaphang');
     Route::get('/canhbaonhaphang/pdf', [ThongKeController::class, 'exportPDF3'])->name('canhbaonhaphang.pdf');
   });
+  
+  Route::middleware(['kiemtraquyen:9'])->group(function () {
+    Route::get('/thongkesuachua', [ThongKeController::class, 'thongkesuachua'])->name('thongkesuachua');
+    Route::get('/thongkesuachua/pdf', [ThongKeController::class, 'exportPDF1'])->name('thongkesuachua.pdf');
+    Route::get('/thongkesuachua/detailSC/{maMay}', [ThongKeController::class, 'detailSC'])->name('thongkesuachua.detailSC');
+    Route::get('/thongkesuachua/detailBT/{maMay}', [ThongKeController::class, 'detailBT'])->name('thongkesuachua.detailBT');
+  });
 
-  Route::middleware(['kiemtraquyen:36'])->group(function () {
+    Route::middleware(['kiemtraquyen:36'])->group(function () {
     Route::get('/phieuthanhly', [PhieuThanhLyController::class, 'index'])->name('phieuthanhly.index');
     Route::get('/phieuthanhly/create', [PhieuThanhLyController::class, 'create'])->name('phieuthanhly.create');
     Route::post('/phieuthanhly/store', [PhieuThanhLyController::class, 'store'])->name('phieuthanhly.store');
