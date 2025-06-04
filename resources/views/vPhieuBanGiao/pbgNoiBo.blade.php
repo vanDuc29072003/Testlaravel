@@ -149,7 +149,7 @@
         const productList = document.getElementById('product-list');
         const form = document.querySelector('form');
 
-        const blockedChars = /[!@~`#$%^&*()+=\[\]{};:"\\|,.<>\/?]/;
+        const blockedChars = /[!@~`#$%^&*()+=\[\]{};:"\\|<>\/?]/;
 
         // Ngăn nhập ký tự đặc biệt
         searchInput.addEventListener('keydown', function (e) {

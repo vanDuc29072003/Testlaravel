@@ -123,7 +123,7 @@
                     </div>
                     <div class="form-check">
                       <input class="form-check-input" type="radio" name="khoang_thoi_gian" id="radio_1thang" value="1"
-                        {{ request('khoang_thoi_gian', '1') == '1' ? 'checked' : '' }}>
+                        {{ request('khoang_thoi_gian') == '1' ? 'checked' : '' }}>
                       <label class="form-check-label m-0" for="radio_1thang">
                         1 tháng gần nhất
                       </label>
