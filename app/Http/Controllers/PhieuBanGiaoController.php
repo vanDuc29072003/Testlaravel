@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Events\eventUpdateTable;
 use App\Models\PhieuBanGiaoNoiBo;
 use App\Models\ChiTietPhieuBanGiaoNoiBo;
 use App\Models\LichSuaChua;
@@ -68,6 +69,8 @@ class PhieuBanGiaoController extends Controller
         $lichSuaChua->TrangThai = 1;
         $lichSuaChua->save();
 
+        event (new eventUpdateTable());
+
         return redirect()->route('lichsuachua.dahoanthanh')
             ->with('success', 'Phiếu bàn giao nội bộ đã được tạo thành công!');
     }
@@ -130,6 +133,9 @@ class PhieuBanGiaoController extends Controller
             $lichSuaChua = LichSuaChua::findOrFail($request->MaLichSuaChua);
             $lichSuaChua->TrangThai = 2;
             $lichSuaChua->save();
+
+            event (new eventUpdateTable());
+
 
             return redirect()->route('lichsuachua.dahoanthanh')->with('success', 'Phiếu bàn giao nhà cung cấp đã được tạo thành công!');
         } catch (\Illuminate\Validation\ValidationException $e) {
@@ -215,6 +221,8 @@ class PhieuBanGiaoController extends Controller
             $lichBaoTri = LichBaoTri::findOrFail($request->MaLichBaoTri);
             $lichBaoTri->TrangThai = 1;
             $lichBaoTri->save();
+
+            event (new eventUpdateTable());
 
             return redirect()->route('lichbaotri.dabangiao')->with('success', 'Phiếu bàn giao bảo trì được tạo thành công!');
         } catch (\Illuminate\Validation\ValidationException $e) {
