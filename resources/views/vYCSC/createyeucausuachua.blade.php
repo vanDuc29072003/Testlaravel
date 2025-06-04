@@ -71,5 +71,9 @@
     </div>
 @endsection
 @section('scripts')
-   
+   <script>
+        document.getElementById('MoTa').addEventListener('input', function (e) {
+            this.value = this.value.replace(/[^\p{L}0-9 _-]/gu, '');
+        });
+   </script>
 @endsection

@@ -5,7 +5,7 @@
 @section('content')
     <div class="container">
         <div class="page-inner">
-            <div class="row">
+            <div id="dashboard-count" class="row">
                 <div class="col-sm-6 col-md-4 col-xxl-2">
                     <a href="{{ route('lichvanhanh') }}">
                         <div class="card card-stats card-round">
@@ -346,7 +346,7 @@
                     @endif
                 </div>
                 <div class="col-md-4">
-                    <div class="card">
+                    <div id="dashboard-thongbao" class="card">
                         <div class="card-header">
                             <div class="card-head-row">
                                 <div class="card-title">Thông báo gần đây</div>
@@ -538,6 +538,29 @@
             document.getElementById('chiphi-this-month').classList.remove('active');
             document.getElementById('chiphi-last-month').classList.remove('active');
         });
+    </script>
+    <script>
+        pusher.subscribe('channel-all').bind('eventUpdateUI', function (data) {
+            if (data.reload) {
+                console.log('Có cập nhật mới');
+
+                $.ajax({
+                    url: window.location.href,
+                    type: 'GET',
+
+                    success: function (response) {
+                        const newCount = $(response).find('#dashboard-count').html();
+                        const newThongBao = $(response).find('#dashboard-thongbao').html();
+
+                        $('#dashboard-count').html(newCount);
+                        $('#dashboard-thongbao').html(newThongBao);
+                    },
+                    error: function () {
+                        console.error('Lỗi khi load lại bảng!');
+                    }
+                });
+            }
+        })
     </script>
     
 @endsection

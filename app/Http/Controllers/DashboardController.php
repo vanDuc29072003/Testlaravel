@@ -20,7 +20,9 @@ class DashboardController extends Controller
     public function index()
     {
         $lichvanhanh = LichVanHanh::whereDate('NgayVanHanh', now()->format('Y-m-d'))->get();
-        $lichbaotri = LichBaoTri::with('may')->whereBetween('NgayBaoTri', [now()->format('Y-m-d'), now()->addDays(7)->format('Y-m-d')])
+        $lichbaotri = LichBaoTri::with('may')
+            ->where('trangthai', '0')
+            ->whereBetween('NgayBaoTri', [now()->format('Y-m-d'), now()->addDays(7)->format('Y-m-d')])
             ->orderBy('NgayBaoTri', 'asc')
             ->get();
         $lichsuachua = LichSuaChua::whereDate('created_at', now()->format('Y-m-d'))->where('trangthai', '0')->get();

@@ -18,12 +18,12 @@
                                     <table class="table table-responsive table-bordered table-hover">
                                         <thead>
                                             <tr class="text-center">
-                                                <th scope="col">Mã</th>
-                                                <th scope="col">TGYC</th>
-                                                <th scope="col">Máy</th>
-                                                <th scope="col">Mô Tả</th>
-                                                <th scope="col">NVYC</th>
-                                                <th scope="col">Người đảm nhận</th>
+                                                <th scope="col" style="width: 5%">Mã</th>
+                                                <th scope="col" style="width: 5%">TGYC</th>
+                                                <th scope="col" style="width: 20%">Máy</th>
+                                                <th scope="col" style="width: 20%">Mô Tả</th>
+                                                <th scope="col" style="width: 10%">NVYC</th>
+                                                <th scope="col" style="width: 10%">Người đảm nhận</th>
                                                 <th scope="col">Trạng thái</th>
                                                 <th scope="col">Hành động</th>
                                             </tr>
@@ -33,8 +33,8 @@
                                                 <tr class="text-center">
                                                     <td>{{ $cht->MaLichSuaChua}}</td>
                                                     <td>{{ \Carbon\Carbon::parse($cht->yeuCauSuaChua->ThoiGianYeuCau)->format('H:i') }}</td>
-                                                    <td>{{ $cht->yeuCauSuaChua->may->TenMay }}</td>
-                                                    <td>{{ $cht->yeuCauSuaChua->MoTa }}</td>
+                                                    <td class="text-start">{{ $cht->yeuCauSuaChua->may->TenMay }}</td>
+                                                    <td class="text-start">{{ $cht->yeuCauSuaChua->MoTa }}</td>
                                                     <td>{{ $cht->yeuCauSuaChua->nhanVien->TenNhanVien ?? 'Không xác định'}}</td>
                                                     <td>{{ $cht->nhanVienKyThuat->TenNhanVien }}</td>
                                                     <td><span class="badge bg-warning">Chưa hoàn thành</span></td>
@@ -65,10 +65,7 @@
                             @endif
                         </div>
                     </div>
-                </div>
-              
-                
-                
+                </div> 
             </div>
         </div>
     </div>
@@ -112,10 +109,8 @@
 
                     success: function (response) {
                         const newChuaHoanThanh = $(response).find('#bang-chua-hoan-thanh').html();
-                        const newDaHoanThanh = $(response).find('#bang-da-hoan-thanh').html();
 
                         $('#bang-chua-hoan-thanh').html(newChuaHoanThanh);
-                        $('#bang-da-hoan-thanh').html(newDaHoanThanh);
                     },
                     error: function () {
                         console.error('Lỗi khi load lại bảng!');
