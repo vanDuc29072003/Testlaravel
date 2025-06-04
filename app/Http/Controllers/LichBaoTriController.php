@@ -36,11 +36,21 @@ class LichBaoTriController extends Controller
 
         // 3. Nếu chọn "khoảng thời gian gần nhất"
         elseif ($request->filled('khoang_thoi_gian')) {
-            $soThang = (int) $request->input('khoang_thoi_gian');
-            $query->whereBetween('NgayBaoTri', [
-                Carbon::today(),
-                Carbon::today()->addMonths($soThang),
-            ]);
+            $khoang = $request->input('khoang_thoi_gian');
+            if ($khoang == '7days') {
+                $query->whereBetween('NgayBaoTri', [
+                    Carbon::today(),
+                    Carbon::today()->addDays(7),
+                ]);
+            }else{
+                $soThang = (int) $request->input('khoang_thoi_gian');
+                $query->whereBetween('NgayBaoTri', [
+                    Carbon::today(),
+                    Carbon::today()->addMonths($soThang),
+                ]);
+            }
+
+           
         }
         // 4. Mặc định: 30 ngày từ hôm nay
         else {
@@ -78,10 +88,6 @@ class LichBaoTriController extends Controller
 
         return view('vLich.lichbaotri', compact('lichbaotriGrouped', 'dsMay', 'dsNhaCungCap'));
     }
-
-
-
-
 
     public function lichSuBaoTri(Request $request)
     {
@@ -318,7 +324,24 @@ class LichBaoTriController extends Controller
 
         return view('vPhieuBanGiao.detailpbgBT', compact('lichBaoTri', 'nhaCungCap', 'nhanvien'));
     }
+    public function edit($id)
+    {
+        $lich = LichBaoTri::with('may.nhaCungCap')->findOrFail($id);
+        return view('Vlich.editlichbaotri', compact('lich'));
+    }
 
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'NgayBaoTri' => 'required|date',
+        ]);
+
+        $lich = LichBaoTri::findOrFail($id);
+        $lich->NgayBaoTri = $request->NgayBaoTri;
+        $lich->save();
+
+        return redirect()->route('lichbaotri')->with('success', 'Cập nhật lịch bảo trì thành công.');
+    }
 
 
 }

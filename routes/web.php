@@ -210,6 +210,9 @@ Route::middleware('auth')->group(function () {
 
   Route::middleware(['kiemtraquyen:41'])->group(function () {
     Route::get('/lichbaotri', [LichBaoTriController::class, 'index'])->name('lichbaotri');
+    Route::get('lichbaotri/{id}/edit', [LichBaoTriController::class, 'edit'])->name('lichbaotri.edit');
+    Route::match(['put', 'patch'], 'lichbaotri/{id}', [LichBaoTriController::class, 'update'])->name('lichbaotri.update');
+
     Route::get('/lichbaotri/create', [LichBaoTriController::class, 'create'])
       ->middleware('kiemtraquyen:2')
       ->name('lichbaotri.create');
@@ -223,6 +226,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/lichbaotri/{MaLichBaoTri}/taophieubangiao', [LichBaoTriController::class, 'taophieubangiao'])
     ->middleware(['kiemtraquyen:3', 'chuadenngay'])
     ->name('lichbaotri.taophieubangiao');
+    
 
   });
 
