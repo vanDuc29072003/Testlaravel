@@ -102,7 +102,7 @@
                 </div>
 
                 <!-- Bộ lọc -->
-                <div class="col-xl-2 col-sm-12 p-0">
+                <div class="col-xl-2 col-sm-12 p-0" style="margin-top: 138px;">
                     <div>
                         <form method="GET" action="{{ route('lichvanhanh') }}" class="p-3 border rounded fixed-search-form">
                             <h5 class="mb-3">Bộ lọc</h5>    

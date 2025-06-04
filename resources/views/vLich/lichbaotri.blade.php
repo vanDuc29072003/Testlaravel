@@ -1,14 +1,13 @@
-
 @extends('layouts.main')
 
 @section('title', 'Lịch Bảo Trì')
 <style>
 .square-btn {
-    width: 90px;             /* Điều chỉnh cho nút gọn hơn */
+    width: 90px;             
     text-align: center;
-    white-space: nowrap;     /* Không xuống dòng */
-    font-size: 20px;         /* Chữ to hơn mặc định */
-    padding: 6px 8px;        /* Giữ nút không bị quá cao */
+    white-space: nowrap;     
+    font-size: 20px;         
+    padding: 6px 8px;        
 }
 </style>
 @section('content')
@@ -48,21 +47,26 @@
                   <td>{{ $lich->MoTa }}</td>
                   <td>{{ $lich->may->nhaCungCap->TenNhaCungCap ?? 'Không xác định' }}</td>
                   <td>
+                      <div class="d-flex gap-2 mb-2">
+                          <a href="{{ route('lichbaotri.exporttscBT', $lich->MaLichBaoTri) }}" class="btn btn-sm btn-primary square-btn" target="_blank">
+                              <i class="fa fa-print"></i> In
+                          </a>
+                          <a href="{{ route('lichbaotri.taophieubangiao', $lich->MaLichBaoTri) }}" class="btn btn-sm btn-success square-btn">
+                              <i class="fa fa-check"></i> Bàn giao
+                          </a>
+                      </div>
                       <div class="d-flex gap-2">
-                      <a href="{{ route('lichbaotri.exporttscBT', $lich->MaLichBaoTri) }}" class="btn btn-sm btn-primary square-btn" target="_blank">
-                        <i class="fa fa-print"></i> In
-                      </a>
-                      <a href="{{ route('lichbaotri.taophieubangiao', $lich->MaLichBaoTri) }}" class="btn btn-sm btn-success square-btn">
-                        <i class="fa fa-check"></i> Bàn giao
-                      </a>
-                      <form action="{{ route('lichbaotri.destroy', $lich->MaLichBaoTri) }}" method="POST" class="m-0 p-0">
-                        @csrf
-                        @method('DELETE')
-                        <button type="button" class="btn btn-danger btn-sm square-btn" onclick="event.stopPropagation(); confirmDelete(this)">
-                          <i class="fa fa-trash"></i> Xóa
-                        </button>
-                      </form>
-                    </div>
+                          <a href="{{ route('lichbaotri.edit', $lich->MaLichBaoTri) }}" class="btn btn-sm btn-warning square-btn">
+                              <i class="fa fa-edit"></i> Sửa
+                          </a>
+                          <form action="{{ route('lichbaotri.destroy', $lich->MaLichBaoTri) }}" method="POST" class="m-0 p-0 d-inline">
+                              @csrf
+                              @method('DELETE')
+                              <button type="button" class="btn btn-danger btn-sm square-btn" onclick="event.stopPropagation(); confirmDelete(this)">
+                                  <i class="fa fa-trash"></i> Xóa
+                              </button>
+                          </form>
+                      </div>
                   </td>
                 </tr>
               @endforeach
@@ -110,6 +114,13 @@
               <!-- Khoảng thời gian -->
                 <div class="mb-3">
                   <label class="form-label d-block">Khoảng thời gian</label>
+                    <div class="form-check">
+                      <input class="form-check-input" type="radio" name="khoang_thoi_gian" id="radio_7ngay" value="7days"
+                        {{ request('khoang_thoi_gian', '7days') == '7days' ? 'checked' : '' }}>
+                      <label class="form-check-label m-0" for="radio_7ngay">
+                        7 ngày gần nhất
+                      </label>
+                    </div>
                     <div class="form-check">
                       <input class="form-check-input" type="radio" name="khoang_thoi_gian" id="radio_1thang" value="1"
                         {{ request('khoang_thoi_gian', '1') == '1' ? 'checked' : '' }}>

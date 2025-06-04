@@ -230,7 +230,7 @@ class LichVanHanhController extends Controller
         $request->validate([
             'NhatKi' => 'required|string',
             'TrangThai' => 'required|in:0,2',
-            'MoTaSuCo' => 'required|string',
+            'MoTaSuCo' => $trangThai === 2 ? 'required|string' : 'nullable|string',
 
         ]);
 
