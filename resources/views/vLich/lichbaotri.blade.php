@@ -27,7 +27,7 @@
       <div class="col-lg-9">
         @forelse ($lichbaotriGrouped as $monthYear => $lichs)
           <h5 class="mt-4 text-primary">Tháng: {{ \Carbon\Carbon::parse($monthYear . '-01')->format('m/Y') }}</h5>
-          <table class="table table-responsive table-bordered">
+          <table id="tableLichBaoTri" class="table table-responsive table-bordered">
             <thead>
               <tr>
                 <th>STT</th>
@@ -224,6 +224,25 @@
     document.querySelectorAll('input[name="khoang_thoi_gian"]').forEach(radio => {
       radio.addEventListener('change', toggleTuyChon);
     });
+  });
+</script>
+<script>
+  pusher.subscribe('channel-all').bind('eventUpdateTable', function (data) {
+    if (data.reload) {
+        $.ajax({
+            url: window.location.href,
+            type: 'GET',
+            success: function (response) {
+                const newData = $(response).find('#tableLichBaoTri').html();
+
+                // Gán lại đúng chỗ
+                $('#tableLichBaoTri').html(newData);
+            },
+            error: function () {
+                console.error('Lỗi khi load lại bảng!');
+            }
+        });
+    }
   });
 </script>
 @endsection
