@@ -17,10 +17,11 @@
                         <table class="table table-responsive table-bordered table-hover">
                             <thead>
                                 <tr class="text-center">
-                                    <th scope="col">Mã Nhà Cung Cấp</th>
+                                    <th scope="col" style="width: 5%;">Mã</th>
                                     <th scope="col">Tên Nhà Cung Cấp</th>
                                     <th scope="col">Số Điện Thoại</th>
                                     <th scope="col">Mã Số Thuế </th>
+                                    <th scope="col">Email</th>
                                     <th scope="col">Hành động</th>
                                 </tr>
                             </thead>
@@ -33,6 +34,7 @@
                                         <td class="text-start">{{ $ncc->TenNhaCungCap }}</td>
                                         <td>{{ $ncc->SDT }}</td>
                                         <td>{{ $ncc->MaSoThue }}</td>
+                                        <td class="text-start">{{ $ncc->Email }}</td>
                                         <td>
                                             <div class="d-flex justify-content-center gap-2">
                                                 <a href="{{ route('nhacungcap.edit', $ncc->MaNhaCungCap) }}"
@@ -56,7 +58,7 @@
                             <tfoot>
                                 <!-- Pagination -->
                                 <nav aria-label="Page navigation example">
-                                    {{ $dsNhaCungCap->appends(['search' => request('search')])->links('pagination::bootstrap-5') }}
+                                    {{ $dsNhaCungCap->appends(request()->query())->links('pagination::bootstrap-5') }}
                                 </nav>
                             </tfoot>
                         </table>
@@ -77,14 +79,19 @@
                                     placeholder="Vui lòng nhập" value="{{ request('TenNhaCungCap') }}">
                             </div>
                             <div class="mb-3">
-                                <label for="DiaChi" class="form-label">Địa chỉ</label>
-                                <input type="text" name="DiaChi" id="DiaChi" class="form-control"
-                                    placeholder="Vui lòng nhập" value="{{ request('DiaChi') }}">
+                                <label for="SDT" class="form-label">Số Điện Thoại</label>
+                                <input type="number" name="SDT" id="SDT" class="form-control" placeholder="Vui lòng nhập"
+                                    value="{{ request('SDT') }}">
                             </div>
                             <div class="mb-3">
                                 <label for="MaSoThue" class="form-label">Mã số thuế </label>
                                 <input type="number" name="MaSoThue" id="MaSoThue" class="form-control"
                                     placeholder="Vui lòng nhập" value="{{ request('MaSoThue') }}">
+                            </div>
+                            <div class="mb-3">
+                                <label for="Email" class="form-label">Email</label>
+                                <input type="text" name="Email" id="Email" class="form-control" placeholder="Vui lòng nhập"
+                                    value="{{ request('Email') }}">
                             </div>
                             <button type="submit" class="btn btn-primary w-100">
                                 <i class="fa fa-search"></i> Tìm kiếm
@@ -95,33 +102,31 @@
             </div>
         </div>
 @endsection
-    @section('scripts')
-        <script>
-            function confirmDelete(button) {
-                swal({
-                    title: 'Bạn có chắc chắn?',
-                    text: "Những máy thuộc nhà cung cấp sẽ bị xóa theo!",
-                    icon: 'warning',
-                    buttons: {
-                        confirm: {
-                            text: 'Xóa',
-                            className: 'btn btn-danger'
-                        },
-                        cancel: {
-                            text: 'Hủy',
-                            visible: true,
-                            className: 'btn btn-success'
-                        }
+@section('scripts')
+    <script>
+        function confirmDelete(button) {
+            swal({
+                title: 'Bạn có chắc chắn?',
+                text: "Những máy thuộc nhà cung cấp sẽ bị xóa theo!",
+                icon: 'warning',
+                buttons: {
+                    confirm: {
+                        text: 'Xóa',
+                        className: 'btn btn-danger'
+                    },
+                    cancel: {
+                        text: 'Hủy',
+                        visible: true,
+                        className: 'btn btn-success'
                     }
-                }).then((willDelete) => {
-                    if (willDelete) {
-                        button.closest('form').submit(); // Gửi form
-                    } else {
-                        swal.close(); // Đóng hộp thoại
-                    }
-                });
-            }
-        </script>
-       
-        
-    @endsection
+                }
+            }).then((willDelete) => {
+                if (willDelete) {
+                    button.closest('form').submit(); // Gửi form
+                } else {
+                    swal.close(); // Đóng hộp thoại
+                }
+            });
+        }
+    </script>
+@endsection

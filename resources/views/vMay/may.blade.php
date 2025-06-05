@@ -126,24 +126,24 @@
                                 <label for="TrangThai" class="form-label">Tình trạng máy</label>
                                 <select name="TrangThai" id="TrangThai" class="form-control">
                                     <option value="">Tất cả</option>
-                                    <option value="0" {{ request('TrangThai') === '0' ? 'selected' : '' }}>Đang sử dụng</option>
-                                    <option value="1" {{ request('TrangThai') === '1' ? 'selected' : '' }}>Đã thanh lý</option>
+                                    <option value="dang_su_dung" {{ request('TrangThai') === 'dang_su_dung' ? 'selected' : '' }}>Đang sử dụng</option>
+                                    <option value="da_thanh_ly" {{ request('TrangThai') === 'da_thanh_ly' ? 'selected' : '' }}>Đã thanh lý</option>
                                 </select>
                             </div>
                             <div class="mb-3">
                                 <label for="KhauHao" class="form-label">Tình trạng khấu hao</label>
                                 <select name="KhauHao" id="KhauHao" class="form-control">
                                     <option value="">Tất cả</option>
-                                    <option value="0" {{ request('KhauHao') === '0' ? 'selected' : '' }}>Còn khấu hao</option>
-                                    <option value="1" {{ request('KhauHao') === '1' ? 'selected' : '' }}>Đã hết khấu hao</option>
+                                    <option value="con_khau_hao" {{ request('KhauHao') === 'con_khau_hao' ? 'selected' : '' }}>Còn khấu hao</option>
+                                    <option value="het_khau_hao" {{ request('KhauHao') === 'het_khau_hao' ? 'selected' : '' }}>Đã hết khấu hao</option>
                                 </select>
                             </div>
                             <div class="mb-3">
                                 <label for="BaoHanh" class="form-label">Tình trạng bảo hành</label>
                                 <select name="BaoHanh" id="BaoHanh" class="form-control">
                                     <option value="">Tất cả</option>
-                                    <option value="0" {{ request('BaoHanh') === '0' ? 'selected' : '' }}>Còn bảo hành</option>
-                                    <option value="1" {{ request('BaoHanh') === '1' ? 'selected' : '' }}>Đã hết bảo hành</option>
+                                    <option value="con_bao_hanh" {{ request('BaoHanh') === 'con_bao_hanh' ? 'selected' : '' }}>Còn bảo hành</option>
+                                    <option value="het_bao_hanh" {{ request('BaoHanh') === 'het_bao_hanh' ? 'selected' : '' }}>Đã hết bảo hành</option>
                                 </select>
                             </div>
                             <div class="mb-3">
@@ -160,13 +160,7 @@
                                 <label for="ThoiGianDuaVaoSuDung" class="form-label">Thời gian đưa vào sử dụng</label>
                                 <input type="date" name="ThoiGianDuaVaoSuDung" id="ThoiGianDuaVaoSuDung"
                                     class="form-control" value="{{ request('ThoiGianDuaVaoSuDung') }}">
-                            </div>
-                            <div class="mb-3">
-                                <label for="NamSanXuat" class="form-label">Năm sản xuất</label>
-                                <input type="number" name="NamSanXuat" id="NamSanXuat" class="form-control"
-                                    placeholder="Nhập năm sản xuất..." value="{{ request('NamSanXuat') }}" min="2000">
-                            </div>
-                           
+                            </div>                  
                             <button type="submit" class="btn btn-primary w-100">
                                 <i class="fa fa-search"></i> Tìm kiếm
                             </button>

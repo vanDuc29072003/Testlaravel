@@ -9,12 +9,17 @@ class DonViTinhController extends Controller
 {
     public function index(Request $request)
     {
-        $search = $request->input('search');
+        $query = DonViTinh::query()->withSum('linhKiens', 'SoLuong');
 
-        $query = DonViTinh::withSum('linhKiens', 'SoLuong'); // Tổng số lượng của linh kiện liên quan
+        $filters = [
+            'TenDonViTinh' => 'like',
+        ];
 
-        if ($search) {
-            $query->where('TenDonViTinh', 'like', '%' . $search . '%');
+        foreach ($filters as $field => $operator) {
+            if ($request->filled($field)) {
+                $value = $operator === 'like' ? '%' . $request->$field . '%' : $request->$field;
+                $query->where($field, $operator, $value);
+            }
         }
 
         $dsDonvitinh = $query->get();
@@ -32,7 +37,8 @@ class DonViTinhController extends Controller
     // Xử lý lưu dữ liệu mới
     public function store(Request $request)
     {
-        $request->validate([
+        try {
+            $request->validate([
             'TenDonViTinh' => 'required|string|max:255|unique:donvitinh,TenDonViTinh',
         ]);
 
@@ -41,6 +47,9 @@ class DonViTinhController extends Controller
         ]);
 
         return redirect()->route('donvitinh.index')->with('success', 'Đã thêm đơn vị tính thành công.');
+        } catch (\Exception $e) {
+            return redirect()->back()->withInput()->with('error', 'Tên đơn vị tính đã tồn tại.');
+        }
     }
 
     // Xóa bộ phận
@@ -50,9 +59,9 @@ class DonViTinhController extends Controller
             $dsDonvitinh = DonViTinh::findOrFail($id);
             $dsDonvitinh->delete();
 
-            return redirect()->route('donvitinh.index')->with('success', 'Xóa đơn vị tính thành công.');
+            return redirect()->back()->with('success', 'Xóa đơn vị tính thành công.');
         } catch (\Illuminate\Database\QueryException $e) {
-            return redirect()->route('donvitinh.index')->with('error', 'Không thể xóa đơn vị tính này vì nó đang được sử dụng.');
+            return redirect()->back()->with('error', 'Không thể xóa đơn vị tính này vì nó đang được sử dụng.');
         }
     }
 

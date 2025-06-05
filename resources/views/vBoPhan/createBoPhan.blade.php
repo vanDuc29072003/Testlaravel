@@ -17,14 +17,14 @@
 
               <div class="form-group">
                 <label for="TenBoPhan" class="form-label">Tên Bộ Phận</label>
-                <input type="text" name="TenBoPhan" class="form-control" value="{{ old('TenBoPhan') }}" required>
+                <input type="text" name="TenBoPhan" class="form-control" value="{{ old('TenBoPhan') }}" placeholder="Nhập tên bộ phận" required>
                 @error('TenBoPhan')
                   <small class="text-danger">{{ $message }}</small>
                 @enderror
               </div>
               <div class="form-group">
                 <label for="TenRutGon" class="form-label">Tên Rút Gọn</label>
-                <input type="text" name="TenRutGon" class="form-control" value="{{ old('TenRutGon') }}" required>
+                <input type="text" name="TenRutGon" class="form-control" value="{{ old('TenRutGon') }}" placeholder="Nhập tên rút gọn" required>
                 @error('TenRutGon')
                   <small class="text-danger">{{ $message }}</small>
                 @enderror

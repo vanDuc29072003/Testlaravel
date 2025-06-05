@@ -17,12 +17,12 @@
 
                 <div class="form-group">
                   <label for="TenLoai">Tên Loại</label>
-                  <input type="text" name="TenLoai" class="form-control" placeholder="Vui lòng nhập..." value="{{ old('TenLoai') }}" required>
+                  <input type="text" id="TenLoai" name="TenLoai" class="form-control" placeholder="Vui lòng nhập..." value="{{ old('TenLoai') }}" required>
                 </div>
 
                 <div class="form-group">
                   <label for="MoTa">Tên Viết Tắt</label>
-                  <input type="text" name="MoTa" class="form-control" rows="3" placeholder="Vui lòng nhập..." value="{{ old('MoTa') }}" required></input>
+                  <input type="text" id="MoTa" name="MoTa" class="form-control" rows="3" placeholder="Vui lòng nhập..." value="{{ old('MoTa') }}" required></input>
                 </div>
               </form>
             </div>

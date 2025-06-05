@@ -17,10 +17,10 @@
                         <table class="table table-responsive table-bordered table-hover">
                             <thead>
                                 <tr class="text-center">
-                                    <th scope="col">Mã Linh Kiện</th>
+                                    <th scope="col" style="width: 5%">Mã</th>
                                     <th scope="col">Tên Linh Kiện</th>
-                                    <th scope="col">Đơn Vị Tính</th>
-                                    <th scope="col">Số Lượng</th>
+                                    <th scope="col" style="width: 13%">Đơn Vị Tính</th>
+                                    <th scope="col" style="width: 12%">Số Lượng</th>
                                     <th scope="col">Nhà Cung Cấp</th>
                                     <th scope="col">Cập Nhật</th>
                                 </tr>
@@ -34,14 +34,14 @@
                                         <td>{{ $linhKien->donViTinh->TenDonViTinh ?? 'Không xác định' }}</td>
                                         <td>{{ $linhKien->SoLuong }}</td>
                                         <td>
-                                            <ul class="list-group list-group-flush">
+                                            <ul class="list-group">
                                                 @foreach ($linhKien->nhaCungCaps as $nhaCungCap)
                                                     <li class="list-group-item">{{ $nhaCungCap->TenNhaCungCap }}</li>
                                                 @endforeach
                                             </ul>
                                         </td>
                                         <td>
-                                            <div class="d-flex gap-2">
+                                            <div class="d-flex justify-content-center gap-2">
                                                 <a href="{{ route('linhkien.edit', $linhKien->MaLinhKien) }}"
                                                     class="btn btn-warning btn-sm text-black">
                                                     <i class="fa fa-edit"></i> Sửa
@@ -63,7 +63,7 @@
                             <tfoot>
                                 <!-- Pagination -->
                                 <nav aria-label="Page navigation example">
-                                    {{ $dsLinhKien->appends(['search' => request('search')])->links('pagination::bootstrap-5') }}
+                                    {{ $dsLinhKien->appends(request()->query())->links('pagination::bootstrap-5') }}
                                 </nav>
                             </tfoot>
                         </table>

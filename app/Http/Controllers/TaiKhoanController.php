@@ -208,6 +208,6 @@ class TaiKhoanController extends Controller
         $taikhoan = TaiKhoan::where('TenTaiKhoan', $TenTaiKhoan)->firstOrFail();
         $taikhoan->delete();
 
-        return redirect()->route('taikhoan.index')->with('success', 'Xóa tài khoản thành công!');
+        return redirect()->back()->with('success', 'Xóa tài khoản thành công!');
     }
 }
