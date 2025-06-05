@@ -128,7 +128,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/may', [MayController::class, 'storeMay'])->name('may.store');
     Route::get('/may/{MaMay}', [MayController::class, 'detailMay'])->name('may.detail');
     Route::get('/may/{MaMay}/edit', [MayController::class, 'form_editmay'])
-      ->middleware('kiemtraquyen:11')
+      ->middleware('kiemtraquyen:12')
       ->name('may.edit');
     Route::patch('/may/{MaMay}', [MayController::class, 'editmay'])->name('may.update');
     Route::delete('/may/{MaMay}', [MayController::class, 'deleteMay'])->name('may.delete');
