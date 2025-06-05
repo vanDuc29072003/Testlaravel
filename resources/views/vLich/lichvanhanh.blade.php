@@ -1,7 +1,15 @@
 @extends('layouts.main')
 
 @section('title', 'Lịch Vận Hành')
-
+<style>
+    .square-btn {
+        width: 90px;             
+        text-align: center;
+        white-space: nowrap;     
+        font-size: 20px;         
+        padding: 6px 8px;        
+    }
+</style>
 @section('content')
     <div class="container">
         <div class="page-inner">
@@ -49,43 +57,32 @@
                                             <td>{{ $lich->nhanVien->TenNhanVien ?? 'Không xác định' }}</td>
                                             <td>{{ $lich->MoTa ?? 'Không có mô tả' }}</td>
                                             <td>
-                                                <div class="d-flex justify-content-center">
-                                                    <div class="row g-1" style="max-width: 320px;">
-                                                        <div class="col-5">
-                                                            <a href="{{ route('lichvanhanh.showNhatKi', $lich->MaLichVanHanh) }}"
-                                                            class="btn btn-info btn-sm w-100 text-white">
-                                                                <i class="fa fa-book"></i> Nhật Kí
-                                                            </a>
-                                                        </div>
-                                                        <div class="col-5">
-                                                            <a href="{{ route('yeucausuachua.create', ['ma_lich' => $lich->MaLichVanHanh]) }}"
-                                                            class="btn btn-primary btn-sm w-100 text-white">
-                                                                <i class="fa fa-wrench"></i> YCSC
-                                                            </a>
-                                                        </div>
-                                                        <div class="col-5">
-                                                            <a href="{{ route('lichvanhanh.edit', $lich->MaLichVanHanh) }}"
-                                                            class="btn btn-warning btn-sm w-100 text-black">
-                                                                <i class="fa fa-edit"></i> Sửa
-                                                            </a>
-                                                        </div>
-                                                        <div class="col-5">
-                                                            <form action="{{ route('lichvanhanh.destroy', $lich->MaLichVanHanh) }}"
-                                                                method="POST" class="w-100">
-                                                                @csrf
-                                                                @method('DELETE')
-                                                                @foreach (['from_date', 'to_date', 'quy', 'nam', 'ca', 'may', 'nhanvien'] as $filter)
-                                                                    <input type="hidden" name="{{ $filter }}" value="{{ request($filter) }}">
-                                                                @endforeach
-                                                                <button type="button" class="btn btn-danger btn-sm w-100"
-                                                                        onclick="event.stopPropagation(); confirmDelete(this)">
-                                                                    <i class="fa fa-trash"></i> Xóa
-                                                                </button>
-                                                            </form>
-                                                        </div>
-                                                    </div>
+                                                <div class="d-flex gap-2 mb-2">
+                                                    <a href="{{ route('lichvanhanh.showNhatKi', $lich->MaLichVanHanh) }}"
+                                                    class="btn btn-info btn-sm text-white square-btn">
+                                                        <i class="fa fa-book"></i> Nhật Kí
+                                                    </a>
+                                                
+                                                    <a href="{{ route('yeucausuachua.create', ['ma_lich' => $lich->MaLichVanHanh]) }}"
+                                                    class="btn btn-primary btn-sm text-white square-btn">
+                                                        <i class="fa fa-wrench"></i> YCSC
+                                                    </a>
                                                 </div>
-
+                                                <div class="d-flex gap-2">
+                                                    <a href="{{ route('lichvanhanh.edit', $lich->MaLichVanHanh) }}"
+                                                    class="btn btn-warning btn-sm text-black square-btn">
+                                                        <i class="fa fa-edit"></i> Sửa
+                                                    </a>
+                                                    <form action="{{ route('lichvanhanh.destroy', $lich->MaLichVanHanh) }}"
+                                                        method="POST" class="m-0 p-0 d-inline">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="button" class="btn btn-danger btn-sm square-btn"
+                                                                onclick="event.stopPropagation(); confirmDelete(this)">
+                                                            <i class="fa fa-trash"></i> Xóa
+                                                        </button>
+                                                    </form>
+                                                </div>
                                             </td>
                                         </tr>
                                     @empty

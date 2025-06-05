@@ -44,7 +44,7 @@
                                         <td>
                                             {{ $may->ThoiGianKhauHao ?? '---' }} năm
                                             @if ($ngayHetKhauHao && $ngayHetKhauHao < \Carbon\Carbon::now())
-                                                <span class="badge badge-danger">Đã hết khấu hao</span>
+                                                <span class="badge badge-danger ms-3">Đã hết khấu hao</span>
                                             @endif
                                         </td>
                                         
@@ -57,7 +57,7 @@
                                         <th scope="row">Thời Gian Bảo Hành</th>
                                         <td>{{ $may->ThoiGianBaoHanh ?? '---' }} tháng
                                             @if ($ngayHetBaoHanh && $ngayHetBaoHanh < \Carbon\Carbon::now())
-                                                <span class="badge badge-danger">Đã hết bảo hành</span>
+                                                <span class="badge badge-danger ms-3">Đã hết bảo hành</span>
                                             @endif
                                         </td>
                                         

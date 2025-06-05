@@ -99,7 +99,6 @@ Route::middleware('auth')->group(function () {
   
   Route::middleware(['kiemtraquyen:15'])->group(function () {
     Route::get('/linhkien/search1', [LinhKienController::class, 'search1'])->name('linhkien.search1');
-    Route::get('/linhkien/search', [LinhKienController::class, 'search'])->name('linhkien.search');
     Route::get('/linhkien', [LinhKienController::class, 'index'])->name('linhkien');
     Route::get('/linhkien/add2', [LinhKienController::class, 'create2'])->name('linhkien.add2');
     Route::get('/linhkien/add3', [LinhKienController::class, 'create3'])->name('linhkien.add3');

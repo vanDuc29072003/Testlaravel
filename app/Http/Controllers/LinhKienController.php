@@ -13,9 +13,8 @@ class LinhKienController extends Controller
 {
     public function index(Request $request)
     {
-        $query = LinhKien::with(['donViTinh', 'nhaCungCaps']); // Eager load quan hệ đơn vị tính và nhà cung cấp
+        $query = LinhKien::with(['donViTinh', 'nhaCungCaps']);
 
-        // Danh sách các trường cần lọc
         $filters = [
             'MaLinhKien' => '=',
             'TenLinhKien' => 'like',
@@ -23,7 +22,6 @@ class LinhKienController extends Controller
             'MaDonViTinh' => '=',
         ];
 
-        // Áp dụng các điều kiện lọc trực tiếp
         foreach ($filters as $field => $operator) {
             if ($request->filled($field)) {
                 $value = $operator === 'like' ? '%' . $request->$field . '%' : $request->$field;
@@ -31,14 +29,12 @@ class LinhKienController extends Controller
             }
         }
 
-        // Tìm kiếm theo tên nhà cung cấp
         if ($request->filled('MaNhaCungCap')) {
             $query->whereHas('nhaCungCaps', function ($q) use ($request) {
                 $q->where('nhacungcap_linhkien.MaNhaCungCap', $request->MaNhaCungCap);
             });
         }
 
-        // Lấy danh sách linh kiện với phân trang
         $dsLinhKien = $query->paginate(10);
         $dsDonViTinh = DonViTinh::all();
         $dsNhaCungCap = NhaCungCap::all();
@@ -71,7 +67,6 @@ class LinhKienController extends Controller
     public function store(Request $request)
     {
         try {
-            // Xác thực dữ liệu đầu vào
             $request->validate(
                 [
                     'TenLinhKien' => 'required|string|max:255|unique:linhkiensuachua,TenLinhKien',
@@ -85,7 +80,6 @@ class LinhKienController extends Controller
                 ]
             );
 
-            // Tạo mới linh kiện
             $linhKien = LinhKien::create([
                 'TenLinhKien' => $request->TenLinhKien,
                 'SoLuong' => 0,
@@ -93,14 +87,13 @@ class LinhKienController extends Controller
                 'MaDonViTinh' => $request->MaDonViTinh,
             ]);
 
-            // Lưu quan hệ với nhà cung cấp
             $linhKien->nhaCungCaps()->attach($request->MaNhaCungCap, []);
 
 
             return redirect()->route('linhkien')->with('success', 'Thêm linh kiện mới thành công !');
         } catch (\Illuminate\Validation\ValidationException $e) {
             return redirect()->back()
-                ->with('error', $e->validator->errors()->first()) // Lấy lỗi đầu tiên     
+                ->with('error', $e->validator->errors()->first()) // Lấy lỗi đầu tiên
                 ->withInput();
         }
     }
@@ -193,44 +186,50 @@ class LinhKienController extends Controller
 
     public function update(Request $request, $MaLinhKien)
     {
-        // Xác thực dữ liệu đầu vào
-        $request->validate([
+        try {
+            // Xác thực dữ liệu đầu vào
+            $request->validate([
 
-            'MoTa' => 'nullable|string|max:255',
-            'MaDonViTinh' => 'required|exists:donvitinh,MaDonViTinh', // Đảm bảo mã đơn vị tính tồn tại
-            'TenLinhKien' => 'required|string|max:255',
-            'MaNhaCungCap' => 'required|array|min:1', // Phải chọn ít nhất một nhà cung cấp
-            'MaNhaCungCap.*' => 'exists:nhacungcap,MaNhaCungCap', // Đảm bảo nhà cung cấp tồn tại
-        ]);
+                'MoTa' => 'nullable|string|max:255',
+                'MaDonViTinh' => 'required|exists:donvitinh,MaDonViTinh', // Đảm bảo mã đơn vị tính tồn tại
+                'TenLinhKien' => 'required|string|max:255',
+                'MaNhaCungCap' => 'required|array|min:1', // Phải chọn ít nhất một nhà cung cấp
+                'MaNhaCungCap.*' => 'exists:nhacungcap,MaNhaCungCap', // Đảm bảo nhà cung cấp tồn tại
+            ]);
 
-        // Tìm linh kiện theo mã
-        $linhKien = LinhKien::findOrFail($MaLinhKien);
+            // Tìm linh kiện theo mã
+            $linhKien = LinhKien::findOrFail($MaLinhKien);
 
-        // Cập nhật thông tin linh kiện
-        $linhKien->update([
-            'TenLinhKien' => $request->TenLinhKien,
-            'MoTa' => $request->MoTa,
-            'MaDonViTinh' => $request->MaDonViTinh,
-        ]);
-        \DB::table('nhacungcap_linhkien')
-            ->where('MaLinhKien', $MaLinhKien)
-            ->delete();
+            // Cập nhật thông tin linh kiện
+            $linhKien->update([
+                'TenLinhKien' => $request->TenLinhKien,
+                'MoTa' => $request->MoTa,
+                'MaDonViTinh' => $request->MaDonViTinh,
+            ]);
+            \DB::table('nhacungcap_linhkien')
+                ->where('MaLinhKien', $MaLinhKien)
+                ->delete();
 
-        // Thêm mới danh sách nhà cung cấp vào bảng liên kết
-        $dataInsert = [];
-        foreach ($request->MaNhaCungCap as $nhaCungCapId) {
-            $dataInsert[] = [
-                'MaNhaCungCap' => $nhaCungCapId,
-                'MaLinhKien' => $MaLinhKien,
+            // Thêm mới danh sách nhà cung cấp vào bảng liên kết
+            $dataInsert = [];
+            foreach ($request->MaNhaCungCap as $nhaCungCapId) {
+                $dataInsert[] = [
+                    'MaNhaCungCap' => $nhaCungCapId,
+                    'MaLinhKien' => $MaLinhKien,
 
-            ];
+                ];
+            }
+
+            // Thêm vào bảng liên kết
+            \DB::table('nhacungcap_linhkien')->insert($dataInsert);
+
+            return redirect()->route('linhkien.detail', $MaLinhKien)
+                ->with('success', 'Cập nhật linh kiện thành công!');
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return redirect()->back()
+                ->with('error', 'Cập nhật không thành công. Vui lòng kiểm tra lại')
+                ->withInput();
         }
-
-        // Thêm vào bảng liên kết
-        \DB::table('nhacungcap_linhkien')->insert($dataInsert);
-
-        return redirect()->route('linhkien.detail', $MaLinhKien)
-            ->with('success', 'Cập nhật linh kiện thành công!');
     }
     public function saveFormData(Request $request)
     {
@@ -245,39 +244,15 @@ class LinhKienController extends Controller
 
     public function delete($MaLinhKien)
     {
-        try{
-        $linhKien = LinhKien::findOrFail($MaLinhKien);
-       
-        $linhKien->delete(); // Xóa linh kiện
-        return redirect()->back()->with('success', 'Xóa linh kiện thành công!');
-    } catch(\Illuminate\Database\QueryException $e){
+        try {
+            $linhKien = LinhKien::findOrFail($MaLinhKien);
+
+            $linhKien->delete(); // Xóa linh kiện
+            return redirect()->back()->with('success', 'Xóa linh kiện thành công!');
+        } catch (\Illuminate\Database\QueryException $e) {
             return redirect()->back()->with('error', 'Không thể xóa linh kiện này vì đang được sử dụng');
         }
     }
-
-    public function search(Request $request)
-    {
-        $query = LinhKien::query();
-
-        // Lọc theo các trường
-        if ($request->filled('MaLinhKien')) {
-            $query->where('MaLinhKien', 'like', '%' . $request->MaLinhKien . '%');
-        }
-
-        if ($request->filled('TenLinhKien')) {
-            $query->where('TenLinhKien', 'like', '%' . $request->TenLinhKien . '%');
-        }
-
-        if ($request->filled('SoLuong')) {
-            $query->where('SoLuong', $request->SoLuong);
-        }
-
-        // Lấy danh sách kết quả
-        $dsLinhKien = $query->paginate(10);
-
-        return view('vLK.linhkien', compact('dsLinhKien'));
-    }
-
 
     public function search1(Request $request)
     {
@@ -295,5 +270,5 @@ class LinhKienController extends Controller
         session()->put('linhkien_form_data', $request->all());
         return response()->json(['status' => 'ok']);
     }
-    
+
 }

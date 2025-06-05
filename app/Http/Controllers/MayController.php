@@ -16,28 +16,28 @@ class MayController extends Controller
         $query = May::query();
 
         if ($request->filled('TrangThai')) {
-            if ($request->TrangThai == '1') {
+            if ($request->TrangThai == 'da_thanh_ly') {
                 $query->where('TrangThai', 1);
-            } elseif ($request->TrangThai == '0') {
+            } elseif ($request->TrangThai == 'dang_su_dung') {
                 $query->where('TrangThai', '!=', 1);
             }
         }
 
         if ($request->filled('KhauHao')) {
-            if ($request->KhauHao == '1') {
+            if ($request->KhauHao == 'het_khau_hao') {
                 // Đã hết khấu hao
                 $query->whereRaw("DATE_ADD(`ThoiGianDuaVaoSuDung`, INTERVAL `ThoiGianKhauHao` YEAR) <= CURDATE()");
-            } elseif ($request->KhauHao == '0') {
+            } elseif ($request->KhauHao == 'con_khau_hao') {
                 // Còn khấu hao
                 $query->whereRaw("DATE_ADD(`ThoiGianDuaVaoSuDung`, INTERVAL `ThoiGianKhauHao` YEAR) > CURDATE()");
             }
         }
 
         if ($request->filled('BaoHanh')) {
-            if ($request->BaoHanh == '1') {
+            if ($request->BaoHanh == 'het_bao_hanh') {
                 // Đã hết bao hành
                 $query->whereRaw("DATE_ADD(`ThoiGianDuaVaoSuDung`, INTERVAL `ThoiGianBaoHanh` MONTH) <= CURDATE()");
-            } elseif ($request->BaoHanh == '0') {
+            } elseif ($request->BaoHanh == 'con_bao_hanh') {
                 // Còn bao hành
                 $query->whereRaw("DATE_ADD(`ThoiGianDuaVaoSuDung`, INTERVAL `ThoiGianBaoHanh` MONTH) > CURDATE()");
             }
@@ -51,7 +51,6 @@ class MayController extends Controller
             'ChuKyBaoTri' => '=',
             'ThoiGianBaoHanh' => '=',
             'ThoiGianDuaVaoSuDung' => '=',
-            'NamSanXuat' => '=',
         ];
 
         foreach ($filters as $field => $operator) {
@@ -181,7 +180,7 @@ class MayController extends Controller
             ]);
 
             event(new eventUpdateTable());
-            
+
             session()->forget('may_form_data');
             return redirect()->route('may')->with('success', 'Thêm máy thành công!');
         } catch (\Illuminate\Validation\ValidationException $e) {
@@ -193,12 +192,16 @@ class MayController extends Controller
     }
     public function deleteMay($MaMay)
     {
-        $may = May::findOrFail($MaMay); // Tìm máy theo ID
-        $may->delete(); // Xóa máy
+        try {
+            $may = May::findOrFail($MaMay); // Tìm máy theo ID
+            $may->delete(); // Xóa máy
 
-        event(new eventUpdateTable());
+            event(new eventUpdateTable());
 
-        return redirect()->back()->with('success', 'Xóa máy thành công!');
+            return redirect()->back()->with('success', 'Xóa máy thành công!');
+        } catch (\Illuminate\Database\QueryException $e) {
+            return redirect()->back()->with('error', 'Không thể xóa máy vì đang được sử dụng.');
+        }
     }
     public function saveFormSession(Request $request)
     {

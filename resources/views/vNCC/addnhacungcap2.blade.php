@@ -91,5 +91,8 @@
         document.getElementById('MaSoThue').addEventListener('input', function(e) {
             this.value = this.value.replace(/[^0-9]/gu, '');
         });
+        document.getElementById('Email').addEventListener('input', function(e) {
+            this.value = this.value.replace(/[^A-Za-z0-9@._\-+]/g, '');
+        });
     </script>
 @endsection

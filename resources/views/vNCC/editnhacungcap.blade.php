@@ -19,7 +19,7 @@
                                 <div class="form-group">
                                     <label for="TenNhaCungCap">Tên Nhà Cung Cấp</label>
                                     <input type="text" class="form-control" id="TenNhaCungCap" name="TenNhaCungCap"
-                                        value="{{ $nhaCungCap->TenNhaCungCap }}" required readonly>
+                                        value="{{ $nhaCungCap->TenNhaCungCap }}" required>
                                 </div>
 
                                 <!-- Địa Chỉ -->
@@ -77,6 +77,9 @@
         });
         document.getElementById('MaSoThue').addEventListener('input', function(e) {
             this.value = this.value.replace(/[^0-9]/gu, '');
+        });
+        document.getElementById('Email').addEventListener('input', function(e) {
+            this.value = this.value.replace(/[^A-Za-z0-9@._\-+]/g, '');
         });
     </script>
 @endsection

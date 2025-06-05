@@ -27,7 +27,7 @@
                             @forelse ($dsDonvitinh as $dvt)
                                 <tr class="text-center">
                                     <td>{{ $dvt->MaDonViTinh }}</td>
-                                    <td class="text-start">{{ $dvt->TenDonViTinh }}</td>
+                                    <td>{{ $dvt->TenDonViTinh }}</td>
                                     <td>{{ $dvt->linh_kiens_sum_so_luong ?? 0 }}</td>
 
                                     <td>
@@ -58,9 +58,9 @@
                             <h5 class="mb-3">Tìm kiếm</h5>
                             <form action="{{ route('donvitinh.index') }}" method="GET">
                                 <div class="mb-3">
-                                    <label for="search" class="form-label">Tên Đơn vị tính</label>
-                                    <input type="text" name="search" class="form-control" placeholder="Vui lòng nhập..."
-                                        value="{{ request('search') }}">
+                                    <label for="TenDonViTinh" class="form-label">Tên Đơn vị tính</label>
+                                    <input type="text" name="TenDonViTinh" class="form-control" placeholder="Vui lòng nhập..."
+                                        value="{{ request('TenDonViTinh') }}">
                                 </div>
                                 <button class="btn btn-primary w-100" type="submit">
                                     <i class="fa fa-search"></i> Tìm kiếm

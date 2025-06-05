@@ -16,11 +16,11 @@ class NhaCungCapController extends Controller
 
         // Danh sách các trường cần lọc
         $filters = [
-            'MaNhaCungCap' => 'like',
+            'MaNhaCungCap' => '=',
             'TenNhaCungCap' => 'like',
             'SDT' => 'like',
             'MaSoThue' => 'like',
-
+            'Email' => 'like',
         ];
 
         // Áp dụng các điều kiện lọc

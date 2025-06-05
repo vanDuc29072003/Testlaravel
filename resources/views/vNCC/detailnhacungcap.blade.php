@@ -17,7 +17,7 @@
                             </div>
                         </div>
                         <div class="card-body px-5 pt-5">
-                            <table class="table table-bordered table-striped">
+                            <table class="table">
                                 <tbody>
                                     <tr>
                                         <th scope="row">Mã Nhà Cung Cấp</th>
@@ -26,10 +26,6 @@
                                     <tr>
                                         <th scope="row">Tên Nhà Cung Cấp</th>
                                         <td>{{ $nhaCungCap->TenNhaCungCap }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">Địa Chỉ</th>
-                                        <td>{{ $nhaCungCap->DiaChi }}</td>
                                     </tr>
                                     <tr>
                                         <th scope="row">Số Điện Thoại</th>
@@ -42,6 +38,10 @@
                                     <tr>
                                         <th scope="row">Mã Số Thuế</th>
                                         <td>{{ $nhaCungCap->MaSoThue }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Địa Chỉ</th>
+                                        <td>{{ $nhaCungCap->DiaChi }}</td>
                                     </tr>
                                 </tbody>
                             </table>

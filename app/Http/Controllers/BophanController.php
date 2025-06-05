@@ -8,7 +8,7 @@ use App\Models\BoPhan;
 class BoPhanController extends Controller
 {
     // Hiển thị danh sách bộ phận
-        public function index(Request $request)
+    public function index(Request $request)
     {
         $search = $request->input('search');
 
@@ -35,7 +35,7 @@ class BoPhanController extends Controller
     }
 
     // Xử lý lưu dữ liệu mới
-    
+
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -71,13 +71,13 @@ class BoPhanController extends Controller
     // Xóa bộ phận
     public function destroy($id)
     {
-        try{
-        $bophan = BoPhan::findOrFail($id);
-        $bophan->delete();
+        try {
+            $bophan = BoPhan::findOrFail($id);
+            $bophan->delete();
 
-        return redirect()->route('bophan.index')->with('success', 'Xóa bộ phận thành công.');
-    } catch(\Illuminate\Database\QueryException $e){
-            return redirect()->route('bophan.index')->with('error', 'Không thể xóa bộ phận này vì đang được sử dụng');
+            return redirect()->back()->with('success', 'Xóa bộ phận thành công.');
+        } catch (\Illuminate\Database\QueryException $e) {
+            return redirect()->back()->with('error', 'Không thể xóa bộ phận này vì đang được sử dụng');
         }
     }
 }

@@ -246,21 +246,14 @@ class LichVanHanhController extends Controller
     }
 
 
-
-
-
     public function destroy(Request $request, $id)
     {
 
         $lich = LichVanHanh::findOrFail($id);
         $lich->delete();
 
-        // Lấy lại các tham số lọc từ request
-        $filters = $request->only(['from_date', 'to_date', 'quy', 'nam', 'ca']);
-
         event(new eventUpdateTable());
 
-        // Chuyển hướng lại với các tham số lọc
-        return redirect()->route('lichvanhanh', $filters)->with('success', 'Xóa lịch vận hành thành công!');
+        return redirect()->back()->with('success', 'Xóa lịch vận hành thành công!');
     }
 }
