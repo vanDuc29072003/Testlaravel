@@ -133,36 +133,48 @@ class TaiKhoanController extends Controller
     public function updateThongTin(Request $request, $TenTaiKhoan)
     {
         $taikhoan = TaiKhoan::with('nhanvien')->where('TenTaiKhoan', $TenTaiKhoan)->firstOrFail();
-
-        $request->validate([
+        try{
+            $request->validate([
             'TenNhanVien' => 'required|string|max:255',
-            'Email' => 'required|email',
-            'SDT' => 'nullable|string|max:20',
-            'DiaChi' => 'nullable|string|max:255',
+            'Email' => 'required|email|unique:nhanvien,Email,' . $taikhoan->nhanvien->MaNhanVien . ',MaNhanVien',
+            'SDT' => 'required|digits:10|unique:nhanvien,SDT,' . $taikhoan->nhanvien->MaNhanVien . ',MaNhanVien',
+            'DiaChi' => 'required|string|max:255',
             'NgaySinh' => 'nullable|date',
             'GioiTinh' => 'required|in:Nam,Nữ',
             'MaBoPhan' => 'required|exists:bophan,MaBoPhan',
-            'MatKhauChuaMaHoa' => 'nullable|string|min:6',
-        ]);
+            'MatKhauChuaMaHoa' => 'required|string|min:6',
+            ], [
+            'TenNhanVien.required' => 'Tên nhân viên là bắt buộc.',
+            'Email.unique' => 'Email đã tồn tại.',
+            'SDT.digits' => 'Số điện thoại phải có 10 chữ số.',
+            'SDT.unique' => 'Số điện thoại đã tồn tại.',
+            'MatKhauChuaMaHoa.required' => 'Mật khẩu là bắt buộc.',
+            'MatKhauChuaMaHoa.min' => 'Mật khẩu phải có ít nhất 6 ký tự.',
+            ]
+            );
 
         // Cập nhật thông tin nhân viên liên kết với tài khoản
-        if ($taikhoan->nhanvien) {
-            $nhanvien = $taikhoan->nhanvien;
-            $nhanvien->TenNhanVien = $request->TenNhanVien;
-            $nhanvien->Email = $request->Email;
-            $nhanvien->SDT = $request->SDT;
-            $nhanvien->DiaChi = $request->DiaChi;
-            $nhanvien->NgaySinh = $request->NgaySinh;
-            $nhanvien->GioiTinh = $request->GioiTinh;
-            $nhanvien->MaBoPhan = $request->MaBoPhan;
-            if ($request->has('MatKhauChuaMaHoa') && !empty($request->MatKhauChuaMaHoa)) {
-                $taikhoan->MatKhauChuaMaHoa = $request->MatKhauChuaMaHoa;
-                $taikhoan->MatKhau = Hash::make($request->MatKhauChuaMaHoa);
+            if ($taikhoan->nhanvien) {
+                $nhanvien = $taikhoan->nhanvien;
+                $nhanvien->TenNhanVien = $request->TenNhanVien;
+                $nhanvien->Email = $request->Email;
+                $nhanvien->SDT = $request->SDT;
+                $nhanvien->DiaChi = $request->DiaChi;
+                $nhanvien->NgaySinh = $request->NgaySinh;
+                $nhanvien->GioiTinh = $request->GioiTinh;
+                $nhanvien->MaBoPhan = $request->MaBoPhan;
+                if ($request->has('MatKhauChuaMaHoa') && !empty($request->MatKhauChuaMaHoa)) {
+                    $taikhoan->MatKhauChuaMaHoa = $request->MatKhauChuaMaHoa;
+                    $taikhoan->MatKhau = Hash::make($request->MatKhauChuaMaHoa);
+                }
+                $nhanvien->save();
+                $taikhoan->save();
             }
-            $nhanvien->save();
-            $taikhoan->save();
-        }
-        return redirect()->route('taikhoan.show', $taikhoan->TenTaiKhoan)->with('success', 'Cập nhật thành công!');
+            return redirect()->route('taikhoan.show', $taikhoan->TenTaiKhoan)->with('success', 'Cập nhật thành công!');
+        }catch (\Illuminate\Validation\ValidationException $e) {
+                return back()->withInput()
+                            ->with('error', 'Đã xảy ra lỗi: ' . $e->validator->errors()->first());
+            }
     }
 
     public function update(Request $request, $id)

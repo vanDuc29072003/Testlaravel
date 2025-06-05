@@ -167,6 +167,8 @@ Route::middleware('auth')->group(function () {
   Route::post('/nhacungcap/store-from-PN', [NhaCungCapController::class, 'storeNCCfromPN'])->name('nhacungcap.storeNCCfromPN');
 
   Route::get('/detailuser', [DetailuserController::class, 'detailuser'])->name('detailuser');
+  Route::get('/detailuser/edit', [DetailuserController::class, 'showInforUser'])->name('detailuser.edit');
+  Route::match(['put', 'patch'], '/detailuser/update', [DetailuserController::class, 'update'])->name('detailuser.update');
 
 
   Route::middleware(['kiemtraquyen:43'])->group(function () {

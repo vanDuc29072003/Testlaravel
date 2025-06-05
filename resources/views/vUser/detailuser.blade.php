@@ -11,7 +11,7 @@
                         <div class="card-header">
                             <div class="d-flex justify-content-between align-items-center">
                                 <h1 class="mt-3 mx-3">Chi tiết người dùng</h1>
-                                <a href="{{ route('taikhoan.editThongTin', $user->TenTaiKhoan) }}" class="btn btn-warning my-0 mx-3">
+                                <a href="{{ route('detailuser.edit') }}" class="btn btn-warning my-0 mx-3">
                                     <i class="fa fa-edit"></i> Sửa
                                 </a>
                             </div>
@@ -68,11 +68,7 @@
                             </table>
                         </div>
                         <div class="card-footer">
-                            <div class="d-flex justify-content-between align-items-center flex-wrap m-3">
-                                <a href="{{ url()->previous() }}" class="btn btn-secondary">
-                                    <i class="fa fa-arrow-left"></i> Quay lại
-                                </a>
-                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -82,5 +78,5 @@
     </div>
 @endsection
 @section('script')
- 
+
 @endsection
