@@ -44,7 +44,7 @@
     <script>
         document.getElementById('TenDonViTinh').addEventListener('input', function(e) {
             // Chỉ cho phép chữ cái, số, khoảng trắng, gạch ngang, gạch dưới
-            this.value = this.value.replace(/[^\p{L}0-9 _-]/gu, '');
+            this.value = this.value.replace(/[^\p{L}0-9 _\-().,]/gu, '');
         });
     </script>
 @endsection

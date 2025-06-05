@@ -50,9 +50,9 @@ class DonViTinhController extends Controller
             $dsDonvitinh = DonViTinh::findOrFail($id);
             $dsDonvitinh->delete();
 
-            return redirect()->route('donvitinh.index')->with('success', 'Xóa đơn vị tính thành công.');
+            return redirect()->back()->with('success', 'Xóa đơn vị tính thành công.');
         } catch (\Illuminate\Database\QueryException $e) {
-            return redirect()->route('donvitinh.index')->with('error', 'Không thể xóa đơn vị tính này vì nó đang được sử dụng.');
+            return redirect()->back()->with('error', 'Không thể xóa đơn vị tính này vì nó đang được sử dụng.');
         }
     }
 

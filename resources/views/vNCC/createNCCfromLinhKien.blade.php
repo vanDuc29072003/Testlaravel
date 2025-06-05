@@ -84,7 +84,7 @@
             this.value = this.value.replace(/[^0-9]/gu, '');
         });
         document.getElementById('MaSoThue').addEventListener('input', function(e) {
-            this.value = this.value.replace(/[^0-9-]/gu, '');
+            this.value = this.value.replace(/[^0-9]/gu, '');
         });
     </script>
 @endsection

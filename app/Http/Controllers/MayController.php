@@ -198,7 +198,7 @@ class MayController extends Controller
 
         event(new eventUpdateTable());
 
-        return redirect()->route('may')->with('success', 'Xóa máy thành công!');
+        return redirect()->back()->with('success', 'Xóa máy thành công!');
     }
     public function saveFormSession(Request $request)
     {

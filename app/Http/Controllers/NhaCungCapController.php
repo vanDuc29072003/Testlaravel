@@ -239,10 +239,10 @@ class NhaCungCapController extends Controller
         try{
         $nhaCungCap = NhaCungCap::findOrFail($MaNhaCungCap); // Tìm nhà cung cấp theo ID
         $nhaCungCap->delete(); // Xóa nhà cung cấp
-        return redirect()->route('nhacungcap')->with('success', 'Xóa nhà cung cấp thành công!');
+        return redirect()->back()->with('success', 'Xóa nhà cung cấp thành công!');
     } catch (\Illuminate\Database\QueryException $e) {
             
-            return redirect()->route('nhacungcap')->with('error', 'Không thể xóa nhà cung cấp vì đang được sử dụng');
+            return redirect()->back()->with('error', 'Không thể xóa nhà cung cấp vì đang được sử dụng');
         }
     }
 

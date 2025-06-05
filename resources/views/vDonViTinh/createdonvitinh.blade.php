@@ -40,7 +40,7 @@
   <script>
         document.getElementById('TenDonViTinh').addEventListener('input', function(e) {
             // \p{L}: Cho phép mọi ký tự chữ cái Unicode (cả tiếng Việt, tiếng Anh, tiếng Nhật, v.v.)
-            this.value = this.value.replace(/[^\p{L}0-9 _-]/gu, '');
+            this.value = this.value.replace(/[^\p{L}0-9 _\-().,]/gu, '');
         });
     </script>
 @endsection

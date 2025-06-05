@@ -50,6 +50,11 @@
                                 </tr>
                             @endforelse
                         </tbody>
+                        <tfoot>
+                            <nav aria-label="Page navigation example">
+                                {{ $loaimays->appends(request()->query())->links('pagination::bootstrap-5') }}
+                            </nav>
+                        </tfoot>
                     </table>
                 </div>
 
@@ -60,9 +65,14 @@
                             class="p-3 border rounded fixed-search-form" style="margin-top: 60px;">
                             <h5 class="mb-3">Tìm kiếm</h5>
                             <div class="mb-3">
-                                <label for="search" class="form-label">Tên loại máy</label>
-                                <input type="text" name="search" class="form-control" placeholder="Nhập tên..."
-                                    value="{{ request('search') }}">
+                                <label for="TenLoai" class="form-label">Tên loại máy</label>
+                                <input type="text" name="TenLoai" class="form-control" placeholder="Nhập tên..."
+                                    value="{{ request('TenLoai') }}">
+                            </div>
+                            <div class="mb-3">
+                                <label for="MoTa" class="form-label">Tên viết tắt</label>
+                                <input type="text" name="MoTa" class="form-control" placeholder="Nhập tên viết tắt..."
+                                    value="{{ request('MoTa') }}">
                             </div>
                             <button class="btn btn-primary w-100" type="submit">
                                 <i class="fa fa-search"></i> Tìm kiếm

@@ -8,15 +8,21 @@ class LoaiMayController extends Controller
 {
     public function index(Request $request)
     {
-        $search = $request->input('search');
+        $query = LoaiMay::query()->withCount('mays');
 
-        $loaimays = LoaiMay::withCount('mays');
+        $filters = [
+            'TenLoai' => 'like',
+            'MoTa' => '=',
+        ];
 
-        if ($search) {
-            $loaimays->where('TenLoai', 'like', '%' . $search . '%');
+        foreach ($filters as $field => $operator) {
+            if ($request->filled($field)) {
+                $value = $operator === 'like' ? '%' . $request->$field . '%' : $request->$field;
+                $query->where($field, $operator, $value);
+            }
         }
 
-        $loaimays = $loaimays->get(); // hoặc ->paginate(10) nếu muốn phân trang
+        $loaimays = $query->paginate(10);
 
         return view('vMay.loaiMay', compact('loaimays'));
     }
@@ -48,10 +54,10 @@ class LoaiMayController extends Controller
             $loaimay = LoaiMay::findOrFail($id);
             $loaimay->delete();
             event(new eventUpdateTable());
-            return redirect()->route('loaimay.index')->with('success', 'Xóa loại máy thành công.');
+            return redirect()->back()->with('success', 'Xóa loại máy thành công.');
         } catch (\Illuminate\Database\QueryException $e) {
             
-            return redirect()->route('loaimay.index')->with('error', 'Không thể xóa loại máy vì đang được sử dụng.');
+            return redirect()->back()->with('error', 'Không thể xóa loại máy vì đang được sử dụng.');
         }
     }
 
