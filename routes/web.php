@@ -107,11 +107,9 @@ Route::middleware('auth')->group(function () {
     Route::post('/linhkien', [LinhKienController::class, 'store'])->name('linhkien.store');
     Route::get('/linhkien/{MaLinhKien}', [LinhKienController::class, 'detail'])->name('linhkien.detail');
     Route::get('/linhkien/{MaLinhKien}/edit', [LinhKienController::class, 'editForm'])
-      ->middleware('kiemtraquyen:16')
       ->name('linhkien.edit');
     Route::patch('/linhkien/{MaLinhKien}', [LinhKienController::class, 'update'])->name('linhkien.update');
     Route::delete('/linhkien/{MaLinhKien}', [LinhKienController::class, 'delete'])
-      ->middleware('kiemtraquyen:17')
       ->name('linhkien.delete');
   });
 
@@ -123,15 +121,14 @@ Route::middleware('auth')->group(function () {
 
 
 
-  Route::middleware(['kiemtraquyen:10'])->group(function () {
+  Route::middleware(['kiemtraquyen:12'])->group(function () {
     Route::get('/may', [MayController::class, 'may'])->name('may');
     Route::get('/may/add', [MayController::class, 'addMay'])
-      ->middleware('kiemtraquyen:10')
       ->name('may.add');
     Route::post('/may', [MayController::class, 'storeMay'])->name('may.store');
     Route::get('/may/{MaMay}', [MayController::class, 'detailMay'])->name('may.detail');
     Route::get('/may/{MaMay}/edit', [MayController::class, 'form_editmay'])
-      ->middleware('kiemtraquyen:11')
+      ->middleware('kiemtraquyen:12')
       ->name('may.edit');
     Route::patch('/may/{MaMay}', [MayController::class, 'editmay'])->name('may.update');
     Route::delete('/may/{MaMay}', [MayController::class, 'deleteMay'])->name('may.delete');
