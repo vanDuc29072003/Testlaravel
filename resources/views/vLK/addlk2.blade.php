@@ -83,7 +83,7 @@
             this.value = this.value.replace(/[^\p{L}0-9 _\-,.()]/gu, '');
         });
         document.getElementById('MoTa').addEventListener('input', function(e) {
-            this.value = this.value.replace(/[^\p{L}0-9 _\-,.()]/gu, '');
+            this.value = this.value.replace(/[^\p{L}0-9 _\-,.:()\n]/gu, '');
         });
     </script>s
 @endsection
