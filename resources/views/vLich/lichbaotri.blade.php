@@ -149,7 +149,7 @@
                   <!-- Tùy chọn khác -->
                   <div class="form-check">
                     <input class="form-check-input" type="radio" name="khoang_thoi_gian" id="radio_khac" value="khac"
-                      {{ request('khoang_thoi_gian') == 'khac' || request('tu_ngay') || request('den_ngay') ? 'checked' : '' }}>
+                      {{ request('khoang_thoi_gian') == 'khac' ? 'checked' : '' }}>
                     <label class="form-check-label m-0" for="radio_khac">
                       Tùy chọn khác
                     </label>

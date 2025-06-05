@@ -56,7 +56,7 @@
                                     <tr>
                                         <td colspan="7">
                                             <div class="text-center" role="alert" style="width: 99%;">
-                                                <p class="fst-italic m-0">Không có yêu cầu sửa chữa nào đang chờ duyệt.</p>
+                                                <p class="fst-italic m-0">Không có phiếu nhập nào đang chờ duyệt.</p>
                                             </div>
                                         </td>
                                     </tr>

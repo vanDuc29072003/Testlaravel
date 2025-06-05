@@ -27,7 +27,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($dsPhieuThanhLyChoDuyet as $phieuThanhLy)
+                                @forelse ($dsPhieuThanhLyChoDuyet as $phieuThanhLy)
                                     <tr class="text-center"
                                         onclick="window.location='{{ route('phieuthanhly.detail', $phieuThanhLy->MaPhieuThanhLy) }}'"
                                         style="cursor: pointer;">
@@ -50,7 +50,15 @@
                                             </div>
                                         </td>
                                     </tr>
-                                @endforeach
+                                @empty
+                                    <tr>
+                                        <td colspan="6">
+                                            <div class="text-center" role="alert" style="width: 99%;">
+                                                <p class="fst-italic m-0">Không có phiếu thanh lý nào đang chờ duyệt.</p>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @endforelse
                             </tbody>
                             <tfoot>
                                 <!-- Pagination cho trạng thái chờ duyệt -->

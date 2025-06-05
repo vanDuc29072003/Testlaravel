@@ -27,17 +27,7 @@ class LichBaoTriController extends Controller
         // Chỉ lấy lịch chưa hoàn thành
         $query->where('TrangThai', 0);
 
-        // 1. Nếu chọn khoảng thời gian tuỳ chỉnh (từ ngày - đến ngày)
-        
-        if ($request->filled('tu_ngay') && $request->filled('den_ngay')) {
-            $query->whereBetween('NgayBaoTri', [
-                Carbon::parse($request->input('tu_ngay'))->startOfDay(),
-                Carbon::parse($request->input('den_ngay'))->endOfDay(),
-            ]);
-        }
-
-        // 2. Nếu chọn các khoảng thời gian định sẵn (7 ngày, 1 tháng, 3 tháng, ...)
-        elseif ($request->filled('khoang_thoi_gian')) {
+        if ($request->filled('khoang_thoi_gian')) {
             $khoang = $request->input('khoang_thoi_gian');
 
             if ($khoang === '7days') {
@@ -45,7 +35,16 @@ class LichBaoTriController extends Controller
                     Carbon::today(),
                     Carbon::today()->addDays(7),
                 ]);
-            } else {
+            } 
+            elseif ($khoang === 'khac') {
+                if ($request->filled('tu_ngay') && $request->filled('den_ngay')) {
+                    $query->whereBetween('NgayBaoTri', [
+                        Carbon::parse($request->input('tu_ngay'))->startOfDay(),
+                        Carbon::parse($request->input('den_ngay'))->endOfDay(),
+                    ]);
+                }
+            } 
+            else {
                 $soThang = (int) $khoang;
                 $query->whereBetween('NgayBaoTri', [
                     Carbon::today(),
@@ -185,7 +184,7 @@ class LichBaoTriController extends Controller
                 return redirect()->back()->with('error', 'Không đủ thông tin chu kỳ hoặc thời gian bảo hành của máy.');
             }
             $thangHienTai = Carbon::now()->month;
-            $soLanLap = floor(13 - $thangHienTai / $may->ChuKyBaoTri);
+            $soLanLap = floor((13 - $thangHienTai) / $may->ChuKyBaoTri);
             if ($soLanLap < 1) {
                 return redirect()->route('lichbaotri.create')
                     ->withInput()
@@ -285,7 +284,7 @@ class LichBaoTriController extends Controller
 
         event(new eventUpdateTable());
 
-        return redirect()->route('lichbaotri')->with('success', 'Xóa lịch bảo trì thành công!');
+        return redirect()->back()->with('success', 'Xóa lịch bảo trì thành công!');
     }
 
     public function exporttscBT($MaLichBaoTri)
