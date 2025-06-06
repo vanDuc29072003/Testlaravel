@@ -115,7 +115,7 @@ class LinhKienController extends Controller
                 'MoTa' => $request->MoTa,
                 'MaDonViTinh' => $request->MaDonViTinh,
             ]);
-
+            $linhKien->nhaCungCaps()->attach($request->MaNhaCungCap, []);
             return redirect()->route('dsphieunhap.add')
                 ->with('success', 'Thêm linh kiện thành công, hãy tạo tiếp thông tin phiếu nhập!');
 
@@ -146,7 +146,7 @@ class LinhKienController extends Controller
                 'MoTa' => $request->MoTa,
                 'MaDonViTinh' => $request->MaDonViTinh,
             ]);
-
+            $linhKien->nhaCungCaps()->attach($request->MaNhaCungCap, []);
             $phieuNhapSession1 = session('phieuNhapSession1');
 
             if (!$phieuNhapSession1 || !isset($phieuNhapSession1['MaPhieuNhap'])) {
