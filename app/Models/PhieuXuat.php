@@ -27,10 +27,10 @@ class PhieuXuat extends Model
     {
         parent::boot();
 
-        // Sự kiện `creating` để tạo mã phiếu nhập
+       
         static::creating(function ($phieuXuat) {
-            $now = Carbon::now(); // Lấy thời gian hiện tại
-            $phieuXuat->MaHienThi = 'PX' . $now->format('ymd-His'); // Tạo mã phiếu nhập theo định dạng
+            $now = Carbon::now(); 
+            $phieuXuat->MaHienThi = 'PX' . $now->format('ymd-His'); 
         });
     }
 

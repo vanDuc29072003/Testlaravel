@@ -31,8 +31,8 @@ class PhieuNhap extends Model
 
         // Sự kiện `creating` để tạo mã phiếu nhập
         static::creating(function ($phieuNhap) {
-            $now = Carbon::now(); // Lấy thời gian hiện tại
-            $phieuNhap->MaHienThi = 'PN' . $now->format('ymd-His'); // Tạo mã phiếu nhập theo định dạng
+            $now = Carbon::now(); 
+            $phieuNhap->MaHienThi = 'PN' . $now->format('ymd-His');
         });
     }
     public function nhaCungCap()

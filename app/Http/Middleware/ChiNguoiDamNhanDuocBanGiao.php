@@ -13,7 +13,6 @@ class ChiNguoiDamNhanDuocBanGiao
         $user = Auth::user();
         $nhanVien = $user->nhanVien;
 
-        // Lấy lịch sửa chữa từ route
         $maLichSuaChua = $request->route('MaLichSuaChua');
         $lichSuaChua = LichSuaChua::find($maLichSuaChua);
         
@@ -23,16 +22,13 @@ class ChiNguoiDamNhanDuocBanGiao
 
         $maBoPhan = $nhanVien->MaBoPhan;
 
-       
         if ($maBoPhan == '1') {
             return $next($request);
         }
-
-        // ✅ Nếu thuộc bộ phận Kỹ thuật → phải trùng ID với người đảm nhận
         if ($maBoPhan == '3' && $nhanVien->MaNhanVien   == $lichSuaChua->MaNhanVienKyThuat){
             return $next($request);
         }
-
+        
         session()->flash('error', 'Bạn không có quyền thực hiện tác vụ này đâu.');
         return redirect()->back();
     }

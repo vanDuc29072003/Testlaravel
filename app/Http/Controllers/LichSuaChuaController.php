@@ -118,25 +118,25 @@ class LichSuaChuaController extends Controller
                 'GhiChu' => null,
             ];
         }
-        // Truyền dữ liệu cần thiết sang view
+      
         return view('vPhieuBanGiao.pbgNoiBo', compact('lichSuaChua'));
     }
 
 
     public function xemNCC($MaLichSuaChua)
     {
-        // Lấy thông tin lịch sửa chữa
+       
         $lichSuaChua = LichSuaChua::with(['yeuCauSuaChua.may.nhaCungCap'])->findOrFail($MaLichSuaChua);
 
-        // Lấy thông tin nhà cung cấp từ mã máy
+      
         $nhaCungCap = $lichSuaChua->yeuCauSuaChua->may->nhaCungCap;
 
-        // Nếu không tìm thấy nhà cung cấp, trả về lỗi
+       
         if (!$nhaCungCap) {
             return redirect()->back()->with('error', 'Không tìm thấy thông tin nhà cung cấp.');
         }
 
-        // Trả về view hiển thị thông tin nhà cung cấp và lịch sửa chữa
+      
         return view('vPhieuBanGiao.xemnhacungcap', compact('nhaCungCap', 'lichSuaChua'));
     }
 
@@ -153,10 +153,10 @@ class LichSuaChuaController extends Controller
 
     public function bangiaoNhaCungCap($MaLichSuaChua)
     {
-        // Lấy thông tin lịch sửa chữa cùng với nhà cung cấp
+        
         $lichSuaChua = LichSuaChua::with(['yeuCauSuaChua.may.nhaCungCap'])->findOrFail($MaLichSuaChua);
 
-        // Lấy thông tin nhà cung cấp từ mã máy
+        
         $nhaCungCap = $lichSuaChua->yeuCauSuaChua->may->nhaCungCap;
 
         //Lấy ngày hết bảo hành của máy
@@ -165,7 +165,7 @@ class LichSuaChuaController extends Controller
             $ngayHetBaoHanh = Carbon::parse($lichSuaChua->yeuCauSuaChua->may->ThoiGianDuaVaoSuDung)->addMonths($lichSuaChua->yeuCauSuaChua->may->ThoiGianBaoHanh);
         }
 
-        // Nếu không tìm thấy nhà cung cấp, trả về lỗi
+       
         if (!$nhaCungCap) {
             return redirect()->back()->with('error', 'Không tìm thấy thông tin nhà cung cấp.');
         }
@@ -200,15 +200,15 @@ class LichSuaChuaController extends Controller
             'phieuBanGiaoSuaChuaNCC.nhanVienTao'
         ])->findOrFail($MaLichSuaChua);
 
-        // Lấy luôn nhà cung cấp
+       
         $nhaCungCap = $lichSuaChua->yeuCauSuaChua->may->nhaCungCap ?? null;
 
-        // Nếu không có nhà cung cấp thì trả về lỗi
+        
         if (!$nhaCungCap) {
             return redirect()->back()->with('error', 'Không tìm thấy thông tin nhà cung cấp.');
         }
 
-        // Truyền dữ liệu sang view vPhieuBanGiao.pbgNCC
+        
         return view('vPhieuBanGiao.detailpbgNCC', compact('lichSuaChua', 'nhaCungCap'));
     }
 

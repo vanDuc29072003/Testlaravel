@@ -26,16 +26,14 @@ class ChuaDenNgayBanGiao
 
         if ($maBoPhan == '1') {
             
-            // Kiểm tra ngày hiện tại với NgayBaoTri
+         
             $today = Carbon::today();
             $ngayBaoTri = Carbon::parse($lichBaoTri->NgayBaoTri);
 
             if ($today->lt($ngayBaoTri)) {
-                // Nếu chưa đến ngày bàn giao
                 Session::flash('error', 'Chưa đến ngày bàn giao lịch bảo trì.');
                 return redirect()->back();
             }
-
             return $next($request);
         }
 

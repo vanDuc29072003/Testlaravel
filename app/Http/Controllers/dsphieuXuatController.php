@@ -15,8 +15,7 @@ class dsphieuXuatController extends Controller
     {
         // Tạo query để lấy danh sách phiếu xuất
         $query = PhieuXuat::with(['nhanVienTao', 'nhanVienNhan']);
-
-        // Lọc theo các điều kiện tìm kiếm
+  
         if ($request->filled('MaHienThi')) {
             $query->where('MaHienThi', 'LIKE', '%' . $request->MaHienThi . '%');
         }
@@ -37,35 +36,28 @@ class dsphieuXuatController extends Controller
             });
         }
         $query->orderBy('NgayXuat', 'desc');
-
-        // Phân trang kết quả
+   
         $dsPhieuXuat = $query->paginate(10);
 
-        // Trả về view với dữ liệu
         return view('vPXuat.dsphieuxuat', compact('dsPhieuXuat'));
     }
     public function show($MaPhieuXuat)
     {
-        // Lấy thông tin phiếu xuất cùng với chi tiết phiếu xuất và các quan hệ liên quan
+        
         $phieuXuat = PhieuXuat::with(['chiTietPhieuXuat.linhKien', 'nhanVienTao', 'nhanVienNhan'])
             ->findOrFail($MaPhieuXuat);
-
-        // Trả về view hiển thị chi tiết phiếu xuất
         return view('vPXuat.detailphieuxuat', compact('phieuXuat'));
     }
     public function create()
     {
-        // Lấy danh sách nhân viên để chọn nhân viên nhận
         $nhanViens = NhanVien::where('MaBoPhan', 3)->get();
 
-        // Trả về view thêm mới phiếu xuất
         return view('vPXuat.addphieuxuat', compact('nhanViens'));
     }
 
 
     public function store(Request $request)
     {
-        // Xác thực dữ liệu đầu vào
         $validatedData = $request->validate([
             'NgayXuat' => 'required|date',
             'MaNhanVienTao' => 'required|exists:nhanvien,MaNhanVien',
@@ -88,8 +80,7 @@ class dsphieuXuatController extends Controller
                 $linhKien = LinhKien::where('MaLinhKien', $maLinhKien)->first();
 
                 if ($linhKien) {
-                    if ($linhKien->SoLuong < $validatedData['SoLuong'][$index]) {
-                        // Thêm lỗi vào danh sách lỗi
+                    if ($linhKien->SoLuong < $validatedData['SoLuong'][$index]) {     
                         $errors[] = 'Số lượng tồn kho không đủ cho linh kiện: ' . $linhKien->TenLinhKien;
                     }
                 }
@@ -97,13 +88,11 @@ class dsphieuXuatController extends Controller
 
             // Nếu có lỗi, rollback transaction và trả về view với lỗi
             if (!empty($errors)) {
-                // Không rollback transaction vì chưa lưu dữ liệu
                 return redirect()->back()
                     ->withInput() // Giữ lại dữ liệu đã nhập
                     ->with('error', implode('<br>', $errors));
             }
 
-            // Lưu phiếu xuất
             $phieuXuat = PhieuXuat::create([
                 'NgayXuat' => $validatedData['NgayXuat'],
                 'MaNhanVienTao' => $validatedData['MaNhanVienTao'],
@@ -116,11 +105,9 @@ class dsphieuXuatController extends Controller
             foreach ($validatedData['MaLinhKien'] as $index => $maLinhKien) {
                 $linhKien = LinhKien::where('MaLinhKien', $maLinhKien)->first();
 
-                // Trừ số lượng tồn kho
                 $linhKien->SoLuong -= $validatedData['SoLuong'][$index];
                 $linhKien->save();
 
-                // Lưu chi tiết phiếu xuất
                 ChiTietPhieuXuat::create([
                     'MaPhieuXuat' => $phieuXuat->MaPhieuXuat,
                     'MaLinhKien' => $maLinhKien,

@@ -11,10 +11,9 @@ class dsphieuTraController extends Controller
 {
     public function index(Request $request)
     {
-        // Tạo query để lấy danh sách phiếu trả
+        // Tạo query để lấy danh sách phiếu trả với các quan hệ liên quan
         $query = PhieuTra::with(['nhanVienTao', 'nhanVienTra']);
 
-        // Lọc theo các điều kiện tìm kiếm
         if ($request->filled('MaHienThi')) {
             $query->where('MaHienThi', 'LIKE', '%' . $request->MaHienThi . '%');
         }
@@ -35,36 +34,32 @@ class dsphieuTraController extends Controller
             });
         }
 
-        // Phân trang kết quả
         $dsPhieuTra = $query->paginate(10);
 
-        // Trả về view với dữ liệu
         return view('vTra.dsphieutra', compact('dsPhieuTra'));
     }
 
     public function show($MaPhieuTra)
     {
-        // Lấy thông tin phiếu trả cùng với chi tiết phiếu trả và các quan hệ liên quan
+    
         $phieuTra = PhieuTra::with(['chiTietPhieuTra.linhKien', 'nhanVienTao', 'nhanVienTra'])
             ->findOrFail($MaPhieuTra);
 
-        // Trả về view hiển thị chi tiết phiếu trả
+        
         return view('vTra.detailphieutra', compact('phieuTra'));
     }
 
     public function create()
     {
-        // Lấy danh sách nhân viên để chọn nhân viên nhận
+        
         $nhanViens = NhanVien::where('MaBoPhan', 2)->get();
 
-        // Trả về view thêm mới phiếu trả
         return view('vTra.addphieutra', compact('nhanViens'));
     }
 
     public function store(Request $request)
     {
         
-        // Xác thực dữ liệu đầu vào
         $validatedData = $request->validate([
             'NgayTra' => 'required|date',
             'MaNhanVienTao' => 'required|exists:nhanvien,MaNhanVien',
@@ -82,7 +77,6 @@ class dsphieuTraController extends Controller
             // Bắt đầu transaction để đảm bảo tính toàn vẹn dữ liệu
             \DB::beginTransaction();
 
-            // Lưu phiếu trả
             $phieuTra = PhieuTra::create([
                 'NgayTra' => $validatedData['NgayTra'],
                 'MaNhanVienTao' => $validatedData['MaNhanVienTao'],
@@ -96,11 +90,8 @@ class dsphieuTraController extends Controller
                 $linhKien = LinhKien::where('MaLinhKien', $maLinhKien)->first();
 
                 if ($linhKien) {
-                    // Cộng số lượng trả vào tồn kho
                     $linhKien->SoLuong += $validatedData['SoLuong'][$index];
                     $linhKien->save();
-
-                    // Lưu chi tiết phiếu trả
                     ChiTietPhieuTra::create([
                         'MaPhieuTra' => $phieuTra->MaPhieuTra,
                         'MaLinhKien' => $maLinhKien,
@@ -129,10 +120,8 @@ class dsphieuTraController extends Controller
             $phieuTra = PhieuTra::with(['nhanVienTao', 'nhanVienTra', 'chiTietPhieuTra.linhKien.donViTinh'])
                 ->findOrFail($MaPhieuTra);
 
-            // Tạo file PDF từ view
             $pdf = Pdf::loadView('vTra.export', compact('phieuTra'));
 
-            // Trả về file PDF để xem trực tiếp
             return $pdf->stream('Phieu_Tra_' . $phieuTra->MaPhieuTra . '.pdf');
        
     }

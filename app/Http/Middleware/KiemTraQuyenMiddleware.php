@@ -22,9 +22,6 @@ class KiemTraQuyenMiddleware
             $query->where('bophan.MaBoPhan', $nhanVien->MaBoPhan);
         })->pluck('MaPhanQuyen')->toArray();
 
-        // ✅ Gọi dd SAU khi đã gán biến
-
-
         if (!in_array((int) $requiredMaPhanQuyen, $maPhanQuyens)) {
             session()->flash('error', 'Bạn không có quyền thực hiện tác vụ này.');
             return redirect()->back();
