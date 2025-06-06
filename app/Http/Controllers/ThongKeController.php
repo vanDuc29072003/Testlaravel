@@ -749,7 +749,7 @@ class ThongKeController extends Controller
         }
 
         // Sắp xếp theo số lượng
-        $query->orderBy('SoLuong', $sortOrder);
+        $query->orderBy('SoLuong', 'asc')->orderBy('TenLinhKien', 'asc');
 
         $linhKienList = $query->get();
 
@@ -765,10 +765,10 @@ class ThongKeController extends Controller
             } else { // từ 20 đến 50
                 $mucDo = 'warning';
             }
-
             return [
                 'MaLinhKien' => $item->MaLinhKien,
                 'TenLinhKien' => $item->TenLinhKien,
+              
                 'SoLuong' => $item->SoLuong,
                 'DVT' => $item->donViTinh->TenDonViTinh ?? 'N/A',
                 'MucDo' => $mucDo
