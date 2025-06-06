@@ -98,19 +98,19 @@ class LichBaoTriController extends Controller
         // Chỉ lấy lịch bảo trì đã hoàn thành
         $query->where('TrangThai', 1);
 
-        // Lọc theo máy
+      
         if ($request->filled('may')) {
             $query->where('MaMay', $request->input('may'));
         }
 
-        // Lọc theo nhà cung cấp
+     
         if ($request->filled('ncc')) {
             $query->whereHas('may', function ($q) use ($request) {
                 $q->where('MaNhaCungCap', $request->input('ncc'));
             });
         }
 
-        // Lọc theo thời gian
+       
         $timeType = $request->input('time_type', 'month');
         if ($timeType === 'month') {
             $query->whereMonth('NgayBaoTri', now()->month)
@@ -130,15 +130,15 @@ class LichBaoTriController extends Controller
             }
         }
 
-        // Lấy danh sách lịch bảo trì
+        
         $lichbaotri = $query->with('may.nhaCungCap')->orderBy('NgayBaoTri', 'desc')->get();
 
-        // Nhóm theo tháng-năm
+        
         $lichbaotriGrouped = $lichbaotri->groupBy(function ($item) {
             return Carbon::parse($item->NgayBaoTri)->format('Y-m');
         });
 
-        // Dữ liệu cho combobox
+      
         $dsMay = May::where('TrangThai', '!=', 1)->get();
         $dsNhaCungCap = NhaCungCap::all();
 
@@ -289,7 +289,7 @@ class LichBaoTriController extends Controller
 
     public function exporttscBT($MaLichBaoTri)
     {
-        // Lấy dữ liệu lịch bảo trì
+       
         $lich = LichBaoTri::with(['may'])->where('MaLichBaoTri', $MaLichBaoTri)->firstOrFail();
 
         // Tạo PDF từ view
@@ -327,7 +327,7 @@ class LichBaoTriController extends Controller
             'phieuBanGiaoBaoTri.nhanVien'
         ])->findOrFail($MaLichBaoTri);
 
-        // Kiểm tra xem phieuBanGiaoBaoTri và nhanVien có tồn tại không
+       
         $nhaCungCap = $lichBaoTri->may->nhaCungCap;
         $nhanvien = $lichBaoTri->phieuBanGiaoBaoTri ? $lichBaoTri->phieuBanGiaoBaoTri->nhanVien : null;
 

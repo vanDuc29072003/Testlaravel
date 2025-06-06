@@ -18,21 +18,17 @@ class VietNhatKi
         if (!$nhanVien) {
             return abort(403, 'Không có thông tin nhân viên.');
         }
-
-       
         $maLichVanHanh = $request->route('id') ?? $request->query('ma_lich');
-
         
         if (!$maLichVanHanh) {
             return $next($request); 
         }
 
-        // ✅ Có mã lịch → kiểm tra quyền
+        // Có mã lịch thì kiểm tra quyền
         $lichVanHanh = LichVanHanh::find($maLichVanHanh);
         if (!$lichVanHanh) {
             return abort(403, 'Không tìm thấy lịch vận hành.');
         }
-
         $maBoPhan = $nhanVien->MaBoPhan;
 
         if ($maBoPhan == '1') {

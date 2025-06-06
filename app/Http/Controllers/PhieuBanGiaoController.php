@@ -24,7 +24,7 @@ class PhieuBanGiaoController extends Controller
 
     public function store(Request $request)
     {
-        // Validate phần chung (không liên quan đến linh kiện)
+        // Validate phần chung 
         $rules = [
             'MaLichSuaChua' => 'required|exists:lichsuachua,MaLichSuaChua',
             'ThoiGianBanGiao' => 'required|date',
@@ -32,15 +32,14 @@ class PhieuBanGiaoController extends Controller
             'GhiChu' => 'nullable|string|max:255',
         ];
 
-        // Nếu có nhập linh kiện thì validate thêm
+        // Nếu có nhập linh kiện 
         if ($request->has('MaLinhKien') && is_array($request->MaLinhKien)) {
             $rules['MaLinhKien'] = 'required|array';
             $rules['SoLuong'] = 'required|array';
             $rules['MaLinhKien.*'] = 'exists:linhkiensuachua,MaLinhKien';
             $rules['SoLuong.*'] = 'integer|min:1';
         }
-
-        // Thực hiện validate
+        
         $request->validate($rules);
 
         // Tạo phiếu bàn giao nội bộ
@@ -64,7 +63,7 @@ class PhieuBanGiaoController extends Controller
             }
         }
 
-        // Cập nhật trạng thái của lịch sửa chữa
+      
         $lichSuaChua = LichSuaChua::findOrFail($request->MaLichSuaChua);
         $lichSuaChua->TrangThai = 1;
         $lichSuaChua->save();
@@ -80,7 +79,7 @@ class PhieuBanGiaoController extends Controller
     public function store1(Request $request)
     {
         try {
-            // Validate input
+            
             $request->validate([
                 'MaLichSuaChua' => 'required|exists:lichsuachua,MaLichSuaChua',
                 'MaNhaCungCap' => 'required|exists:nhacungcap,MaNhaCungCap',
@@ -128,7 +127,7 @@ class PhieuBanGiaoController extends Controller
                 ]);
             }
 
-            // Cập nhật trạng thái của lịch sửa chữa
+            
             $lichSuaChua = LichSuaChua::findOrFail($request->MaLichSuaChua);
             $lichSuaChua->TrangThai = 2;
             $lichSuaChua->save();
@@ -147,26 +146,25 @@ class PhieuBanGiaoController extends Controller
 
     public function exportPDF($MaPhieuBanGiaoNoiBo)
     {
-        // Lấy phiếu bàn giao
+       
         $phieuBanGiaoNoiBo = PhieuBanGiaoNoiBo::with('chiTietPhieuBanGiaoNoiBo.LinhKienSuaChua')->findOrFail($MaPhieuBanGiaoNoiBo);
 
-        // Xuất PDF logic ở đây
+        // Truyền dữ liệu sang view PDF
         $pdf = PDF::loadView('vPhieuBanGiao.export', compact('phieuBanGiaoNoiBo'));
+        // Trả về PDF cho người dùng tải về
 
         return $pdf->stream('phieu_ban_giao_noi_bo_' . $MaPhieuBanGiaoNoiBo . '.pdf');
 
     }
     public function exportPDF1($MaPhieuBanGiaoSuaChua)
     {
-        // Lấy thông tin phiếu bàn giao từ cơ sở dữ liệu theo MaPhieuBanGiaoSuaChua
+       
         $phieuBanGiao = PhieuBanGiaoSuaChuaNCC::with(['yeuCauSuaChua', 'nhaCungCap', 'chiTietPhieuBanGiaoSuaChuaNCC'])
             ->where('MaPhieuBanGiaoSuaChua', $MaPhieuBanGiaoSuaChua)
             ->firstOrFail();
-
-        // Truyền dữ liệu sang view PDF
+        
         $pdf = PDF::loadView('vPhieuBanGiao.export1', ['phieuBanGiao' => $phieuBanGiao]);
 
-        // Trả về PDF cho người dùng tải về
         return $pdf->stream('phieu_ban_giao_' . $MaPhieuBanGiaoSuaChua . '.pdf');
     }
 
@@ -195,7 +193,7 @@ class PhieuBanGiaoController extends Controller
             $giaThanhList = array_map(fn($v) => str_replace('.', '', $v), $request->GiaThanh);
             $tongTien = str_replace('.', '', $request->TongTien);
 
-            // Tạo phiếu bàn giao bảo trì
+            
             $phieuBanGiaoBaoTri = new PhieuBanGiaoBaoTri();
             $phieuBanGiaoBaoTri->MaPhieuBanGiaoBaoTri = $request->MaLichBaoTri;
             $phieuBanGiaoBaoTri->MaNhanVien = $request->MaNhanVien;
