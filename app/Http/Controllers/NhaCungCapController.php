@@ -8,13 +8,10 @@ use App\Models\NhaCungCap;
 class NhaCungCapController extends Controller
 {
 
-    // Hiển thị danh sách nhà cung cấp
-
     public function NhaCungCap(Request $request)
     {
         $query = NhaCungCap::query();
 
-        // Danh sách các trường cần lọc
         $filters = [
             'MaNhaCungCap' => '=',
             'TenNhaCungCap' => 'like',
@@ -23,7 +20,6 @@ class NhaCungCapController extends Controller
             'Email' => 'like',
         ];
 
-        // Áp dụng các điều kiện lọc
         foreach ($filters as $field => $operator) {
             if ($request->filled($field)) {
                 $value = $operator === 'like' ? '%' . $request->$field . '%' : $request->$field;
@@ -31,7 +27,6 @@ class NhaCungCapController extends Controller
             }
         }
 
-        // Lấy danh sách máy với phân trang (mặc định 10 bản ghi mỗi trang)
         $dsNhaCungCap = $query->paginate(10);
 
         return view('vNCC.nhacungcap', compact('dsNhaCungCap'));
@@ -40,25 +35,53 @@ class NhaCungCapController extends Controller
 
     public function detailNhaCungCap($MaNhaCungCap)
     {
-        $nhaCungCap = NhaCungCap::findOrFail($MaNhaCungCap); // Tìm nhà cung cấp theo ID
+        $nhaCungCap = NhaCungCap::findOrFail($MaNhaCungCap);
         return view('vNCC.detailnhacungcap', compact('nhaCungCap'));
     }
-    // Hiển thị form chỉnh sửa nhà cung cấp
+
     public function form_editNhaCungCap($MaNhaCungCap)
     {
-        $nhaCungCap = NhaCungCap::findOrFail($MaNhaCungCap); // Tìm nhà cung cấp theo ID
+        $nhaCungCap = NhaCungCap::findOrFail($MaNhaCungCap);
         return view('vNCC.editnhacungcap', compact('nhaCungCap'));
     }
 
-    // Xử lý chỉnh sửa nhà cung cấp
     public function editNhaCungCap(Request $request, $MaNhaCungCap)
     {
-        $nhaCungCap = NhaCungCap::findOrFail($MaNhaCungCap); // Tìm nhà cung cấp theo ID
-        $nhaCungCap->update($request->all()); // Cập nhật thông tin nhà cung cấp
-        return redirect()->route('nhacungcap.detail', ['MaNhaCungCap' => $MaNhaCungCap])->with('success', 'Cập nhật nhà cung cấp thành công!');
+        try {
+            $request->validate([
+                'TenNhaCungCap' => 'required|string|max:255|unique:nhacungcap,TenNhaCungCap,' . $MaNhaCungCap . ',MaNhaCungCap',
+                'DiaChi' => 'required|string|max:255|unique:nhacungcap,DiaChi,' . $MaNhaCungCap . ',MaNhaCungCap',
+                'SDT' => 'required|numeric|digits_between:10,12|unique:nhacungcap,SDT,' . $MaNhaCungCap . ',MaNhaCungCap',
+                'Email' => 'required|email|max:255|unique:nhacungcap,Email,' . $MaNhaCungCap . ',MaNhaCungCap',
+                'MaSoThue' => 'required|numeric|digits_between:10,15|unique:nhacungcap,MaSoThue,' . $MaNhaCungCap . ',MaNhaCungCap',
+            ], [
+                'TenNhaCungCap.unique' => 'Tên nhà cung cấp đã tồn tại trong hệ thống.',
+                'SDT.digits_between' => 'Số điện thoại phải có độ dài từ 10 đến 12 chữ số.',
+                'SDT.unique' => 'Số điện thoại này đã tồn tại trong hệ thống.',
+                'DiaChi.unique' => 'Địa chỉ này đã tồn tại ở công ty khác.',
+                'Email.email' => 'Email phải là một địa chỉ email hợp lệ.',
+                'Email.unique' => 'Email đã tồn tại trong hệ thống.',
+                'MaSoThue.digits_between' => 'Mã số thuế phải có độ dài từ 10 đến 15 chữ số.',
+                'MaSoThue.unique' => 'Mã số thuế đã tồn tại trong hệ thống.',
+            ]);
+
+            $nhaCungCap = NhaCungCap::findOrFail($MaNhaCungCap);
+            $nhaCungCap->update([
+                'TenNhaCungCap' => $request->TenNhaCungCap,
+                'DiaChi' => $request->DiaChi,
+                'SDT' => $request->SDT,
+                'Email' => $request->Email,
+                'MaSoThue' => $request->MaSoThue,
+            ]);
+
+            return redirect()->route('nhacungcap.detail', ['MaNhaCungCap' => $MaNhaCungCap])->with('success', 'Cập nhật nhà cung cấp thành công!');
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return redirect()->back()->withInput()->with('error', $e->validator->errors()->first());
+        } catch (\Exception $e) {
+            return redirect()->back()->withInput()->with('error', 'Cập nhật thông tin không thành công, vui lòng kiểm tra lại.');
+        }
     }
 
-    // Hiển thị form thêm nhà cung cấp
     public function addNhaCungCap()
     {
         return view('vNCC.addnhacungcap');
@@ -71,11 +94,11 @@ class NhaCungCapController extends Controller
     {
         return view('vNCC.addNCCfromMay');
     }
-      public function createNCCfromPN()
+    public function createNCCfromPN()
     {
         return view('vNCC.addNCCfromPN');
     }
-    // Xử lý thêm nhà cung cấp
+
     public function storeNCCfromMay(Request $request)
     {
         try {
@@ -86,18 +109,15 @@ class NhaCungCapController extends Controller
                 'Email' => 'required|email|max:255|unique:nhacungcap,Email',
                 'MaSoThue' => 'required|numeric|digits_between:10,15|unique:nhacungcap,MaSoThue',
             ], [
-
-                'TenNhaCungCap.unique' => 'Nhà cung cấp đã tồn tại.',
-                'SDT.digits_between' => 'Số Điện Thoại phải có độ dài từ 10 đến 12 chữ số.',
+                'TenNhaCungCap.unique' => 'Tên nhà cung cấp đã tồn tại trong hệ thống.',
+                'SDT.digits_between' => 'Số điện thoại phải có độ dài từ 10 đến 12 chữ số.',
                 'DiaChi.unique' => 'Địa chỉ này đã tồn tại ở công ty khác.',
                 'Email.email' => 'Email phải là một địa chỉ email hợp lệ.',
-                'Email.unique' => 'Email đã tồn tại.',
-
-                'MaSoThue.numeric' => 'Mã Số Thuế phải là số.',
-                'MaSoThue.digits_between' => 'Mã Số Thuế phải có độ dài từ 10 đến 15 chữ số.',
-                'MaSoThue.unique' => 'Mã Số Thuế đã tồn tại.',
+                'Email.unique' => 'Email đã tồn tại trong hệ thống.',
+                'MaSoThue.digits_between' => 'Mã số thuế phải có độ dài từ 10 đến 15 chữ số.',
+                'MaSoThue.unique' => 'Mã số thuế đã tồn tại trong hệ thống.',
             ]);
-            // Tạo mới nhà cung cấp
+            
             NhaCungCap::create([
                 'TenNhaCungCap' => $request->TenNhaCungCap,
                 'DiaChi' => $request->DiaChi,
@@ -108,12 +128,12 @@ class NhaCungCapController extends Controller
 
             return redirect()->route('may.add')->with('success', 'Thêm nhà cung cấp thành công!');
         } catch (\Illuminate\Validation\ValidationException $e) {
-            return redirect()->back()
-                ->with('error', $e->validator->errors()->first()) // Lấy lỗi đầu tiên     
-                ->withInput();
+            return redirect()->back()->with('error', $e->validator->errors()->first())->withInput();
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Thêm nhà cung cấp không thành công, vui lý kiểm tra lại.')->withInput();
         }
     }
-     public function storeNCCfromPN(Request $request)
+    public function storeNCCfromPN(Request $request)
     {
         try {
             $request->validate([
@@ -123,18 +143,15 @@ class NhaCungCapController extends Controller
                 'Email' => 'required|email|max:255|unique:nhacungcap,Email',
                 'MaSoThue' => 'required|numeric|digits_between:10,15|unique:nhacungcap,MaSoThue',
             ], [
-
-                'TenNhaCungCap.unique' => 'Nhà cung cấp đã tồn tại.',
-                'SDT.digits_between' => 'Số Điện Thoại phải có độ dài từ 10 đến 12 chữ số.',
+                'TenNhaCungCap.unique' => 'Tên nhà cung cấp đã tồn tại trong hệ thống.',
+                'SDT.digits_between' => 'Số điện thoại phải có độ dài từ 10 đến 12 chữ số.',
                 'DiaChi.unique' => 'Địa chỉ này đã tồn tại ở công ty khác.',
                 'Email.email' => 'Email phải là một địa chỉ email hợp lệ.',
-                'Email.unique' => 'Email đã tồn tại.',
-
-                'MaSoThue.numeric' => 'Mã Số Thuế phải là số.',
-                'MaSoThue.digits_between' => 'Mã Số Thuế phải có độ dài từ 10 đến 15 chữ số.',
-                'MaSoThue.unique' => 'Mã Số Thuế đã tồn tại.',
+                'Email.unique' => 'Email đã tồn tại trong hệ thống.',
+                'MaSoThue.digits_between' => 'Mã số thuế phải có độ dài từ 10 đến 15 chữ số.',
+                'MaSoThue.unique' => 'Mã số thuế đã tồn tại trong hệ thống.',
             ]);
-            // Tạo mới nhà cung cấp
+
             NhaCungCap::create([
                 'TenNhaCungCap' => $request->TenNhaCungCap,
                 'DiaChi' => $request->DiaChi,
@@ -146,8 +163,10 @@ class NhaCungCapController extends Controller
             return redirect()->route('dsphieunhap.add')->with('success', 'Thêm nhà cung cấp thành công,hãy tiếp tục tạo phiếu');
         } catch (\Illuminate\Validation\ValidationException $e) {
             return redirect()->back()
-                ->with('error', $e->validator->errors()->first()) // Lấy lỗi đầu tiên     
+                ->with('error', $e->validator->errors()->first())
                 ->withInput();
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Thêm nhà cung cấp không thành công, vui lý kiểm tra lại.')->withInput();
         }
     }
     public function storeNhaCungCap(Request $request)
@@ -160,18 +179,15 @@ class NhaCungCapController extends Controller
                 'Email' => 'required|email|max:255|unique:nhacungcap,Email',
                 'MaSoThue' => 'required|numeric|digits_between:10,15|unique:nhacungcap,MaSoThue',
             ], [
-
-                'TenNhaCungCap.unique' => 'Nhà cung cấp đã tồn tại.',
-                'SDT.digits_between' => 'Số Điện Thoại phải có độ dài từ 10 đến 12 chữ số.',
+                'TenNhaCungCap.unique' => 'Tên nhà cung cấp đã tồn tại trong hệ thống.',
+                'SDT.digits_between' => 'Số điện thoại phải có độ dài từ 10 đến 12 chữ số.',
                 'DiaChi.unique' => 'Địa chỉ này đã tồn tại ở công ty khác.',
                 'Email.email' => 'Email phải là một địa chỉ email hợp lệ.',
-                'Email.unique' => 'Email đã tồn tại.',
-
-                'MaSoThue.numeric' => 'Mã Số Thuế phải là số.',
-                'MaSoThue.digits_between' => 'Mã Số Thuế phải có độ dài từ 10 đến 15 chữ số.',
-                'MaSoThue.unique' => 'Mã Số Thuế đã tồn tại.',
+                'Email.unique' => 'Email đã tồn tại trong hệ thống.',
+                'MaSoThue.digits_between' => 'Mã số thuế phải có độ dài từ 10 đến 15 chữ số.',
+                'MaSoThue.unique' => 'Mã số thuế đã tồn tại trong hệ thống.',
             ]);
-            // Tạo mới nhà cung cấp
+
             NhaCungCap::create([
                 'TenNhaCungCap' => $request->TenNhaCungCap,
                 'DiaChi' => $request->DiaChi,
@@ -183,8 +199,10 @@ class NhaCungCapController extends Controller
             return redirect()->route('nhacungcap')->with('success', 'Thêm nhà cung cấp thành công!');
         } catch (\Illuminate\Validation\ValidationException $e) {
             return redirect()->back()
-                ->with('error', $e->validator->errors()->first()) // Lấy lỗi đầu tiên     
+                ->with('error', $e->validator->errors()->first())
                 ->withInput();
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Thêm nhà cung cấp không thành công, vui lý kiểm tra lại.')->withInput();
         }
     }
     public function storeNhaCungCap2(Request $request)
@@ -197,19 +215,15 @@ class NhaCungCapController extends Controller
                 'Email' => 'required|email|max:255|unique:nhacungcap,Email',
                 'MaSoThue' => 'required|numeric|digits_between:10,15|unique:nhacungcap,MaSoThue',
             ], [
-
-                'TenNhaCungCap.unique' => 'Nhà cung cấp đã tồn tại.',
-                'SDT.unique' => 'Số Điện Thoại đã tồn tại.',
-                'SDT.digits_between' => 'Số Điện Thoại phải có độ dài từ 10 đến 12 chữ số.',
+                'TenNhaCungCap.unique' => 'Tên nhà cung cấp đã tồn tại trong hệ thống.',
+                'SDT.digits_between' => 'Số điện thoại phải có độ dài từ 10 đến 12 chữ số.',
                 'DiaChi.unique' => 'Địa chỉ này đã tồn tại ở công ty khác.',
                 'Email.email' => 'Email phải là một địa chỉ email hợp lệ.',
-                'Email.unique' => 'Email đã tồn tại.',
-
-                'MaSoThue.numeric' => 'Mã Số Thuế phải là số.',
-                'MaSoThue.digits_between' => 'Mã Số Thuế phải có độ dài từ 10 đến 15 chữ số.',
-                'MaSoThue.unique' => 'Mã Số Thuế đã tồn tại.',
+                'Email.unique' => 'Email đã tồn tại trong hệ thống.',
+                'MaSoThue.digits_between' => 'Mã số thuế phải có độ dài từ 10 đến 15 chữ số.',
+                'MaSoThue.unique' => 'Mã số thuế đã tồn tại trong hệ thống.',
             ]);
-            // Tạo mới nhà cung cấp
+
             NhaCungCap::create([
                 'TenNhaCungCap' => $request->TenNhaCungCap,
                 'DiaChi' => $request->DiaChi,
@@ -229,19 +243,19 @@ class NhaCungCapController extends Controller
             }
         } catch (\Illuminate\Validation\ValidationException $e) {
             return redirect()->back()
-                ->with('error', $e->validator->errors()->first()) // Lấy lỗi đầu tiên     
+                ->with('error', $e->validator->errors()->first())
                 ->withInput();
         }
     }
-    // Xóa nhà cung cấp
+
     public function deleteNhaCungCap($MaNhaCungCap)
     {
-        try{
-        $nhaCungCap = NhaCungCap::findOrFail($MaNhaCungCap); // Tìm nhà cung cấp theo ID
-        $nhaCungCap->delete(); // Xóa nhà cung cấp
-        return redirect()->back()->with('success', 'Xóa nhà cung cấp thành công!');
-    } catch (\Illuminate\Database\QueryException $e) {
-            
+        try {
+            $nhaCungCap = NhaCungCap::findOrFail($MaNhaCungCap);
+            $nhaCungCap->delete();
+            return redirect()->back()->with('success', 'Xóa nhà cung cấp thành công!');
+        } catch (\Illuminate\Database\QueryException $e) {
+
             return redirect()->back()->with('error', 'Không thể xóa nhà cung cấp vì đang được sử dụng');
         }
     }
@@ -252,7 +266,7 @@ class NhaCungCapController extends Controller
     }
     public function storeNCCfromLinhKien(Request $request)
     {
-                try {
+        try {
             $request->validate([
                 'TenNhaCungCap' => 'required|string|max:255|unique:nhacungcap,TenNhaCungCap',
                 'DiaChi' => 'required|string|max:255|unique:nhacungcap,DiaChi',
@@ -260,18 +274,15 @@ class NhaCungCapController extends Controller
                 'Email' => 'required|email|max:255|unique:nhacungcap,Email',
                 'MaSoThue' => 'required|numeric|digits_between:10,15|unique:nhacungcap,MaSoThue',
             ], [
-
-                'TenNhaCungCap.unique' => 'Nhà cung cấp đã tồn tại.',
-                'SDT.digits_between' => 'Số Điện Thoại phải có độ dài từ 10 đến 12 chữ số.',
+                'TenNhaCungCap.unique' => 'Tên nhà cung cấp đã tồn tại trong hệ thống.',
+                'SDT.digits_between' => 'Số điện thoại phải có độ dài từ 10 đến 12 chữ số.',
                 'DiaChi.unique' => 'Địa chỉ này đã tồn tại ở công ty khác.',
                 'Email.email' => 'Email phải là một địa chỉ email hợp lệ.',
-                'Email.unique' => 'Email đã tồn tại.',
-
-                'MaSoThue.numeric' => 'Mã Số Thuế phải là số.',
-                'MaSoThue.digits_between' => 'Mã Số Thuế phải có độ dài từ 10 đến 15 chữ số.',
-                'MaSoThue.unique' => 'Mã Số Thuế đã tồn tại.',
+                'Email.unique' => 'Email đã tồn tại trong hệ thống.',
+                'MaSoThue.digits_between' => 'Mã số thuế phải có độ dài từ 10 đến 15 chữ số.',
+                'MaSoThue.unique' => 'Mã số thuế đã tồn tại trong hệ thống.',
             ]);
-            // Tạo mới nhà cung cấp
+
             NhaCungCap::create([
                 'TenNhaCungCap' => $request->TenNhaCungCap,
                 'DiaChi' => $request->DiaChi,
@@ -283,8 +294,10 @@ class NhaCungCapController extends Controller
             return redirect()->route('linhkien.add')->with('success', 'Thêm nhà cung cấp thành công!');
         } catch (\Illuminate\Validation\ValidationException $e) {
             return redirect()->back()
-                ->with('error', $e->validator->errors()->first()) // Lấy lỗi đầu tiên     
+                ->with('error', $e->validator->errors()->first())
                 ->withInput();
+        } catch (\Exception $e) {
+            return redirect()->back()->withInput()->with('error', 'Thêm nhà cung cấp không thành công, vui lòng kiểm tra lại.');
         }
     }
 }

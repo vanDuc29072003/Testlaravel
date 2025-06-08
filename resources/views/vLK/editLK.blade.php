@@ -63,32 +63,22 @@
                                 <div class="form-group">
                                     <div class="d-flex justify-content-between">
                                         <label>Tên Nhà Cung Cấp</label>
-                                             <a href="{{ route('linhkien.saveFormData') }}" 
+                                        <a href="{{ route('linhkien.saveFormData') }}" 
                                             onclick="event.preventDefault(); document.getElementById('saveFormBeforeRedirect').submit();" 
                                             class="btn btn-sm btn-outline-white">
-                                                <i class="fa fa-plus"></i> Thêm mới
-                                            </a>
-                                    
-                                            
+                                            <i class="fa fa-plus"></i> Thêm mới
+                                        </a>
                                      </div>
                                     <div class="dropdown">
-                                        <button 
-                                            id="nhaCungCapButton"
-                                            class="btn btn-outline-secondary dropdown-toggle w-100 text-start"
-                                            type="button"
-                                            data-bs-toggle="dropdown"
-                                            aria-expanded="false">
-                                            Chọn nhà cung cấp
+                                        <button id="nhaCungCapButton" class="btn btn-outline-secondary dropdown-toggle w-100 text-start" type="button"
+                                            data-bs-toggle="dropdown" aria-expanded="false"> Chọn nhà cung cấp
                                         </button>
 
                                         <ul class="dropdown-menu p-3" style="width: 100%;">
                                             @foreach ($nhaCungCaps as $nhaCungCap)
                                                 <li>
                                                     <div class="form-check">
-                                                        <input 
-                                                            class="form-check-input nha-cung-cap-checkbox"
-                                                            type="checkbox"
-                                                            name="MaNhaCungCap[]"
+                                                        <input class="form-check-input nha-cung-cap-checkbox" type="checkbox" name="MaNhaCungCap[]"
                                                             value="{{ $nhaCungCap->MaNhaCungCap }}"
                                                                 {{ in_array($nhaCungCap->MaNhaCungCap, old('MaNhaCungCap', $formData['MaNhaCungCap'] ?? $selectedNhaCungCaps ?? [])) ? 'checked' : '' }}>
                                                         <label class="form-check-label">
@@ -102,15 +92,15 @@
                                 </div>
                             </form>
                         </div>
-                        <form id="saveFormBeforeRedirect" action="{{ route('linhkien.saveFormData') }}" method="POST" style="display: none;">
-                                                @csrf
-                                                <input type="hidden" name="MaLinhKien" value="{{ old('MaLinhKien', $linhKien->MaLinhKien) }}">
-                                                <input type="hidden" name="TenLinhKien" value="{{ old('TenLinhKien', $linhKien->TenLinhKien) }}">
-                                                <input type="hidden" name="MaDonViTinh" value="{{ old('MaDonViTinh', $linhKien->MaDonViTinh) }}">
-                                                <input type="hidden" name="MoTa" value="{{ old('MoTa', $linhKien->MoTa) }}">
-                                                @foreach ($nhaCungCaps as $ncc)
-                                                    <input type="hidden" name="MaNhaCungCap[]" value="{{ $ncc->MaNhaCungCap }}">
-                                                @endforeach
+                            <form id="saveFormBeforeRedirect" action="{{ route('linhkien.saveFormData') }}" method="POST" style="display: none;">
+                                @csrf
+                                <input type="hidden" name="MaLinhKien" value="{{ old('MaLinhKien', $linhKien->MaLinhKien) }}">
+                                <input type="hidden" name="TenLinhKien" value="{{ old('TenLinhKien', $linhKien->TenLinhKien) }}">
+                                <input type="hidden" name="MaDonViTinh" value="{{ old('MaDonViTinh', $linhKien->MaDonViTinh) }}">
+                                <input type="hidden" name="MoTa" value="{{ old('MoTa', $linhKien->MoTa) }}">
+                                @foreach ($nhaCungCaps as $ncc)
+                                    <input type="hidden" name="MaNhaCungCap[]" value="{{ $ncc->MaNhaCungCap }}">
+                                @endforeach
                             </form>
                         <div class="card-footer">
                             <div class="form-group d-flex justify-content-between">

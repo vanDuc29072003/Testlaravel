@@ -14,7 +14,7 @@
                         <div class="card-body">
                             <form id="formNhaCungCap" action="{{ route('nhacungcap.update', $nhaCungCap->MaNhaCungCap) }}" method="POST">
                                 @csrf
-                                @method('POST')
+                                @method('PATCH')
                                 <!-- Tên Nhà Cung Cấp -->
                                 <div class="form-group">
                                     <label for="TenNhaCungCap">Tên Nhà Cung Cấp</label>

@@ -103,19 +103,24 @@ class MayController extends Controller
                 'NamSanXuat' => 'required|integer|min:1900|max:' . date('Y'),
                 'ThoiGianDuaVaoSuDung' => 'required|date',
                 'ThoiGianBaoHanh' => 'required|integer|min:1',
-                'ChiTietLinhKien' => 'nullable|string|max:255',
+                'ChiTietLinhKien' => 'nullable|string|max:255|url',
                 'MaNhaCungCap' => 'required|exists:nhacungcap,MaNhaCungCap',
                 'MaLoai' => 'required|exists:loaimay,MaLoai',
                 'ThoiGianKhauHao' => 'nullable|numeric|min:0',
                 'GiaTriBanDau' => 'nullable|numeric|min:0',
+            ], [
+                'SeriMay.unique' => 'Seri máy đã tồn tại trong hệ thống.',
+                'ChiTietLinhKien.url' => 'Đường dẫn chi tiết linh kiện không hợp lệ.',
             ]);
 
             $may->update($request->all());
 
             event(new eventUpdateTable());
             return redirect()->route('may.detail', ['MaMay' => $MaMay])->with('success', 'Cập nhật thành công!');
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return redirect()->back()->with('error', $e->validator->errors()->first())->withInput();
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Cập nhật không thành công!');
+            return redirect()->back()->with('error', 'Cập nhật không thành công, vui lòng kiểm tra lại.')->withInput();
         }
     }
 
@@ -140,11 +145,14 @@ class MayController extends Controller
                 'NamSanXuat' => 'required|integer|min:1900|max:' . date('Y'),
                 'ThoiGianDuaVaoSuDung' => 'required|date',
                 'ThoiGianBaoHanh' => 'required|integer|min:1',
-                'ChiTietLinhKien' => 'nullable|string|max:255',
+                'ChiTietLinhKien' => 'nullable|string|max:255|url',
                 'MaNhaCungCap' => 'required|exists:nhacungcap,MaNhaCungCap',
                 'MaLoai' => 'required|exists:loaimay,MaLoai',
                 'ThoiGianKhauHao' => 'nullable|integer|min:1',
                 'GiaTriBanDau' => 'nullable|integer|min:1',
+            ],[
+                'SeriMay.unique' => 'Seri máy đã tồn tại trong hệ thống.',
+                'ChiTietLinhKien.url' => 'Đường dẫn chi tiết linh kiện không hợp lệ.',
             ]);
 
             $loaiMay = LoaiMay::where('MaLoai', $request->MaLoai)->first();
@@ -161,7 +169,7 @@ class MayController extends Controller
                 $newNumber = $lastNumber + 1;
             }
 
-            // Ghép tiền tố với số thứ tự, có thể padding số 0 nếu muốn
+            // Ghép tiền tố với số thứ tự
             $newMaMay = $tiento . str_pad($newNumber, 3, '0', STR_PAD_LEFT);
 
             May::create([
@@ -184,10 +192,9 @@ class MayController extends Controller
             session()->forget('may_form_data');
             return redirect()->route('may')->with('success', 'Thêm máy thành công!');
         } catch (\Illuminate\Validation\ValidationException $e) {
-            // Lưu lỗi vào session
-            return redirect()->back()
-                ->with('error', 'Seri Máy trùng lặp hoặc thông tin không hợp lệ!')
-                ->withInput();
+            return redirect()->back()->with('error', $e->validator->errors()->first())->withInput();
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Cập nhật không thành công, vui lòng kiểm tra lại.')->withInput();
         }
     }
     public function deleteMay($MaMay)
