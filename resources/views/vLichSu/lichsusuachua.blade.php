@@ -54,7 +54,7 @@
                             </tbody>
                             <tfoot>
                                 <nav aria-label="Page navigation example">
-                                    {{ $dsLSCDaHoanThanh->links('pagination::bootstrap-5') }}
+                                    {{ $dsLSCDaHoanThanh->appends(request()->query())->links('pagination::bootstrap-5') }}
                                 </nav>
                             </tfoot>
                         </table>

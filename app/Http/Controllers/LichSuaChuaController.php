@@ -22,19 +22,6 @@ class LichSuaChuaController extends Controller
         $queryChuaHoanThanh = LichSuaChua::query();
         $dsNhanVien = NhanVien::all();
 
-        // Danh sách các trường cần lọc
-        $filters = [
-            'MaLichSuaChua' => '=',
-            'MaYeuCauSuaChua' => '=',
-            'MaNhanVienKyThuat' => '='
-        ];
-        foreach ($filters as $field => $operator) {
-            if ($request->filled($field)) {
-                $value = $operator === 'like' ? '%' . $request->$field . '%' : $request->$field;
-                $queryChuaHoanThanh->where($field, $operator, $value);
-            }
-        }
-
         $dsLSCChuaHoanThanh = $queryChuaHoanThanh->where('TrangThai', '0')
             ->with(['yeuCauSuaChua', 'nhanVienKyThuat'])
             ->orderBy('updated_at', 'desc')
