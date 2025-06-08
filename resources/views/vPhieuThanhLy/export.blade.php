@@ -108,12 +108,16 @@
 
 <table class="info-table">
     <tr>
+        <td class="label">Mã máy:</td>
+        <td>{{ $phieuThanhLy->may->MaMay2 ?? 'Không xác định' }}</td>
+    </tr>
+    <tr>
         <td class="label">Tên máy:</td>
         <td>{{ $phieuThanhLy->may->TenMay ?? 'Không xác định' }}</td>
     </tr>
     <tr>
-        <td class="label">Mã máy:</td>
-        <td>{{ $phieuThanhLy->may->MaMay ?? 'Không xác định' }}</td>
+        <td class=label>Seri máy:</td>
+        <td>{{ $phieuThanhLy->may->SeriMay ?? 'Không xác định' }}</td>
     </tr>
     <tr>
         <td class="label">Loại máy:</td>
