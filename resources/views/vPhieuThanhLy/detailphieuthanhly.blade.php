@@ -9,7 +9,15 @@
             <div class="col-xl-9 col-lg-12 col-md-8 col-sm-10">
                 <div class="card mx-auto">
                     <div class="card-header">
-                        <h1 class="m-3">Chi Tiết Phiếu Thanh Lý</h1>
+                        <div class="mt-3 mx-3 d-flex justify-content-between">
+                            <h2 class="ps-3 mb-0">Chi Tiết Phiếu Thanh Lý</h2>
+                            <div class="d-flex justify-content-end">
+                                <a href="{{ route('phieuthanhly.exportPDF', $phieuThanhLy->MaPhieuThanhLy) }}"
+                                    class="btn btn-black btn-border ms-3">
+                                    <i class="fas fa-file-download"></i> Xuất FILE PDF
+                                </a>
+                            </div>
+                        </div>
                     </div>
                     <div class="card-body px-5">
                         <div class="row">

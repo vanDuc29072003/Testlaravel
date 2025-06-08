@@ -7,34 +7,33 @@
         <div class="page-inner">
             <div class="row">
                 <div class="col-xl-10 col-sm-12">
-                    <div class="table-responsive">
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <div class="d-flex align-items-center gap-2">
-                                {{-- Nút lọc loại máy --}}
-                                <div class="dropdown">
-                                    <button class="btn btn-outline-secondary dropdown-toggle p-2" type="button"
-                                        id="dropdownLoaiMay" data-bs-toggle="dropdown" aria-expanded="false">
-                                        ☰
-                                    </button>
-                                    <ul class="dropdown-menu" aria-labelledby="dropdownLoaiMay">
-                                        <li><a class="dropdown-item" href="{{ route('may') }}">Tất cả</a></li>
-                                        @foreach ($dsLoaiMay as $loai)
-                                            <li>
-                                                <a class="dropdown-item"
-                                                    href="{{ route('may', ['MaLoai' => $loai->MaLoai] + request()->except('MaLoai')) }}">
-                                                    {{ $loai->TenLoai }}
-                                                </a>
-                                            </li>
-                                        @endforeach
-                                    </ul>
-                                </div>
-                                <h1 class="mb-0">Danh sách Máy</h1>
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div class="d-flex align-items-center gap-2">
+                            {{-- Nút lọc loại máy --}}
+                            <div class="dropdown">
+                                <button class="btn btn-outline-secondary dropdown-toggle p-2" type="button"
+                                    id="dropdownLoaiMay" data-bs-toggle="dropdown" aria-expanded="false">
+                                    ☰
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownLoaiMay">
+                                    <li><a class="dropdown-item" href="{{ route('may') }}">Tất cả</a></li>
+                                    @foreach ($dsLoaiMay as $loai)
+                                        <li>
+                                            <a class="dropdown-item"
+                                                href="{{ route('may', ['MaLoai' => $loai->MaLoai] + request()->except('MaLoai')) }}">
+                                                {{ $loai->TenLoai }}
+                                            </a>
+                                        </li>
+                                    @endforeach
+                                </ul>
                             </div>
-                            <a href="{{ route('may.add') }}" class="btn btn-primary">
-                                <i class="fa fa-plus"></i> Thêm mới
-                            </a>
+                            <h1 class="mb-0">Danh sách Máy</h1>
                         </div>
-
+                        <a href="{{ route('may.add') }}" class="btn btn-primary">
+                            <i class="fa fa-plus"></i> Thêm mới
+                        </a>
+                    </div>
+                    <div class="table-responsive">
                         <table class="table table-responsive table-bordered table-hover">
                             <thead>
                                 <tr class="text-center">

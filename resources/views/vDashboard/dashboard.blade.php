@@ -433,7 +433,7 @@
                 responsive: true,
                 plugins: {
                     legend: { position: 'top' },
-                    tooltip: { mode: 'index', intersect: false }
+                    tooltip: { mode: 'nearest', intersect: false }
                 },
                 scales: {
                     y: { beginAtZero: true }

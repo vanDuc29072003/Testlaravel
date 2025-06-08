@@ -42,7 +42,7 @@
                                         <td>{{ $may->loaiMay->TenLoai ?? '---' }}</td>
                                         <th scope="row">Thời Gian Khấu Hao</th>
                                         <td>
-                                            {{ $may->ThoiGianKhauHao ?? '---' }} năm
+                                            {{ $may->ThoiGianKhauHao ?? '---' }} năm ({{ \Carbon\Carbon::parse($ngayHetKhauHao)->format('d/m/Y') ?? '---' }})
                                             @if ($ngayHetKhauHao && $ngayHetKhauHao < \Carbon\Carbon::now())
                                                 <span class="badge badge-danger ms-3">Đã hết khấu hao</span>
                                             @endif
@@ -55,7 +55,7 @@
                                         <th scope="row">Seri Máy</th>
                                         <td>{{ $may->SeriMay }}</td>
                                         <th scope="row">Thời Gian Bảo Hành</th>
-                                        <td>{{ $may->ThoiGianBaoHanh ?? '---' }} tháng
+                                        <td>{{ $may->ThoiGianBaoHanh ?? '---' }} tháng ({{ \Carbon\Carbon::parse($ngayHetBaoHanh)->format('d/m/Y') ?? '---' }})
                                             @if ($ngayHetBaoHanh && $ngayHetBaoHanh < \Carbon\Carbon::now())
                                                 <span class="badge badge-danger ms-3">Đã hết bảo hành</span>
                                             @endif
