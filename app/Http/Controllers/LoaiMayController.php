@@ -34,8 +34,11 @@ class LoaiMayController extends Controller
     {
         try {
             $request->validate([
-                'TenLoai' => 'required|string|max:255',
+                'TenLoai' => 'required|string|max:255|unique:loaimay,TenLoai',
                 'MoTa' => 'required|string|max:10|unique:loaimay,MoTa',
+            ], [
+                'TenLoai.unique' => 'Tên loại máy đã tồn tại trong hệ thống.',
+                'MoTa.unique' => 'Tên viết tắt đã tồn tại trong hệ thống.',
             ]);
 
             LoaiMay::create([
@@ -44,8 +47,10 @@ class LoaiMayController extends Controller
             ]);
 
             return redirect()->route('loaimay.index')->with('success', 'Đã thêm loại máy thành công.');
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return redirect()->back()->withInput()->with('error', $e->validator->errors()->first());
         } catch (\Exception $e) {
-            return redirect()->back()->withInput()->with('error', 'Tên viết tắt đã được sử dụng hoặc dữ liệu không hợp lệ');
+            return redirect()->back()->withInput()->with('error', 'Thêm mới không thành công, vui lòng kiểm tra lại.');
         }
     }
     public function destroy($id)
@@ -53,10 +58,10 @@ class LoaiMayController extends Controller
         try {
             $loaimay = LoaiMay::findOrFail($id);
             $loaimay->delete();
-            event(new eventUpdateTable());
+
             return redirect()->back()->with('success', 'Xóa loại máy thành công.');
         } catch (\Illuminate\Database\QueryException $e) {
-            
+
             return redirect()->back()->with('error', 'Không thể xóa loại máy vì đang được sử dụng.');
         }
     }
@@ -69,17 +74,22 @@ class LoaiMayController extends Controller
     {
         try {
             $request->validate([
-                'TenLoai' => 'required|string|max:255',
+                'TenLoai' => 'required|string|max:255|unique:loaimay,TenLoai',
                 'MoTa' => 'required|string|max:10|unique:loaimay,MoTa',
+            ], [
+                'TenLoai.unique' => 'Tên loại máy đã tồn tại trong hệ thống.',
+                'MoTa.unique' => 'Tên viết tắt đã tồn tại trong hệ thống.',
             ]);
             LoaiMay::create([
                 'TenLoai' => $request->TenLoai,
                 'MoTa' => $request->MoTa,
             ]);
-            // Không xóa session ở đây
+
             return redirect()->route('may.add')->with('success', 'Thêm loại máy thành công!');
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return redirect()->back()->withInput()->with('error', $e->validator->errors()->first());
         } catch (\Exception $e) {
-            return redirect()->back()->withInput()->with('error', 'Tên viết tắt đã được sử dụng hoặc dữ liệu không hợp lệ');
+            return redirect()->back()->withInput()->with('error', 'Thêm máy mới không thành công, vui lòng kiểm tra lại.');
         }
     }
 }

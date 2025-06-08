@@ -22,7 +22,7 @@ class DonViTinhController extends Controller
             }
         }
 
-        $dsDonvitinh = $query->get();
+        $dsDonvitinh = $query->paginate(10);
 
         return view('vDonViTinh.donvitinh', compact('dsDonvitinh'));
     }
@@ -39,16 +39,20 @@ class DonViTinhController extends Controller
     {
         try {
             $request->validate([
-            'TenDonViTinh' => 'required|string|max:255|unique:donvitinh,TenDonViTinh',
-        ]);
+                'TenDonViTinh' => 'required|string|max:255|unique:donvitinh,TenDonViTinh',
+            ], [
+                'TenDonViTinh.unique' => 'Tên đơn vị tính đã tồn tại trong hệ thống.',
+            ]);
 
-        DonViTinh::create([
-            'TenDonViTinh' => $request->TenDonViTinh,
-        ]);
+            DonViTinh::create([
+                'TenDonViTinh' => $request->TenDonViTinh,
+            ]);
 
-        return redirect()->route('donvitinh.index')->with('success', 'Đã thêm đơn vị tính thành công.');
+            return redirect()->route('donvitinh.index')->with('success', 'Đã thêm đơn vị tính thành công.');
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return redirect()->back()->withInput()->with('error', $e->validator->errors()->first());
         } catch (\Exception $e) {
-            return redirect()->back()->withInput()->with('error', 'Tên đơn vị tính đã tồn tại.');
+            return redirect()->back()->withInput()->with('error', 'Thêm mới đơn vị tính không tính công, vui lòng kiểm tra lại.');
         }
     }
 
@@ -74,6 +78,8 @@ class DonViTinhController extends Controller
         try {
             $request->validate([
                 'TenDonViTinh' => 'required|string|max:255|unique:donvitinh,TenDonViTinh',
+            ], [
+                'TenDonViTinh.unique' => 'Tên đơn vị tính đã tồn tại trong hệ thống.',
             ]);
 
             DonViTinh::create([
@@ -81,8 +87,10 @@ class DonViTinhController extends Controller
             ]);
 
             return redirect()->route('linhkien.add')->with('success', 'Đã thêm đơn vị tính thành công.');
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return redirect()->back()->withInput()->with('error', $e->validator->errors()->first());
         } catch (\Exception $e) {
-            return redirect()->back()->withInput()->with('error', 'Tên đơn vị tính đã tồn tại hoặc dữ liệu không hợp lệ');
+            return redirect()->back()->withInput()->with('error', 'Thêm mới đơn vị tính không thành công, vui lòng kiểm tra lại.');
         }
     }
 }

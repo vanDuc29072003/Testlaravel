@@ -67,18 +67,14 @@ class LinhKienController extends Controller
     public function store(Request $request)
     {
         try {
-            $request->validate(
-                [
-                    'TenLinhKien' => 'required|string|max:255|unique:linhkiensuachua,TenLinhKien',
-                    'MaNhaCungCap' => 'required|exists:nhacungcap,MaNhaCungCap', // Chỉ chọn một nhà cung cấp
-                    'MoTa' => 'nullable|string|max:255',
-                    'MaDonViTinh' => 'required',
-
-                ],
-                [
-                    'TenLinhKien.unique' => 'Tên linh kiện đã tồn tại trong hệ thống.',
-                ]
-            );
+            $request->validate([
+                'TenLinhKien' => 'required|string|max:255|unique:linhkiensuachua,TenLinhKien',
+                'MaNhaCungCap' => 'required|exists:nhacungcap,MaNhaCungCap',
+                'MoTa' => 'nullable|string|max:255',
+                'MaDonViTinh' => 'required',
+            ], [
+                'TenLinhKien.unique' => 'Tên linh kiện đã tồn tại trong hệ thống.',
+            ]);
 
             $linhKien = LinhKien::create([
                 'TenLinhKien' => $request->TenLinhKien,
@@ -89,12 +85,13 @@ class LinhKienController extends Controller
 
             $linhKien->nhaCungCaps()->attach($request->MaNhaCungCap, []);
 
-
             return redirect()->route('linhkien')->with('success', 'Thêm linh kiện mới thành công !');
         } catch (\Illuminate\Validation\ValidationException $e) {
             return redirect()->back()
-                ->with('error', $e->validator->errors()->first()) // Lấy lỗi đầu tiên
+                ->with('error', $e->validator->errors()->first())
                 ->withInput();
+        } catch (\Exception $e) {
+            return redirect()->back()->withInput()->with('error', 'Tạo linh kiện không thành công, vui lòng kiểm tra lại.');
         }
     }
     public function store2(Request $request)
@@ -124,6 +121,8 @@ class LinhKienController extends Controller
             return redirect()->back()
                 ->with('error', $e->validator->errors()->first())
                 ->withInput();
+        } catch (\Exception $e) {
+            return redirect()->back()->withInput()->with('error', 'Tạo linh kiện không thành công, vui lòng kiểm tra lại.');
         }
     }
     public function store3(Request $request)
@@ -162,6 +161,8 @@ class LinhKienController extends Controller
             return redirect()->back()
                 ->with('error', $e->validator->errors()->first())
                 ->withInput();
+        } catch (\Exception $e) {
+            return redirect()->back()->withInput()->with('error', 'Tạo linh kiện không thành công, vui lòng kiểm tra lại.');
         }
     }
 
@@ -177,7 +178,7 @@ class LinhKienController extends Controller
         $linhKien = LinhKien::with('nhaCungCaps')->findOrFail($MaLinhKien);
         $donViTinhs = DonViTinh::all();
         $nhaCungCaps = NhaCungCap::all();
-        $formData = session('formData'); // lấy từ flash session nếu có
+        $formData = session('formData');
         $selectedNhaCungCaps = $formData['MaNhaCungCap'] ?? $linhKien->nhaCungCaps->pluck('MaNhaCungCap')->toArray();
 
         return view('vLK.editLK', compact('linhKien', 'donViTinhs', 'nhaCungCaps', 'formData', 'selectedNhaCungCaps'));
@@ -187,48 +188,35 @@ class LinhKienController extends Controller
     public function update(Request $request, $MaLinhKien)
     {
         try {
-            // Xác thực dữ liệu đầu vào
             $request->validate([
-
                 'MoTa' => 'nullable|string|max:255',
-                'MaDonViTinh' => 'required|exists:donvitinh,MaDonViTinh', // Đảm bảo mã đơn vị tính tồn tại
-                'TenLinhKien' => 'required|string|max:255',
-                'MaNhaCungCap' => 'required|array|min:1', // Phải chọn ít nhất một nhà cung cấp
-                'MaNhaCungCap.*' => 'exists:nhacungcap,MaNhaCungCap', // Đảm bảo nhà cung cấp tồn tại
+                'MaDonViTinh' => 'required|exists:donvitinh,MaDonViTinh',
+                'TenLinhKien' => 'required|string|max:255|unique:linhkiensuachua,TenLinhKien,' . $MaLinhKien . ',MaLinhKien',
+                'MaNhaCungCap' => 'required|array|min:1',
+                'MaNhaCungCap.*' => 'exists:nhacungcap,MaNhaCungCap',
+            ], [
+                'TenLinhKien.unique' => 'Tên linh kiện đã tồn tại trong hệ thống.',
             ]);
 
-            // Tìm linh kiện theo mã
             $linhKien = LinhKien::findOrFail($MaLinhKien);
 
-            // Cập nhật thông tin linh kiện
             $linhKien->update([
                 'TenLinhKien' => $request->TenLinhKien,
                 'MoTa' => $request->MoTa,
                 'MaDonViTinh' => $request->MaDonViTinh,
             ]);
-            \DB::table('nhacungcap_linhkien')
-                ->where('MaLinhKien', $MaLinhKien)
-                ->delete();
 
-            // Thêm mới danh sách nhà cung cấp vào bảng liên kết
-            $dataInsert = [];
-            foreach ($request->MaNhaCungCap as $nhaCungCapId) {
-                $dataInsert[] = [
-                    'MaNhaCungCap' => $nhaCungCapId,
-                    'MaLinhKien' => $MaLinhKien,
-
-                ];
-            }
-
-            // Thêm vào bảng liên kết
-            \DB::table('nhacungcap_linhkien')->insert($dataInsert);
+            //cập nhật danh sách nhà cung cấp
+            $linhKien->nhaCungCaps()->sync($request->MaNhaCungCap);
 
             return redirect()->route('linhkien.detail', $MaLinhKien)
                 ->with('success', 'Cập nhật linh kiện thành công!');
         } catch (\Illuminate\Validation\ValidationException $e) {
             return redirect()->back()
-                ->with('error', 'Cập nhật không thành công. Vui lòng kiểm tra lại')
+                ->with('error', $e->validator->errors()->first())
                 ->withInput();
+        } catch (\Exception $e) {
+            return redirect()->back()->withInput()->with('error', 'Cập nhật linh kiện không thành công, vui lòng kiểm tra lại.');
         }
     }
     public function saveFormData(Request $request)
@@ -236,7 +224,6 @@ class LinhKienController extends Controller
         session([
             'form_linhkien_data' => $request->all(),
             'editing_linhkien_id' => $request->MaLinhKien // lưu lại mã linh kiện
-
         ]);
 
         return redirect()->route('nhacungcap.add2');
@@ -247,7 +234,7 @@ class LinhKienController extends Controller
         try {
             $linhKien = LinhKien::findOrFail($MaLinhKien);
 
-            $linhKien->delete(); // Xóa linh kiện
+            $linhKien->delete();
             return redirect()->back()->with('success', 'Xóa linh kiện thành công!');
         } catch (\Illuminate\Database\QueryException $e) {
             return redirect()->back()->with('error', 'Không thể xóa linh kiện này vì đang được sử dụng');
