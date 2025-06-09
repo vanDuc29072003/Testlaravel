@@ -100,7 +100,7 @@
                                 <div class="form-group">
                                     <label for="NgayNhap">Ngày Nhập</label>
                                 <input type="datetime-local" class="form-control" id="NgayNhap" name="NgayNhap"
-                                  value="{{ session('phieuNhapSession')['NgayNhap'] ?? date('Y-m-d\TH:i') }}" required>
+                                  value="{{ session('phieuNhapSession')['NgayNhap'] ?? date('Y-m-d\TH:i') }}" disabled required>
 
 
                                 </div>
