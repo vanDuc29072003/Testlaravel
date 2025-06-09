@@ -64,7 +64,7 @@
                         <div class="form-group">
                             <label for="NgayTra">Ngày Trả</label>
                             <input type="datetime-local" class="form-control" id="NgayTra" name="NgayTra"
-                                value="{{ date('Y-m-d\TH:i') }}" required>
+                                value="{{ date('Y-m-d\TH:i') }}" disabled required>
                         </div>
 
                         <div class="form-group">
