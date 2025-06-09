@@ -15,7 +15,7 @@
         <form id="formTaiKhoan" action="{{ route('taikhoan.store') }}" method="POST">
           @csrf
           <div class="row">
-          {{-- Cột 1: Thông tin nhân viên --}}
+          
           <div class="col-md-6">
             <h5 class="fst-italic ms-3">Thông tin nhân viên</h5>
 
@@ -74,7 +74,7 @@
 
           </div>
 
-          {{-- Cột 2: Thông tin tài khoản --}}
+          
           <div class="col-md-6">
             <h5 class="fst-italic ms-3">Thông tin tài khoản</h5>
 
@@ -104,7 +104,7 @@
 
           </div>
 
-          {{-- Nút hành động --}}
+          
 
         </form>
         </div>

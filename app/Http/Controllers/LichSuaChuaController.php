@@ -22,7 +22,7 @@ class LichSuaChuaController extends Controller
         $queryChuaHoanThanh = LichSuaChua::query();
         $dsNhanVien = NhanVien::all();
 
-        // Danh sách các trường cần lọc
+        
         $filters = [
             'MaLichSuaChua' => '=',
             'MaYeuCauSuaChua' => '=',

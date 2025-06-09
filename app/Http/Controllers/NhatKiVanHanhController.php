@@ -28,9 +28,9 @@ class NhatKiVanHanhController extends Controller
             )
             ->whereNotNull('lichvanhanh.NhatKi');
 
-        // Xử lý lọc theo thời gian
+        
         $timeFilter = $request->input('time_filter');
-        $timeDescription = ''; // Chuỗi mô tả để truyền ra view
+        $timeDescription = ''; 
 
         if ($timeFilter === 'today') {
             $startDate = Carbon::today()->startOfDay();  
@@ -75,14 +75,14 @@ class NhatKiVanHanhController extends Controller
             $query->whereDate('NgayVanHanh', $startDate, $endDate);
             $timeDescription = 'Hôm nay';
         }
-        // Lấy tổng số bản ghi có nhật ký
+        
         $totalWithNhatKi = (clone $query)->count();
 
-        // Lấy danh sách dữ liệu
+        
         $thongke = $query->orderBy('NgayVanHanh', 'desc')->get();
 
 
-        // Dữ liệu dropdown nếu bạn cần cho các bộ lọc nâng cao
+        
         $may = DB::table('may')->get();
         $nhanvien = DB::table('nhanvien')->get();
 
