@@ -1,6 +1,7 @@
 <style>
     body {
         font-family: 'DejaVu Sans', sans-serif;
+        font-size: 12px;
         margin: 20px;
     }
 
@@ -90,17 +91,33 @@
         ({{ \Carbon\Carbon::parse($phieuThanhLy->NgayLapPhieu)->format('d/m/Y') }})</em>
 </div>
 
-<h4>I, Thông tin máy móc cần thanh lý</h4>
+<h4>I, Thông tin chung</h4>
 
 <table class="info-table">
+    <tr>
+        <td class="label">Ngày lập phiếu:</td>
+        <td>{{ \Carbon\Carbon::parse($phieuThanhLy->NgayLapPhieu)->format('H:i d/m/Y') }}</td>
+    </tr>
+    <tr>
+        <td class="label">Người lập phiếu:</td>
+        <td>{{ $phieuThanhLy->nhanVien->TenNhanVien ?? 'Không xác định' }}</td>
+    </tr>
+</table>
+
+<h4>II, Thông tin máy móc cần thanh lý</h4>
+
 <table class="info-table">
+    <tr>
+        <td class="label">Mã máy:</td>
+        <td>{{ $phieuThanhLy->may->MaMay2 ?? 'Không xác định' }}</td>
+    </tr>
     <tr>
         <td class="label">Tên máy:</td>
         <td>{{ $phieuThanhLy->may->TenMay ?? 'Không xác định' }}</td>
     </tr>
     <tr>
-        <td class="label">Mã máy:</td>
-        <td>{{ $phieuThanhLy->may->MaMay ?? 'Không xác định' }}</td>
+        <td class=label>Seri máy:</td>
+        <td>{{ $phieuThanhLy->may->SeriMay ?? 'Không xác định' }}</td>
     </tr>
     <tr>
         <td class="label">Loại máy:</td>
@@ -119,8 +136,12 @@
         <td>{{ $phieuThanhLy->may->ThoiGianDuaVaoSuDung ? \Carbon\Carbon::parse($phieuThanhLy->may->ThoiGianDuaVaoSuDung)->format('d/m/Y') : 'Không xác định' }}</td>
     </tr>
     <tr>
+        <td class="label">Thời gian bảo hành:</td>
+        <td>{{ $phieuThanhLy->may->ThoiGianBaoHanh ?? 'Không xác định' }} năm</td>
+    </tr>
+    <tr>
         <td class="label">Thời gian khấu hao:</td>
-        <td>{{ $phieuThanhLy->may->ThoiGianKhauHao ?? 'Không xác định' }}</td>
+        <td>{{ $phieuThanhLy->may->ThoiGianKhauHao ?? 'Không xác định' }} tháng</td>
     </tr>
     <tr>
         <td class="label">Giá trị ban đầu:</td>
@@ -132,13 +153,11 @@
     </tr>
 </table>
 
-</table>
-
-<h4>II, Ý kiến của bộ phận sử dụng</h4>
+<h4>III, Ý kiến của bộ phận sử dụng</h4>
 
 <p class="danhgia"><strong>Đánh giá: </strong>{{ $phieuThanhLy->DanhGia }}</p>
 
-<h4>III, Kết luận của hội đồng thanh lý</h4>
+<h4>IV, Kết luận của hội đồng thanh lý</h4>
 
 <p class="danhgia"><strong>Kết luận: </strong>
     @if ($phieuThanhLy->TrangThai == '0')
@@ -149,7 +168,7 @@
         Yêu cầu thanh lý tài sản nêu trên không được phê duyệt.
     @endif
 </p>
-<p class="danhgia"><strong>Ghi chú: </strong>{{ $phieuThanhLy->GhiChu ?? '................................................................................................................' }}
+<p class="danhgia"><strong>Ghi chú: </strong>{{ $phieuThanhLy->GhiChu ?? '...........................................................................................................................................................' }}
 
 <p class="note">Thông tin trên phiếu thanh lý này đã được kiểm tra, xác nhận và phản ánh đúng thực tế. Chúng tôi hoàn toàn chịu trách nhiệm về tính chính xác và trung thực của các nội dung đã kê khai.</p>
 

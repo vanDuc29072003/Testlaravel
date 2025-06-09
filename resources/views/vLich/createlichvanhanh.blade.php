@@ -61,7 +61,7 @@
                 {{-- Chọn theo ngày (đột xuất) --}}
                 <div id="chon-ngay" class="form-group" style="display: none;">
                   <label for="ngayDotXuat">Chọn ngày</label>
-                  <input type="date" name="ngayDotXuat" id="ngayDotXuat" class="form-control">
+                  <input type="date" name="ngayDotXuat" id="ngayDotXuat" class="form-control" min="{{ now()->format('Y-m-d') }}">
                 </div>
 
                 {{-- Các dòng máy --}}

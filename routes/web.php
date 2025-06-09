@@ -141,7 +141,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/nhacungcap/edit/{MaNhaCungCap}', [NhaCungCapController::class, 'form_editNhaCungCap'])
       ->middleware('kiemtraquyen:19')
       ->name('nhacungcap.edit');
-    Route::post('/nhacungcap/edit/{MaNhaCungCap}', [NhaCungCapController::class, 'editNhaCungCap'])->name('nhacungcap.update');
+    Route::patch('/nhacungcap/edit/{MaNhaCungCap}', [NhaCungCapController::class, 'editNhaCungCap'])->name('nhacungcap.update');
     Route::get('/nhacungcap/add', [NhaCungCapController::class, 'addNhaCungCap'])
       ->middleware('kiemtraquyen:18')
       ->name('nhacungcap.add');

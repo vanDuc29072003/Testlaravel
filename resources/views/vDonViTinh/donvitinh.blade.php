@@ -48,6 +48,11 @@
                                 </tr>
                             @endforelse
                         </tbody>
+                        <tfoot aria-label="Page navigation example">
+                            <nav>
+                                {{ $dsDonvitinh->appends(request()->query())->links('pagination::bootstrap-5') }}
+                            </nav>
+                        </tfoot>
                     </table>
                 </div>
 

@@ -75,7 +75,6 @@
   <script src="{{ asset('js/plugin/gmaps/gmaps.js') }}"></script>
   <script src="{{ asset('js/plugin/sweetalert/sweetalert.min.js') }}"></script>
   <script src="{{ asset('js/kaiadmin.min.js') }}"></script>
-
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <script>
@@ -139,7 +138,6 @@
 
     pusher.subscribe('channel-all').bind('eventUpdateUI', function (data) {
       if (data.reload) {
-        console.log('Cập nhật giao diện sidebar và main header');
         // Gửi AJAX để load lại sidebar
         $.ajax({
           url: '/sidebar', // Route để lấy nội dung sidebar
@@ -167,10 +165,11 @@
         });
 
         function reloadSidebar() {
-          
+          if ($.fn.scrollbar) {
+            $('.scrollbar-inner').scrollbar();
+          }
         }
         function reloadMainHeader() {
-          console.log('Gắn lại sự kiện và khởi tạo plugin Main Header');
           // Khởi tạo lại jQuery Scrollbar (nếu sử dụng)
           if ($.fn.scrollbar) {
             $('.scrollbar-outer').scrollbar(); // Khởi tạo lại thanh cuộn tùy chỉnh
