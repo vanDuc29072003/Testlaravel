@@ -160,6 +160,11 @@ class LichBaoTriController extends Controller
             'MoTa' => 'required|string',
             'NgayBaoTri' => 'required|date',
             'MaMay' => 'required|exists:may,MaMay',
+        ]
+    ,
+        [
+            'MoTa.required' => 'Mô tả không được để trống.',
+            'NgayBaoTri.required' => 'Ngày bảo trì không được để trống.'
         ]);
 
         $isDotXuat = $request->boolean('is_dot_xuat');
@@ -256,6 +261,7 @@ class LichBaoTriController extends Controller
 
             if ($trungVoiVanHanh) {
                 return redirect()->route('lichbaotri.create')
+                    ->withInput()
                     ->with('error', 'Máy này đang có lịch vận hành vào ngày đã chọn. Không thể tạo lịch bảo trì.');
             }
 
@@ -271,7 +277,7 @@ class LichBaoTriController extends Controller
             return redirect()->route('lichbaotri')->with('success', 'Tạo lịch bảo trì đột xuất thành công!');
         }
 
-        return redirect()->back()->with('error', 'Vui lòng chọn loại lịch bảo trì hợp lệ.');
+        return redirect()->back()->withInput()->with('error', 'Vui lòng chọn loại lịch bảo trì hợp lệ.');
     }
 
 
@@ -292,10 +298,10 @@ class LichBaoTriController extends Controller
        
         $lich = LichBaoTri::with(['may'])->where('MaLichBaoTri', $MaLichBaoTri)->firstOrFail();
 
-        // Tạo PDF từ view
+        
         $pdf = PDF::loadView('vLich.exporttscBT', compact('lich'));
 
-        // Stream PDF (hiển thị trực tiếp trên trình duyệt)
+        
         return $pdf->stream('LichBaoTri_' . $MaLichBaoTri . '.pdf');
     }
 

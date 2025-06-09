@@ -16,14 +16,14 @@
                                 @csrf
                                 @method('PATCH')
 
-                                {{-- Ngày vận hành (readonly) --}}
+                                
                                 <div class="form-group">
                                     <label for="NgayVanHanh">Ngày vận hành</label>
                                     <input type="text" id="NgayVanHanh" class="form-control"
                                         value="{{ \Carbon\Carbon::parse($lich->NgayVanHanh)->format('d/m/Y') }}" readonly>
                                 </div>
 
-                                {{-- Tên máy --}}
+                                
                                 <div class="form-group">
                                     <label for="MaMay">Tên máy</label>
                                     <select name="MaMay" id="MaMay" class="form-control" required>
@@ -36,7 +36,7 @@
                                     </select>
                                 </div>
 
-                                {{-- Người đảm nhận --}}
+                                
                                 <div class="form-group">
                                     <label for="MaNhanVien">Người đảm nhận</label>
                                     <select name="MaNhanVien" id="MaNhanVien" class="form-control" required>
@@ -49,7 +49,7 @@
                                     </select>
                                 </div>
 
-                                {{-- Ca làm việc --}}
+                                
                                 <div class="form-group">
                                     <label for="CaLamViec">Ca làm việc</label>
                                     <select name="CaLamViec" id="CaLamViec" class="form-control" required>
@@ -62,7 +62,7 @@
                                     </select>
                                 </div>
 
-                                {{-- Mô tả --}}
+                                
                                 <div class="form-group">
                                     <label for="MoTa">Mô tả</label>
                                     <textarea name="MoTa" id="MoTa" class="form-control" rows="3"
@@ -71,8 +71,7 @@
                             </form>
                         </div>
                         <div class="card-footer">
-                            {{-- Thời gian bắt đầu --}}
-                            {{-- Nút hành động --}}
+                            
                             <div class="form-group d-flex justify-content-between">
                                 <a href="{{ route('lichvanhanh') }}" class="btn btn-secondary">
                                     <i class="fa fa-arrow-left"></i> Trở lại

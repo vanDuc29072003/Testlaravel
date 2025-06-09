@@ -209,17 +209,16 @@ class LichVanHanhController extends Controller
     }
     public function showNhatKi($id)
     {
-        // Tìm lịch vận hành theo ID
+        
         $lich = LichVanHanh::with(['may', 'nhanVien'])->findOrFail($id);
-
-        // Trả về view và truyền dữ liệu cho view
+        
         return view('vLich.nhatkivanhanh', compact('lich'));
     }
     public function updateNhatKi(Request $request, $id)
     {
-
+ 
         $trangThai = is_array($request->TrangThai)
-            ? (int) $request->TrangThai[0]  // Lấy giá trị đầu tiên được chọn
+            ? (int) $request->TrangThai[0]  
             : (int) $request->TrangThai;
 
         // Xác thực dữ liệu
@@ -237,7 +236,7 @@ class LichVanHanhController extends Controller
         // Cập nhật nhật ký
         $lich = LichVanHanh::findOrFail($id);
         $lich->NhatKi = $request->NhatKi;
-        $lich->trangthai = $trangThai; // Cập nhật trạng thái
+        $lich->trangthai = $trangThai; 
         $lich->MoTaSuCo = $request->MoTaSuCo;
         $lich->save();
 

@@ -14,24 +14,24 @@ class TaiKhoanController extends Controller
     {
         $taikhoans = TaiKhoan::query();
     
-        // Lọc theo tên nhân viên (nếu có)
+        
         if ($request->filled('TenNhanVien')) {
             $taikhoans->whereHas('nhanvien', function ($query) use ($request) {
                 $query->where('TenNhanVien', 'like', '%' . $request->TenNhanVien . '%');
             });
         }
     
-        // Lọc theo mã bộ phận (nếu có)
+        
         if ($request->filled('MaBoPhan')) {
             $taikhoans->whereHas('nhanvien', function ($query) use ($request) {
                 $query->where('MaBoPhan', $request->MaBoPhan);
             });
         }
     
-        // Lấy danh sách kết quả sau khi lọc
+        
         $taikhoans = $taikhoans->get();
     
-        // Dữ liệu cho dropdown lọc
+        
         $nhanviens = NhanVien::all(); 
         $bophans = BoPhan::all();     
     
@@ -43,7 +43,7 @@ class TaiKhoanController extends Controller
 
 
 
-    // Form thêm tài khoản
+    
     public function create()
     {
         $bophans = Bophan::all(); 
@@ -52,11 +52,11 @@ class TaiKhoanController extends Controller
         return view('Vtaikhoan.createTaiKhoan', compact('maNhanVien','bophans'));
     }
 
-    // Lưu tài khoản mới
+    
     public function store(Request $request)
     {
         try {
-            // Validate dữ liệu
+            
             $validated = $request->validate([
                 'TenNhanVien' => 'required|string|max:100',
                 'Email' => 'required|email|unique:nhanvien,Email',
@@ -74,7 +74,6 @@ class TaiKhoanController extends Controller
             ]
         );
 
-            // Tạo nhân viên
             $nhanvien = new NhanVien();
             $nhanvien->TenNhanVien = $validated['TenNhanVien'];
             $nhanvien->Email = $validated['Email'];
@@ -83,20 +82,20 @@ class TaiKhoanController extends Controller
             $nhanvien->SDT = $validated['SDT'];
             $nhanvien->DiaChi = $validated['DiaChi'];
             $nhanvien->MaBoPhan = $validated['MaBoPhan'];
-            $nhanvien->save(); // ;
+            $nhanvien->save(); 
 
-            // Lấy TenRutGon
+            
             $tenRutGon = BoPhan::find($validated['MaBoPhan'])->TenRutGon ?? 'XX';
             $tenTaiKhoan = $tenRutGon . $nhanvien->MaNhanVien;
 
-            // Kiểm tra trùng tài khoản
+            
             $base = $tenTaiKhoan;
             $suffix = 1;
             while (TaiKhoan::where('TenTaiKhoan', $tenTaiKhoan)->exists()) {
                 $tenTaiKhoan = $base . '_' . $suffix++;
             }
 
-            // Tạo tài khoản
+           
             $matkhauMacDinh = 'TKhoa12345@';
             TaiKhoan::create([
                 'MaNhanVien' => $nhanvien->MaNhanVien,
@@ -114,20 +113,17 @@ class TaiKhoanController extends Controller
     }
 
 
-        public function edit($MaNhanVien)
+    public function edit($MaNhanVien)
     {
         
-        // Truy vấn tài khoản với mối quan hệ nhanvien
         $taikhoan = TaiKhoan::with('nhanvien')->findOrFail($MaNhanVien);
-        
-        // Trả về view sửa tài khoản
         return view('Vtaikhoan.editTaiKhoan', compact('taikhoan'));
     }
     
     public function editThongTin($TenTaiKhoan)
     {
         $taikhoan = TaiKhoan::with('nhanvien.bophan')->where('TenTaiKhoan', $TenTaiKhoan)->firstOrFail();
-        $boPhans = BoPhan::all(); // Để hiển thị dropdown bộ phận
+        $boPhans = BoPhan::all(); 
         return view('Vtaikhoan.editThongTin', compact('taikhoan', 'boPhans'));
     }
     public function updateThongTin(Request $request, $TenTaiKhoan)
@@ -153,7 +149,7 @@ class TaiKhoanController extends Controller
             ]
             );
 
-        // Cập nhật thông tin nhân viên liên kết với tài khoản
+        
             if ($taikhoan->nhanvien) {
                 $nhanvien = $taikhoan->nhanvien;
                 $nhanvien->TenNhanVien = $request->TenNhanVien;
@@ -183,11 +179,11 @@ class TaiKhoanController extends Controller
                 'MatKhauChuaMaHoa' => 'required|string|min:6',
             ]);
 
-            $taikhoan = TaiKhoan::findOrFail($id); // Không cần where('TenTaiKhoan', ...)
+            $taikhoan = TaiKhoan::findOrFail($id); 
 
             $taikhoan->MatKhauChuaMaHoa = $request->MatKhauChuaMaHoa;
-            $taikhoan->MatKhau = Hash::make($request->MatKhauChuaMaHoa); // mã hóa đúng
-            $taikhoan->save(); // dùng save thay vì update để đảm bảo model ghi đúng
+            $taikhoan->MatKhau = Hash::make($request->MatKhauChuaMaHoa); 
+            $taikhoan->save(); 
             
             return redirect()->route('taikhoan.index')->with('success', 'Cập nhật mật khẩu thành công.');
         }
@@ -197,12 +193,12 @@ class TaiKhoanController extends Controller
     public function show($TenTaiKhoan)
     {
         $taikhoan = TaiKhoan::where('TenTaiKhoan', $TenTaiKhoan)
-            ->with(['nhanvien.bophan']) // eager load nhân viên và bộ phận
+            ->with(['nhanvien.bophan']) 
             ->firstOrFail();
 
         return view('Vtaikhoan.detailTaiKhoan', compact('taikhoan'));
     }
-    // Xóa tài khoản
+    
     public function destroy($TenTaiKhoan)
     {
         $taikhoan = TaiKhoan::where('TenTaiKhoan', $TenTaiKhoan)->firstOrFail();

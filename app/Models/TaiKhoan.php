@@ -6,10 +6,9 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class TaiKhoan extends Authenticatable
 {
-    protected $table = 'taikhoan'; // Tên bảng trong database
-    protected $primaryKey = 'MaNhanVien'; // Khóa chính
-    public $timestamps = false; // Không sử dụng created_at và updated_at
-
+    protected $table = 'taikhoan'; 
+    protected $primaryKey = 'MaNhanVien'; 
+    public $timestamps = false; 
     protected $fillable = [
         'MaNhanVien',
         'TenTaiKhoan',
@@ -17,7 +16,6 @@ class TaiKhoan extends Authenticatable
         'MatKhau',
     ];
 
-    // Ghi đè phương thức getAuthPassword để sử dụng cột MatKhau
     public function getAuthPassword()
     {
         return $this->MatKhau;
@@ -32,7 +30,7 @@ class TaiKhoan extends Authenticatable
 
         static::saving(function ($model) {
             if ($model->MatKhauChuaMaHoa) {
-                $model->MatKhau = bcrypt($model->MatKhauChuaMaHoa); // Mã hóa mật khẩu
+                $model->MatKhau = bcrypt($model->MatKhauChuaMaHoa); 
             }
         });
     }
