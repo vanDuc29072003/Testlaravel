@@ -62,7 +62,7 @@
                                     </div>
                                     <div class="col-12">
                                         <div class="form-group">
-                                            <label for="MoTa">Mô Tả</label>
+                                            <label for="MoTa">Mô Tả Lần 1000 </label>
                                             <textarea type="text" class="form-control" id="MoTa" name="MoTa"
                                                 placeholder="Nhập mô tả" value="{{ old('MoTa', $linhkienFormData['MoTa'] ?? '') }}"></textarea>
                                         </div>
