@@ -171,7 +171,7 @@
             tinhTongTien();
         }
     });
-
+    
     document.addEventListener('change', function (e) {
         if (e.target.classList.contains('baoHanh')) {
             const row = e.target.closest('tr');
